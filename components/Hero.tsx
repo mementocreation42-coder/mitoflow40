@@ -39,7 +39,7 @@ export default function Hero() {
             </div>
 
             {/* Hero Illustration - Bottom Left */}
-            <div className="absolute bottom-0 left-0 w-[350px] md:w-[550px] h-[350px] md:h-[550px] z-10 pointer-events-none">
+            <div className="absolute bottom-0 left-0 w-[400px] md:w-[600px] h-[400px] md:h-[600px] z-10 pointer-events-none">
                 <Image
                     src="/images/hero-illustration-bl.png"
                     alt="Hero Illustration"
