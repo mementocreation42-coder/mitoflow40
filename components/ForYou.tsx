@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import FadeOnScroll from './FadeOnScroll';
 
 const forYouItems = [
     {
@@ -27,43 +28,56 @@ export default function ForYou() {
     return (
         <section id="for-you" className="relative py-24 bg-[#E8C547] border-t border-[#1A1A1A] overflow-hidden">
             <div className="max-w-[800px] mx-auto px-4 relative z-10">
-                <div className="text-center mb-12">
-                    <h2 className="font-[family-name:var(--font-main)] text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2">
-                        FOR YOU
-                    </h2>
-                    <p className="text-[#4A4A4A]">こんな人に最適</p>
-                </div>
+                <FadeOnScroll>
+                    <div className="text-center mb-12">
+                        <h2 className="font-[family-name:var(--font-main)] text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2">
+                            FOR YOU
+                        </h2>
+                        <p className="text-[#4A4A4A]">こんな人に最適</p>
+                    </div>
+                </FadeOnScroll>
 
-                <div className="grid md:grid-cols-2 gap-6 justify-center">
-                    {forYouItems.map((item, index) => (
-                        <div
-                            key={index}
-                            className="bg-[#FFF9C4] border border-[#555555] rounded-xl overflow-hidden flex flex-col"
-                        >
-                            <div className="w-full h-[200px] overflow-hidden border-b border-[#555555]">
-                                <Image
-                                    src={item.image}
-                                    alt={item.alt}
-                                    width={400}
-                                    height={200}
-                                    className="w-full h-full object-cover object-top"
-                                />
+                <FadeOnScroll delay={0.2}>
+                    <div className="grid md:grid-cols-2 gap-6 justify-center">
+                        {forYouItems.map((item, index) => (
+                            <div
+                                key={index}
+                                className="bg-[#FFF9C4] border border-[#555555] rounded-xl overflow-hidden flex flex-col"
+                            >
+                                <div className="w-full h-[200px] overflow-hidden border-b border-[#555555]">
+                                    <Image
+                                        src={item.image}
+                                        alt={item.alt}
+                                        width={400}
+                                        height={200}
+                                        className="w-full h-full object-cover object-top"
+                                    />
+                                </div>
+                                <div className="p-6 bg-[#FFF9C4] flex-grow text-[#1A1A1A]">
+                                    <p>{item.text}</p>
+                                </div>
                             </div>
-                            <div className="p-6 bg-[#FFF9C4] flex-grow text-[#1A1A1A]">
-                                <p>{item.text}</p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                </FadeOnScroll>
             </div>
 
-            {/* Background Illustration */}
+            {/* Background Illustration - Top Right */}
             <Image
                 src="/images/for-you-illustration-bg.png"
                 alt=""
                 width={400}
                 height={400}
                 className="absolute top-[-50px] right-[-50px] w-[300px] md:w-[400px] h-auto object-contain pointer-events-none opacity-80 z-0"
+            />
+
+            {/* Background Illustration - Bottom Left (New) */}
+            <Image
+                src="/images/for-you-illustration-bl.png"
+                alt=""
+                width={300}
+                height={300}
+                className="absolute bottom-[-20px] left-[-20px] w-[200px] md:w-[300px] h-auto object-contain pointer-events-none opacity-90 z-0"
             />
         </section>
     );

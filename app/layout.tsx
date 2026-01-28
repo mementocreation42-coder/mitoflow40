@@ -21,7 +21,7 @@ const notoSansJP = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
-  title: "Mitoflow40 | 40代からはじめる健康戦略ミトフロー。",
+  title: "MitoFlow40 | 40代からはじめる健康戦略ミトフロー",
   description:
     "40代。それはカラダの本当の声が無視できなくなる年齢。ミトコンドリア活性化で40代からの人生をフローさせる。パーソナルヘルスケアサービス by DAISUKE KOBAYASHI",
   keywords: [
@@ -30,11 +30,11 @@ export const metadata: Metadata = {
     "ミトコンドリア",
     "パーソナルヘルスケア",
     "小林大介",
-    "Mitoflow40",
+    "MitoFlow40",
   ],
   authors: [{ name: "小林大介" }],
   openGraph: {
-    title: "Mitoflow40 | 40代からはじめる健康戦略ミトフロー。",
+    title: "MitoFlow40 | 40代からはじめる健康戦略ミトフロー",
     description:
       "40代。それはカラダの本当の声が無視できなくなる年齢。ミトコンドリア活性化で40代からの人生をフローさせる。パーソナルヘルスケアサービス by DAISUKE KOBAYASHI",
     type: "website",

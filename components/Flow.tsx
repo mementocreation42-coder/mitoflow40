@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import FadeOnScroll from './FadeOnScroll';
 
 const steps = [
     {
@@ -46,36 +47,39 @@ export default function Flow() {
     return (
         <section id="flow" className="py-24 bg-[#FFB37B] border-t border-[#1A1A1A]">
             <div className="max-w-[800px] mx-auto px-4">
-                <div className="text-center mb-12">
-                    <h2 className="font-[family-name:var(--font-main)] text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2">
-                        FLOW
-                    </h2>
-                    <p className="text-[#4A4A4A]">ご利用の流れ</p>
-                </div>
+                <FadeOnScroll>
+                    <div className="text-center mb-12">
+                        <h2 className="font-[family-name:var(--font-main)] text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2">
+                            FLOW
+                        </h2>
+                        <p className="text-[#4A4A4A]">ご利用の流れ</p>
+                    </div>
+                </FadeOnScroll>
 
                 <div className="space-y-0">
                     {steps.map((step, index) => (
-                        <div
-                            key={index}
-                            className="flex gap-8 py-8 border-b border-[#1A1A1A] last:border-b-0 items-start"
-                        >
-                            <div className="font-[family-name:var(--font-main)] text-5xl font-bold text-black/20 flex-shrink-0">
-                                {step.number}
+                        <FadeOnScroll key={index} delay={index * 0.1}>
+                            <div
+                                className="flex gap-8 py-8 border-b border-[#1A1A1A] last:border-b-0 items-start"
+                            >
+                                <div className="font-[family-name:var(--font-main)] text-5xl font-bold text-black/20 flex-shrink-0">
+                                    {step.number}
+                                </div>
+                                <div className="flex-grow">
+                                    <h3 className="text-xl font-bold text-[#1A1A1A] mb-2">{step.title}</h3>
+                                    <p className="text-[#4A4A4A]">{step.description}</p>
+                                    {step.hasButton && (
+                                        <Link
+                                            href={step.buttonLink || '#'}
+                                            target="_blank"
+                                            className="inline-block mt-4 px-6 py-3 bg-[#FF9855] text-[#1A1A1A] border border-[#1A1A1A] rounded-full text-sm font-semibold hover:bg-[#FF8030] hover:text-white transition-colors"
+                                        >
+                                            {step.buttonText}
+                                        </Link>
+                                    )}
+                                </div>
                             </div>
-                            <div className="flex-grow">
-                                <h3 className="text-xl font-bold text-[#1A1A1A] mb-2">{step.title}</h3>
-                                <p className="text-[#4A4A4A]">{step.description}</p>
-                                {step.hasButton && (
-                                    <Link
-                                        href={step.buttonLink || '#'}
-                                        target="_blank"
-                                        className="inline-block mt-4 px-6 py-3 bg-[#FF9855] text-[#1A1A1A] border border-[#1A1A1A] rounded-full text-sm font-semibold hover:bg-[#FF8030] hover:text-white transition-colors"
-                                    >
-                                        {step.buttonText}
-                                    </Link>
-                                )}
-                            </div>
-                        </div>
+                        </FadeOnScroll>
                     ))}
                 </div>
             </div>

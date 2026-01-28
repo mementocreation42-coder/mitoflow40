@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import FadeOnScroll from './FadeOnScroll';
 
 const faqItems = [
     {
@@ -55,39 +56,43 @@ export default function FAQ() {
     return (
         <section id="faq" className="py-24 bg-[#E5D0E3] border-t border-[#1A1A1A]">
             <div className="max-w-[800px] mx-auto px-4">
-                <div className="text-center mb-12">
-                    <h2 className="font-[family-name:var(--font-main)] text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2">
-                        FAQ
-                    </h2>
-                    <p className="text-[#4A4A4A]">よくある質問</p>
-                </div>
+                <FadeOnScroll>
+                    <div className="text-center mb-12">
+                        <h2 className="font-[family-name:var(--font-main)] text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2">
+                            FAQ
+                        </h2>
+                        <p className="text-[#4A4A4A]">よくある質問</p>
+                    </div>
+                </FadeOnScroll>
 
-                <div className="max-w-[800px] mx-auto space-y-4">
-                    {faqItems.map((item, index) => (
-                        <div
-                            key={index}
-                            className="border border-[#1A1A1A] rounded-lg overflow-hidden bg-white"
-                        >
-                            <button
-                                className="w-full flex justify-between items-center p-4 text-left font-semibold text-[#1A1A1A] hover:bg-gray-50 transition-colors"
-                                onClick={() => toggleItem(index)}
-                            >
-                                <span>{item.question}</span>
-                                <span className="text-xl ml-4 flex-shrink-0">
-                                    {openIndex === index ? '-' : '+'}
-                                </span>
-                            </button>
+                <FadeOnScroll delay={0.2}>
+                    <div className="max-w-[800px] mx-auto space-y-4">
+                        {faqItems.map((item, index) => (
                             <div
-                                className={`overflow-hidden transition-all duration-300 ${openIndex === index ? 'max-h-96' : 'max-h-0'
-                                    }`}
+                                key={index}
+                                className="border border-[#1A1A1A] rounded-lg overflow-hidden bg-white"
                             >
-                                <div className="p-4 pt-0 text-[#4A4A4A] border-t border-gray-200">
-                                    {item.answer}
+                                <button
+                                    className="w-full flex justify-between items-center p-4 text-left font-semibold text-[#1A1A1A] hover:bg-gray-50 transition-colors"
+                                    onClick={() => toggleItem(index)}
+                                >
+                                    <span>{item.question}</span>
+                                    <span className="text-xl ml-4 flex-shrink-0">
+                                        {openIndex === index ? '-' : '+'}
+                                    </span>
+                                </button>
+                                <div
+                                    className={`overflow-hidden transition-all duration-300 ${openIndex === index ? 'max-h-96' : 'max-h-0'
+                                        }`}
+                                >
+                                    <div className="p-4 pt-0 text-[#4A4A4A] border-t border-gray-200">
+                                        {item.answer}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                </FadeOnScroll>
             </div>
         </section>
     );
