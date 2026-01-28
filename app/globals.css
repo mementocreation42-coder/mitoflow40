@@ -1,26 +1,144 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* =========================================
+   1. CUSTOM THEME
+   ========================================= */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Colors */
+  --color-bg: #FFFFFF;
+  --color-text: #1A1A1A;
+  --color-text-dark: #1A1A1A;
+  --color-text-muted: #666666;
+  --color-text-muted-dark: #4A4A4A;
+
+  --color-accent-mint: #4AF6C3;
+  --color-accent-apricot: #FFB37B;
+  --color-accent-sky: #6CCFF6;
+  --color-accent-lavender: #E5D0E3;
+  --color-accent-gray: #F2F2F2;
+  --color-accent-yellow: #E8C547;
+  --color-accent-pink: #FFB6B6;
+  --color-accent-cyan: #B2EBF2;
+  --color-accent-dark-cyan: #4DD0E1;
+  --color-accent-dark-orange: #FF9855;
+
+  --color-border: #555555;
+  --color-border-dark: #1A1A1A;
+
+  /* Fonts */
+  --font-main: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', 'Noto Sans JP', sans-serif;
+
+  /* Spacing */
+  --spacing-sm: 1rem;
+  --spacing-md: 2rem;
+  --spacing-lg: 4rem;
+  --spacing-xl: 8rem;
+
+  /* Container */
+  --container-max: 1000px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* =========================================
+   2. BASE STYLES
+   ========================================= */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-main);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0em;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.3s ease;
+}
+
+/* =========================================
+   3. ANIMATIONS
+   ========================================= */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-section {
+  opacity: 0;
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in-section.visible {
+  opacity: 1;
+}
+
+/* =========================================
+   4. CUSTOM COMPONENT STYLES
+   ========================================= */
+.btn {
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  border: 1px solid var(--color-border-dark);
+  border-radius: 9999px;
+  font-family: var(--font-main);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: transparent;
+  color: var(--color-text-dark);
+}
+
+.btn:hover {
+  background: var(--color-text-dark);
+  color: var(--color-bg);
+}
+
+.btn-dark-cyan {
+  background-color: var(--color-accent-dark-cyan);
+  color: var(--color-text-dark);
+  border: 1px solid var(--color-text-dark);
+}
+
+.btn-dark-cyan:hover {
+  background-color: #26C6DA;
+  color: #FFFFFF;
+}
+
+.btn-dark-orange {
+  background-color: var(--color-accent-dark-orange);
+  color: var(--color-text-dark);
+  border: 1px solid var(--color-text-dark);
+}
+
+.btn-dark-orange:hover {
+  background-color: #FF8030;
+  color: #FFFFFF;
 }
