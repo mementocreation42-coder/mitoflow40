@@ -21,22 +21,22 @@ const notoSansJP = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
-  title: "MitoFlow40 | 40代からの健康戦略 - 小林大介",
+  title: "Mitoflow40 | 40代からはじめる健康戦略ミトフロー。",
   description:
-    "映像クリエイターが運営する、細胞レベルの健康戦略。ミトコンドリア活性化で40代からの人生をフローさせる。パーソナルヘルスケアサービス by 小林大介",
+    "40代。それはカラダの本当の声が無視できなくなる年齢。ミトコンドリア活性化で40代からの人生をフローさせる。パーソナルヘルスケアサービス by DAISUKE KOBAYASHI",
   keywords: [
     "健康",
     "40代",
     "ミトコンドリア",
     "パーソナルヘルスケア",
     "小林大介",
-    "MitoFlow40",
+    "Mitoflow40",
   ],
   authors: [{ name: "小林大介" }],
   openGraph: {
-    title: "MitoFlow40 | 40代からの健康戦略",
+    title: "Mitoflow40 | 40代からはじめる健康戦略ミトフロー。",
     description:
-      "映像クリエイターが運営する、細胞レベルの健康戦略。ミトコンドリア活性化で40代からの人生をフローさせる。",
+      "40代。それはカラダの本当の声が無視できなくなる年齢。ミトコンドリア活性化で40代からの人生をフローさせる。パーソナルヘルスケアサービス by DAISUKE KOBAYASHI",
     type: "website",
     locale: "ja_JP",
   },

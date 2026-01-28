@@ -22,7 +22,7 @@ export default function Header() {
             <div className="max-w-[800px] mx-auto px-4 h-[60px] flex items-center justify-between">
                 {/* Logo */}
                 <Link href="#" className="text-xl font-bold tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                    MitoFlow40
+                    Mitoflow40
                 </Link>
 
                 {/* Desktop Navigation */}

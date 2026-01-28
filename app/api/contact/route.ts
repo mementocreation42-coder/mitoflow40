@@ -18,11 +18,11 @@ export async function POST(request: NextRequest) {
 
         // Send email
         const { data, error } = await resend.emails.send({
-            from: 'MitoFlow40 <onboarding@resend.dev>', // Change to your verified domain
+            from: 'Mitoflow40 <onboarding@resend.dev>', // Change to your verified domain
             to: process.env.CONTACT_EMAIL || 'your-email@example.com',
-            subject: `【MitoFlow40】お問い合わせ: ${name}様より`,
+            subject: `【Mitoflow40】お問い合わせ: ${name}様より`,
             html: `
-        <h2>MitoFlow40 お問い合わせ</h2>
+        <h2>Mitoflow40 お問い合わせ</h2>
         <p><strong>お名前:</strong> ${name}</p>
         <p><strong>メールアドレス:</strong> ${email}</p>
         <p><strong>メッセージ:</strong></p>

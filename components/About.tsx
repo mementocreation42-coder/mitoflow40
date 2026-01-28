@@ -8,7 +8,7 @@ export default function About() {
                     <h2 className="font-[family-name:var(--font-main)] text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2">
                         ABOUT
                     </h2>
-                    <p className="text-[#1A1A1A]/80">MitoFlow40とは</p>
+                    <p className="text-[#1A1A1A]/80">Mitoflow40とは</p>
                 </div>
 
                 <div className="grid gap-8">
@@ -26,7 +26,7 @@ export default function About() {
                             私たちの体には、エネルギーを生み出す「ミトコンドリア」が存在します。しかし、40代を境にその機能は低下し、疲労や活力不足の原因となります。
                         </p>
                         <p>
-                            MitoFlow40は、ミトコンドリアを起点に「食事・運動・習慣・サプリ」の4本柱でカラダの流れを整える健康戦略です。一過性の対策ではなく、今の自分を正しく整える知恵と技術で、暮らしを再設計する。流れが整えば、人生は再び劇的な変化を遂げ始めます。
+                            Mitoflow40は、ミトコンドリアを起点に「食事・運動・習慣・サプリ」の4本柱でカラダの流れを整える健康戦略です。一過性の対策ではなく、今の自分を正しく整える知恵と技術で、暮らしを再設計する。流れが整えば、人生は再び劇的な変化を遂げ始めます。
                         </p>
                     </div>
                 </div>

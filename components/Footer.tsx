@@ -17,7 +17,7 @@ export default function Footer() {
             <div className="max-w-[800px] mx-auto px-4 text-center">
                 {/* Logo */}
                 <div className="text-3xl font-bold text-white mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                    MitoFlow40
+                    Mitoflow40
                 </div>
                 <p className="text-white text-sm mb-8">40代からの健康戦略</p>
 
@@ -39,7 +39,7 @@ export default function Footer() {
 
                 {/* Copyright */}
                 <div className="text-white text-sm">
-                    &copy; 2026 MitoFlow40. All Rights Reserved.
+                    &copy; 2026 Mitoflow40. All Rights Reserved.
                 </div>
             </div>
         </footer>
