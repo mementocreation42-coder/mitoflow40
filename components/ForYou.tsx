@@ -26,7 +26,7 @@ const forYouItems = [
 export default function ForYou() {
     return (
         <section id="for-you" className="relative py-24 bg-[#E8C547] border-t border-[#1A1A1A] overflow-hidden">
-            <div className="max-w-[1000px] mx-auto px-4 relative z-10">
+            <div className="max-w-[800px] mx-auto px-4 relative z-10">
                 <div className="text-center mb-12">
                     <h2 className="font-[family-name:var(--font-main)] text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2">
                         FOR YOU

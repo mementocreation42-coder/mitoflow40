@@ -3,21 +3,21 @@ import Link from 'next/link';
 const steps = [
     {
         number: '01',
-        title: 'お問い合わせ',
+        title: 'ご連絡・ご相談',
         description:
-            'まずはお問い合わせフォームからご連絡ください。必ずセッション前に無料のオンライン面談を行います。',
+            'まずはお気軽にご連絡ください。健康に関する悩みや気になること、試してみたいことなどを軽くお話しましょう！',
     },
     {
         number: '02',
         title: 'データ提出',
         description:
-            '血液検査のデータの提出や、カウンセリングシートをご記入いただきます。データ等をいただきましたら、こちらで解析を進めていきます。',
+            '血液検査のデータの提出や、こちらからお送りするカウンセリングシートをご記入いただきます。提出が済みましたら、解析を進めていきます。',
     },
     {
         number: '03',
         title: 'セッション',
         description:
-            'カウンセリングシートや、血液検査のデータを解析した結果から、考えられる健康対策アドバイスをお伝えしていきます。',
+            'カウンセリングシートや血液検査を解析した結果から、考えられる健康対策アドバイスをお伝えしていきます。合わせて解析サンプルもお渡しいたします。',
         hasButton: true,
         buttonText: '解析サンプル',
         buttonLink: 'https://elegant-gingersnap-97643e.netlify.app/',
@@ -26,7 +26,7 @@ const steps = [
         number: '04',
         title: 'アドバイスの実践',
         description:
-            '見えてきた健康対策を実践していただきます。難しいこともあるかもしれませんが、できることからはじめられます。',
+            '見えてきた健康対策を実践していただきます。難しいこともあるかもしれませんが、できることからはじめていただきます。',
     },
     {
         number: '05',
@@ -36,16 +36,16 @@ const steps = [
     },
     {
         number: '06',
-        title: '継続サポート',
+        title: 'セッション・実践の繰り返し',
         description:
-            'フィードバックを踏まえて、必要に応じて改善やサプリメントの調整などを行いながら継続的にサポートしていきます。',
+            '翌月以降はセッションと実践の繰り返しになります。身体から返ってくる違いを楽しみましょう！',
     },
 ];
 
 export default function Flow() {
     return (
         <section id="flow" className="py-24 bg-[#FFB37B] border-t border-[#1A1A1A]">
-            <div className="max-w-[1000px] mx-auto px-4">
+            <div className="max-w-[800px] mx-auto px-4">
                 <div className="text-center mb-12">
                     <h2 className="font-[family-name:var(--font-main)] text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2">
                         FLOW

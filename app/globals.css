@@ -138,7 +138,18 @@ a {
   border: 1px solid var(--color-text-dark);
 }
 
+
 .btn-dark-orange:hover {
   background-color: #FF8030;
   color: #FFFFFF;
+}
+
+/* Footer Link Override */
+.footer-link {
+  color: #FFFFFF !important;
+  transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #4AF6C3 !important;
 }

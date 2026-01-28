@@ -14,12 +14,12 @@ const footerLinks = [
 export default function Footer() {
     return (
         <footer className="py-12 bg-[#1A1A1A] border-t border-[#333333]">
-            <div className="max-w-[1000px] mx-auto px-4 text-center">
+            <div className="max-w-[800px] mx-auto px-4 text-center">
                 {/* Logo */}
                 <div className="text-3xl font-bold text-white mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                     MitoFlow40
                 </div>
-                <p className="text-white/50 text-sm mb-8">40代からの健康戦略</p>
+                <p className="text-white text-sm mb-8">40代からの健康戦略</p>
 
                 {/* Navigation */}
                 <nav className="mb-8">
@@ -28,7 +28,7 @@ export default function Footer() {
                             <li key={link.href}>
                                 <Link
                                     href={link.href}
-                                    className="text-sm text-white/70 hover:text-[#4AF6C3] transition-colors"
+                                    className="text-sm footer-link"
                                 >
                                     {link.label}
                                 </Link>
@@ -38,7 +38,7 @@ export default function Footer() {
                 </nav>
 
                 {/* Copyright */}
-                <div className="text-white/50 text-sm">
+                <div className="text-white text-sm">
                     &copy; 2026 MitoFlow40. All Rights Reserved.
                 </div>
             </div>

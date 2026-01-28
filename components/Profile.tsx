@@ -3,7 +3,7 @@ import Image from 'next/image';
 export default function Profile() {
     return (
         <section id="profile" className="py-24 bg-[#A07DB8] border-t border-[#1A1A1A]">
-            <div className="max-w-[1000px] mx-auto px-4">
+            <div className="max-w-[800px] mx-auto px-4">
                 <div className="text-center mb-12">
                     <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         PROFILE
@@ -11,13 +11,13 @@ export default function Profile() {
                     <p className="text-[#1A1A1A]/80">プロフィール</p>
                 </div>
 
-                <div className="grid md:grid-cols-[250px_1fr] gap-12 items-start">
+                <div className="grid md:grid-cols-[300px_1fr] gap-12 items-start">
                     <div className="w-full aspect-square rounded-xl overflow-hidden">
                         <Image
                             src="/images/profile.jpg"
                             alt="Daisuke Kobayashi"
-                            width={250}
-                            height={250}
+                            width={300}
+                            height={300}
                             className="w-full h-full object-cover object-top"
                         />
                     </div>

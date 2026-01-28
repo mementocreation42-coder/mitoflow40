@@ -19,7 +19,7 @@ export default function Header() {
 
     return (
         <header className="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-sm border-b border-[#1A1A1A]/20">
-            <div className="max-w-[1000px] mx-auto px-4 h-[70px] flex items-center justify-between">
+            <div className="max-w-[800px] mx-auto px-4 h-[60px] flex items-center justify-between">
                 {/* Logo */}
                 <Link href="#" className="text-xl font-bold tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                     MitoFlow40

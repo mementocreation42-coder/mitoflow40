@@ -33,7 +33,7 @@ const pricingPlans = [
 export default function Pricing() {
     return (
         <section id="pricing" className="relative py-24 bg-[#4AF6C3] border-t border-[#1A1A1A] overflow-hidden">
-            <div className="max-w-[1000px] mx-auto px-4 relative z-10">
+            <div className="max-w-[800px] mx-auto px-4 relative z-10">
                 <div className="text-center mb-12">
                     <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         PRICE

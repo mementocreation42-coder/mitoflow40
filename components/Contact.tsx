@@ -41,7 +41,7 @@ export default function Contact() {
 
     return (
         <section id="contact" className="py-24 bg-[#6CC6E8] border-t border-[#1A1A1A]">
-            <div className="max-w-[1000px] mx-auto px-4">
+            <div className="max-w-[800px] mx-auto px-4">
                 <div className="text-center mb-12">
                     <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         CONTACT

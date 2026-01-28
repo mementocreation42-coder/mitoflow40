@@ -14,7 +14,7 @@ export default function Hero() {
             />
 
             {/* Content */}
-            <div className="max-w-[1000px] w-full mx-auto px-4 py-20 relative z-10">
+            <div className="max-w-[800px] w-full mx-auto px-4 py-20 relative z-10">
                 <div className="text-right">
                     <h1
                         className="text-5xl md:text-7xl font-bold leading-tight mb-6"
@@ -25,7 +25,7 @@ export default function Hero() {
                         <span className="block">AFTER 40</span>
                     </h1>
                     <p
-                        className="text-lg md:text-xl text-[#333333] leading-relaxed"
+                        className="text-lg md:text-xl text-[#333333] leading-relaxed font-bold relative z-20 mb-32 md:mb-0"
                         style={{
                             writingMode: 'horizontal-tb',
                             maxWidth: '500px',
