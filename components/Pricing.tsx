@@ -49,8 +49,7 @@ export default function Pricing() {
                         {pricingPlans.map((plan, index) => (
                             <div
                                 key={index}
-                                className={`border-2 border-[#1A1A1A] rounded-xl p-10 text-center ${plan.featured ? 'bg-[#7FFFD4]/50' : 'bg-[#7FFFD4]/30'
-                                    }`}
+                                className={`rounded-2xl p-10 text-center bg-white/60 backdrop-blur-[2px] border border-[#1A1A1A]`}
                             >
                                 <div className="mb-6">
                                     <h3 className="text-xl font-bold text-[#1A1A1A] mb-4">{plan.title}</h3>

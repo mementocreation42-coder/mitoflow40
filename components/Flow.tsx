@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import FadeOnScroll from './FadeOnScroll';
 
 const steps = [
@@ -45,8 +46,35 @@ const steps = [
 
 export default function Flow() {
     return (
-        <section id="flow" className="py-24 bg-[#FFB37B] border-t border-[#1A1A1A]">
-            <div className="max-w-[800px] mx-auto px-4">
+        <section id="flow" className="relative py-24 bg-[#FFB37B] border-t border-[#1A1A1A] overflow-hidden">
+            {/* Background Illustration - Top Right (Contact Step) */}
+            <Image
+                src="/images/flow-illustration-contact.png"
+                alt=""
+                width={300}
+                height={300}
+                className="absolute top-[150px] md:top-[120px] right-[-20px] md:right-[50px] w-[180px] md:w-[280px] h-auto object-contain pointer-events-none opacity-90 z-0"
+            />
+
+            {/* Background Illustration - Middle Left (Session/Practice Step) */}
+            <Image
+                src="/images/flow-illustration-practice.png"
+                alt=""
+                width={300}
+                height={300}
+                className="absolute top-[600px] md:top-[500px] left-[-20px] md:left-[20px] w-[180px] md:w-[280px] h-auto object-contain pointer-events-none opacity-90 z-0"
+            />
+
+            {/* Background Illustration - Bottom Right (Feedback/2nd Session Step) */}
+            <Image
+                src="/images/flow-illustration-feedback.png"
+                alt=""
+                width={300}
+                height={300}
+                className="absolute bottom-[50px] md:bottom-[100px] right-[-30px] md:right-[20px] w-[200px] md:w-[300px] h-auto object-contain pointer-events-none opacity-90 z-0"
+            />
+
+            <div className="max-w-[800px] mx-auto px-4 relative z-10">
                 <FadeOnScroll>
                     <div className="text-center mb-12">
                         <h2 className="font-[family-name:var(--font-main)] text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2">
@@ -56,11 +84,11 @@ export default function Flow() {
                     </div>
                 </FadeOnScroll>
 
-                <div className="space-y-0">
+                <div className="space-y-4">
                     {steps.map((step, index) => (
                         <FadeOnScroll key={index} delay={index * 0.1}>
                             <div
-                                className="flex gap-8 py-8 border-b border-[#1A1A1A] last:border-b-0 items-start"
+                                className="flex gap-6 py-6 px-6 items-start bg-white/60 backdrop-blur-[2px] rounded-2xl border border-[#1A1A1A]/5"
                             >
                                 <div className="font-[family-name:var(--font-main)] text-5xl font-bold text-black/20 flex-shrink-0">
                                     {step.number}

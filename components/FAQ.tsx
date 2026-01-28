@@ -85,7 +85,7 @@ export default function FAQ() {
                                     className={`overflow-hidden transition-all duration-300 ${openIndex === index ? 'max-h-96' : 'max-h-0'
                                         }`}
                                 >
-                                    <div className="p-4 pt-0 text-[#4A4A4A] border-t border-gray-200">
+                                    <div className="p-4 pt-0 text-[#4A4A4A]">
                                         {item.answer}
                                     </div>
                                 </div>
