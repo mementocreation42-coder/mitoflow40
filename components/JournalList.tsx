@@ -13,11 +13,11 @@ export default function JournalList() {
     const page = searchParams.get('page') || '1';
     const search = searchParams.get('search') || '';
 
-    const { data, error, isLoading } = useSWR(
+    const { data, error, isLoading, isValidating } = useSWR(
         `/api/journal?page=${page}&search=${encodeURIComponent(search)}`,
         fetcher,
         {
-            keepPreviousData: true, // Keep showing old data while fetching new data
+            keepPreviousData: true,
         }
     );
 
@@ -54,7 +54,7 @@ export default function JournalList() {
     }
 
     return (
-        <div>
+        <div className={`transition-opacity duration-300 ${isValidating ? 'opacity-50' : 'opacity-100'}`}>
             {/* Search Result Info */}
             {search && (
                 <div className="text-center mb-8">

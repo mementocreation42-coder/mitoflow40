@@ -23,7 +23,7 @@ export type WPPost = {
 
 export async function getAllPosts(): Promise<WPPost[]> {
     const res = await fetch(`${WP_API_URL}/posts?_embed&per_page=100`, {
-        next: { revalidate: 60 },
+        next: { revalidate: 3600 },
     });
 
     if (!res.ok) {
@@ -35,7 +35,7 @@ export async function getAllPosts(): Promise<WPPost[]> {
 
 export async function getPostBySlug(slug: string): Promise<WPPost | undefined> {
     const res = await fetch(`${WP_API_URL}/posts?_embed&slug=${encodeURIComponent(slug)}`, {
-        next: { revalidate: 60 },
+        next: { revalidate: 3600 },
     });
 
     if (!res.ok) {
@@ -48,7 +48,7 @@ export async function getPostBySlug(slug: string): Promise<WPPost | undefined> {
 
 export async function getPostById(id: number): Promise<WPPost | undefined> {
     const res = await fetch(`${WP_API_URL}/posts/${id}?_embed`, {
-        next: { revalidate: 60 },
+        next: { revalidate: 3600 },
     });
 
     if (!res.ok) {
@@ -66,7 +66,7 @@ export async function getPostByDateAndSlug(
 ): Promise<WPPost | undefined> {
     // Fetch by slug first, then verify the date matches
     const res = await fetch(`${WP_API_URL}/posts?_embed&slug=${encodeURIComponent(slug)}`, {
-        next: { revalidate: 60 },
+        next: { revalidate: 3600 },
     });
 
     if (!res.ok) {
@@ -88,7 +88,7 @@ export async function getPostByDateAndSlug(
 
 export async function getLatestPosts(limit = 3): Promise<WPPost[]> {
     const res = await fetch(`${WP_API_URL}/posts?_embed&per_page=${limit}`, {
-        next: { revalidate: 60 },
+        next: { revalidate: 3600 },
     });
 
     if (!res.ok) {
@@ -100,7 +100,7 @@ export async function getLatestPosts(limit = 3): Promise<WPPost[]> {
 
 export async function getRelatedPosts(currentPostId: number, limit = 3): Promise<WPPost[]> {
     const res = await fetch(`${WP_API_URL}/posts?_embed&per_page=${limit}&exclude=${currentPostId}`, {
-        next: { revalidate: 60 },
+        next: { revalidate: 3600 },
     });
 
     if (!res.ok) {
@@ -117,13 +117,13 @@ export type PaginatedPosts = {
 };
 
 export async function getPostsPaginated(page = 1, perPage = 20, search?: string): Promise<PaginatedPosts> {
-    let url = `${WP_API_URL}/posts?_embed&per_page=${perPage}&page=${page}`;
+    let url = `${WP_API_URL}/posts?_embed&per_page=${perPage}&page=${page}&_fields=id,date,slug,title,excerpt,_links,_embedded`;
     if (search) {
         url += `&search=${encodeURIComponent(search)}`;
     }
 
     const res = await fetch(url, {
-        next: { revalidate: 60 },
+        next: { revalidate: 3600 },
     });
 
     if (!res.ok) {
