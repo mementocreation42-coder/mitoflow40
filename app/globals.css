@@ -154,3 +154,13 @@ a {
 .footer-link:hover {
   color: #4AF6C3 !important;
 }
+
+/* =========================================
+   5. WORDPRESS CONTENT STYLES
+   ========================================= */
+.prose iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  border-radius: 0.5rem;
+}

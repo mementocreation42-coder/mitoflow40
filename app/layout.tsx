@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { GoogleAnalytics } from '@next/third-parties/google';
 import { Space_Grotesk, Inter, Noto_Sans_JP, MuseoModerno } from "next/font/google";
 import "./globals.css";
 
@@ -59,6 +60,7 @@ export default function RootLayout({
         className={`${spaceGrotesk.variable} ${inter.variable} ${notoSansJP.variable} ${museoModerno.variable} antialiased`}
       >
         {children}
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
       </body>
     </html>
   );
