@@ -4,7 +4,7 @@ import Image from "next/image";
 import { format } from "date-fns";
 import { notFound } from "next/navigation";
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export default async function JournalPost({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
