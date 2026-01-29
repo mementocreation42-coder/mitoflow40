@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import FadeOnScroll from './FadeOnScroll';
 
 export default function Contact() {
@@ -41,8 +42,8 @@ export default function Contact() {
     };
 
     return (
-        <section id="contact" className="py-24 bg-[#6CC6E8] border-t border-[#1A1A1A]">
-            <div className="max-w-[800px] mx-auto px-4">
+        <section id="contact" className="py-24 bg-[#6CC6E8] border-t border-[#1A1A1A] relative overflow-hidden">
+            <div className="max-w-[800px] mx-auto px-4 relative z-10">
                 <FadeOnScroll>
                     <div className="text-center mb-12">
                         <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
@@ -152,6 +153,22 @@ export default function Contact() {
                     )}
                 </FadeOnScroll>
             </div>
+
+            {/* Illustrations */}
+            <Image
+                src="/images/contact-illustration-left.png"
+                alt=""
+                width={300}
+                height={300}
+                className="absolute bottom-[-20px] left-[-50px] md:left-[20px] w-[200px] md:w-[300px] h-auto object-contain pointer-events-none opacity-90 z-0"
+            />
+            <Image
+                src="/images/contact-illustration-right.png"
+                alt=""
+                width={300}
+                height={300}
+                className="absolute bottom-[-30px] right-[-50px] md:right-[20px] w-[200px] md:w-[300px] h-auto object-contain pointer-events-none opacity-90 z-0"
+            />
         </section>
     );
 }

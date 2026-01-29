@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import FadeOnScroll from './FadeOnScroll';
 
 export default function Profile() {
@@ -16,14 +17,23 @@ export default function Profile() {
 
                 <FadeOnScroll delay={0.2}>
                     <div className="grid md:grid-cols-[300px_1fr] gap-12 items-start">
-                        <div className="w-full aspect-square rounded-xl overflow-hidden">
-                            <Image
-                                src="/images/profile.jpg"
-                                alt="Daisuke Kobayashi"
-                                width={300}
-                                height={300}
-                                className="w-full h-full object-cover object-top"
-                            />
+                        <div className="flex flex-col items-center">
+                            <div className="w-full aspect-square rounded-xl overflow-hidden">
+                                <Image
+                                    src="/images/profile.jpg"
+                                    alt="Daisuke Kobayashi"
+                                    width={300}
+                                    height={300}
+                                    className="w-full h-full object-cover object-top"
+                                />
+                            </div>
+                            <Link
+                                href="https://note.com/elvin"
+                                target="_blank"
+                                className="mt-4 inline-block px-8 py-3 bg-[#C4A8D8] text-[#1A1A1A] border border-[#1A1A1A] rounded-full text-base font-bold hover:bg-[#D4B8E8] transition-colors"
+                            >
+                                noteで執筆中!
+                            </Link>
                         </div>
 
                         <div>

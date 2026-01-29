@@ -21,7 +21,7 @@ export default function Header() {
         <header className="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-sm border-b border-[#1A1A1A]/20">
             <div className="max-w-[800px] mx-auto px-4 h-[60px] flex items-center justify-between">
                 {/* Logo */}
-                <Link href="#" className="text-xl font-bold tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                <Link href="#" className="text-xl font-bold tracking-tight" style={{ fontFamily: "'MuseoModerno', sans-serif" }}>
                     Mitoflow40
                 </Link>
 
@@ -41,7 +41,7 @@ export default function Header() {
                         <li>
                             <Link
                                 href="#contact"
-                                className="px-4 py-2 bg-[#4AF6C3] text-[#1A1A1A] text-sm font-semibold rounded-full hover:bg-[#3AE6B3] transition-colors"
+                                className="px-4 py-2 bg-[#4AF6C3] text-[#1A1A1A] border border-[#1A1A1A] text-sm font-semibold rounded-full hover:bg-[#3AE6B3] transition-colors"
                             >
                                 Contact
                             </Link>

@@ -46,6 +46,8 @@ const faqItems = [
     },
 ];
 
+import Image from 'next/image';
+
 export default function FAQ() {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
 
@@ -54,8 +56,8 @@ export default function FAQ() {
     };
 
     return (
-        <section id="faq" className="py-24 bg-[#E5D0E3] border-t border-[#1A1A1A]">
-            <div className="max-w-[800px] mx-auto px-4">
+        <section id="faq" className="py-24 bg-[#E5D0E3] border-t border-[#1A1A1A] relative overflow-hidden">
+            <div className="max-w-[800px] mx-auto px-4 relative z-10">
                 <FadeOnScroll>
                     <div className="text-center mb-12">
                         <h2 className="font-[family-name:var(--font-main)] text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2">
@@ -94,6 +96,15 @@ export default function FAQ() {
                     </div>
                 </FadeOnScroll>
             </div>
+
+            {/* Illustration */}
+            <Image
+                src="/images/faq-illustration.png"
+                alt=""
+                width={300}
+                height={300}
+                className="absolute bottom-[-20px] left-[-30px] w-[250px] md:w-[350px] h-auto object-contain pointer-events-none opacity-80 z-0 rotate-12"
+            />
         </section>
     );
 }

@@ -49,7 +49,7 @@ export default function Pricing() {
                         {pricingPlans.map((plan, index) => (
                             <div
                                 key={index}
-                                className={`rounded-2xl p-10 text-center bg-white/60 backdrop-blur-[2px] border border-[#1A1A1A]`}
+                                className={`rounded-2xl p-10 text-center bg-white/60 backdrop-blur-[2px] border border-[#1A1A1A] relative overflow-hidden`}
                             >
                                 <div className="mb-6">
                                     <h3 className="text-xl font-bold text-[#1A1A1A] mb-4">{plan.title}</h3>
@@ -81,6 +81,15 @@ export default function Pricing() {
                                             {plan.buttonText}
                                         </Link>
                                     </div>
+                                )}
+                                {plan.featured && (
+                                    <Image
+                                        src="/images/pricing-plan-illustration.png"
+                                        alt=""
+                                        width={150}
+                                        height={150}
+                                        className="absolute bottom-[-30px] right-[-30px] w-[120px] md:w-[150px] h-auto object-contain pointer-events-none opacity-90 z-0"
+                                    />
                                 )}
                             </div>
                         ))}

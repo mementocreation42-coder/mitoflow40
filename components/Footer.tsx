@@ -16,7 +16,7 @@ export default function Footer() {
         <footer className="py-12 bg-[#1A1A1A] border-t border-[#333333]">
             <div className="max-w-[800px] mx-auto px-4 text-center">
                 {/* Logo */}
-                <div className="text-3xl font-bold text-white mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                <div className="text-3xl font-bold text-white mb-2" style={{ fontFamily: "'MuseoModerno', sans-serif" }}>
                     Mitoflow40
                 </div>
                 <p className="text-white text-sm mb-8">40代からの健康戦略</p>

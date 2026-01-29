@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="pt-[70px]">
+      <main className="pt-[60px]">
         <Hero />
         <About />
         <Benefits />
