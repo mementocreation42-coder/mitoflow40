@@ -70,7 +70,7 @@ export default async function JournalPost({ params }: { params: Promise<{ id: st
                         const relatedImageUrl = relatedImage?.source_url;
 
                         return (
-                            <Link href={`/journal/${relatedPost.id}`} key={relatedPost.id} className="group block">
+                            <Link href={`/journal/${relatedPost.id}`} key={relatedPost.id} className="group block text-[#1A1A1A] visited:text-[#999999]">
                                 <article className="h-full flex flex-col">
                                     <div className="aspect-[16/9] relative overflow-hidden rounded-xl mb-4 bg-gray-100">
                                         {relatedImageUrl ? (
@@ -91,7 +91,7 @@ export default async function JournalPost({ params }: { params: Promise<{ id: st
                                             {format(new Date(relatedPost.date), 'yyyy.MM.dd')}
                                         </time>
                                         <h3
-                                            className="text-lg font-bold text-[#1A1A1A] leading-snug group-hover:text-[#41C9B4] transition-colors line-clamp-2"
+                                            className="text-lg font-bold group-hover:text-[#41C9B4] group-active:text-[#41C9B4] transition-colors line-clamp-2"
                                             dangerouslySetInnerHTML={{ __html: relatedPost.title.rendered }}
                                         />
                                     </div>

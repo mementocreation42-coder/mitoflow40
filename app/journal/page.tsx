@@ -58,7 +58,7 @@ export default async function JournalIndex({
                         const imageUrl = featuredMedia?.source_url;
 
                         return (
-                            <Link href={getPostUrl(post)} key={post.id} className="group block">
+                            <Link href={getPostUrl(post)} key={post.id} className="group block text-[#1A1A1A] visited:text-[#999999]">
                                 <article className="h-full flex flex-col">
                                     <div className="aspect-[16/9] relative overflow-hidden rounded-xl mb-4 bg-gray-100">
                                         {imageUrl ? (
@@ -79,7 +79,7 @@ export default async function JournalIndex({
                                             {format(new Date(post.date), 'yyyy.MM.dd')}
                                         </div>
                                         <h2
-                                            className="text-xl font-bold text-[#1A1A1A] group-hover:text-[#41C9B4] transition-colors line-clamp-2 leading-tight"
+                                            className="text-xl font-bold group-hover:text-[#41C9B4] group-active:text-[#41C9B4] transition-colors line-clamp-2 leading-tight"
                                             dangerouslySetInnerHTML={{ __html: post.title.rendered }}
                                         />
                                         <div
