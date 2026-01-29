@@ -158,6 +158,20 @@ a {
 /* =========================================
    5. WORDPRESS CONTENT STYLES
    ========================================= */
+@keyframes loading {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  50% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 .prose iframe {
   width: 100%;
   aspect-ratio: 16 / 9;

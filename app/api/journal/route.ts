@@ -7,8 +7,12 @@ export async function GET(request: Request) {
     const search = searchParams.get('search') || undefined;
 
     try {
-        const data = await getPostsPaginated(page, 30, search);
-        return NextResponse.json(data);
+        const data = await getPostsPaginated(page, 12, search);
+        return NextResponse.json(data, {
+            headers: {
+                'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=3600',
+            },
+        });
     } catch (error) {
         return NextResponse.json({ error: 'Failed to fetch posts' }, { status: 500 });
     }
