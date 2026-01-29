@@ -1,14 +1,13 @@
 import Link from 'next/link';
 
 const footerLinks = [
-    { href: '#hero', label: 'TOP' },
-    { href: '#about', label: 'ABOUT' },
-    { href: '#benefits', label: 'EXPERIENCE' },
-    { href: '#for-you', label: 'FOR YOU' },
-    { href: '#pricing', label: 'PRICE' },
-    { href: '#flow', label: 'FLOW' },
-    { href: '#profile', label: 'PROFILE' },
-    { href: '#contact', label: 'CONTACT' },
+    { href: '/', label: 'TOP' },
+    { href: '/#about', label: 'ABOUT' },
+    { href: '/#pricing', label: 'PRICE' },
+    { href: '/#flow', label: 'FLOW' },
+    { href: '/#profile', label: 'PROFILE' },
+    { href: '/journal', label: 'JOURNAL' },
+    { href: '/#contact', label: 'CONTACT' },
 ];
 
 export default function Footer() {

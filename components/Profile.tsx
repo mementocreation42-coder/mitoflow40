@@ -28,11 +28,10 @@ export default function Profile() {
                                 />
                             </div>
                             <Link
-                                href="https://note.com/elvin"
-                                target="_blank"
+                                href="/journal"
                                 className="mt-4 inline-block px-8 py-3 bg-[#C4A8D8] text-[#1A1A1A] border border-[#1A1A1A] rounded-full text-base font-bold hover:bg-[#D4B8E8] transition-colors"
                             >
-                                noteで執筆中!
+                                日々の記録を執筆中!
                             </Link>
                         </div>
 
