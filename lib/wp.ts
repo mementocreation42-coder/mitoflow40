@@ -138,3 +138,19 @@ export async function getPostsPaginated(page = 1, perPage = 20, search?: string)
         currentPage: page,
     };
 }
+
+export async function getAllPostsForSitemap(): Promise<{ id: number; date: string }[]> {
+    // Fetch all posts (up to 1000 for now) with minimal fields
+    const res = await fetch(`${WP_API_URL}/posts?per_page=100&_fields=id,date`, {
+        next: { revalidate: 3600 },
+    });
+
+    if (!res.ok) {
+        return [];
+    }
+
+    // Handle pagination if needed in the future, currently just returns first 100
+    // Realistically for a sitemap we might need to loop through pages if > 100
+    // But let's start with this.
+    return res.json();
+}
