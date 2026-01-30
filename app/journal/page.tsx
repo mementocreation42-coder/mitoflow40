@@ -3,7 +3,7 @@ import JournalSearch from "@/components/JournalSearch";
 import JournalList from "@/components/JournalList";
 import { Suspense } from "react";
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 export default function JournalIndex() {
     return (
