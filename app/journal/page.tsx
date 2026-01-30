@@ -7,7 +7,7 @@ export const revalidate = 3600;
 
 export default function JournalIndex() {
     return (
-        <div className="max-w-[1000px] mx-auto px-4 py-12 md:py-24">
+        <div className="max-w-[1000px] mx-auto px-6 md:px-4 py-12 md:py-24">
             <div className="text-center mb-8">
                 <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                     HYPERPAST JOURNAL

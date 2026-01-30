@@ -23,15 +23,9 @@ export default async function JournalPost({ params }: { params: Promise<{ id: st
     const featuredMedia = post._embedded?.['wp:featuredmedia']?.[0];
 
     return (
-        <article className="max-w-[800px] mx-auto px-4 py-12 md:py-24">
+        <article className="max-w-[800px] mx-auto px-6 md:px-4 py-12 md:py-24">
             {/* Header */}
             <header className="mb-12 text-center">
-                <Link
-                    href="/journal"
-                    className="inline-block mb-8 text-sm font-medium tracking-wider text-[#4A4A4A] hover:text-[#41C9B4] transition-colors"
-                >
-                    ← BACK TO JOURNAL
-                </Link>
                 <div className="text-sm text-[#4A4A4A]/70 mb-4 font-mono">
                     {format(new Date(post.date), 'yyyy.MM.dd')}
                 </div>
@@ -105,10 +99,18 @@ export default async function JournalPost({ params }: { params: Promise<{ id: st
             <div className="text-center">
                 <Link
                     href="/journal"
-                    className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-[#1A1A1A] rounded-full font-bold hover:bg-[#41C9B4] hover:text-white hover:border-[#1A1A1A] transition-colors"
+                    className="inline-block mb-12 text-sm font-medium tracking-wider text-[#4A4A4A] hover:text-[#41C9B4] transition-colors"
                 >
-                    一覧に戻る
+                    ← BACK TO JOURNAL
                 </Link>
+                <div>
+                    <Link
+                        href="/journal"
+                        className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-[#1A1A1A] rounded-full font-bold hover:bg-[#41C9B4] hover:text-white hover:border-[#1A1A1A] transition-colors"
+                    >
+                        一覧に戻る
+                    </Link>
+                </div>
             </div>
         </article>
     );
