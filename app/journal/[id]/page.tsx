@@ -54,7 +54,18 @@ export default async function JournalPost({ params }: { params: Promise<{ id: st
             />
 
             {/* Related Articles */}
-            <div className="mt-20 pt-12 border-t border-gray-200">
+            {/* Back Link */}
+            <div className="mt-20 text-center">
+                <Link
+                    href="/journal"
+                    className="inline-block px-4 py-2 text-sm font-medium tracking-wider text-[#4A4A4A] hover:text-[#41C9B4] transition-colors"
+                >
+                    ← BACK TO JOURNAL
+                </Link>
+            </div>
+
+            {/* Related Articles */}
+            <div className="mt-12 pt-12 border-t border-gray-200">
                 <h2 className="text-2xl font-bold text-center mb-12" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                     RELATED ARTICLES
                 </h2>
@@ -99,18 +110,10 @@ export default async function JournalPost({ params }: { params: Promise<{ id: st
             <div className="text-center">
                 <Link
                     href="/journal"
-                    className="inline-block mb-12 text-sm font-medium tracking-wider text-[#4A4A4A] hover:text-[#41C9B4] transition-colors"
+                    className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-[#1A1A1A] rounded-full font-bold hover:bg-[#41C9B4] hover:text-white hover:border-[#1A1A1A] transition-colors"
                 >
-                    ← BACK TO JOURNAL
+                    一覧に戻る
                 </Link>
-                <div>
-                    <Link
-                        href="/journal"
-                        className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-[#1A1A1A] rounded-full font-bold hover:bg-[#41C9B4] hover:text-white hover:border-[#1A1A1A] transition-colors"
-                    >
-                        一覧に戻る
-                    </Link>
-                </div>
             </div>
         </article>
     );
