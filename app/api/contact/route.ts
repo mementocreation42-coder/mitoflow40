@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
 
         // Send email
         const { data, error } = await resend.emails.send({
-            from: 'Mitoflow40 <onboarding@resend.dev>', // Change to your verified domain
+            from: 'Mitoflow40 <info@mitoflow40.com>', // Verified domain
             to: process.env.CONTACT_EMAIL || 'your-email@example.com',
             subject: `【Mitoflow40】お問い合わせ: ${name}様より`,
             html: `
