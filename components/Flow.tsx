@@ -47,15 +47,6 @@ const steps = [
 export default function Flow() {
     return (
         <section id="flow" className="relative py-24 bg-[#FFB37B] border-t border-[#1A1A1A] overflow-hidden">
-            {/* Background Illustration - Top Right (Contact Step) */}
-            <Image
-                src="/images/flow-illustration-contact.png"
-                alt=""
-                width={300}
-                height={300}
-                className="absolute top-[150px] md:top-[120px] right-[-20px] md:right-[50px] w-[180px] md:w-[280px] h-auto object-contain pointer-events-none opacity-90 z-0"
-            />
-
             {/* Background Illustration - Middle Left (Session/Practice Step) */}
             <Image
                 src="/images/flow-illustration-practice.png"

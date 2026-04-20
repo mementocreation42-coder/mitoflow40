@@ -62,15 +62,6 @@ export default function ForYou() {
                 </FadeOnScroll>
             </div>
 
-            {/* Background Illustration - Top Right */}
-            <Image
-                src="/images/for-you-illustration-bg.png"
-                alt=""
-                width={400}
-                height={400}
-                className="absolute top-[-50px] right-[-50px] w-[300px] md:w-[400px] h-auto object-contain pointer-events-none opacity-80 z-0"
-            />
-
             {/* Background Illustration - Bottom Left (New) */}
             <Image
                 src="/images/for-you-illustration-bl.png"
