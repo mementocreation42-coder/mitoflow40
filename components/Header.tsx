@@ -17,6 +17,7 @@ export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     return (
+        <>
         <header className="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-sm border-b border-[#1A1A1A]/20">
             <div className="max-w-[800px] mx-auto px-4 h-[60px] flex items-center justify-between">
                 {/* Logo */}
@@ -59,25 +60,26 @@ export default function Header() {
                     <span className="block w-6 h-0.5 bg-[#1A1A1A]" />
                 </button>
             </div>
-
-            {/* Mobile Menu */}
-            {isMenuOpen && (
-                <nav className="md:hidden bg-white/95 backdrop-blur-sm border-t border-gray-200 py-4">
-                    <ul className="flex flex-col items-center gap-4">
-                        {navItems.map((item) => (
-                            <li key={item.href}>
-                                <Link
-                                    href={item.href}
-                                    className="text-base font-medium"
-                                    onClick={() => setIsMenuOpen(false)}
-                                >
-                                    {item.label}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </nav>
-            )}
         </header>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+            <nav className="md:hidden fixed inset-0 top-[60px] z-40 bg-white border-t border-gray-200 flex items-center justify-center overflow-y-auto">
+                <ul className="flex flex-col items-center gap-10">
+                    {navItems.map((item) => (
+                        <li key={item.href}>
+                            <Link
+                                href={item.href}
+                                className="block text-3xl font-semibold tracking-wide py-2 px-6"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                {item.label}
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+            </nav>
+        )}
+        </>
     );
 }
