@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'hyperpast-journal.xyz',
+        hostname: 'journal.mitoflow40.com',
         pathname: '/wp-content/uploads/**',
       },
     ],
