@@ -1,4 +1,32 @@
-export const WP_API_URL = 'https://hyperpast-journal.xyz/wp-json/wp/v2';
+const WP_BASE = 'https://journal.mitoflow40.com/index.php';
+const WP_ORIGIN = 'https://journal.mitoflow40.com';
+const FRONT_ORIGIN = 'https://mitoflow40.com';
+
+// 記事内のWordPress内部リンクをフロントエンドURLに書き換える
+function rewriteLinks(html: string): string {
+    // /?p=123 形式 → /journal/123
+    let result = html.replace(
+        new RegExp(`${WP_ORIGIN}/\\?p=(\\d+)`, 'g'),
+        `${FRONT_ORIGIN}/journal/$1`
+    );
+    // その他のWPオリジンURL（カテゴリ・スラッグ等）→ /journal
+    result = result.replace(
+        new RegExp(`${WP_ORIGIN}(/[^"']*)?`, 'g'),
+        `${FRONT_ORIGIN}/journal`
+    );
+    return result;
+}
+
+function wpUrl(path: string, params?: Record<string, string | number>): string {
+    const url = new URL(WP_BASE);
+    url.searchParams.set('rest_route', `/wp/v2${path}`);
+    if (params) {
+        for (const [key, value] of Object.entries(params)) {
+            url.searchParams.set(key, String(value));
+        }
+    }
+    return url.toString();
+}
 
 export type WPPost = {
     id: number;
@@ -22,8 +50,8 @@ export type WPPost = {
 };
 
 export async function getAllPosts(): Promise<WPPost[]> {
-    const res = await fetch(`${WP_API_URL}/posts?_embed&per_page=100`, {
-        next: { revalidate: 60 },
+    const res = await fetch(wpUrl('/posts', { _embed: '1', per_page: 100 }), {
+        next: { revalidate: 3600 },
     });
 
     if (!res.ok) {
@@ -34,8 +62,8 @@ export async function getAllPosts(): Promise<WPPost[]> {
 }
 
 export async function getPostBySlug(slug: string): Promise<WPPost | undefined> {
-    const res = await fetch(`${WP_API_URL}/posts?_embed&slug=${encodeURIComponent(slug)}`, {
-        next: { revalidate: 60 },
+    const res = await fetch(wpUrl('/posts', { _embed: '1', slug }), {
+        next: { revalidate: 3600 },
     });
 
     if (!res.ok) {
@@ -47,15 +75,17 @@ export async function getPostBySlug(slug: string): Promise<WPPost | undefined> {
 }
 
 export async function getPostById(id: number): Promise<WPPost | undefined> {
-    const res = await fetch(`${WP_API_URL}/posts/${id}?_embed`, {
-        next: { revalidate: 60 },
+    const res = await fetch(wpUrl(`/posts/${id}`, { _embed: '1' }), {
+        next: { revalidate: 3600 },
     });
 
     if (!res.ok) {
         return undefined;
     }
 
-    return res.json();
+    const post: WPPost = await res.json();
+    post.content.rendered = rewriteLinks(post.content.rendered);
+    return post;
 }
 
 export async function getPostByDateAndSlug(
@@ -65,8 +95,8 @@ export async function getPostByDateAndSlug(
     slug: string
 ): Promise<WPPost | undefined> {
     // Fetch by slug first, then verify the date matches
-    const res = await fetch(`${WP_API_URL}/posts?_embed&slug=${encodeURIComponent(slug)}`, {
-        next: { revalidate: 60 },
+    const res = await fetch(wpUrl('/posts', { _embed: '1', slug }), {
+        next: { revalidate: 3600 },
     });
 
     if (!res.ok) {
@@ -87,8 +117,8 @@ export async function getPostByDateAndSlug(
 }
 
 export async function getLatestPosts(limit = 3): Promise<WPPost[]> {
-    const res = await fetch(`${WP_API_URL}/posts?_embed&per_page=${limit}`, {
-        next: { revalidate: 60 },
+    const res = await fetch(wpUrl('/posts', { _embed: '1', per_page: limit }), {
+        next: { revalidate: 3600 },
     });
 
     if (!res.ok) {
@@ -99,8 +129,8 @@ export async function getLatestPosts(limit = 3): Promise<WPPost[]> {
 }
 
 export async function getRelatedPosts(currentPostId: number, limit = 3): Promise<WPPost[]> {
-    const res = await fetch(`${WP_API_URL}/posts?_embed&per_page=${limit}&exclude=${currentPostId}`, {
-        next: { revalidate: 60 },
+    const res = await fetch(wpUrl('/posts', { _embed: '1', per_page: limit, exclude: currentPostId }), {
+        next: { revalidate: 3600 },
     });
 
     if (!res.ok) {
@@ -117,13 +147,18 @@ export type PaginatedPosts = {
 };
 
 export async function getPostsPaginated(page = 1, perPage = 20, search?: string): Promise<PaginatedPosts> {
-    let url = `${WP_API_URL}/posts?_embed&per_page=${perPage}&page=${page}&_fields=id,date,slug,title,excerpt,_links,_embedded`;
+    const params: Record<string, string | number> = {
+        _embed: '1',
+        per_page: perPage,
+        page,
+        _fields: 'id,date,slug,title,excerpt,_links,_embedded',
+    };
     if (search) {
-        url += `&search=${encodeURIComponent(search)}`;
+        params.search = search;
     }
 
-    const res = await fetch(url, {
-        next: { revalidate: 60 },
+    const res = await fetch(wpUrl('/posts', params), {
+        cache: 'no-store',
     });
 
     if (!res.ok) {
@@ -141,7 +176,7 @@ export async function getPostsPaginated(page = 1, perPage = 20, search?: string)
 
 export async function getAllPostsForSitemap(): Promise<{ id: number; date: string }[]> {
     // Fetch all posts (up to 1000 for now) with minimal fields
-    const res = await fetch(`${WP_API_URL}/posts?per_page=100&_fields=id,date`, {
+    const res = await fetch(wpUrl('/posts', { per_page: 100, _fields: 'id,date' }), {
         next: { revalidate: 3600 },
     });
 
