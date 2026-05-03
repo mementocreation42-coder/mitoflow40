@@ -46,6 +46,11 @@ export type WPPost = {
             source_url: string;
             alt_text: string;
         }>;
+        'wp:term'?: Array<Array<{
+            id: number;
+            name: string;
+            slug: string;
+        }>>;
     };
 };
 
@@ -146,7 +151,7 @@ export type PaginatedPosts = {
     currentPage: number;
 };
 
-export async function getPostsPaginated(page = 1, perPage = 20, search?: string): Promise<PaginatedPosts> {
+export async function getPostsPaginated(page = 1, perPage = 20, search?: string, categoryId?: number): Promise<PaginatedPosts> {
     const params: Record<string, string | number> = {
         _embed: '1',
         per_page: perPage,
@@ -155,6 +160,9 @@ export async function getPostsPaginated(page = 1, perPage = 20, search?: string)
     };
     if (search) {
         params.search = search;
+    }
+    if (categoryId) {
+        params.categories = categoryId;
     }
 
     const res = await fetch(wpUrl('/posts', params), {
@@ -172,6 +180,21 @@ export async function getPostsPaginated(page = 1, perPage = 20, search?: string)
         totalPages,
         currentPage: page,
     };
+}
+
+export type WPCategory = {
+    id: number;
+    name: string;
+    slug: string;
+    count: number;
+};
+
+export async function getCategories(): Promise<WPCategory[]> {
+    const res = await fetch(wpUrl('/categories', { per_page: 50 }), {
+        next: { revalidate: 3600 },
+    });
+    if (!res.ok) return [];
+    return res.json();
 }
 
 export async function getAllPostsForSitemap(): Promise<{ id: number; date: string }[]> {

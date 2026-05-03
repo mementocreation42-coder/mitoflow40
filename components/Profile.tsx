@@ -28,10 +28,12 @@ export default function Profile() {
                                 />
                             </div>
                             <Link
-                                href="/journal"
+                                href="https://www.shinealight.jp/universe"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="mt-4 inline-block px-8 py-3 bg-[#C4A8D8] text-[#1A1A1A] border border-[#1A1A1A] rounded-full text-base font-bold hover:bg-[#D4B8E8] transition-colors text-center"
                             >
-                                日々の記録を<br />JOURNALにて発信中!
+                                すべての活動は<br />SALにて発信中！
                             </Link>
                         </div>
 

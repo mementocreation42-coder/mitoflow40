@@ -13,9 +13,10 @@ export default function JournalList() {
     const searchParams = useSearchParams();
     const page = searchParams.get('page') || '1';
     const search = searchParams.get('search') || '';
+    const category = searchParams.get('category') || '';
 
     const { data, error, isLoading, isValidating } = useSWR(
-        `/api/journal?page=${page}&search=${encodeURIComponent(search)}`,
+        `/api/journal?page=${page}&search=${encodeURIComponent(search)}${category ? `&category=${category}` : ''}`,
         fetcher,
         {
             keepPreviousData: true,
@@ -25,13 +26,13 @@ export default function JournalList() {
     // Scroll to top on page change
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, [page, search]);
+    }, [page, search, category]);
 
     // Prefetch next page
     useEffect(() => {
         if (data?.totalPages && data.currentPage < data.totalPages) {
             const nextPage = data.currentPage + 1;
-            preload(`/api/journal?page=${nextPage}&search=${encodeURIComponent(search)}`, fetcher);
+            preload(`/api/journal?page=${nextPage}&search=${encodeURIComponent(search)}${category ? `&category=${category}` : ''}`, fetcher);
         }
     }, [data, search]);
 

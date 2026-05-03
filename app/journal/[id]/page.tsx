@@ -3,6 +3,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { format } from "date-fns";
 import { notFound } from "next/navigation";
+import JournalAuthor from "@/components/JournalAuthor";
+import JournalContent from "@/components/JournalContent";
+import JournalNewsletter from "@/components/JournalNewsletter";
 
 export const revalidate = 60;
 
@@ -21,21 +24,14 @@ export default async function JournalPost({ params }: { params: Promise<{ id: st
     }
 
     const featuredMedia = post._embedded?.['wp:featuredmedia']?.[0];
+    const categories = post._embedded?.['wp:term']?.[0] ?? [];
 
     return (
         <article className="max-w-[800px] mx-auto px-6 md:px-4 py-12 md:py-24">
             {/* Header */}
-            <header className="mb-12 text-center">
-                <div className="text-sm text-[#4A4A4A]/70 mb-4 font-mono">
-                    {format(new Date(post.date), 'yyyy.MM.dd')}
-                </div>
-                <h1
-                    className="text-3xl md:text-4xl font-bold text-[#1A1A1A] leading-tight mb-8"
-                    dangerouslySetInnerHTML={{ __html: post.title.rendered }}
-                />
-
+            <header className="mb-10 text-center">
                 {featuredMedia && (
-                    <div className="aspect-[16/9] relative w-full overflow-hidden rounded-2xl shadow-sm">
+                    <div className="aspect-[16/9] relative w-full overflow-hidden rounded-2xl shadow-sm mb-8">
                         <Image
                             src={featuredMedia.source_url}
                             alt={featuredMedia.alt_text || post.title.rendered}
@@ -45,27 +41,38 @@ export default async function JournalPost({ params }: { params: Promise<{ id: st
                         />
                     </div>
                 )}
+                <div className="text-sm text-[#4A4A4A]/70 mb-4 font-mono">
+                    {format(new Date(post.date), 'yyyy.MM.dd')}
+                </div>
+                <h1
+                    className="text-3xl md:text-4xl font-bold text-[#1A1A1A] leading-tight mb-6"
+                    dangerouslySetInnerHTML={{ __html: post.title.rendered }}
+                />
+                {categories.length > 0 && (
+                    <div className="flex flex-wrap justify-center gap-2">
+                        {categories.map((cat) => (
+                            <span
+                                key={cat.id}
+                                className="px-3 py-1 text-xs font-medium tracking-wide rounded-full bg-[#1A1A1A] text-white"
+                            >
+                                {cat.name}
+                            </span>
+                        ))}
+                    </div>
+                )}
             </header>
 
+            {/* Author */}
+            <JournalAuthor />
+
             {/* Content */}
-            <div
-                className="prose prose-lg prose-slate mx-auto prose-headings:font-bold prose-headings:text-[#1A1A1A] prose-p:text-[#4A4A4A] prose-a:text-[#41C9B4] prose-img:rounded-xl"
-                dangerouslySetInnerHTML={{ __html: post.content.rendered }}
-            />
+            <JournalContent html={post.content.rendered} />
+
+            {/* Newsletter */}
+            <JournalNewsletter />
 
             {/* Related Articles */}
-            {/* Back Link */}
-            <div className="mt-20 text-center">
-                <Link
-                    href="/journal"
-                    className="inline-block px-4 py-2 text-sm font-medium tracking-wider text-[#4A4A4A] hover:text-[#41C9B4] transition-colors"
-                >
-                    ← BACK TO JOURNAL
-                </Link>
-            </div>
-
-            {/* Related Articles */}
-            <div className="mt-12 pt-12 border-t border-gray-200">
+            <div className="pt-12 border-t border-gray-200">
                 <h2 className="text-2xl font-bold text-center mb-12" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                     RELATED ARTICLES
                 </h2>
