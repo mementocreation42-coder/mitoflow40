@@ -34,10 +34,11 @@ function CapsuleButton({
             onClick={onClick}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
-            className="relative h-9 rounded-full overflow-hidden flex items-center justify-center font-bold whitespace-nowrap cursor-pointer"
+            className="relative rounded-full overflow-hidden flex items-center justify-center font-bold whitespace-nowrap cursor-pointer"
             style={{
-                fontSize: "clamp(10px, 2.5vw, 12px)",
-                padding: "0 20px",
+                height: "clamp(28px, 7vw, 36px)",
+                fontSize: "clamp(9px, 2.2vw, 12px)",
+                padding: "0 clamp(10px, 3vw, 20px)",
                 border: `2px solid ${filled ? color : "#D1D5DB"}`,
                 transition: "border-color 0.2s",
             }}
@@ -95,15 +96,15 @@ export default function JournalCategoryFilter({ categories }: { categories: Cate
     const allActive = !current;
 
     return (
-        <div className="sticky top-0 z-30 mb-10 -mx-6 px-6 md:-mx-4 md:px-4 py-4 flex justify-center">
+        <div className="sticky top-0 z-30 mb-10 -mx-6 md:-mx-4 flex justify-center">
             <div
-                className="flex flex-wrap gap-2 justify-center px-4 py-3 rounded-full"
+                className="flex flex-wrap gap-2 justify-center px-6 py-3 w-full md:w-auto md:mx-4 md:my-4 md:rounded-full"
                 style={{
-                    background: 'rgba(255,255,255,0.88)',
-                    backdropFilter: 'blur(20px)',
-                    WebkitBackdropFilter: 'blur(20px)',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.10), 0 1px 0 rgba(255,255,255,0.8) inset',
-                    border: '1px solid rgba(0,0,0,0.07)',
+                    background: 'rgba(255,255,255,0.55)',
+                    backdropFilter: 'blur(16px)',
+                    WebkitBackdropFilter: 'blur(16px)',
+                    boxShadow: '0 2px 16px rgba(0,0,0,0.06)',
+                    border: '1px solid rgba(255,255,255,0.5)',
                 }}
             >
             <CapsuleButton

@@ -48,7 +48,7 @@ export default function FloatingNav() {
                 }}
             >
                 <div
-                    className="flex items-center gap-2 px-3 py-2.5 rounded-full"
+                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full"
                     style={{
                         background: 'rgba(180,240,228,0.90)',
                         backdropFilter: 'blur(20px)',
@@ -60,39 +60,39 @@ export default function FloatingNav() {
                     {/* Author avatar */}
                     <Link
                         href="/#profile"
-                        className="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-black/5 transition-colors"
+                        className="flex items-center gap-1.5 px-2 py-1 rounded-full hover:bg-black/5 transition-colors"
                     >
-                        <div className="w-7 h-7 rounded-full overflow-hidden ring-2 ring-[#41C9B4]/60">
+                        <div className="w-6 h-6 rounded-full overflow-hidden ring-2 ring-[#41C9B4]/60">
                             <Image
                                 src="/images/profile.jpg"
                                 alt="Daisuke Kobayashi"
-                                width={28}
-                                height={28}
+                                width={24}
+                                height={24}
                                 className="w-full h-full object-cover object-top"
                             />
                         </div>
                         <span className="text-xs font-semibold text-[#1A1A1A]/80 hidden sm:block">小林大介</span>
                     </Link>
 
-                    <div className="w-px h-5 bg-black/10 mx-1" />
+                    <div className="w-px h-4 bg-black/10 mx-0.5" />
 
                     {/* Nav links */}
                     {navItems.map((item) => (
                         <Link
                             key={item.href}
                             href={item.href}
-                            className="px-3 py-1.5 rounded-full text-xs font-semibold text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-black/5 transition-all whitespace-nowrap"
+                            className="px-2.5 py-1 rounded-full text-xs font-semibold text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-black/5 transition-all whitespace-nowrap"
                         >
                             {item.label}
                         </Link>
                     ))}
 
-                    <div className="w-px h-5 bg-black/10 mx-1" />
+                    <div className="w-px h-4 bg-black/10 mx-0.5" />
 
                     {/* CTA */}
                     <Link
                         href="/#contact"
-                        className="px-4 py-1.5 rounded-full text-xs font-bold text-[#1A1A1A] transition-all whitespace-nowrap"
+                        className="px-3 py-1 rounded-full text-xs font-bold text-[#1A1A1A] transition-all whitespace-nowrap"
                         style={{
                             background: 'linear-gradient(135deg, #4AF6C3 0%, #3AE6B3 100%)',
                             boxShadow: '0 2px 8px rgba(74,246,195,0.4)',
