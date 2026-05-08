@@ -18,7 +18,7 @@ export default function Header() {
 
     return (
         <>
-        <header className="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-sm border-b border-[#1A1A1A]/20">
+        <header className="w-full z-50 bg-white/80 backdrop-blur-sm border-b border-[#1A1A1A]/20">
             <div className="max-w-[800px] mx-auto px-4 h-[60px] flex items-center justify-between">
                 {/* Logo */}
                 <Link href="/" className="text-xl font-bold tracking-tight" style={{ fontFamily: "'MuseoModerno', sans-serif" }}>
@@ -70,7 +70,7 @@ export default function Header() {
                         <li key={item.href}>
                             <Link
                                 href={item.href}
-                                className="block text-3xl font-semibold tracking-wide py-2 px-6"
+                                className="block text-xl font-semibold tracking-wide py-2 px-6"
                                 onClick={() => setIsMenuOpen(false)}
                             >
                                 {item.label}

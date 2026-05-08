@@ -7,6 +7,14 @@ import { format } from 'date-fns';
 import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
+const CATEGORY_COLORS: Record<number, string> = {
+    1:  "#E07B5A",
+    5:  "#5BBF8A",
+    10: "#7B9DE0",
+    11: "#C97BAF",
+    12: "#E0C97B",
+};
+
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function JournalList() {
@@ -42,7 +50,7 @@ export default function JournalList() {
         return (
             <div>
                 {/* Skeleton Loader */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid md:grid-cols-2 gap-8">
                     {[...Array(6)].map((_, i) => (
                         <div key={i} className="h-full flex flex-col">
                             <div className="aspect-[16/9] bg-gray-200 rounded-xl mb-4 animate-pulse" />
@@ -90,7 +98,7 @@ export default function JournalList() {
                     </div>
                 )}
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid md:grid-cols-2 gap-8">
                     {posts.map((post: any) => {
                         const featuredMedia = post._embedded?.['wp:featuredmedia']?.[0];
                         const imageUrl = featuredMedia?.source_url;
@@ -113,8 +121,22 @@ export default function JournalList() {
                                         )}
                                     </div>
                                     <div className="flex-1">
-                                        <div className="text-sm text-[#4A4A4A]/70 mb-2 font-mono">
-                                            {format(new Date(post.date), 'yyyy.MM.dd')}
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <span className="text-sm text-[#4A4A4A]/70 font-mono">
+                                                {format(new Date(post.date), 'yyyy.MM.dd')}
+                                            </span>
+                                            {post._embedded?.['wp:term']?.[0]?.map((cat: any) => (
+                                                <span
+                                                    key={cat.id}
+                                                    className="text-xs font-bold px-2.5 py-0.5 rounded-full"
+                                                    style={{
+                                                        background: CATEGORY_COLORS[cat.id] ?? '#41C9B4',
+                                                        color: 'white',
+                                                    }}
+                                                >
+                                                    {cat.name}
+                                                </span>
+                                            ))}
                                         </div>
                                         <h2
                                             className="text-xl font-bold group-hover:text-[#41C9B4] group-active:text-[#41C9B4] transition-colors line-clamp-2 leading-tight"

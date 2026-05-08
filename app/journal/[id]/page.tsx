@@ -6,6 +6,8 @@ import { notFound } from "next/navigation";
 import JournalAuthor from "@/components/JournalAuthor";
 import JournalContent from "@/components/JournalContent";
 import JournalNewsletter from "@/components/JournalNewsletter";
+import JournalStickyCategory from "@/components/JournalStickyCategory";
+import { getCategories } from "@/lib/wp";
 
 export const revalidate = 60;
 
@@ -17,7 +19,10 @@ export default async function JournalPost({ params }: { params: Promise<{ id: st
         notFound();
     }
 
-    const post = await getPostById(postId);
+    const [post, allCategories] = await Promise.all([
+        getPostById(postId),
+        getCategories(),
+    ]);
 
     if (!post) {
         notFound();
@@ -27,7 +32,7 @@ export default async function JournalPost({ params }: { params: Promise<{ id: st
     const categories = post._embedded?.['wp:term']?.[0] ?? [];
 
     return (
-        <article className="max-w-[800px] mx-auto px-6 md:px-4 py-12 md:py-24">
+        <article className="max-w-[660px] mx-auto px-6 md:px-4 py-12 md:py-24">
             {/* Header */}
             <header className="mb-10 text-center">
                 {featuredMedia && (
@@ -48,19 +53,10 @@ export default async function JournalPost({ params }: { params: Promise<{ id: st
                     className="text-3xl md:text-4xl font-bold text-[#1A1A1A] leading-tight mb-6"
                     dangerouslySetInnerHTML={{ __html: post.title.rendered }}
                 />
-                {categories.length > 0 && (
-                    <div className="flex flex-wrap justify-center gap-2">
-                        {categories.map((cat) => (
-                            <span
-                                key={cat.id}
-                                className="px-3 py-1 text-xs font-medium tracking-wide rounded-full bg-[#1A1A1A] text-white"
-                            >
-                                {cat.name}
-                            </span>
-                        ))}
-                    </div>
-                )}
             </header>
+
+            {/* Sticky Category */}
+            <JournalStickyCategory categories={allCategories} activeIds={categories.map((c: any) => c.id)} />
 
             {/* Author */}
             <JournalAuthor />

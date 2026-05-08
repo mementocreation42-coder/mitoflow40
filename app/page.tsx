@@ -9,12 +9,13 @@ import FAQ from "@/components/FAQ";
 import Profile from "@/components/Profile";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import FloatingNav from "@/components/FloatingNav";
 
 export default function Home() {
   return (
     <>
       <Header />
-      <main className="pt-[60px]">
+      <main>
         <Hero />
         <About />
         <Benefits />
@@ -26,6 +27,7 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
+      <FloatingNav />
     </>
   );
 }
