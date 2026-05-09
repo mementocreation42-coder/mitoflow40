@@ -28,7 +28,7 @@ export default function NewsletterForm() {
     }
 
     return (
-        <div className="w-full max-w-md">
+        <div style={{ width: "100%", maxWidth: "448px", margin: "0 auto" }}>
             <form onSubmit={handleSubmit} className="flex gap-2">
                 <input
                     type="email"

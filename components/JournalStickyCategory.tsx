@@ -76,14 +76,8 @@ export default function JournalStickyCategory({
     return (
         <div className="sticky top-0 z-30 mb-10 -mx-6 md:-mx-4 flex justify-center">
             <div
-                className="flex flex-wrap gap-2 justify-center px-6 py-3 w-full md:w-auto md:mx-4 md:my-4 md:rounded-full"
-                style={{
-                    background: 'rgba(255,255,255,0.55)',
-                    backdropFilter: 'blur(16px)',
-                    WebkitBackdropFilter: 'blur(16px)',
-                    boxShadow: '0 2px 16px rgba(0,0,0,0.06)',
-                    border: '1px solid rgba(255,255,255,0.5)',
-                }}
+                className="flex flex-wrap gap-2 justify-center px-6 py-3 w-full md:my-4"
+                style={{ maxWidth: "420px" }}
             >
                 {sorted.map((cat) => (
                     <CapsuleLink
