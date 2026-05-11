@@ -45,14 +45,15 @@ export default function OgpCard({ url }: { url: string }) {
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex border border-gray-200 rounded-xl overflow-hidden hover:border-[#41C9B4] transition-colors my-6 no-underline bg-white group"
+            className="flex h-[120px] border border-gray-200 rounded-xl overflow-hidden hover:border-[#41C9B4] transition-colors my-6 no-underline bg-white group"
         >
             {data.image && (
-                <div className="relative w-[120px] md:w-[200px] flex-shrink-0 bg-gray-100">
+                <div className="relative w-[120px] md:w-[160px] flex-shrink-0 bg-gray-100">
                     <Image
                         src={data.image}
                         alt={data.title}
                         fill
+                        sizes="160px"
                         className="object-cover"
                         unoptimized
                     />
@@ -69,7 +70,7 @@ export default function OgpCard({ url }: { url: string }) {
                 )}
                 <div className="flex items-center gap-1.5">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={data.favicon} alt="" width={14} height={14} className="opacity-60" />
+                    {data.favicon && <img src={data.favicon} alt="" width={14} height={14} className="opacity-60" />}
                     <span className="text-xs text-[#4A4A4A]/60 truncate">{hostname}</span>
                 </div>
             </div>

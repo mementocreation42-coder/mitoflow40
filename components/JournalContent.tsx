@@ -19,6 +19,7 @@ export default function JournalContent({ html }: { html: string }) {
 
             const url = text;
             const wrapper = document.createElement("div");
+            wrapper.className = "not-prose";
             p.replaceWith(wrapper);
             const root = createRoot(wrapper);
             root.render(<OgpCard url={url} />);

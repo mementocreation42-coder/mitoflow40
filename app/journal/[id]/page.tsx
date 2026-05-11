@@ -31,7 +31,18 @@ export default async function JournalPost({ params }: { params: Promise<{ id: st
     const featuredMedia = post._embedded?.['wp:featuredmedia']?.[0];
     const categories = post._embedded?.['wp:term']?.[0] ?? [];
 
+    const CATEGORY_BG: Record<number, string> = {
+        1:  "#FAD9CE", // 食事・栄養 - orange
+        10: "#CDD8F5", // 生活習慣 - blue
+        11: "#ECCAE3", // サプリメント - purple
+        12: "#F5EAC0", // データ・効果検証 - yellow
+        13: "#C0EDD8", // 運動 - green
+    };
+    const primaryCat = (categories as any[]).find((c: any) => c.slug !== 'journal' && c.name !== 'Journal');
+    const bgColor = primaryCat ? (CATEGORY_BG[primaryCat.id] ?? '#B8F5E8') : '#B8F5E8';
+
     return (
+        <div className="min-h-screen" style={{ background: bgColor }}>
         <article className="max-w-[660px] mx-auto px-6 md:px-4 py-12 md:py-24">
             {/* Header */}
             <header className="mb-10 text-center">
@@ -41,6 +52,7 @@ export default async function JournalPost({ params }: { params: Promise<{ id: st
                             src={featuredMedia.source_url}
                             alt={featuredMedia.alt_text || post.title.rendered}
                             fill
+                            sizes="(max-width: 660px) 100vw, 660px"
                             className="object-cover"
                             priority
                         />
@@ -56,7 +68,7 @@ export default async function JournalPost({ params }: { params: Promise<{ id: st
             </header>
 
             {/* Sticky Category */}
-            <JournalStickyCategory categories={allCategories} activeIds={categories.map((c: any) => c.id)} />
+            <JournalStickyCategory categories={allCategories.filter(c => c.slug !== 'journal')} activeIds={categories.map((c: any) => c.id)} />
 
             {/* Author */}
             <JournalAuthor />
@@ -86,6 +98,7 @@ export default async function JournalPost({ params }: { params: Promise<{ id: st
                                                 src={relatedImageUrl}
                                                 alt={relatedImage?.alt_text || relatedPost.title.rendered}
                                                 fill
+                                                sizes="(max-width: 768px) 100vw, 220px"
                                                 className="object-cover transition-transform duration-500 group-hover:scale-105"
                                             />
                                         ) : (
@@ -119,5 +132,6 @@ export default async function JournalPost({ params }: { params: Promise<{ id: st
                 </Link>
             </div>
         </article>
+        </div>
     );
 }

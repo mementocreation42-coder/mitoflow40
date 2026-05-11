@@ -29,7 +29,7 @@ function CapsuleLink({ label, color, isActive, href }: { label: string; color: s
                 height: "clamp(28px, 7vw, 36px)",
                 fontSize: "clamp(9px, 2.2vw, 12px)",
                 padding: "0 clamp(10px, 3vw, 20px)",
-                border: `2px solid ${filled ? color : "#D1D5DB"}`,
+                border: "none",
                 transition: "border-color 0.2s",
             }}
         >
@@ -79,6 +79,13 @@ export default function JournalStickyCategory({
                 className="flex flex-wrap gap-2 justify-center px-6 py-3 w-full md:my-4"
                 style={{ maxWidth: "420px" }}
             >
+                <CapsuleLink
+                    key="all"
+                    label="すべて"
+                    color="#E05A7B"
+                    isActive={false}
+                    href="/journal"
+                />
                 {sorted.map((cat) => (
                     <CapsuleLink
                         key={cat.id}

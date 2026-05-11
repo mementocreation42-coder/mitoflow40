@@ -8,11 +8,11 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
 const CATEGORY_COLORS: Record<number, string> = {
-    1:  "#E07B5A",
-    5:  "#5BBF8A",
-    10: "#7B9DE0",
-    11: "#C97BAF",
-    12: "#E0C97B",
+    1:  "#E07B5A", // 食事・栄養
+    10: "#7B9DE0", // 生活習慣
+    11: "#C97BAF", // サプリメント
+    12: "#E0C97B", // データ・効果検証
+    13: "#5BBF8A", // 運動
 };
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -112,6 +112,7 @@ export default function JournalList() {
                                                 src={imageUrl}
                                                 alt={featuredMedia?.alt_text || post.title.rendered}
                                                 fill
+                                                sizes="(max-width: 768px) 100vw, 50vw"
                                                 className="object-cover transition-transform duration-500 group-hover:scale-105"
                                             />
                                         ) : (
@@ -125,7 +126,7 @@ export default function JournalList() {
                                             <span className="text-sm text-[#4A4A4A]/70 font-mono">
                                                 {format(new Date(post.date), 'yyyy.MM.dd')}
                                             </span>
-                                            {post._embedded?.['wp:term']?.[0]?.map((cat: any) => (
+                                            {post._embedded?.['wp:term']?.[0]?.filter((cat: any) => cat.slug !== 'journal' && cat.name !== 'Journal').map((cat: any) => (
                                                 <span
                                                     key={cat.id}
                                                     className="text-xs font-bold px-2.5 py-0.5 rounded-full"

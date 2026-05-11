@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { GoogleAnalytics } from '@next/third-parties/google';
-import { Space_Grotesk, Inter, Noto_Sans_JP, MuseoModerno } from "next/font/google";
+import { Space_Grotesk, Inter, Noto_Sans_JP, MuseoModerno, Special_Elite, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -18,6 +18,20 @@ const museoModerno = MuseoModerno({
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+const specialElite = Special_Elite({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-handwrite",
+  display: "swap",
+});
+
+const bebasNeue = Bebas_Neue({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-bebas",
   display: "swap",
 });
 
@@ -57,7 +71,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body
-        className={`${spaceGrotesk.variable} ${inter.variable} ${notoSansJP.variable} ${museoModerno.variable} antialiased`}
+        className={`${spaceGrotesk.variable} ${inter.variable} ${notoSansJP.variable} ${museoModerno.variable} ${specialElite.variable} ${bebasNeue.variable} antialiased`}
       >
         {children}
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
