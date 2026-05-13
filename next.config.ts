@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'journal.mitoflow40.com',
-        pathname: '/wp-content/uploads/**',
+        pathname: '/**',
       },
     ],
   },

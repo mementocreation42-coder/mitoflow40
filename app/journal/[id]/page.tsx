@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { format } from "date-fns";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import JournalAuthor from "@/components/JournalAuthor";
 import JournalContent from "@/components/JournalContent";
 import JournalNewsletter from "@/components/JournalNewsletter";
@@ -10,6 +11,83 @@ import JournalStickyCategory from "@/components/JournalStickyCategory";
 import { getCategories } from "@/lib/wp";
 
 export const revalidate = 60;
+
+const SITE_URL = "https://mitoflow40.com";
+const SITE_NAME = "Mitoflow40";
+
+// HTML/エンティティを取り除き、指定文字数で切り詰めるユーティリティ
+function stripHtml(html: string, maxLength = 160): string {
+    const text = html
+        .replace(/<[^>]+>/g, "")
+        .replace(/&amp;/g, "&")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, '"')
+        .replace(/&#039;/g, "'")
+        .replace(/&nbsp;/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength - 1) + "…";
+}
+
+export async function generateMetadata(
+    { params }: { params: Promise<{ id: string }> }
+): Promise<Metadata> {
+    const { id } = await params;
+    const postId = parseInt(id, 10);
+    if (isNaN(postId)) return {};
+
+    const post = await getPostById(postId);
+    if (!post) return {};
+
+    const title = stripHtml(post.title.rendered, 70);
+    const description = stripHtml(post.excerpt.rendered || post.content.rendered, 160);
+    const featuredMedia = post._embedded?.["wp:featuredmedia"]?.[0];
+    const ogImage = featuredMedia?.source_url;
+    const canonical = `${SITE_URL}/journal/${post.id}`;
+    const categories = post._embedded?.["wp:term"]?.[0] ?? [];
+
+    return {
+        title: { absolute: `${title} | ${SITE_NAME}` },
+        description,
+        keywords: [
+            ...categories.map((c) => c.name),
+            "Mitoflow40", "40代", "健康", "ミトコンドリア", "ヘルスケア",
+        ],
+        alternates: { canonical },
+        openGraph: {
+            title,
+            description,
+            url: canonical,
+            siteName: SITE_NAME,
+            type: "article",
+            locale: "ja_JP",
+            publishedTime: post.date,
+            images: ogImage
+                ? [{ url: ogImage, width: 1200, height: 630, alt: featuredMedia.alt_text || title }]
+                : undefined,
+            authors: ["小林大介"],
+            tags: categories.map((c) => c.name),
+        },
+        twitter: {
+            card: ogImage ? "summary_large_image" : "summary",
+            title,
+            description,
+            images: ogImage ? [ogImage] : undefined,
+        },
+        robots: {
+            index: true,
+            follow: true,
+            googleBot: {
+                index: true,
+                follow: true,
+                "max-image-preview": "large",
+                "max-snippet": -1,
+            },
+        },
+    };
+}
 
 export default async function JournalPost({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -41,16 +119,51 @@ export default async function JournalPost({ params }: { params: Promise<{ id: st
     const primaryCat = (categories as any[]).find((c: any) => c.slug !== 'journal' && c.name !== 'Journal');
     const bgColor = primaryCat ? (CATEGORY_BG[primaryCat.id] ?? '#B8F5E8') : '#B8F5E8';
 
+    // JSON-LD 構造化データ（Article schema）
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: stripHtml(post.title.rendered, 110),
+        description: stripHtml(post.excerpt.rendered || post.content.rendered, 200),
+        image: featuredMedia ? [featuredMedia.source_url] : undefined,
+        datePublished: post.date,
+        dateModified: post.date,
+        author: {
+            "@type": "Person",
+            name: "小林大介",
+            url: `${SITE_URL}/#profile`,
+        },
+        publisher: {
+            "@type": "Organization",
+            name: SITE_NAME,
+            logo: {
+                "@type": "ImageObject",
+                url: `${SITE_URL}/icon.png`,
+            },
+        },
+        mainEntityOfPage: {
+            "@type": "WebPage",
+            "@id": `${SITE_URL}/journal/${post.id}`,
+        },
+        articleSection: categories.map((c) => c.name).join(", "),
+    };
+
     return (
         <div className="min-h-screen" style={{ background: bgColor }}>
         <article className="max-w-[660px] mx-auto px-6 md:px-4 py-12 md:py-24">
+            {/* 構造化データ */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+
             {/* Header */}
             <header className="mb-10 text-center">
                 {featuredMedia && (
                     <div className="aspect-[16/9] relative w-full overflow-hidden rounded-2xl shadow-sm mb-8">
                         <Image
                             src={featuredMedia.source_url}
-                            alt={featuredMedia.alt_text || post.title.rendered}
+                            alt={featuredMedia.alt_text || stripHtml(post.title.rendered, 100)}
                             fill
                             sizes="(max-width: 660px) 100vw, 660px"
                             className="object-cover"

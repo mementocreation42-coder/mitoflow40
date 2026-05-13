@@ -2,6 +2,100 @@ const WP_BASE = 'https://journal.mitoflow40.com/index.php';
 const WP_ORIGIN = 'https://journal.mitoflow40.com';
 const FRONT_ORIGIN = 'https://mitoflow40.com';
 
+// ===== Write API (Application Password) =====
+
+function getAuthHeader(): string {
+  const user = process.env.WP_APP_USERNAME || '';
+  const pass = process.env.WP_APP_PASSWORD || '';
+  const token = Buffer.from(`${user}:${pass}`).toString('base64');
+  return `Basic ${token}`;
+}
+
+function writeUrl(path: string): string {
+  return `${WP_ORIGIN}/?rest_route=/wp/v2${path}`;
+}
+
+export async function uploadMedia(file: Blob, filename: string): Promise<{ id: number; source_url: string }> {
+  const res = await fetch(writeUrl('/media'), {
+    method: 'POST',
+    headers: {
+      Authorization: getAuthHeader(),
+      'Content-Disposition': `attachment; filename="${encodeURIComponent(filename)}"`,
+      'Content-Type': file.type || 'image/jpeg',
+    },
+    body: file,
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Media upload failed: ${res.status} – ${err}`);
+  }
+  const data = await res.json();
+  return { id: data.id, source_url: data.source_url };
+}
+
+export interface CreatePostInput {
+  title: string;
+  content: string;
+  excerpt?: string;
+  date?: string;
+  status?: 'publish' | 'draft';
+  categories?: number[];
+  featured_media?: number;
+}
+
+export async function createWPPost(input: CreatePostInput): Promise<{ id: number; slug: string }> {
+  const res = await fetch(writeUrl('/posts'), {
+    method: 'POST',
+    headers: {
+      Authorization: getAuthHeader(),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      title: input.title,
+      content: input.content,
+      excerpt: input.excerpt || '',
+      date: input.date,
+      status: input.status || 'publish',
+      categories: input.categories || [],
+      featured_media: input.featured_media || 0,
+    }),
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Create post failed: ${res.status} – ${err}`);
+  }
+  const post = await res.json();
+  return { id: post.id, slug: post.slug };
+}
+
+export async function updateWPPost(id: number, input: Partial<CreatePostInput>): Promise<{ id: number; slug: string }> {
+  const res = await fetch(writeUrl(`/posts/${id}`), {
+    method: 'POST',
+    headers: {
+      Authorization: getAuthHeader(),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(input),
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Update post failed: ${res.status} – ${err}`);
+  }
+  const post = await res.json();
+  return { id: post.id, slug: post.slug };
+}
+
+export async function deleteWPPost(id: number): Promise<void> {
+  const res = await fetch(writeUrl(`/posts/${id}?force=true`), {
+    method: 'DELETE',
+    headers: { Authorization: getAuthHeader() },
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Delete post failed: ${res.status} – ${err}`);
+  }
+}
+
 // 記事内のWordPress内部リンクをフロントエンドURLに書き換える
 function rewriteLinks(html: string): string {
     // /?p=123 形式 → /journal/123
