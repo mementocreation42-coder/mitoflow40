@@ -16,11 +16,16 @@ function writeUrl(path: string): string {
 }
 
 export async function uploadMedia(file: Blob, filename: string): Promise<{ id: number; source_url: string }> {
+  // 拡張子を保持しつつ非ASCII文字を除去（WAF対策）
+  const extMatch = filename.match(/\.([a-zA-Z0-9]+)$/);
+  const ext = extMatch ? extMatch[1].toLowerCase() : 'jpg';
+  const safeName = `upload-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+
   const res = await fetch(writeUrl('/media'), {
     method: 'POST',
     headers: {
       Authorization: getAuthHeader(),
-      'Content-Disposition': `attachment; filename="${encodeURIComponent(filename)}"`,
+      'Content-Disposition': `attachment; filename="${safeName}"`,
       'Content-Type': file.type || 'image/jpeg',
     },
     body: file,
