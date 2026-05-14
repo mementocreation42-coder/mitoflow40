@@ -179,13 +179,27 @@ export async function getPostById(id: number): Promise<WPPost | undefined> {
         next: { revalidate: 3600 },
     });
 
-    if (!res.ok) {
-        return undefined;
+    if (res.ok) {
+        const post: WPPost = await res.json();
+        post.content.rendered = rewriteLinks(post.content.rendered);
+        return post;
     }
 
-    const post: WPPost = await res.json();
-    post.content.rendered = rewriteLinks(post.content.rendered);
-    return post;
+    // 公開APIで取得できない場合は下書きの可能性があるので認証付きで再試行
+    try {
+        const draftUrl = new URL(writeUrl(`/posts/${id}`));
+        draftUrl.searchParams.set('_embed', '1');
+        const draftRes = await fetch(draftUrl.toString(), {
+            cache: 'no-store',
+            headers: { Authorization: getAuthHeader() },
+        });
+        if (!draftRes.ok) return undefined;
+        const post: WPPost = await draftRes.json();
+        post.content.rendered = rewriteLinks(post.content.rendered);
+        return post;
+    } catch {
+        return undefined;
+    }
 }
 
 export async function getPostByDateAndSlug(
