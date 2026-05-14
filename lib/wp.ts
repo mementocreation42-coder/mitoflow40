@@ -21,14 +21,17 @@ export async function uploadMedia(file: Blob, filename: string): Promise<{ id: n
   const ext = extMatch ? extMatch[1].toLowerCase() : 'jpg';
   const safeName = `upload-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
 
+  // multipart/form-data でブラウザ標準のアップロードと同じ形式にする（WAF対策）
+  const form = new FormData();
+  form.append('file', file, safeName);
+
   const res = await fetch(writeUrl('/media'), {
     method: 'POST',
     headers: {
       Authorization: getAuthHeader(),
-      'Content-Disposition': `attachment; filename="${safeName}"`,
-      'Content-Type': file.type || 'image/jpeg',
+      'User-Agent': 'Mozilla/5.0 (compatible; Mitoflow40-Admin/1.0)',
     },
-    body: file,
+    body: form,
   });
   if (!res.ok) {
     const err = await res.text();
