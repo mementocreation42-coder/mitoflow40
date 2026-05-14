@@ -13,6 +13,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return {
         title: `${gene.symbol} - ${gene.name} | Mitoflow40`,
         description: gene.tagline,
+        alternates: { canonical: `https://mitoflow40.com/genes/${slug}` },
+        robots: { index: true, follow: true },
+        openGraph: {
+            title: `${gene.symbol} - ${gene.name} | Mitoflow40`,
+            description: gene.tagline,
+            url: `https://mitoflow40.com/genes/${slug}`,
+            type: 'article',
+        },
     };
 }
 

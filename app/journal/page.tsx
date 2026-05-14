@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import JournalSearch from "@/components/JournalSearch";
 import JournalList from "@/components/JournalList";
 import JournalCategoryFilter from "@/components/JournalCategoryFilter";
@@ -5,6 +6,18 @@ import { Suspense } from "react";
 import { getCategories } from "@/lib/wp";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+    title: 'JoUrNaL | Mitoflow40',
+    description: '40代からの健康実践・ミトコンドリア最適化・精密栄養学など、最先端の健康情報と実践の記録。',
+    alternates: { canonical: 'https://mitoflow40.com/journal' },
+    openGraph: {
+        title: 'JoUrNaL | Mitoflow40',
+        description: '40代からの健康実践・ミトコンドリア最適化・精密栄養学など、最先端の健康情報と実践の記録。',
+        url: 'https://mitoflow40.com/journal',
+        type: 'website',
+    },
+};
 
 const CATEGORY_BG: Record<number, string> = {
     1:  "#FAD9CE",

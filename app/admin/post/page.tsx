@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { getCategories } from '@/lib/wp';
 import PostEditor from '@/components/admin/PostEditor';
 
-export const metadata = { title: { absolute: '新規投稿 | Mitoflow40 Admin' } };
+export const metadata = { title: { absolute: '新規投稿 | Mitoflow40 Admin' }, robots: { index: false, follow: false } };
 export const dynamic = 'force-dynamic';
 
 export default async function NewPostPage() {

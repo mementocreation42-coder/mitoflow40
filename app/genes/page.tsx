@@ -2,8 +2,15 @@ import Link from 'next/link';
 import { genes } from '@/lib/genes';
 
 export const metadata = {
-    title: 'GENES - Mitoflow40',
-    description: 'Dirty Genesに基づく7つの主要遺伝子と、それぞれを"クリーン"に保つための栄養・生活習慣',
+    title: 'GENES | Mitoflow40',
+    description: 'Dirty Genesに基づく7つの主要遺伝子と、それぞれを"クリーン"に保つための栄養・生活習慣。MTHFR・COMT・MAOAなど40代の健康最適化に直結する遺伝子情報。',
+    alternates: { canonical: 'https://mitoflow40.com/genes' },
+    openGraph: {
+        title: 'GENES | Mitoflow40',
+        description: 'Dirty Genesに基づく7つの主要遺伝子と、それぞれを"クリーン"に保つための栄養・生活習慣。',
+        url: 'https://mitoflow40.com/genes',
+        type: 'website',
+    },
 };
 
 export default function GenesIndex() {

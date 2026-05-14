@@ -1,8 +1,15 @@
 import NewsletterForm from "@/components/NewsletterForm";
 
 export const metadata = {
-    title: "Newsletter | Mitoflow40 Journal",
-    description: "40代からの健康実践・AI・クリエイティブをテーマに、領域を横断した視点でお届けするニュースレター。",
+    title: "Newsletter | Mitoflow40",
+    description: "40代からの健康実践・AI・クリエイティブをテーマに、領域を横断した視点でお届けするニュースレター。登録者にはSAL謹製写真現像プリセット「selpico3」をプレゼント。",
+    alternates: { canonical: 'https://mitoflow40.com/newsletter' },
+    openGraph: {
+        title: 'Newsletter | Mitoflow40',
+        description: '40代からの健康実践・AI・クリエイティブをテーマに、領域を横断した視点でお届けするニュースレター。',
+        url: 'https://mitoflow40.com/newsletter',
+        type: 'website',
+    },
 };
 
 const TAGS = [

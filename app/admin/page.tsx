@@ -3,7 +3,7 @@ import { getPostsPaginated } from '@/lib/wp';
 import { logout } from '@/app/login/actions';
 import PostActions from '@/components/admin/PostActions';
 
-export const metadata = { title: { absolute: 'ダッシュボード | Mitoflow40 Admin' } };
+export const metadata = { title: { absolute: 'ダッシュボード | Mitoflow40 Admin' }, robots: { index: false, follow: false } };
 export const dynamic = 'force-dynamic';
 
 export default async function AdminPage({

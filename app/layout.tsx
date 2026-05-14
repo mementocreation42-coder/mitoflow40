@@ -60,6 +60,11 @@ export const metadata: Metadata = {
       "40代。それはカラダの本当の声が無視できなくなる年齢。ミトコンドリア活性化で40代からの人生をフローさせる。パーソナルヘルスケアサービス by DAISUKE KOBAYASHI",
     type: "website",
     locale: "ja_JP",
+    url: "https://mitoflow40.com",
+    siteName: "Mitoflow40",
+  },
+  alternates: {
+    canonical: "https://mitoflow40.com",
   },
 };
 
