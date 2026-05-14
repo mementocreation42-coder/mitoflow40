@@ -29,7 +29,7 @@ export default function JournalContent({ html }: { html: string }) {
     return (
         <div
             ref={ref}
-            className="prose prose-lg prose-slate mx-auto prose-headings:font-bold prose-headings:text-[#1A1A1A] prose-p:text-[#4A4A4A] prose-p:font-medium prose-p:leading-[1.75] prose-p:my-8 prose-li:font-medium prose-li:leading-[1.75] prose-blockquote:font-medium prose-a:text-[#41C9B4] prose-img:rounded-xl"
+            className="prose prose-slate mx-auto prose-headings:font-bold prose-headings:text-[#1A1A1A] prose-p:text-[#4A4A4A] prose-p:font-medium prose-p:leading-[1.75] prose-p:my-8 prose-li:font-medium prose-li:leading-[1.75] prose-blockquote:font-medium prose-a:text-[#41C9B4] prose-img:rounded-xl"
             dangerouslySetInnerHTML={{ __html: html }}
         />
     );

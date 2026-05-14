@@ -172,6 +172,35 @@ a {
   }
 }
 
+/* Journal Article Headings */
+.prose h2 {
+  font-family: var(--font-body);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  border-left: 4px solid #41C9B4;
+  background: linear-gradient(90deg, rgba(65,201,180,0.08) 0%, transparent 100%);
+  padding: 0.6em 1em;
+  margin-top: 2.5em;
+  margin-bottom: 1em;
+  border-radius: 0 6px 6px 0;
+}
+
+.prose h3 {
+  font-family: var(--font-body);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  border-bottom: 2px solid #41C9B4;
+  padding-bottom: 0.3em;
+  margin-top: 2em;
+  margin-bottom: 0.8em;
+}
+
 .prose iframe {
   width: 100%;
   aspect-ratio: 16 / 9;

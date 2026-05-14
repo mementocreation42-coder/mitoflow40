@@ -112,8 +112,9 @@ function rewriteLinks(html: string): string {
         `${FRONT_ORIGIN}/journal/$1`
     );
     // その他のWPオリジンURL（カテゴリ・スラッグ等）→ /journal
+    // ただし /wp-content/ (画像等) と /wp-includes/ は除外
     result = result.replace(
-        new RegExp(`${WP_ORIGIN}(/[^"']*)?`, 'g'),
+        new RegExp(`${WP_ORIGIN}(?!/wp-content|/wp-includes|/wp-json)(/[^"'\\s]*)?`, 'g'),
         `${FRONT_ORIGIN}/journal`
     );
     return result;
