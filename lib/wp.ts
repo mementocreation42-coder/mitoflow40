@@ -126,6 +126,7 @@ export type WPPost = {
     id: number;
     date: string;
     slug: string;
+    status?: 'publish' | 'draft' | 'pending' | 'private';
     title: {
         rendered: string;
     };
@@ -246,34 +247,48 @@ export type PaginatedPosts = {
 };
 
 export async function getPostsPaginated(page = 1, perPage = 20, search?: string, categoryId?: number): Promise<PaginatedPosts> {
-    const params: Record<string, string | number> = {
+    const base: Record<string, string | number> = {
         _embed: '1',
         per_page: perPage,
         page,
-        _fields: 'id,date,slug,title,excerpt,_links,_embedded',
+        _fields: 'id,date,slug,title,excerpt,status,_links,_embedded',
     };
-    if (search) {
-        params.search = search;
+    if (search) base.search = search;
+    if (categoryId) base.categories = categoryId;
+
+    // 公開済み（認証不要、デフォルトで publish のみ返る）
+    const pubRes = await fetch(wpUrl('/posts', base), { cache: 'no-store' });
+    if (!pubRes.ok) {
+        const body = await pubRes.text().catch(() => '');
+        throw new Error(`Failed to fetch posts (${pubRes.status}): ${body.slice(0, 200)}`);
     }
-    if (categoryId) {
-        params.categories = categoryId;
+    const totalPages = parseInt(pubRes.headers.get('X-WP-TotalPages') || '1', 10);
+    const pubPosts: WPPost[] = await pubRes.json();
+
+    // 下書き（認証あり、1ページ目のみ全件）
+    let draftPosts: WPPost[] = [];
+    try {
+        const draftUrl = new URL(writeUrl('/posts'));
+        const draftParams: Record<string, string | number> = { ...base, status: 'draft', per_page: 100, page: 1 };
+        for (const [k, v] of Object.entries(draftParams)) draftUrl.searchParams.set(k, String(v));
+        const draftRes = await fetch(draftUrl.toString(), {
+            cache: 'no-store',
+            headers: { Authorization: getAuthHeader() },
+        });
+        if (draftRes.ok) {
+            draftPosts = await draftRes.json();
+        } else {
+            const body = await draftRes.text().catch(() => '');
+            console.warn(`[wp] Draft fetch failed (${draftRes.status}): ${body.slice(0, 300)}`);
+        }
+    } catch (e) {
+        console.warn('[wp] Draft fetch error:', e);
     }
 
-    const res = await fetch(wpUrl('/posts', params), {
-        cache: 'no-store',
-    });
+    // 下書きを先頭に、公開済みをその後に並べる
+    const posts = page === 1 ? [...draftPosts, ...pubPosts] : pubPosts;
 
-    if (!res.ok) {
-        throw new Error('Failed to fetch posts');
-    }
-
-    const totalPages = parseInt(res.headers.get('X-WP-TotalPages') || '1', 10);
-
-    return {
-        posts: await res.json(),
-        totalPages,
-        currentPage: page,
-    };
+    return { posts, totalPages, currentPage: page };
 }
 
 export type WPCategory = {

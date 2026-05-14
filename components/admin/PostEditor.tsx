@@ -123,6 +123,25 @@ export default function PostEditor({ categories, postId, defaultValues }: PostEd
     return () => { ta.removeEventListener('mouseup', save); ta.removeEventListener('keyup', save); };
   }, []);
 
+  function generateExcerpt() {
+    const plain = body
+      .replace(/\[image:\d+\]/g, '')         // 画像タグ除去
+      .replace(/^#{1,6}\s+/gm, '')           // 見出し記号除去
+      .replace(/\*\*(.+?)\*\*/g, '$1')       // bold
+      .replace(/\*(.+?)\*/g, '$1')           // italic
+      .replace(/`(.+?)`/g, '$1')             // code
+      .replace(/^[-*>\s]+/gm, '')            // リスト・引用記号
+      .replace(/\n{2,}/g, '\n')              // 連続改行を1つに
+      .replace(/\n/g, ' ')                   // 改行をスペースに
+      .trim();
+    // 文末句点で切る（80〜160字）
+    let result = plain.slice(0, 160);
+    const cutPoint = result.search(/[。．!?！？]/g);
+    if (cutPoint >= 60) result = plain.slice(0, cutPoint + 1);
+    else result = plain.slice(0, 120);
+    setExcerpt(result.trim());
+  }
+
   const uploadFile = useCallback(async (file: File): Promise<{ url: string; id: number }> => {
     const compressed = await compressImage(file);
     const fd = new FormData();
@@ -399,6 +418,10 @@ export default function PostEditor({ categories, postId, defaultValues }: PostEd
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
           <label style={{ ...labelStyle, marginBottom: 0 }}>抜粋 / メタディスクリプション</label>
+          <button type="button" onClick={generateExcerpt}
+            style={{ fontSize: 11, padding: '3px 8px', background: '#1e1e1e', border: '1px solid #2a2a2a', borderRadius: 5, color: '#888', cursor: 'pointer' }}>
+            自動抽出
+          </button>
           <span style={{
             fontSize: 11,
             color: excerpt.length === 0 ? '#444'

@@ -81,6 +81,14 @@ export default async function AdminPage({
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 6 }}>
                     <span style={{ fontSize: 12, color: '#555' }}>{date}</span>
+                    {post.status === 'draft' && (
+                      <span style={{
+                        fontSize: 11, padding: '2px 8px', background: '#2a1e00',
+                        border: '1px solid #4a3a00', borderRadius: 20, color: '#f59e0b',
+                      }}>
+                        下書き
+                      </span>
+                    )}
                     {categories.map((cat) => (
                       <span key={cat.id} style={{
                         fontSize: 11, padding: '2px 8px', background: '#1e1e1e',
@@ -103,7 +111,7 @@ export default async function AdminPage({
                     fontSize: 13, color: '#555', lineHeight: 1.5,
                     display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
                   }}
-                    dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}
+                    dangerouslySetInnerHTML={{ __html: post.excerpt?.rendered ?? '' }}
                   />
                 </div>
                 <PostActions postId={post.id} />
