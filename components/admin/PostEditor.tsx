@@ -25,7 +25,7 @@ const TARGET_SIZE = 200 * 1024;
 const MAX_DIM = 1920;
 
 async function compressImage(file: File): Promise<File> {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const img = new Image();
     const url = URL.createObjectURL(file);
     img.onload = () => {
@@ -50,7 +50,7 @@ async function compressImage(file: File): Promise<File> {
       };
       tryQ(0.85);
     };
-    img.onerror = () => { URL.revokeObjectURL(url); resolve(file); };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error(`画像をデコードできませんでした (${file.type || '不明'}, ${file.name})`)); };
     img.src = url;
   });
 }
@@ -128,7 +128,10 @@ export default function PostEditor({ categories, postId, defaultValues }: PostEd
     const fd = new FormData();
     fd.append('image', compressed, compressed.name);
     const res = await fetch('/api/admin/upload', { method: 'POST', body: fd });
-    if (!res.ok) throw new Error('Upload failed');
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      throw new Error(`Upload failed (${res.status}): ${text.slice(0, 300)}`);
+    }
     return res.json();
   }, []);
 
@@ -144,8 +147,8 @@ export default function PostEditor({ categories, postId, defaultValues }: PostEd
         setBody((b) => b.slice(0, pos) + '\n' + tag + '\n' + b.slice(pos));
         return [...prev, ...results];
       });
-    } catch {
-      setError('画像のアップロードに失敗しました');
+    } catch (e) {
+      setError(`画像のアップロードに失敗しました: ${e instanceof Error ? e.message : String(e)}`);
     } finally {
       setUploading(false);
     }
@@ -156,7 +159,7 @@ export default function PostEditor({ categories, postId, defaultValues }: PostEd
     if (!file) return;
     setUploading(true);
     try { setFeaturedImage(await uploadFile(file)); }
-    catch { setError('アイキャッチ画像のアップロードに失敗しました'); }
+    catch (err) { setError(`アイキャッチ画像のアップロードに失敗しました: ${err instanceof Error ? err.message : String(err)}`); }
     finally { setUploading(false); }
   }
 
