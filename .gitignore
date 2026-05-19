@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# blood-analysis: 個人健康情報の保護
+/blood-analysis/inputs/
+/blood-analysis/outputs/
+/blood-analysis/*.pdf
+/blood-analysis/**/*.pdf
+/blood-analysis/血液検査データ理想値_*.pdf
+/public/reports/*.html
+/public/reports/_published_tokens.log

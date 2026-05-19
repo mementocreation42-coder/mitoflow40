@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>MitoFlow40 Blood Analysis Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  html, body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  :root {
+    --bg: #FFFFFF;
+    --text: #1A1A1A;
+    --muted: #4A4A4A;
+    --border: #1A1A1A;
+    --border-thin: #555555;
+    --mint: #4AF6C3;
+    --apricot: #FFB37B;
+    --sky: #6CCFF6;
+    --lavender: #E5D0E3;
+    --yellow: #E8C547;
+    --pink: #FFB6B6;
+    --cyan: #B2EBF2;
+    --orange: #FF9855;
+  }
+  body {
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 10.5pt;
+    background: var(--bg);
+  }
+  h1, h2, h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+  .ja-sub {
+    font-family: 'Noto Sans JP', sans-serif;
+    text-transform: none;
+    font-weight: 400;
+    color: var(--muted);
+    font-size: 10pt;
+    letter-spacing: 0;
+  }
+
+  section {
+    padding: 30px 50px;
+    border-bottom: 1px solid var(--border);
+    page-break-before: always;
+    page-break-after: always;
+    break-before: page;
+    break-after: page;
+    height: 297mm;
+    max-height: 297mm;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    position: relative;
+  }
+  /* Decorative illustrations to fill negative space */
+  .deco {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.88;
+    z-index: 0;
+  }
+  .deco.br { right: 20px; bottom: 20px; }
+  .deco.bl { left: 20px; bottom: 20px; }
+  .deco.tr { right: 20px; top: 20px; }
+  .deco.tl { left: 20px; top: 20px; }
+  section > .container { position: relative; z-index: 1; }
+  section > .container { width: 100%; }
+  .cover { page-break-after: always; break-after: page; }
+  .container { max-width: 720px; margin: 0 auto; }
+
+  /* ===== COVER ===== */
+  .cover {
+    position: relative;
+    padding: 70px 50px 50px;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    min-height: 92vh;
+    background-image: url('assets/hero-bg-new.png');
+    background-size: cover;
+    background-position: center;
+  }
+  .cover-eyebrow {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10pt;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 24px;
+    font-weight: 600;
+  }
+  .cover-content {
+    position: relative;
+    z-index: 2;
+    text-align: right;
+    max-width: 600px;
+    margin-left: auto;
+  }
+  .cover h1 {
+    font-size: 56pt;
+    line-height: 1;
+    margin-bottom: 28px;
+    color: var(--text);
+  }
+  .cover h1 .accent { color: var(--orange); }
+  .cover-sub {
+    font-family: 'Noto Sans JP', sans-serif;
+    text-transform: none;
+    font-size: 12pt;
+    color: var(--text);
+    max-width: 480px;
+    margin-left: auto;
+    line-height: 1.9;
+    font-weight: 600;
+  }
+  .cover-illust {
+    position: absolute;
+    left: 0;
+    bottom: 60px;
+    width: 560px;
+    height: 560px;
+    z-index: 2;
+    background-image: url('assets/hero-illustration-bl.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: left bottom;
+  }
+  .cover-meta {
+    position: absolute;
+    bottom: 30px;
+    left: 50px;
+    right: 50px;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    z-index: 3;
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(2px);
+  }
+
+  /* ===== SECTION HEAD ===== */
+  .section-head { text-align: center; margin-bottom: 18px; }
+  .section-head h2 { font-size: 24pt; margin-bottom: 4px; }
+
+  /* ===== INTRO (white) ===== */
+  .s-intro { background: var(--bg); }
+  .intro-lead {
+    font-size: 13pt;
+    line-height: 2;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .intro-lead .strong { color: var(--orange); font-weight: 700; }
+  .disclaimer {
+    background: #fafafa;
+    border: 1px solid var(--border-thin);
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 9pt;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ===== SYSTEM BALANCE ===== */
+  .s-snapshot { background: var(--cyan); }
+  .snapshot-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 18px;
+    margin-bottom: 22px;
+  }
+  .gauge-card, .radar-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px;
+  }
+  .gauge-card { display: flex; flex-direction: column; align-items: center; }
+  .gauge-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 8px;
+    align-self: flex-start;
+  }
+  .gauge-card svg { width: 100%; max-width: 220px; }
+  .gauge-verdict {
+    text-align: center;
+    margin-top: 8px;
+  }
+  .gauge-verdict strong {
+    font-family: 'Space Grotesk', sans-serif;
+    display: block;
+    font-size: 11pt;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+  .gauge-verdict span { font-size: 9.5pt; color: var(--muted); }
+  .radar-card svg { width: 100%; }
+
+  .score-bars {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px 26px;
+  }
+  .score-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 50px;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid #ececec;
+  }
+  .score-row:last-child { border-bottom: none; }
+  .score-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10pt;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .score-name em {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 8.5pt;
+    color: var(--muted);
+    font-style: normal;
+    font-weight: 400;
+    display: block;
+    margin-top: 1px;
+  }
+  .score-track {
+    height: 12px;
+    background: #f0f0f0;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .score-fill { height: 100%; }
+  .score-val {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10pt;
+    font-weight: 700;
+    text-align: right;
+  }
+  .score-bars-head {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .score-bars-head span {
+    display: block;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9pt;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--muted);
+    font-weight: 400;
+    margin-top: 4px;
+  }
+
+  /* Composite pattern card */
+  .pattern-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px 26px;
+    margin-top: 0;
+  }
+  .pattern-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .pattern-tag {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 9pt;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    background: var(--text);
+    color: var(--bg);
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .pattern-ja { font-size: 9.5pt; color: var(--muted); }
+  .pattern-title {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 14pt;
+    font-weight: 700;
+    line-height: 1.7;
+    margin-bottom: 18px;
+  }
+  .pattern-flow {
+    display: grid;
+    grid-template-columns: 1fr 24px 1fr 24px 1fr;
+    align-items: stretch;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .flow-node {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 12px;
+    text-align: center;
+  }
+  .flow-node.red { background: var(--orange); }
+  .flow-node.orange { background: var(--yellow); }
+  .flow-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10pt;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .flow-name {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 11pt;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+  .flow-name em {
+    font-family: 'Space Grotesk', sans-serif;
+    font-style: normal;
+    font-size: 8pt;
+    letter-spacing: 0.1em;
+    color: var(--text);
+    opacity: 0.6;
+  }
+  .flow-sig {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 8.5pt;
+    line-height: 1.6;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 4px;
+  }
+  .flow-arrow {
+    align-self: center;
+    text-align: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 24pt;
+    font-weight: 700;
+  }
+  .pattern-note {
+    font-size: 9.5pt;
+    line-height: 1.7;
+    background: #fafafa;
+    border-left: 4px solid var(--orange);
+    padding: 12px 18px;
+    border-radius: 0 8px 8px 0;
+  }
+
+  /* ===== SUMMARY (mint) ===== */
+  .s-summary { background: var(--mint); }
+  .signal-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .signal {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 16px;
+    text-align: center;
+  }
+  .signal .dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+    vertical-align: middle;
+    border: 1px solid var(--border);
+  }
+  .signal.red .dot { background: var(--orange); }
+  .signal.yellow .dot { background: var(--yellow); }
+  .signal.green .dot { background: var(--mint); }
+  .signal .num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 44pt;
+    font-weight: 700;
+    line-height: 1;
+    margin: 10px 0 6px;
+  }
+  .signal .lbl {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 9pt;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .summary-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 26px 30px;
+  }
+  .summary-card .headline {
+    font-size: 13pt;
+    font-weight: 700;
+    line-height: 1.9;
+    margin-bottom: 14px;
+  }
+  .summary-card .narrative {
+    font-size: 10.5pt;
+    line-height: 1.9;
+    color: var(--text);
+  }
+
+  /* ===== TREND CHART ===== */
+  .s-trend { background: var(--yellow); }
+  .trend-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 20px;
+    margin-bottom: 10px;
+    page-break-inside: avoid;
+  }
+  .chart-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10.5pt;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+  .chart-sub {
+    font-size: 9pt;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .trend-svg { width: 100%; height: auto; max-height: 130px; }
+  .trend-narrative {
+    font-size: 9.5pt;
+    line-height: 1.7;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-thin);
+  }
+
+  /* ===== FINDINGS (pink) ===== */
+  .s-categories { background: var(--pink); }
+  .category {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 18px;
+    margin-bottom: 8px;
+    page-break-inside: avoid;
+  }
+  .category-text { font-size: 9.5pt; line-height: 1.65; margin-top: 6px; }
+  .category-text p + p { margin-top: 4px; }
+  .category-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--border-thin);
+    padding-bottom: 10px;
+  }
+  .category-icon {
+    width: 42px; height: 42px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18pt;
+    flex: 0 0 42px;
+  }
+  .category-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13pt;
+    text-transform: uppercase;
+    flex: 1;
+  }
+  .category-title .ja {
+    font-family: 'Noto Sans JP', sans-serif;
+    text-transform: none;
+    font-size: 9.5pt;
+    color: var(--muted);
+    display: block;
+    font-weight: 400;
+    margin-top: 2px;
+  }
+  .pill {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 8pt;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-weight: 600;
+  }
+  .pill.red { background: var(--orange); }
+  .pill.yellow { background: var(--yellow); }
+  .pill.green { background: var(--mint); }
+
+  /* Range bar */
+  .range-bar {
+    margin: 14px 0 8px;
+  }
+  .range-bar-labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 8.5pt;
+    color: var(--muted);
+    margin-bottom: 4px;
+    letter-spacing: 0.05em;
+  }
+  .range-bar-track {
+    position: relative;
+    height: 14px;
+    background: #f0f0f0;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    overflow: visible;
+  }
+  .range-bar-ideal {
+    position: absolute;
+    height: 100%;
+    background: var(--mint);
+    top: 0;
+    border-right: 1px solid var(--border);
+    border-left: 1px solid var(--border);
+  }
+  .range-bar-marker {
+    position: absolute;
+    top: -6px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 12px solid var(--text);
+    transform: translateX(-50%);
+  }
+  .range-bar-marker::after {
+    content: attr(data-val);
+    position: absolute;
+    top: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 9pt;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .range-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9pt;
+    color: var(--muted);
+    margin-top: 18px;
+  }
+  .range-meta strong { color: var(--text); }
+
+
+  /* ===== WATCH (sky) ===== */
+  .s-watch { background: var(--sky); }
+  .watch-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  .watch-item {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 16px;
+  }
+  .watch-item .label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 8.5pt;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .watch-item .value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 26pt;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .watch-item .unit { font-size: 11pt; font-weight: 500; }
+  .watch-item .status {
+    font-size: 9pt;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+  .watch-chart {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 16px;
+  }
+  .watch-note {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    font-size: 10.5pt;
+    line-height: 1.9;
+  }
+  .watch-note strong { color: var(--orange); }
+
+  /* ===== STORY (lavender) ===== */
+  .s-story { background: var(--lavender); }
+  .story-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+  }
+  .story-box .opener {
+    font-size: 11pt;
+    margin-bottom: 18px;
+    line-height: 2;
+  }
+  .story-timeline {
+    list-style: none;
+    counter-reset: item;
+  }
+  .story-timeline li {
+    counter-increment: item;
+    padding: 16px 0 16px 64px;
+    position: relative;
+    border-bottom: 1px solid var(--border-thin);
+    font-size: 10.5pt;
+    line-height: 1.9;
+  }
+  .story-timeline li:last-child { border-bottom: none; }
+  .story-timeline li::before {
+    content: counter(item, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 14px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22pt;
+    font-weight: 700;
+    color: var(--orange);
+    line-height: 1;
+  }
+  .story-closer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    background: var(--mint);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-weight: 700;
+    text-align: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12pt;
+    letter-spacing: 0.04em;
+  }
+
+  /* ===== STEPS (apricot) ===== */
+  .s-steps { background: var(--apricot); }
+  .step {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 14px;
+    display: flex;
+    gap: 22px;
+    page-break-inside: avoid;
+  }
+  .step-num {
+    flex: 0 0 68px;
+    height: 68px;
+    background: var(--text);
+    color: var(--bg);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 24pt;
+    font-weight: 700;
+  }
+  .step-body { flex: 1; }
+  .step-eyebrow {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .step-title {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 700;
+    font-size: 13pt;
+    margin-bottom: 8px;
+  }
+  .step-desc { font-size: 10.5pt; color: var(--text); line-height: 1.9; }
+  .step-desc strong { background: var(--yellow); padding: 1px 4px; }
+
+  /* NEXT LIST GRID */
+  .next-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .next-col {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px 20px;
+  }
+  .next-col-head {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+  }
+  .next-tag {
+    display: block;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 12pt;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .next-ja {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9pt;
+    color: var(--muted);
+    margin-top: 2px;
+    display: block;
+  }
+  .next-list { list-style: none; }
+  .next-list li {
+    position: relative;
+    padding: 6px 0 6px 16px;
+    font-size: 9.5pt;
+    line-height: 1.55;
+    border-bottom: 1px solid #ececec;
+  }
+  .next-list li:last-child { border-bottom: none; }
+  .next-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 8px;
+    height: 8px;
+    background: var(--orange);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    background: var(--text);
+    color: var(--bg);
+    padding: 48px 50px;
+    text-align: center;
+  }
+  .footer .brand {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28pt;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+  .footer .tag {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--mint);
+    margin-bottom: 18px;
+  }
+  .footer .note {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 10pt;
+    line-height: 1.9;
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== COVER ===== -->
+<div class="cover">
+  <div class="cover-illust"></div>
+  <div class="cover-content">
+    <div class="cover-eyebrow">MitoFlow40 / Blood Analysis Report</div>
+    <h1>YOUR BODY<br><span class="accent">SPEAKS.</span><br>LISTEN.</h1>
+    <p class="cover-sub">
+      血液とライフデータから読み解く、<br>
+      あなたのステータス。
+    </p>
+  </div>
+  <div class="cover-meta">
+    <span>解析日 / 2026.05.18</span>
+    <span>対象 / 男性 45歳</span>
+    <span>Vol. 001</span>
+  </div>
+</div>
+
+<!-- ===== INTRO ===== -->
+<section class="s-intro">
+  <img class="deco br" src="assets/faq-illustration.png" style="width:180px; opacity:0.85;">
+  <div class="container">
+    <div class="section-head">
+      <h2>Prologue</h2>
+      <div class="ja-sub">はじめに</div>
+    </div>
+    <p class="intro-lead" style="font-size:11pt; color:var(--text); line-height:1.95; text-align:left;">
+      今回お預かりした血液データは、特定健診2回分（40歳・45歳）。そこに Apple Watch から直近30日の生活データを重ねて、ふたつの視点から体を読み取っていきます。<br><br>
+      このレポートでは、ひとつひとつの数値を単独で見るのではなく、複数の指標を束ねて<strong>「体の系（システム）」</strong>として読む方法をとっています。糖代謝・酸化・栄養・自律神経・脂質・炎症など、それぞれの系がどんなバランスで動いているかを複合スコアとして可視化しました。<br><br>
+      また「今この瞬間の値」よりも、<strong>「どの方向に動いてきたか」</strong>を中心に見ていきます。5年前と今を比べたとき、体がどんな線を描いてきたか。その線を辿ることで、これからの数年で起こりうる変化の予測ができます。<br><br>
+      <span style="color:var(--muted); font-size:10pt;">※ 本レポートに書かれている内容は断定ではなく、現時点で見える <strong>仮の見立て</strong> です。今後の検査・問診・体感を重ねながら、少しずつアップデートしていく前提でお読みください。</span>
+    </p>
+    <div class="disclaimer">
+      ⚠️ 本レポートは栄養状態・体質傾向の仮の見立てであり、医療診断ではありません。今回は健診項目のため、より詳しい体質分析にはフェリチン・ビタミンD・甲状腺等の追加検査が有用です。
+    </div>
+  </div>
+</section>
+
+<!-- ===== SYSTEM BALANCE ===== -->
+<section class="s-snapshot">
+  <img class="deco bl" src="assets/flow-illustration-practice.png" style="width:160px; opacity:0.7;">
+  <div class="container">
+    <div class="section-head">
+      <h2>System Balance</h2>
+      <div class="ja-sub">体の状態スナップショット</div>
+    </div>
+
+    <div class="snapshot-grid">
+      <!-- Overall score gauge -->
+      <div class="gauge-card">
+        <div class="gauge-label">総合スコア</div>
+        <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+          <!-- background arc -->
+          <path d="M 20 110 A 80 80 0 0 1 180 110" fill="none" stroke="#f0f0f0" stroke-width="20" stroke-linecap="butt"/>
+          <!-- segments -->
+          <path d="M 20 110 A 80 80 0 0 1 60 42" fill="none" stroke="#FF9855" stroke-width="20"/>
+          <path d="M 60 42 A 80 80 0 0 1 140 42" fill="none" stroke="#E8C547" stroke-width="20"/>
+          <path d="M 140 42 A 80 80 0 0 1 180 110" fill="none" stroke="#4AF6C3" stroke-width="20"/>
+          <!-- needle at 65/100 = 117deg from start (180deg span) -->
+          <g transform="translate(100,110) rotate(14.4)">
+            <line x1="0" y1="0" x2="0" y2="-78" stroke="#1A1A1A" stroke-width="3"/>
+            <circle cx="0" cy="0" r="8" fill="#1A1A1A"/>
+          </g>
+          <text x="100" y="100" text-anchor="middle" font-family="Space Grotesk" font-size="32" font-weight="700">58</text>
+          <text x="100" y="120" text-anchor="middle" font-family="Space Grotesk" font-size="9" fill="#4A4A4A" letter-spacing="2">/ 100</text>
+        </svg>
+        <div class="gauge-verdict">
+          <strong>GLUCOSE-CENTRIC DRIFT?</strong>
+          <span>糖代謝の動きを軸にした仮の見立て</span>
+        </div>
+      </div>
+
+      <!-- Radar chart -->
+      <div class="radar-card">
+        <div class="gauge-label">体のシステム地図</div>
+        <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+          <g transform="translate(160,160)">
+            <!-- grid rings -->
+            <polygon points="0,-120 103.9,-60 103.9,60 0,120 -103.9,60 -103.9,-60" fill="none" stroke="#cccccc"/>
+            <polygon points="0,-90 77.9,-45 77.9,45 0,90 -77.9,45 -77.9,-45" fill="none" stroke="#dddddd"/>
+            <polygon points="0,-60 52,-30 52,30 0,60 -52,30 -52,-30" fill="none" stroke="#e5e5e5"/>
+            <polygon points="0,-30 26,-15 26,15 0,30 -26,15 -26,-15" fill="none" stroke="#eeeeee"/>
+            <!-- axes -->
+            <line x1="0" y1="0" x2="0" y2="-120" stroke="#cccccc"/>
+            <line x1="0" y1="0" x2="103.9" y2="-60" stroke="#cccccc"/>
+            <line x1="0" y1="0" x2="103.9" y2="60" stroke="#cccccc"/>
+            <line x1="0" y1="0" x2="0" y2="120" stroke="#cccccc"/>
+            <line x1="0" y1="0" x2="-103.9" y2="60" stroke="#cccccc"/>
+            <line x1="0" y1="0" x2="-103.9" y2="-60" stroke="#cccccc"/>
+
+            <!-- composite axes:
+                 0(top)    Metabolism 糖代謝  1.5 → 36
+                 60        Lipid     脂質    4   → 96
+                 120       Nutrition 栄養    2.5 → 60
+                 180       Oxidation 酸化    2.5 → 60
+                 240       Inflammation 炎症 3.5 → 84
+                 300       Autonomic 自律神経 3   → 72 -->
+            <polygon points="0,-36 83.1,-48 52,30 0,60 -72.7,42 -62.4,-36"
+                     fill="#FF9855" fill-opacity="0.35" stroke="#FF9855" stroke-width="2"/>
+            <circle cx="0" cy="-36" r="4" fill="#FF9855" stroke="#1A1A1A"/>
+            <circle cx="83.1" cy="-48" r="4" fill="#FF9855" stroke="#1A1A1A"/>
+            <circle cx="52" cy="30" r="4" fill="#FF9855" stroke="#1A1A1A"/>
+            <circle cx="0" cy="60" r="4" fill="#FF9855" stroke="#1A1A1A"/>
+            <circle cx="-72.7" cy="42" r="4" fill="#FF9855" stroke="#1A1A1A"/>
+            <circle cx="-62.4" cy="-36" r="4" fill="#FF9855" stroke="#1A1A1A"/>
+
+            <!-- axis labels -->
+            <text x="0" y="-135" text-anchor="middle" font-family="Space Grotesk" font-size="10" font-weight="700">METABOLISM</text>
+            <text x="0" y="-148" text-anchor="middle" font-family="Noto Sans JP" font-size="8" fill="#4A4A4A">糖代謝</text>
+
+            <text x="118" y="-65" text-anchor="middle" font-family="Space Grotesk" font-size="10" font-weight="700">LIPID</text>
+            <text x="118" y="-78" text-anchor="middle" font-family="Noto Sans JP" font-size="8" fill="#4A4A4A">脂質</text>
+
+            <text x="118" y="78" text-anchor="middle" font-family="Space Grotesk" font-size="10" font-weight="700">NUTRITION</text>
+            <text x="118" y="92" text-anchor="middle" font-family="Noto Sans JP" font-size="8" fill="#4A4A4A">栄養（材料）</text>
+
+            <text x="0" y="140" text-anchor="middle" font-family="Space Grotesk" font-size="10" font-weight="700">OXIDATION</text>
+            <text x="0" y="153" text-anchor="middle" font-family="Noto Sans JP" font-size="8" fill="#4A4A4A">酸化ストレス</text>
+
+            <text x="-118" y="78" text-anchor="middle" font-family="Space Grotesk" font-size="10" font-weight="700">INFLAMMATION</text>
+            <text x="-118" y="92" text-anchor="middle" font-family="Noto Sans JP" font-size="8" fill="#4A4A4A">炎症</text>
+
+            <text x="-118" y="-65" text-anchor="middle" font-family="Space Grotesk" font-size="10" font-weight="700">AUTONOMIC</text>
+            <text x="-118" y="-78" text-anchor="middle" font-family="Noto Sans JP" font-size="8" fill="#4A4A4A">自律神経</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== SYSTEM BALANCE (Part 2) ===== -->
+<section class="s-snapshot">
+  <img class="deco br" src="assets/for-you-science.png" style="width:240px; opacity:0.75;">
+  <div class="container">
+    <div class="section-head">
+      <h2>Composite Scores</h2>
+      <div class="ja-sub">複合指標スコア</div>
+    </div>
+
+    <!-- Composite score bars -->
+    <div class="score-bars">
+      <div class="score-bars-head">複合指標スコア <span>個別の数値を束ねた、体の系（システム）ごとの仮の見立て</span></div>
+      <div class="score-row"><span class="score-name">Metabolism <em>糖代謝</em></span><div class="score-track"><div class="score-fill" style="width:30%; background:var(--orange);"></div></div><span class="score-val">1.5/5</span></div>
+      <div class="score-row"><span class="score-name">Oxidation <em>酸化ストレス</em></span><div class="score-track"><div class="score-fill" style="width:50%; background:var(--orange);"></div></div><span class="score-val">2.5/5</span></div>
+      <div class="score-row"><span class="score-name">Nutrition <em>栄養（材料供給）</em></span><div class="score-track"><div class="score-fill" style="width:50%; background:var(--orange);"></div></div><span class="score-val">2.5/5</span></div>
+      <div class="score-row"><span class="score-name">Autonomic <em>自律神経</em></span><div class="score-track"><div class="score-fill" style="width:60%; background:var(--yellow);"></div></div><span class="score-val">3/5</span></div>
+      <div class="score-row"><span class="score-name">Inflammation <em>炎症</em></span><div class="score-track"><div class="score-fill" style="width:70%; background:var(--yellow);"></div></div><span class="score-val">3.5/5</span></div>
+      <div class="score-row"><span class="score-name">Lipid <em>脂質バランス</em></span><div class="score-track"><div class="score-fill" style="width:80%; background:var(--mint);"></div></div><span class="score-val">4/5</span></div>
+      <div class="score-row"><span class="score-name">Sleep <em>睡眠</em></span><div class="score-track"><div class="score-fill" style="width:80%; background:var(--mint);"></div></div><span class="score-val">4/5</span></div>
+      <div class="score-row"><span class="score-name">Activity <em>活動量</em></span><div class="score-track"><div class="score-fill" style="width:100%; background:var(--mint);"></div></div><span class="score-val">5/5</span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== CORE PATTERN ===== -->
+<section class="s-snapshot">
+  <img class="deco bl" src="assets/flow-illustration-feedback.png" style="width:180px; opacity:0.7;">
+  <div class="container">
+    <div class="section-head">
+      <h2>Core Pattern</h2>
+      <div class="ja-sub">中心テーマ — 何が起点で、何に波及しているか</div>
+    </div>
+
+    <!-- Composite pattern callout -->
+    <div class="pattern-card">
+      <div class="pattern-head">
+        <span class="pattern-tag">中心テーマ</span>
+        <span class="pattern-ja">CORE PATTERN — 何が起点で、何に波及しているか</span>
+      </div>
+      <div class="pattern-title">糖代謝の動きを起点に、酸化と栄養補給が連動している<span style="color:var(--orange);">可能性</span>が見えます。</div>
+      <div class="pattern-flow">
+        <div class="flow-node red">
+          <div class="flow-num">01</div>
+          <div class="flow-name">糖代謝<br><em>METABOLISM</em></div>
+          <div class="flow-sig">HbA1c 5.3→5.7<br>尿酸 5.4<br>塩分 9.9g/日</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node orange">
+          <div class="flow-num">02</div>
+          <div class="flow-name">酸化ストレス<br><em>OXIDATION</em></div>
+          <div class="flow-sig">γ-GT 17（低）<br>AST 上昇傾向<br>HDL 境界</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node orange">
+          <div class="flow-num">03</div>
+          <div class="flow-name">栄養補給の不足<br><em>NUTRITION</em></div>
+          <div class="flow-sig">Hb 15.9→14.8<br>RBC 523→487<br>体重 −2.6kg</div>
+        </div>
+      </div>
+      <div class="pattern-note">
+        糖代謝の乱れは体内で <strong>糖化</strong>（タンパク質と糖がくっつくダメージ）と <strong>酸化</strong>（細胞のサビ）を進めることが知られています。今回のデータでは、それらを処理する <strong>解毒酵素</strong>（γ-GTなど）の働きが落ちているサインと、処理に必要な <strong>材料（タンパク質・ミネラル）</strong>の供給がやや細っているサインの両方が見えます。<br>
+        この3つは別々の問題ではなく、ひとつながりの現象として進行している<strong>可能性</strong>があります。確定するには、フェリチン・ビタミンD・甲状腺など、今回測っていない項目を加えて再確認する必要があります。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SUMMARY ===== -->
+<section class="s-summary">
+  <img class="deco bl" src="assets/experience_vitality_new.png" style="width:300px; opacity:0.85;">
+  <div class="container">
+    <div class="section-head">
+      <h2>Summary</h2>
+      <div class="ja-sub">総合サマリ</div>
+    </div>
+    <div class="signal-grid">
+      <div class="signal red">
+        <div><span class="dot"></span><span class="ja-sub">注目したい</span></div>
+        <div class="num">02</div>
+        <div class="lbl">項目</div>
+      </div>
+      <div class="signal yellow">
+        <div><span class="dot"></span><span class="ja-sub">ケアしたい</span></div>
+        <div class="num">06</div>
+        <div class="lbl">項目</div>
+      </div>
+      <div class="signal green">
+        <div><span class="dot"></span><span class="ja-sub">良好</span></div>
+        <div class="num">07</div>
+        <div class="lbl">項目</div>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div class="headline">
+        運動・体型は維持できています。<br>
+        ただし、<span style="color:var(--orange);">糖代謝を起点とした「糖化＋酸化」</span>の流れが進んでいる<strong>可能性</strong>が見えます。
+      </div>
+      <div class="narrative">
+        体重・血圧・腎機能・悪玉コレステロールは40歳時より改善し、活動量・睡眠時間も十分にとれています。これは大きな財産です。<br>
+        一方で、HbA1c（血糖の平均）の上昇・塩分過多・尿酸の高めは、「糖代謝が少しずつ滞り始めているサイン」として読み取れます。糖代謝が滞ると、体の中で <strong>糖化</strong> と <strong>酸化ストレス</strong> が進みやすく、それを処理する解毒酵素（γ-GT）や材料（タンパク質・ミネラル）が消耗していくことが知られています。今回のヘモグロビン・赤血球の緩やかな低下、γ-GTの低さは、そうした消耗のサインかもしれません。<br>
+        Apple WatchのHRV低下も、体が裏側でこの流れに対応している<strong>可能性</strong>を裏付けるデータとして読めます。<br>
+        本レポートは、これらを <strong>「糖代謝 → 酸化 → 栄養補給」</strong> という一本の補助線として読み解いてみた仮説です。次回検査と問診で、答え合わせをしていきます。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TREND CHARTS ===== -->
+<section class="s-trend">
+  <img class="deco br" src="assets/flow-illustration-contact.png" style="width:150px; opacity:0.65;">
+  <div class="container">
+    <div class="section-head">
+      <h2>The Trend</h2>
+      <div class="ja-sub">5年間の動き</div>
+    </div>
+
+    <!-- HbA1c chart -->
+    <div class="trend-card">
+      <div class="chart-title">HbA1c — 血糖の安定指標</div>
+      <div class="chart-sub">過去2か月の平均血糖を示す。5.3 → 5.7 は数字以上に重要な動き。</div>
+      <svg class="trend-svg" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+        <!-- ideal band -->
+        <rect x="60" y="60" width="500" height="40" fill="#4AF6C3" opacity="0.4" stroke="#1A1A1A" stroke-dasharray="4 3"/>
+        <text x="565" y="83" font-family="Space Grotesk" font-size="9" fill="#1A1A1A">理想 5.0-5.3</text>
+
+        <!-- danger zone -->
+        <rect x="60" y="140" width="500" height="40" fill="#FF9855" opacity="0.25" stroke="#FF9855" stroke-dasharray="4 3"/>
+        <text x="565" y="163" font-family="Space Grotesk" font-size="9" fill="#FF9855">糖尿病域 6.5+</text>
+
+        <!-- axes -->
+        <line x1="60" y1="20" x2="60" y2="180" stroke="#1A1A1A"/>
+        <line x1="60" y1="180" x2="560" y2="180" stroke="#1A1A1A"/>
+
+        <!-- data line -->
+        <line x1="160" y1="100" x2="460" y2="120" stroke="#FF9855" stroke-width="3"/>
+        <circle cx="160" cy="100" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2"/>
+        <circle cx="460" cy="120" r="9" fill="#FF9855" stroke="#1A1A1A" stroke-width="2"/>
+
+        <!-- forecast (dashed) -->
+        <line x1="460" y1="120" x2="560" y2="135" stroke="#FF9855" stroke-width="2" stroke-dasharray="6 4" opacity="0.6"/>
+        <circle cx="560" cy="135" r="6" fill="#FFFFFF" stroke="#FF9855" stroke-width="2" stroke-dasharray="2 2"/>
+
+        <!-- labels -->
+        <text x="160" y="92" text-anchor="middle" font-family="Space Grotesk" font-size="11" font-weight="700">5.3</text>
+        <text x="460" y="112" text-anchor="middle" font-family="Space Grotesk" font-size="13" font-weight="700" fill="#FF9855">5.7</text>
+        <text x="560" y="127" text-anchor="middle" font-family="Space Grotesk" font-size="10" fill="#FF9855" opacity="0.7">?</text>
+
+        <text x="160" y="196" text-anchor="middle" font-family="Space Grotesk" font-size="9" fill="#4A4A4A">40 (2020)</text>
+        <text x="460" y="196" text-anchor="middle" font-family="Space Grotesk" font-size="9" fill="#4A4A4A">45 (2025)</text>
+        <text x="560" y="196" text-anchor="middle" font-family="Space Grotesk" font-size="9" fill="#4A4A4A">50?</text>
+      </svg>
+      <div class="trend-narrative">
+        この5年で <strong>+0.4ポイント</strong> 上昇しました。HbA1cは1日や1週間ではほとんど動かない指標なので、上がる時は「生活全体の重心が少しずつ動いている」サインです。同じペースで10年進むと境界域（5.8〜6.4）に入ります。逆に言えば、今から減塩とタンパク質を意識すれば、50歳時点で5.3に戻すことは十分可能なレンジです。
+      </div>
+    </div>
+
+    <!-- Hb / RBC trend -->
+    <div class="trend-card">
+      <div class="chart-title">Hemoglobin / RBC — 酸素を運ぶ力</div>
+      <div class="chart-sub">体重減と並行して、酸素運搬の余力が静かに削られている。</div>
+      <svg class="trend-svg" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+        <line x1="60" y1="20" x2="60" y2="180" stroke="#1A1A1A"/>
+        <line x1="60" y1="180" x2="560" y2="180" stroke="#1A1A1A"/>
+
+        <!-- Hb -->
+        <line x1="160" y1="50" x2="460" y2="85" stroke="#6CCFF6" stroke-width="3"/>
+        <circle cx="160" cy="50" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2"/>
+        <circle cx="460" cy="85" r="7" fill="#6CCFF6" stroke="#1A1A1A" stroke-width="2"/>
+        <text x="160" y="42" text-anchor="middle" font-family="Space Grotesk" font-size="10" font-weight="700">Hb 15.9</text>
+        <text x="460" y="77" text-anchor="middle" font-family="Space Grotesk" font-size="10" font-weight="700">Hb 14.8</text>
+
+        <!-- RBC -->
+        <line x1="160" y1="120" x2="460" y2="155" stroke="#FFB37B" stroke-width="3"/>
+        <circle cx="160" cy="120" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2"/>
+        <circle cx="460" cy="155" r="7" fill="#FFB37B" stroke="#1A1A1A" stroke-width="2"/>
+        <text x="160" y="112" text-anchor="middle" font-family="Space Grotesk" font-size="10" font-weight="700">RBC 523</text>
+        <text x="460" y="147" text-anchor="middle" font-family="Space Grotesk" font-size="10" font-weight="700">RBC 487</text>
+
+        <text x="160" y="196" text-anchor="middle" font-family="Space Grotesk" font-size="9" fill="#4A4A4A">40 (2020)</text>
+        <text x="460" y="196" text-anchor="middle" font-family="Space Grotesk" font-size="9" fill="#4A4A4A">45 (2025)</text>
+      </svg>
+      <div class="trend-narrative">
+        ヘモグロビンは <strong>−1.1</strong>、赤血球は <strong>−36万</strong>。どちらも基準値の中なので「異常」とは判定されません。けれど5年前と比べると、体は確かに酸素を運ぶ余裕を少しずつ手放しています。並行して体重も2.6kg減っており、この3つの変化は「材料が供給に追いついていない」という同じ原因から来ている可能性が高いです。
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== TREND (Improvements) ===== -->
+<section class="s-trend">
+  <img class="deco br" src="assets/for-you-recovery.png" style="width:380px; opacity:0.85;">
+  <div class="container">
+    <div class="section-head">
+      <h2>What Improved</h2>
+      <div class="ja-sub">この5年で良くなったもの</div>
+    </div>
+
+    <div class="trend-card">
+      <div class="chart-title">Lipid Profile — 脂質プロファイルの変化</div>
+      <div class="chart-sub">この5年で確実に改善した指標。</div>
+      <svg class="trend-svg" viewBox="0 0 600 160" xmlns="http://www.w3.org/2000/svg">
+        <!-- LDL -->
+        <text x="60" y="35" font-family="Space Grotesk" font-size="10" font-weight="600">LDL</text>
+        <rect x="120" y="22" width="220" height="20" fill="#FF9855" stroke="#1A1A1A"/>
+        <text x="345" y="36" font-family="Space Grotesk" font-size="10" font-weight="700">135</text>
+        <rect x="120" y="48" width="190" height="20" fill="#4AF6C3" stroke="#1A1A1A"/>
+        <text x="315" y="62" font-family="Space Grotesk" font-size="10" font-weight="700">118</text>
+
+        <!-- HDL -->
+        <text x="60" y="95" font-family="Space Grotesk" font-size="10" font-weight="600">HDL</text>
+        <rect x="120" y="82" width="105" height="20" fill="#E8C547" stroke="#1A1A1A"/>
+        <text x="230" y="96" font-family="Space Grotesk" font-size="10" font-weight="700">63</text>
+        <rect x="120" y="108" width="110" height="20" fill="#4AF6C3" stroke="#1A1A1A"/>
+        <text x="235" y="122" font-family="Space Grotesk" font-size="10" font-weight="700">66</text>
+
+        <text x="425" y="36" font-family="Noto Sans JP" font-size="9" fill="#4A4A4A">⬆ 40歳時 / ⬇ 45歳時</text>
+      </svg>
+      <div class="trend-narrative">
+        悪玉コレステロール（LDL）は <strong>135 → 118</strong> と理想域へ。善玉（HDL）も63 → 66とわずかに上昇。腎機能（eGFR）も改善しており、これらは生活習慣の中で「うまくいっている部分」がある証拠です。次の改善ポイントを足していけば、トータルの体は十分整います。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FINDINGS Part 1 (Critical) ===== -->
+<section class="s-categories">
+  <img class="deco bl" src="assets/for-you-business.png" style="width:160px; opacity:0.7;">
+  <div class="container">
+    <div class="section-head">
+      <h2>Critical Findings</h2>
+      <div class="ja-sub">注目したいポイント</div>
+    </div>
+
+    <div class="category">
+      <div class="category-head">
+        <div class="category-icon">🍚</div>
+        <div class="category-title">Glucose<span class="ja">血糖の安定（糖代謝）</span></div>
+        <div class="pill red">注目</div>
+      </div>
+      <div class="range-bar">
+        <div class="range-bar-labels"><span>5.0</span><span>5.5</span><span>6.0</span><span>6.5</span></div>
+        <div class="range-bar-track">
+          <div class="range-bar-ideal" style="left:0%; width:20%;"></div>
+          <div class="range-bar-marker" style="left:46.7%;" data-val="5.7"></div>
+        </div>
+        <div class="range-meta"><span>理想 <strong>5.0-5.3</strong></span><span>今回 <strong style="color:var(--orange);">5.7</strong></span></div>
+      </div>
+      <div class="category-text">
+        <p>HbA1cは「過去2か月の血糖の平均」を表す指標で、1日2日の食事では動きません。今回 5.7 という値は、日常の中で血糖が高めの時間が長くなっていることを示しています。健診上は「やや高め」レベルですが、5年前は5.3だったことを考えると、<strong>体の代謝の重心が少し動いた</strong>と受け止めるのが正しい解釈です。</p>
+        <p>原因は単純な甘い物の食べ過ぎではなく、「食事と食事の間隔」「夜遅い食事」「ストレス」「睡眠の質」「運動の種類」など複数要因の合計で決まります。Apple Watchの自律神経の数値が低めなのも、同じ生活パターンから来ている可能性があります。</p>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="category-head">
+        <div class="category-icon">🧂</div>
+        <div class="category-title">Sodium<span class="ja">塩分摂取</span></div>
+        <div class="pill red">注目</div>
+      </div>
+      <div class="range-bar">
+        <div class="range-bar-labels"><span>0g</span><span>6g</span><span>12g</span></div>
+        <div class="range-bar-track">
+          <div class="range-bar-ideal" style="left:0%; width:50%;"></div>
+          <div class="range-bar-marker" style="left:82.5%;" data-val="9.9g"></div>
+        </div>
+        <div class="range-meta"><span>目標 <strong>6g未満</strong></span><span>今回 <strong style="color:var(--orange);">9.9g</strong>（+65%）</span></div>
+      </div>
+      <div class="category-text">
+        <p>推定9.9g/日は、目標6g未満に対して <strong>1.6倍</strong>。血圧は正常範囲ですが、塩分の影響は血圧だけではありません。マグネシウムやカリウムといった「リラックス系のミネラル」が体から出ていきやすくなり、睡眠の質や疲労感に影響します。</p>
+        <p>味噌汁・漬物・干物・パン・加工品など、日本人の塩分は「自覚しにくいところ」から積み上がります。3週間だけ意識すると、舌のリセットが起きて自然と薄味で満足できるようになります。</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== FINDINGS Part 2 (Watch) ===== -->
+<section class="s-categories">
+  <img class="deco br" src="assets/for-you-wellness.png" style="width:140px; opacity:0.7;">
+  <div class="container">
+    <div class="section-head">
+      <h2>Watch Findings</h2>
+      <div class="ja-sub">経過を見たいポイント</div>
+    </div>
+
+    <div class="category">
+      <div class="category-head">
+        <div class="category-icon">🩸</div>
+        <div class="category-title">Iron / RBC<span class="ja">鉄・赤血球（酸素を運ぶ力）</span></div>
+        <div class="pill yellow">経過観察</div>
+      </div>
+      <div class="range-bar">
+        <div class="range-bar-labels"><span>13</span><span>14</span><span>15</span><span>16</span></div>
+        <div class="range-bar-track">
+          <div class="range-bar-ideal" style="left:0%; width:33%;"></div>
+          <div class="range-bar-marker" style="left:60%;" data-val="14.8"></div>
+        </div>
+        <div class="range-meta"><span>理想 <strong>13-14 g/dL</strong></span><span>今回 <strong>14.8</strong>（5年で −1.1）</span></div>
+      </div>
+      <div class="category-text">
+        <p>ヘモグロビンの絶対値は良好ですが、<strong>変化の方向</strong>が気になります。15.9 → 14.8 と1.1下がり、赤血球数も低下。体重減と並行している点から、「材料供給が活動量に追いついていない」サインの可能性があります。</p>
+        <p>男性は鉄欠乏になりにくいと思われがちですが、運動量が多い・ストイックに食事を整えている方ほどゆっくり減ります。次回検査でフェリチン（鉄の貯金）を測ると、本当に補充が必要かがクリアになります。</p>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="category-head">
+        <div class="category-icon">🥩</div>
+        <div class="category-title">Protein<span class="ja">タンパク質（体の材料）</span></div>
+        <div class="pill yellow">経過観察</div>
+      </div>
+      <div class="category-text">
+        <p>γ-GT（ガンマGT）という肝臓の解毒酵素が <strong>17</strong>（理想20-30）で、低めです。一般には「高いと肝臓が悪い」指標として知られていますが、<strong>低すぎても良くない</strong>。体が解毒酵素を作る材料（タンパク質・ビタミンB6・マグネシウム）が手薄になっているサインの可能性があります。</p>
+        <p>体重56kgの活動的な男性なら、1日のタンパク質目安は <strong>約70g</strong>。これは「肉魚卵を意識して食べる量」ではなく、「3食すべてに主菜＋αが必要な量」です。特に朝食のタンパク質が血糖の安定にも効きます。</p>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="category-head">
+        <div class="category-icon">💧</div>
+        <div class="category-title">Uric Acid<span class="ja">尿酸</span></div>
+        <div class="pill yellow">経過観察</div>
+      </div>
+      <div class="range-bar">
+        <div class="range-bar-labels"><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div>
+        <div class="range-bar-track">
+          <div class="range-bar-ideal" style="left:25%; width:17.5%;"></div>
+          <div class="range-bar-marker" style="left:60%;" data-val="5.4"></div>
+        </div>
+        <div class="range-meta"><span>理想 <strong>4.0-4.7</strong></span><span>今回 <strong>5.4</strong></span></div>
+      </div>
+      <div class="category-text">
+        <p>痛風レベルではありませんが、理想値より少し上。尿酸は果糖（フルーツジュース・甘い飲料・加工糖）と脱水で上がりやすい指標です。前項のHbA1cと同じく「糖の取り扱い」が改善されると、こちらも自然と下がるケースがほとんどです。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WATCH ===== -->
+<section class="s-watch">
+  <img class="deco bl" src="assets/experience_sleep_new.png" style="width:260px; opacity:0.85;">
+  <div class="container">
+    <div class="section-head">
+      <h2>Life Data</h2>
+      <div class="ja-sub">Apple Watch・直近30日</div>
+    </div>
+    <div class="watch-grid">
+      <div class="watch-item"><div class="label">Sleep</div><div class="value">7.5<span class="unit">h</span></div><div class="status">十分 ✅</div></div>
+      <div class="watch-item"><div class="label">Deep Sleep</div><div class="value">1.37<span class="unit">h</span></div><div class="status">良好 ✅</div></div>
+      <div class="watch-item"><div class="label">HRV</div><div class="value">39<span class="unit">ms</span></div><div class="status">やや低 ⚠️</div></div>
+      <div class="watch-item"><div class="label">Resting HR</div><div class="value">60<span class="unit">bpm</span></div><div class="status">良好 ✅</div></div>
+      <div class="watch-item"><div class="label">Steps</div><div class="value">11.7<span class="unit">k</span></div><div class="status">十分 ✅</div></div>
+      <div class="watch-item"><div class="label">Breath</div><div class="value">17<span class="unit">/min</span></div><div class="status">やや高</div></div>
+    </div>
+
+    <div class="watch-chart">
+      <div class="chart-title">Sleep Stages — 1日の平均構成</div>
+      <div class="chart-sub">時間は十分。質を一段あげる余地があります。</div>
+      <svg class="trend-svg" viewBox="0 0 600 90" xmlns="http://www.w3.org/2000/svg">
+        <!-- Stacked bar: total 7.49h -->
+        <!-- Core 6.83 / Deep 1.37 / REM 2.58 / Awake 0.91 — but they overlap, so use relative ratios -->
+        <!-- Use approx proportional widths -->
+        <rect x="0" y="20" width="350" height="40" fill="#B2EBF2" stroke="#1A1A1A"/>
+        <rect x="350" y="20" width="80" height="40" fill="#4AF6C3" stroke="#1A1A1A"/>
+        <rect x="430" y="20" width="130" height="40" fill="#E5D0E3" stroke="#1A1A1A"/>
+        <rect x="560" y="20" width="40" height="40" fill="#FFB6B6" stroke="#1A1A1A"/>
+
+        <text x="175" y="45" text-anchor="middle" font-family="Space Grotesk" font-size="11" font-weight="700">CORE 6.8h</text>
+        <text x="390" y="45" text-anchor="middle" font-family="Space Grotesk" font-size="10" font-weight="700">DEEP 1.4h</text>
+        <text x="495" y="45" text-anchor="middle" font-family="Space Grotesk" font-size="10" font-weight="700">REM 2.6h</text>
+        <text x="580" y="45" text-anchor="middle" font-family="Space Grotesk" font-size="9" font-weight="700">AWK</text>
+
+        <text x="0" y="80" font-family="Space Grotesk" font-size="9" fill="#4A4A4A">0h</text>
+        <text x="595" y="80" text-anchor="end" font-family="Space Grotesk" font-size="9" fill="#4A4A4A">11h total</text>
+      </svg>
+    </div>
+
+    <div class="watch-note">
+      時間も歩数も活動量も十分なのに、自律神経のバランス（HRV）が <strong>39ms</strong>（45歳男性として低め）、呼吸数もやや高め。これは「動けているのに、体の中の回復モードが弱い」状態を示します。<br>
+      血液所見と組み合わせると、<strong>体は外側では十分機能しているけれど、内側の補修と回復に使える材料が足りていない</strong>という一つの解釈に収束します。
+    </div>
+  </div>
+</section>
+
+<!-- ===== STORY ===== -->
+<section class="s-story">
+  <img class="deco br" src="assets/experience_focus_new.png" style="width:340px; opacity:0.85;">
+  <div class="container">
+    <div class="section-head">
+      <h2>Your Story</h2>
+      <div class="ja-sub">あなたの体で今起きていること</div>
+    </div>
+    <div class="story-box">
+      <p class="opener">
+        ここまでの所見を、ひとつの物語として繋ぎ直してみます。<br>
+        5年前の自分と今の自分を比べると、はっきりと見えてくる4つの線があります。
+      </p>
+      <ol class="story-timeline">
+        <li><strong>運動と体型はキープできている。</strong>体重・BMI・血圧は40歳時より少し改善し、悪玉コレステロールも明確に下がりました。健康への意識と行動は、確かに数値に反映されているように見えます。</li>
+        <li><strong>けれど血糖と塩分が、生活の中で少しずつ蓄積している<strong style="color:var(--orange);">可能性</strong>。</strong>HbA1c 5.3 → 5.7、塩分9.9g/日。「食べ過ぎ」というより「生活の重心がじわっと動いてきたサイン」として読めます。</li>
+        <li><strong>同時に、酸素運搬と解毒の余力が少し細っている<strong style="color:var(--orange);">かもしれません</strong>。</strong>ヘモグロビン・赤血球・γ-GTがそろって低下方向に動いていて、活動量に対して材料の補給がぴったり追いついていない可能性が見えます。</li>
+        <li><strong>Apple Watchの自律神経データが、その仮説を裏付けるように見える。</strong>HRVがやや低く、呼吸数もやや高め。「外では動けるが、内側で回復しきれていない」という状態が予測されます。</li>
+      </ol>
+      <div class="story-closer">HARDWARE (運動) は十分 — SOFTWARE (栄養) を整える時期かもしれません。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STEPS ===== -->
+<section class="s-steps">
+  <img class="deco bl" src="assets/pricing-plan-illustration.png" style="width:130px; opacity:0.7;">
+  <div class="container">
+    <div class="section-head">
+      <h2>Next Steps</h2>
+      <div class="ja-sub">次の一歩（3つだけ）</div>
+    </div>
+    <div class="next-grid">
+      <div class="next-col">
+        <div class="next-col-head"><span class="next-tag">食事</span><span class="next-ja">Nutrition</span></div>
+        <ul class="next-list">
+          <li>塩分は6g/日を目安に</li>
+          <li>味噌汁は1日1杯まで</li>
+          <li>加工食品・干物・漬物を減らす</li>
+          <li>出汁・レモン・スパイスで代替</li>
+          <li>朝食にタンパク質20g（卵・納豆・プロテイン）</li>
+          <li>果糖・甘い飲料を控える</li>
+          <li>マグネシウム源（海藻・ナッツ・葉物）</li>
+        </ul>
+      </div>
+      <div class="next-col">
+        <div class="next-col-head"><span class="next-tag">運動</span><span class="next-ja">Exercise</span></div>
+        <ul class="next-list">
+          <li>有酸素＋筋トレを併用</li>
+          <li>週2回の筋トレ（下半身中心）</li>
+          <li>食後15分の軽い散歩</li>
+          <li>HIIT を週1〜2回（短時間でOK）</li>
+          <li>ストレッチで副交感優位に</li>
+          <li>歩数は現状の1万歩キープ</li>
+        </ul>
+      </div>
+      <div class="next-col">
+        <div class="next-col-head"><span class="next-tag">生活</span><span class="next-ja">Lifestyle</span></div>
+        <ul class="next-list">
+          <li>朝の光を浴びる習慣</li>
+          <li>夕食〜就寝は3時間以上空ける</li>
+          <li>就寝前の深呼吸ルーチン</li>
+          <li>水分は1.5〜2L/日</li>
+          <li>就寝・起床時間を一定に</li>
+        </ul>
+      </div>
+      <div class="next-col">
+        <div class="next-col-head"><span class="next-tag">おすすめサプリ</span><span class="next-ja">Supplements</span></div>
+        <ul class="next-list">
+          <li>マグネシウム（グリシン酸塩 200-300mg）</li>
+          <li>ビタミンB群（B6含む）</li>
+          <li>ビタミンD（25-OH測定後に量を調整）</li>
+          <li>亜鉛（15-25mg・食後）</li>
+          <li>コエンザイムQ10（抗酸化サポート）</li>
+          <li>N-アセチルシステイン（解毒・GSH材料）</li>
+          <li>※ 体調を見ながら2〜3か月単位で</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+  <div class="tag">Strategy for your health after 40</div>
+  <div class="brand">MitoFlow40</div>
+  <div class="note">
+    あなたの未来をミトのちからと共に —<br>
+    May the Mito-Force be with you.<br><br>
+    解析者: 小林大介 ／ mitoflow40.com
+  </div>
+</div>
+
+</body>
+</html>
