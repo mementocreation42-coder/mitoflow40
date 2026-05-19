@@ -107,20 +107,66 @@ Apple Watch生XML（`~/Desktop/apple_health_export/export.xml`）は**絶対にR
 - **言葉づかいは出力前に必ず `reference/language_rules.md` でセルフチェック**。断定形が混入していたら全て予測形に書き換える。
 - **日本語/英語の使い分け** — UIラベル・ピル・メタ情報は日本語を主役にする。`language_rules.md` の「バイリンガル表記の方針」を参照。
 
+## お客様用レポート — 固定フォーマット（v2: 単時点評価版）
+
+### 評価軸ルール（最重要）
+- **単時点評価のみ**。複数時点の血液データがあっても、**最新の検査結果1点のみで評価**する。
+- 経年比較・推移チャート・「5年前 → 今」のような表現は使わない。「動いてきた方向」ではなく「**現在値 vs 精密栄養学の理想値**」で語る。
+- 過去データは、解析者用レポート（analyst.md）の参考情報としてのみ保持。お客様用には登場させない。
+
+### 固定セクション構成（11ページ）
+順序固定。追加・並べ替え禁止。情報量が多ければ意味のある単位で分割する（連番表記は不可）。
+
+1. **Cover** — タイトル / カバー画像 / 検査日・解析日・対象（氏名 性別 年齢）/ Vol.番号
+2. **Prologue** — はじめに（500字目安）。入力データ内訳 / 読み方の前提 / 「現在値 vs 理想値」軸の説明
+3. **Blood Snapshot** — 血液データ一覧表（カテゴリ別: 糖代謝・尿酸 / 脂質 / 栄養・酸素運搬 / 腎機能・血圧・生活）。各行: 項目 / 現在値 / 理想値 / ミニレンジバー / 判定ピル
+4. **System Balance** — 総合スコア（半円ゲージ・針なし・アーク上マーカー＋中央に大きく数字）＋ レーダーチャート（6軸）
+5. **Composite Scores** — 8軸スコアバー（Metabolism/Oxidation/Nutrition/Autonomic/Inflammation/Lipid/Sleep/Activity）
+6. **Core Pattern** — 中心テーマ1文 + 3ノードのフロー図（起点→中継→結果）+ 200-300字の補足
+7. **Summary** — ヘッドライン（60字以内）＋ 物語ナラティブ（250-350字）。シグナルカウント（◯項目）は置かない
+8. **Strengths** — 今、整っているところ（2-3項目、現在値で良好なもの）
+9. **Critical Findings** — 注目したいポイント（理想から大きく乖離、🔴 注目）
+10. **Watch Findings** — 経過観察ポイント（理想から小さく乖離、🟡 観察）
+11. **Life Data** — Apple Watch サマリ（睡眠・HRV・歩数等）
+12. **Your Story** — 物語化（4つの補助線。冒頭は「今回のデータから見えてくる4つの線」）
+13. **Next Steps** — 食事 / 運動 / 生活 / サプリ の4列、各5〜7項目（合計でも実行可能な量に）
+
+### 語彙ルール
+- 「**仮の見立て**」を多用しない。文脈で言い換える:
+  - Prologue 注記: 「データから読み取れる **予測**」
+  - Disclaimer: 「栄養状態・体質傾向の **読み取り**」
+  - ゲージ下: 「〜を軸にした **読み取り**」
+  - スコア説明: 「体の系ごとの **現在地**」
+- 断定回避は維持（「〜可能性」「〜サインかもしれません」「〜と読み取れます」）。
+
+### Cover メタ表記
+- `検査日 / YYYY.MM.DD　　解析日 / YYYY.MM.DD`（同じセルに2つ並べる）
+- `対象 / 氏名 性別 年齢歳`
+- `Vol. 001`
+
+### イラスト配置の基本方針
+- 各セクションに `.deco` イラストを1枚配置。多くは**セクション境界からはみ出す（見切れ）**配置で動きを出す。
+- `section { overflow:hidden; }` を個別指定して見切れを実現。
+- インラインスタイルで `width / opacity / bottom / right (or left) / transform` を上書き。bottom/right に**負の値**で見切れを作る。
+- 典型: `width: 240-420px / opacity: 0.85-0.95 / bottom: -50 ~ -110px`。
+
+### 画面とPDFの両立
+- `@media screen` 内で section の `height` を auto / max-height: none / padding-top:70px / padding-bottom:140px に上書き（カバーは padding-top:90px / padding-bottom:120px）。
+- PDF出力時は `1 section = A4 1ページ`（height: 297mm）が効くので、両立する。
+
 ## セクション別 文字数ガイドライン
 
 | セクション | 文字数目安 | 役割 |
 |---|---|---|
-| **Prologue（はじめに）** | **500文字程度** | 入力データの内訳を簡潔に説明し、レポートの読み方の前提（線で見る・予測である等）を伝える |
+| **Prologue（はじめに）** | **500文字程度** | 入力データの内訳を簡潔に説明し、「現在値 vs 理想値」の読み方を伝える |
 | Summary headline | 60字以内 | 一目で伝わる総合の見立て |
 | Summary narrative | 250〜350字 | 中心テーマを物語として導入 |
 | CORE PATTERN タイトル | 50字以内 | 中心テーマを1文で |
 | CORE PATTERN note | 200〜300字 | フロー図の補足解説 |
 | 各カテゴリ category-text | 150〜250字×段落 | 1項目あたり2段落まで |
-| Trend narrative | 150〜250字 | チャートの解釈 |
 | Your Story 各項目 | 80〜120字 | 4本の補助線、簡潔に |
 
-Prologueの目安が500字に届かない場合は、入力データの種類（経年/単発、カウンセリング有無、Apple Watch有無）と読み方の前提を補足して厚みを出す。500字を大きく超えると本編の前にお腹いっぱいになるので注意。
+Prologueの目安が500字に届かない場合は、入力データの種類（カウンセリング有無、Apple Watch有無）と読み方の前提を補足して厚みを出す。500字を大きく超えると本編の前にお腹いっぱいになるので注意。
 
 ## PDF ページレイアウトの原則
 
@@ -140,13 +186,24 @@ Prologueの目安が500字に届かない場合は、入力データの種類（
 
 各ページは**それ単体で読んで意味が完結**するように見出しと内容を組む。
 
-## お客様用PDF生成の手順
+## お客様用レポート生成の手順
 
 1. `cp templates/client_report.html outputs/<氏名_日付>/client.html`
 2. `cp -r templates/assets outputs/<氏名_日付>/assets`
-3. `Edit` または `sed` で以下を個別化:
-   - cover-eyebrow: `MitoFlow40 / Blood Analysis Report` → `〜 — For ◯◯ 様`
-   - cover-meta: `解析日 / YYYY.MM.DD`, `対象 / 氏名 性別 年齢`
-   - その他、解析結果（スコア、CORE PATTERN、所見、ストーリー、Next Steps）を実データで書き換え
-4. `./scripts/html_to_pdf.sh outputs/<氏名_日付>/client.html outputs/<氏名_日付>/<氏名>_<日付>_report.pdf`
-   → PDFが自動でPreviewに開く
+3. `Edit` で個別化（テンプレは小林大介サンプル相当の値が入っているので**全て書き換える**）:
+   - cover-eyebrow: `〜 — For ◯◯ 様`
+   - cover-meta: `検査日 / YYYY.MM.DD　　解析日 / YYYY.MM.DD`, `対象 / 氏名 性別 年齢歳`
+   - **Blood Snapshot**: 4カテゴリの全行を実データで書き換え（現在値・理想値・ミニバー位置%・判定ピル色）
+   - **System Balance**: 総合スコア数値、ゲージ上マーカー位置（score% から計算）、ヘッドライン、レーダー6軸ポリゴン頂点
+   - **Composite Scores**: 8軸の値とバー幅%
+   - **Core Pattern**: タイトル、3ノードの内容、補足200-300字
+   - **Summary**: ヘッドライン60字、ナラティブ250-350字
+   - **Strengths / Critical / Watch Findings**: 各カテゴリの値・narrative・range-meta
+   - **Life Data**: Apple Watch 値・状態ラベル
+   - **Your Story**: opener、4項目、closer
+   - **Next Steps**: 食事/運動/生活/サプリ
+4. **解析者用Markdown** を `outputs/<氏名_日付>/analyst.md` に保存（テンプレは `templates/analyst_report.md`）
+5. PDFが要る場合: `./scripts/html_to_pdf.sh outputs/<氏名_日付>/client.html outputs/<氏名_日付>/<氏名>_<日付>_report.pdf`
+6. **本番公開**: `./scripts/publish_report.sh <氏名_日付>`
+   - `BLOB_READ_WRITE_TOKEN` が環境にあれば自動で Vercel Blob にアップロード
+   - 出力された 公開URL（お客様用）/ 解析者URL を Notion ページの該当列に書き戻し（Claudeが mcp__notion__notion-update-page で実行）

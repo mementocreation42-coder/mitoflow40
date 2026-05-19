@@ -67,6 +67,16 @@
     box-sizing: border-box;
     position: relative;
   }
+  @media screen {
+    section {
+      height: auto;
+      max-height: none;
+      min-height: 0;
+      padding-top: 70px;
+      padding-bottom: 140px;
+    }
+    .cover { min-height: 0; padding-top: 90px; padding-bottom: 120px; }
+  }
   /* Decorative illustrations to fill negative space */
   .deco {
     position: absolute;
@@ -817,7 +827,7 @@
 <div class="cover">
   <div class="cover-illust"></div>
   <div class="cover-content">
-    <div class="cover-eyebrow">MitoFlow40 / Blood Analysis Report</div>
+    <div class="cover-eyebrow">MitoFlow40 / Blood Analysis Report — For 小林大介 様</div>
     <h1>YOUR BODY<br><span class="accent">SPEAKS.</span><br>LISTEN.</h1>
     <p class="cover-sub">
       血液とライフデータから読み解く、<br>
@@ -825,8 +835,8 @@
     </p>
   </div>
   <div class="cover-meta">
-    <span>解析日 / 2026.05.18</span>
-    <span>対象 / 男性 45歳</span>
+    <span>検査日 / 2025.10.26　　解析日 / 2026.05.19</span>
+    <span>対象 / 小林大介 男性 45歳</span>
     <span>Vol. 001</span>
   </div>
 </div>
@@ -840,20 +850,117 @@
       <div class="ja-sub">はじめに</div>
     </div>
     <p class="intro-lead" style="font-size:11pt; color:var(--text); line-height:1.95; text-align:left;">
-      今回お預かりした血液データは、特定健診2回分（40歳・45歳）。そこに Apple Watch から直近30日の生活データを重ねて、ふたつの視点から体を読み取っていきます。<br><br>
+      今回お預かりした血液データは、45歳時点の特定健診。そこに Apple Watch から直近30日の生活データを重ねて、ふたつの視点から体を読み取っていきます。<br><br>
       このレポートでは、ひとつひとつの数値を単独で見るのではなく、複数の指標を束ねて<strong>「体の系（システム）」</strong>として読む方法をとっています。糖代謝・酸化・栄養・自律神経・脂質・炎症など、それぞれの系がどんなバランスで動いているかを複合スコアとして可視化しました。<br><br>
-      また「今この瞬間の値」よりも、<strong>「どの方向に動いてきたか」</strong>を中心に見ていきます。5年前と今を比べたとき、体がどんな線を描いてきたか。その線を辿ることで、これからの数年で起こりうる変化の予測ができます。<br><br>
-      <span style="color:var(--muted); font-size:10pt;">※ 本レポートに書かれている内容は断定ではなく、現時点で見える <strong>仮の見立て</strong> です。今後の検査・問診・体感を重ねながら、少しずつアップデートしていく前提でお読みください。</span>
+      評価の軸は <strong>「現在値 vs 精密栄養学の理想値」</strong>。一般の基準値ではなく、最適に機能している体に見られるレンジを基準に、どの系統に余白があるかを読み解きます。<br><br>
+      <span style="color:var(--muted); font-size:10pt;">※ 本レポートの内容は断定ではなく、現時点のデータから読み取れる <strong>予測</strong> です。今後の検査・問診・体感を重ねながら、少しずつアップデートしていく前提でお読みください。</span>
     </p>
     <div class="disclaimer">
-      ⚠️ 本レポートは栄養状態・体質傾向の仮の見立てであり、医療診断ではありません。今回は健診項目のため、より詳しい体質分析にはフェリチン・ビタミンD・甲状腺等の追加検査が有用です。
+      ⚠️ 本レポートは栄養状態・体質傾向の読み取りであり、医療診断ではありません。今回は健診項目のため、より詳しい体質分析にはフェリチン・ビタミンD・甲状腺等の追加検査が有用です。
     </div>
   </div>
 </section>
 
-<!-- ===== SYSTEM BALANCE ===== -->
+<!-- ===== BLOOD SNAPSHOT (現在値 vs 理想値) ===== -->
 <section class="s-snapshot">
-  <img class="deco bl" src="assets/flow-illustration-practice.png" style="width:160px; opacity:0.7;">
+  <img class="deco br" src="assets/for-you-science.png" style="width:260px; opacity:0.85; bottom:0; right:0;">
+  <div class="container">
+    <div class="section-head">
+      <h2>Blood Snapshot</h2>
+      <div class="ja-sub">血液データ一覧 — 現在値 vs 精密栄養学の理想値</div>
+    </div>
+    <style>
+      .blood-table { width:100%; border-collapse:collapse; font-size:10pt; margin-top:8px; }
+      .blood-table th, .blood-table td { padding:8px 10px; text-align:left; border-bottom:1px solid #EEE; vertical-align:middle; }
+      .blood-table th { font-family:'Space Grotesk',sans-serif; font-size:9pt; letter-spacing:0.04em; text-transform:uppercase; color:var(--muted); border-bottom:1.5px solid var(--text); }
+      .blood-table td.cat { color:var(--muted); font-size:9pt; }
+      .blood-table td.val { font-weight:700; font-family:'Space Grotesk',sans-serif; }
+      .blood-table td.ideal { color:var(--muted); font-family:'Space Grotesk',sans-serif; font-size:9.5pt; }
+      .blood-table .mini-bar { position:relative; width:120px; height:8px; background:#F0F0F0; border-radius:4px; overflow:visible; }
+      .blood-table .mini-bar .ideal-zone { position:absolute; top:0; bottom:0; background:#4AF6C3; opacity:0.55; border-radius:4px; }
+      .blood-table .mini-bar .marker { position:absolute; top:-3px; width:3px; height:14px; background:var(--text); border-radius:2px; }
+      .blood-table .pill-sm { display:inline-block; padding:2px 8px; border-radius:10px; font-size:8.5pt; font-weight:700; font-family:'Space Grotesk',sans-serif; }
+      .pill-sm.g { background:#4AF6C3; color:#1A1A1A; }
+      .pill-sm.y { background:#E8C547; color:#1A1A1A; }
+      .pill-sm.r { background:#FF9855; color:#FFF; }
+      .blood-section-head { font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:10pt; letter-spacing:0.08em; text-transform:uppercase; margin-top:22px; margin-bottom:6px; color:var(--text); }
+      .blood-section-head:first-child { margin-top:0; }
+    </style>
+
+    <div class="blood-section-head">糖代謝・尿酸</div>
+    <table class="blood-table">
+      <thead><tr><th style="width:24%;">項目</th><th style="width:14%;">現在値</th><th style="width:20%;">理想値</th><th>レンジ</th><th style="width:9%;">判定</th></tr></thead>
+      <tbody>
+        <tr><td>HbA1c <span class="cat">血糖平均</span></td><td class="val">5.7 %</td><td class="ideal">5.0 – 5.3</td>
+          <td><div class="mini-bar"><div class="ideal-zone" style="left:0%; width:30%;"></div><div class="marker" style="left:70%;"></div></div></td>
+          <td><span class="pill-sm r">注目</span></td></tr>
+        <tr><td>尿酸 <span class="cat">代謝負荷</span></td><td class="val">5.4 mg/dL</td><td class="ideal">4.0 – 4.7</td>
+          <td><div class="mini-bar"><div class="ideal-zone" style="left:25%; width:17.5%;"></div><div class="marker" style="left:60%;"></div></div></td>
+          <td><span class="pill-sm y">ケア</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="blood-section-head">脂質</div>
+    <table class="blood-table">
+      <thead><tr><th style="width:24%;">項目</th><th style="width:14%;">現在値</th><th style="width:20%;">理想値</th><th>レンジ</th><th style="width:9%;">判定</th></tr></thead>
+      <tbody>
+        <tr><td>LDL <span class="cat">悪玉</span></td><td class="val">118 mg/dL</td><td class="ideal">&lt; 120</td>
+          <td><div class="mini-bar"><div class="ideal-zone" style="left:0%; width:60%;"></div><div class="marker" style="left:59%;"></div></div></td>
+          <td><span class="pill-sm g">良好</span></td></tr>
+        <tr><td>HDL <span class="cat">善玉</span></td><td class="val">66 mg/dL</td><td class="ideal">&gt; 60</td>
+          <td><div class="mini-bar"><div class="ideal-zone" style="left:60%; width:40%;"></div><div class="marker" style="left:66%;"></div></div></td>
+          <td><span class="pill-sm g">良好</span></td></tr>
+        <tr><td>L/H比 <span class="cat">動脈硬化指標</span></td><td class="val">1.79</td><td class="ideal">&lt; 2.0</td>
+          <td><div class="mini-bar"><div class="ideal-zone" style="left:0%; width:67%;"></div><div class="marker" style="left:60%;"></div></div></td>
+          <td><span class="pill-sm g">良好</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="blood-section-head">栄養・酸素運搬</div>
+    <table class="blood-table">
+      <thead><tr><th style="width:24%;">項目</th><th style="width:14%;">現在値</th><th style="width:20%;">理想値</th><th>レンジ</th><th style="width:9%;">判定</th></tr></thead>
+      <tbody>
+        <tr><td>Hb <span class="cat">ヘモグロビン</span></td><td class="val">14.8 g/dL</td><td class="ideal">13 – 14</td>
+          <td><div class="mini-bar"><div class="ideal-zone" style="left:0%; width:33%;"></div><div class="marker" style="left:60%;"></div></div></td>
+          <td><span class="pill-sm y">観察</span></td></tr>
+        <tr><td>RBC <span class="cat">赤血球</span></td><td class="val">487 万/μL</td><td class="ideal">430 – 470</td>
+          <td><div class="mini-bar"><div class="ideal-zone" style="left:0%; width:57%;"></div><div class="marker" style="left:81%;"></div></div></td>
+          <td><span class="pill-sm y">観察</span></td></tr>
+        <tr><td>γ-GT <span class="cat">解毒酵素</span></td><td class="val">17 U/L</td><td class="ideal">20 – 30</td>
+          <td><div class="mini-bar"><div class="ideal-zone" style="left:50%; width:25%;"></div><div class="marker" style="left:42%;"></div></div></td>
+          <td><span class="pill-sm y">観察</span></td></tr>
+        <tr><td>AST <span class="cat">肝・酸化</span></td><td class="val">27 U/L</td><td class="ideal">18 – 22</td>
+          <td><div class="mini-bar"><div class="ideal-zone" style="left:30%; width:20%;"></div><div class="marker" style="left:70%;"></div></div></td>
+          <td><span class="pill-sm y">観察</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="blood-section-head">腎機能・血圧・生活</div>
+    <table class="blood-table">
+      <thead><tr><th style="width:24%;">項目</th><th style="width:14%;">現在値</th><th style="width:20%;">理想値</th><th>レンジ</th><th style="width:9%;">判定</th></tr></thead>
+      <tbody>
+        <tr><td>eGFR <span class="cat">腎機能</span></td><td class="val">81.9</td><td class="ideal">&gt; 75</td>
+          <td><div class="mini-bar"><div class="ideal-zone" style="left:60%; width:40%;"></div><div class="marker" style="left:71%;"></div></div></td>
+          <td><span class="pill-sm g">良好</span></td></tr>
+        <tr><td>BMI</td><td class="val">21.4</td><td class="ideal">20 – 23</td>
+          <td><div class="mini-bar"><div class="ideal-zone" style="left:35%; width:30%;"></div><div class="marker" style="left:47%;"></div></div></td>
+          <td><span class="pill-sm g">良好</span></td></tr>
+        <tr><td>塩分 <span class="cat">推定/日</span></td><td class="val">9.9 g</td><td class="ideal">&lt; 6</td>
+          <td><div class="mini-bar"><div class="ideal-zone" style="left:0%; width:50%;"></div><div class="marker" style="left:82%;"></div></div></td>
+          <td><span class="pill-sm r">注目</span></td></tr>
+      </tbody>
+    </table>
+
+    <p style="margin-top:18px; font-size:9.5pt; color:var(--muted);">
+      🟢 良好 = 理想範囲内　／　🟡 観察 = 理想からの乖離 小　／　🟠 注目 = 理想から大きく乖離。<br>
+      ※ 一般の「基準値」ではなく、精密栄養学の理想値で判定しています。
+    </p>
+  </div>
+</section>
+
+<!-- ===== SYSTEM BALANCE ===== -->
+<section class="s-snapshot" style="overflow:hidden;">
+  <img class="deco bl" src="assets/flow-illustration-practice.png" style="width:320px; opacity:0.95; bottom:-70px; left:-50px;">
   <div class="container">
     <div class="section-head">
       <h2>System Balance</h2>
@@ -864,24 +971,23 @@
       <!-- Overall score gauge -->
       <div class="gauge-card">
         <div class="gauge-label">総合スコア</div>
-        <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg">
           <!-- background arc -->
-          <path d="M 20 110 A 80 80 0 0 1 180 110" fill="none" stroke="#f0f0f0" stroke-width="20" stroke-linecap="butt"/>
-          <!-- segments -->
-          <path d="M 20 110 A 80 80 0 0 1 60 42" fill="none" stroke="#FF9855" stroke-width="20"/>
-          <path d="M 60 42 A 80 80 0 0 1 140 42" fill="none" stroke="#E8C547" stroke-width="20"/>
-          <path d="M 140 42 A 80 80 0 0 1 180 110" fill="none" stroke="#4AF6C3" stroke-width="20"/>
-          <!-- needle at 65/100 = 117deg from start (180deg span) -->
-          <g transform="translate(100,110) rotate(14.4)">
-            <line x1="0" y1="0" x2="0" y2="-78" stroke="#1A1A1A" stroke-width="3"/>
-            <circle cx="0" cy="0" r="8" fill="#1A1A1A"/>
-          </g>
-          <text x="100" y="100" text-anchor="middle" font-family="Space Grotesk" font-size="32" font-weight="700">58</text>
-          <text x="100" y="120" text-anchor="middle" font-family="Space Grotesk" font-size="9" fill="#4A4A4A" letter-spacing="2">/ 100</text>
+          <path d="M 20 110 A 80 80 0 0 1 180 110" fill="none" stroke="#f0f0f0" stroke-width="22" stroke-linecap="butt"/>
+          <!-- segments (colored zones) -->
+          <path d="M 20 110 A 80 80 0 0 1 60 42" fill="none" stroke="#FF9855" stroke-width="22"/>
+          <path d="M 60 42 A 80 80 0 0 1 140 42" fill="none" stroke="#E8C547" stroke-width="22"/>
+          <path d="M 140 42 A 80 80 0 0 1 180 110" fill="none" stroke="#4AF6C3" stroke-width="22"/>
+          <!-- marker on arc at score 58 (angle 180° - 58×1.8° = 75.6° from +x; cx=100+80cos, cy=110-80sin) -->
+          <circle cx="119.9" cy="32.5" r="9" fill="#1A1A1A"/>
+          <circle cx="119.9" cy="32.5" r="4" fill="#FFFFFF"/>
+          <!-- score numerals (centered below arc opening, clear of marker) -->
+          <text x="100" y="105" text-anchor="middle" font-family="Space Grotesk" font-size="40" font-weight="700" fill="#1A1A1A">58</text>
+          <text x="100" y="128" text-anchor="middle" font-family="Space Grotesk" font-size="10" fill="#4A4A4A" letter-spacing="3">/ 100</text>
         </svg>
         <div class="gauge-verdict">
           <strong>GLUCOSE-CENTRIC DRIFT?</strong>
-          <span>糖代謝の動きを軸にした仮の見立て</span>
+          <span>糖代謝の動きを軸にした読み取り</span>
         </div>
       </div>
 
@@ -946,8 +1052,8 @@
 </section>
 
 <!-- ===== SYSTEM BALANCE (Part 2) ===== -->
-<section class="s-snapshot">
-  <img class="deco br" src="assets/for-you-science.png" style="width:240px; opacity:0.75;">
+<section class="s-snapshot" style="overflow:hidden;">
+  <img class="deco br" src="assets/for-you-science.png" style="width:340px; opacity:0.95; bottom:0; right:-110px;">
   <div class="container">
     <div class="section-head">
       <h2>Composite Scores</h2>
@@ -956,7 +1062,7 @@
 
     <!-- Composite score bars -->
     <div class="score-bars">
-      <div class="score-bars-head">複合指標スコア <span>個別の数値を束ねた、体の系（システム）ごとの仮の見立て</span></div>
+      <div class="score-bars-head">複合指標スコア <span>個別の数値を束ねた、体の系（システム）ごとの現在地</span></div>
       <div class="score-row"><span class="score-name">Metabolism <em>糖代謝</em></span><div class="score-track"><div class="score-fill" style="width:30%; background:var(--orange);"></div></div><span class="score-val">1.5/5</span></div>
       <div class="score-row"><span class="score-name">Oxidation <em>酸化ストレス</em></span><div class="score-track"><div class="score-fill" style="width:50%; background:var(--orange);"></div></div><span class="score-val">2.5/5</span></div>
       <div class="score-row"><span class="score-name">Nutrition <em>栄養（材料供給）</em></span><div class="score-track"><div class="score-fill" style="width:50%; background:var(--orange);"></div></div><span class="score-val">2.5/5</span></div>
@@ -971,8 +1077,8 @@
 </section>
 
 <!-- ===== CORE PATTERN ===== -->
-<section class="s-snapshot">
-  <img class="deco bl" src="assets/flow-illustration-feedback.png" style="width:180px; opacity:0.7;">
+<section class="s-snapshot" style="overflow:hidden;">
+  <img class="deco bl" src="assets/flow-illustration-feedback.png" style="width:240px; opacity:0.95; bottom:30px; left:-70px;">
   <div class="container">
     <div class="section-head">
       <h2>Core Pattern</h2>
@@ -990,7 +1096,7 @@
         <div class="flow-node red">
           <div class="flow-num">01</div>
           <div class="flow-name">糖代謝<br><em>METABOLISM</em></div>
-          <div class="flow-sig">HbA1c 5.3→5.7<br>尿酸 5.4<br>塩分 9.9g/日</div>
+          <div class="flow-sig">HbA1c 5.7<br>尿酸 5.4<br>塩分 9.9g/日</div>
         </div>
         <div class="flow-arrow">→</div>
         <div class="flow-node orange">
@@ -1002,7 +1108,7 @@
         <div class="flow-node orange">
           <div class="flow-num">03</div>
           <div class="flow-name">栄養補給の不足<br><em>NUTRITION</em></div>
-          <div class="flow-sig">Hb 15.9→14.8<br>RBC 523→487<br>体重 −2.6kg</div>
+          <div class="flow-sig">Hb 14.8<br>RBC 487<br>γ-GT 17（低）</div>
         </div>
       </div>
       <div class="pattern-note">
@@ -1014,29 +1120,12 @@
 </section>
 
 <!-- ===== SUMMARY ===== -->
-<section class="s-summary">
-  <img class="deco bl" src="assets/experience_vitality_new.png" style="width:300px; opacity:0.85;">
+<section class="s-summary" style="overflow:hidden;">
+  <img class="deco bl" src="assets/experience_vitality_new.png" style="width:340px; opacity:0.95; bottom:20px; left:-90px; transform:rotate(-12deg);">
   <div class="container">
     <div class="section-head">
       <h2>Summary</h2>
       <div class="ja-sub">総合サマリ</div>
-    </div>
-    <div class="signal-grid">
-      <div class="signal red">
-        <div><span class="dot"></span><span class="ja-sub">注目したい</span></div>
-        <div class="num">02</div>
-        <div class="lbl">項目</div>
-      </div>
-      <div class="signal yellow">
-        <div><span class="dot"></span><span class="ja-sub">ケアしたい</span></div>
-        <div class="num">06</div>
-        <div class="lbl">項目</div>
-      </div>
-      <div class="signal green">
-        <div><span class="dot"></span><span class="ja-sub">良好</span></div>
-        <div class="num">07</div>
-        <div class="lbl">項目</div>
-      </div>
     </div>
     <div class="summary-card">
       <div class="headline">
@@ -1044,8 +1133,8 @@
         ただし、<span style="color:var(--orange);">糖代謝を起点とした「糖化＋酸化」</span>の流れが進んでいる<strong>可能性</strong>が見えます。
       </div>
       <div class="narrative">
-        体重・血圧・腎機能・悪玉コレステロールは40歳時より改善し、活動量・睡眠時間も十分にとれています。これは大きな財産です。<br>
-        一方で、HbA1c（血糖の平均）の上昇・塩分過多・尿酸の高めは、「糖代謝が少しずつ滞り始めているサイン」として読み取れます。糖代謝が滞ると、体の中で <strong>糖化</strong> と <strong>酸化ストレス</strong> が進みやすく、それを処理する解毒酵素（γ-GT）や材料（タンパク質・ミネラル）が消耗していくことが知られています。今回のヘモグロビン・赤血球の緩やかな低下、γ-GTの低さは、そうした消耗のサインかもしれません。<br>
+        体重・血圧・腎機能・悪玉コレステロールは理想域に入り、活動量・睡眠時間も十分にとれています。ハードウェアとしての土台は整っている状態です。<br>
+        一方で、HbA1c（血糖の平均）が理想を超え、塩分も過多、尿酸も理想より高めという所見から、「糖代謝が滞り始めているサイン」として読み取れます。糖代謝が滞ると、体の中で <strong>糖化</strong> と <strong>酸化ストレス</strong> が進みやすく、それを処理する解毒酵素（γ-GT）や材料（タンパク質・ミネラル）が消耗していくことが知られています。γ-GT 17 という低値・ヘモグロビン 14.8 が理想（13-14）を上回る値で留まっていることは、そうした消耗のサインかもしれません。<br>
         Apple WatchのHRV低下も、体が裏側でこの流れに対応している<strong>可能性</strong>を裏付けるデータとして読めます。<br>
         本レポートは、これらを <strong>「糖代謝 → 酸化 → 栄養補給」</strong> という一本の補助線として読み解いてみた仮説です。次回検査と問診で、答え合わせをしていきます。
       </div>
@@ -1053,127 +1142,47 @@
   </div>
 </section>
 
-<!-- ===== TREND CHARTS ===== -->
-<section class="s-trend">
-  <img class="deco br" src="assets/flow-illustration-contact.png" style="width:150px; opacity:0.65;">
+<!-- ===== STRENGTHS ===== -->
+<section class="s-categories" style="overflow:hidden;">
+  <img class="deco br" src="assets/for-you-illustration-bl.png" style="width:340px; opacity:0.95; bottom:-90px; right:20px;">
   <div class="container">
     <div class="section-head">
-      <h2>The Trend</h2>
-      <div class="ja-sub">5年間の動き</div>
+      <h2>Strengths</h2>
+      <div class="ja-sub">今、整っているところ</div>
     </div>
 
-    <!-- HbA1c chart -->
-    <div class="trend-card">
-      <div class="chart-title">HbA1c — 血糖の安定指標</div>
-      <div class="chart-sub">過去2か月の平均血糖を示す。5.3 → 5.7 は数字以上に重要な動き。</div>
-      <svg class="trend-svg" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
-        <!-- ideal band -->
-        <rect x="60" y="60" width="500" height="40" fill="#4AF6C3" opacity="0.4" stroke="#1A1A1A" stroke-dasharray="4 3"/>
-        <text x="565" y="83" font-family="Space Grotesk" font-size="9" fill="#1A1A1A">理想 5.0-5.3</text>
-
-        <!-- danger zone -->
-        <rect x="60" y="140" width="500" height="40" fill="#FF9855" opacity="0.25" stroke="#FF9855" stroke-dasharray="4 3"/>
-        <text x="565" y="163" font-family="Space Grotesk" font-size="9" fill="#FF9855">糖尿病域 6.5+</text>
-
-        <!-- axes -->
-        <line x1="60" y1="20" x2="60" y2="180" stroke="#1A1A1A"/>
-        <line x1="60" y1="180" x2="560" y2="180" stroke="#1A1A1A"/>
-
-        <!-- data line -->
-        <line x1="160" y1="100" x2="460" y2="120" stroke="#FF9855" stroke-width="3"/>
-        <circle cx="160" cy="100" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2"/>
-        <circle cx="460" cy="120" r="9" fill="#FF9855" stroke="#1A1A1A" stroke-width="2"/>
-
-        <!-- forecast (dashed) -->
-        <line x1="460" y1="120" x2="560" y2="135" stroke="#FF9855" stroke-width="2" stroke-dasharray="6 4" opacity="0.6"/>
-        <circle cx="560" cy="135" r="6" fill="#FFFFFF" stroke="#FF9855" stroke-width="2" stroke-dasharray="2 2"/>
-
-        <!-- labels -->
-        <text x="160" y="92" text-anchor="middle" font-family="Space Grotesk" font-size="11" font-weight="700">5.3</text>
-        <text x="460" y="112" text-anchor="middle" font-family="Space Grotesk" font-size="13" font-weight="700" fill="#FF9855">5.7</text>
-        <text x="560" y="127" text-anchor="middle" font-family="Space Grotesk" font-size="10" fill="#FF9855" opacity="0.7">?</text>
-
-        <text x="160" y="196" text-anchor="middle" font-family="Space Grotesk" font-size="9" fill="#4A4A4A">40 (2020)</text>
-        <text x="460" y="196" text-anchor="middle" font-family="Space Grotesk" font-size="9" fill="#4A4A4A">45 (2025)</text>
-        <text x="560" y="196" text-anchor="middle" font-family="Space Grotesk" font-size="9" fill="#4A4A4A">50?</text>
-      </svg>
-      <div class="trend-narrative">
-        この5年で <strong>+0.4ポイント</strong> 上昇しました。HbA1cは1日や1週間ではほとんど動かない指標なので、上がる時は「生活全体の重心が少しずつ動いている」サインです。同じペースで10年進むと境界域（5.8〜6.4）に入ります。逆に言えば、今から減塩とタンパク質を意識すれば、50歳時点で5.3に戻すことは十分可能なレンジです。
+    <div class="category">
+      <div class="category-head">
+        <div class="category-icon">🫀</div>
+        <div class="category-title">Lipid Profile<span class="ja">脂質バランス</span></div>
+        <div class="pill green">良好</div>
+      </div>
+      <div class="range-meta" style="display:flex; gap:20px; flex-wrap:wrap; margin-bottom:8px;">
+        <span>LDL <strong>118</strong>（理想 &lt;120）</span>
+        <span>HDL <strong>66</strong>（理想 &gt;60）</span>
+        <span>L/H比 <strong>1.79</strong>（理想 &lt;2.0）</span>
+      </div>
+      <div class="category-text">
+        <p>悪玉コレステロール（LDL）は理想域に入っており、善玉（HDL）も60を超える良好な水準。L/H比も2.0未満で、動脈硬化リスクの観点からは現時点で十分整っているプロファイルです。</p>
       </div>
     </div>
 
-    <!-- Hb / RBC trend -->
-    <div class="trend-card">
-      <div class="chart-title">Hemoglobin / RBC — 酸素を運ぶ力</div>
-      <div class="chart-sub">体重減と並行して、酸素運搬の余力が静かに削られている。</div>
-      <svg class="trend-svg" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
-        <line x1="60" y1="20" x2="60" y2="180" stroke="#1A1A1A"/>
-        <line x1="60" y1="180" x2="560" y2="180" stroke="#1A1A1A"/>
-
-        <!-- Hb -->
-        <line x1="160" y1="50" x2="460" y2="85" stroke="#6CCFF6" stroke-width="3"/>
-        <circle cx="160" cy="50" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2"/>
-        <circle cx="460" cy="85" r="7" fill="#6CCFF6" stroke="#1A1A1A" stroke-width="2"/>
-        <text x="160" y="42" text-anchor="middle" font-family="Space Grotesk" font-size="10" font-weight="700">Hb 15.9</text>
-        <text x="460" y="77" text-anchor="middle" font-family="Space Grotesk" font-size="10" font-weight="700">Hb 14.8</text>
-
-        <!-- RBC -->
-        <line x1="160" y1="120" x2="460" y2="155" stroke="#FFB37B" stroke-width="3"/>
-        <circle cx="160" cy="120" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2"/>
-        <circle cx="460" cy="155" r="7" fill="#FFB37B" stroke="#1A1A1A" stroke-width="2"/>
-        <text x="160" y="112" text-anchor="middle" font-family="Space Grotesk" font-size="10" font-weight="700">RBC 523</text>
-        <text x="460" y="147" text-anchor="middle" font-family="Space Grotesk" font-size="10" font-weight="700">RBC 487</text>
-
-        <text x="160" y="196" text-anchor="middle" font-family="Space Grotesk" font-size="9" fill="#4A4A4A">40 (2020)</text>
-        <text x="460" y="196" text-anchor="middle" font-family="Space Grotesk" font-size="9" fill="#4A4A4A">45 (2025)</text>
-      </svg>
-      <div class="trend-narrative">
-        ヘモグロビンは <strong>−1.1</strong>、赤血球は <strong>−36万</strong>。どちらも基準値の中なので「異常」とは判定されません。けれど5年前と比べると、体は確かに酸素を運ぶ余裕を少しずつ手放しています。並行して体重も2.6kg減っており、この3つの変化は「材料が供給に追いついていない」という同じ原因から来ている可能性が高いです。
+    <div class="category">
+      <div class="category-head">
+        <div class="category-icon">🫁</div>
+        <div class="category-title">Kidney / BP<span class="ja">腎機能・血圧</span></div>
+        <div class="pill green">良好</div>
       </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ===== TREND (Improvements) ===== -->
-<section class="s-trend">
-  <img class="deco br" src="assets/for-you-recovery.png" style="width:380px; opacity:0.85;">
-  <div class="container">
-    <div class="section-head">
-      <h2>What Improved</h2>
-      <div class="ja-sub">この5年で良くなったもの</div>
-    </div>
-
-    <div class="trend-card">
-      <div class="chart-title">Lipid Profile — 脂質プロファイルの変化</div>
-      <div class="chart-sub">この5年で確実に改善した指標。</div>
-      <svg class="trend-svg" viewBox="0 0 600 160" xmlns="http://www.w3.org/2000/svg">
-        <!-- LDL -->
-        <text x="60" y="35" font-family="Space Grotesk" font-size="10" font-weight="600">LDL</text>
-        <rect x="120" y="22" width="220" height="20" fill="#FF9855" stroke="#1A1A1A"/>
-        <text x="345" y="36" font-family="Space Grotesk" font-size="10" font-weight="700">135</text>
-        <rect x="120" y="48" width="190" height="20" fill="#4AF6C3" stroke="#1A1A1A"/>
-        <text x="315" y="62" font-family="Space Grotesk" font-size="10" font-weight="700">118</text>
-
-        <!-- HDL -->
-        <text x="60" y="95" font-family="Space Grotesk" font-size="10" font-weight="600">HDL</text>
-        <rect x="120" y="82" width="105" height="20" fill="#E8C547" stroke="#1A1A1A"/>
-        <text x="230" y="96" font-family="Space Grotesk" font-size="10" font-weight="700">63</text>
-        <rect x="120" y="108" width="110" height="20" fill="#4AF6C3" stroke="#1A1A1A"/>
-        <text x="235" y="122" font-family="Space Grotesk" font-size="10" font-weight="700">66</text>
-
-        <text x="425" y="36" font-family="Noto Sans JP" font-size="9" fill="#4A4A4A">⬆ 40歳時 / ⬇ 45歳時</text>
-      </svg>
-      <div class="trend-narrative">
-        悪玉コレステロール（LDL）は <strong>135 → 118</strong> と理想域へ。善玉（HDL）も63 → 66とわずかに上昇。腎機能（eGFR）も改善しており、これらは生活習慣の中で「うまくいっている部分」がある証拠です。次の改善ポイントを足していけば、トータルの体は十分整います。
+      <div class="category-text">
+        <p>腎機能（eGFR）・血圧ともに理想域。Apple Watchの活動量（11.7k歩/日）と合わせて、循環系の土台は安定しています。この基盤があるからこそ、栄養と糖代謝の微調整が効きやすい状態です。</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ===== FINDINGS Part 1 (Critical) ===== -->
-<section class="s-categories">
-  <img class="deco bl" src="assets/for-you-business.png" style="width:160px; opacity:0.7;">
+<section class="s-categories" style="overflow:hidden;">
+  <img class="deco br" src="assets/for-you-business.png" style="width:400px; opacity:0.95; bottom:-90px; right:-120px;">
   <div class="container">
     <div class="section-head">
       <h2>Critical Findings</h2>
@@ -1195,7 +1204,7 @@
         <div class="range-meta"><span>理想 <strong>5.0-5.3</strong></span><span>今回 <strong style="color:var(--orange);">5.7</strong></span></div>
       </div>
       <div class="category-text">
-        <p>HbA1cは「過去2か月の血糖の平均」を表す指標で、1日2日の食事では動きません。今回 5.7 という値は、日常の中で血糖が高めの時間が長くなっていることを示しています。健診上は「やや高め」レベルですが、5年前は5.3だったことを考えると、<strong>体の代謝の重心が少し動いた</strong>と受け止めるのが正しい解釈です。</p>
+        <p>HbA1cは「過去2か月の血糖の平均」を表す指標で、1日2日の食事では動きません。今回 5.7 という値は、日常の中で血糖が高めの時間が長くなっていることを示しています。健診上は「やや高め」レベルですが、精密栄養学の理想（5.0-5.3）からは0.4ポイント上振れており、<strong>体の代謝の重心が理想からずれ始めているサイン</strong>として読み取れます。</p>
         <p>原因は単純な甘い物の食べ過ぎではなく、「食事と食事の間隔」「夜遅い食事」「ストレス」「睡眠の質」「運動の種類」など複数要因の合計で決まります。Apple Watchの自律神経の数値が低めなのも、同じ生活パターンから来ている可能性があります。</p>
       </div>
     </div>
@@ -1224,8 +1233,8 @@
 </section>
 
 <!-- ===== FINDINGS Part 2 (Watch) ===== -->
-<section class="s-categories">
-  <img class="deco br" src="assets/for-you-wellness.png" style="width:140px; opacity:0.7;">
+<section class="s-categories" style="overflow:hidden;">
+  <img class="deco bl" src="assets/for-you-wellness.png" style="width:340px; opacity:0.95; bottom:-90px; left:-100px;">
   <div class="container">
     <div class="section-head">
       <h2>Watch Findings</h2>
@@ -1244,11 +1253,11 @@
           <div class="range-bar-ideal" style="left:0%; width:33%;"></div>
           <div class="range-bar-marker" style="left:60%;" data-val="14.8"></div>
         </div>
-        <div class="range-meta"><span>理想 <strong>13-14 g/dL</strong></span><span>今回 <strong>14.8</strong>（5年で −1.1）</span></div>
+        <div class="range-meta"><span>理想 <strong>13-14 g/dL</strong></span><span>今回 <strong>14.8</strong></span></div>
       </div>
       <div class="category-text">
-        <p>ヘモグロビンの絶対値は良好ですが、<strong>変化の方向</strong>が気になります。15.9 → 14.8 と1.1下がり、赤血球数も低下。体重減と並行している点から、「材料供給が活動量に追いついていない」サインの可能性があります。</p>
-        <p>男性は鉄欠乏になりにくいと思われがちですが、運動量が多い・ストイックに食事を整えている方ほどゆっくり減ります。次回検査でフェリチン（鉄の貯金）を測ると、本当に補充が必要かがクリアになります。</p>
+        <p>ヘモグロビン 14.8 は一般基準では正常ですが、精密栄養学の理想（13-14 g/dL）からはやや上振れ。赤血球数 487万も理想（430-470万）の上限近く。これは「鉄が不足している」というよりも、<strong>水分や材料供給のバランスに余白がある</strong>サインの可能性として読みます。</p>
+        <p>男性は鉄欠乏になりにくいと思われがちですが、運動量が多い・ストイックに食事を整えている方ほど鉄の貯金（フェリチン）は静かに減っていきます。次回検査でフェリチンを測ると、本当に補充が必要かがクリアになります。</p>
       </div>
     </div>
 
@@ -1286,8 +1295,8 @@
 </section>
 
 <!-- ===== WATCH ===== -->
-<section class="s-watch">
-  <img class="deco bl" src="assets/experience_sleep_new.png" style="width:260px; opacity:0.85;">
+<section class="s-watch" style="overflow:hidden;">
+  <img class="deco bl" src="assets/experience_sleep_new.png" style="width:340px; opacity:0.95; bottom:-80px; left:-90px;">
   <div class="container">
     <div class="section-head">
       <h2>Life Data</h2>
@@ -1332,8 +1341,8 @@
 </section>
 
 <!-- ===== STORY ===== -->
-<section class="s-story">
-  <img class="deco br" src="assets/experience_focus_new.png" style="width:340px; opacity:0.85;">
+<section class="s-story" style="overflow:hidden;">
+  <img class="deco br" src="assets/experience_focus_new.png" style="width:420px; opacity:0.95; bottom:-90px; right:-110px;">
   <div class="container">
     <div class="section-head">
       <h2>Your Story</h2>
@@ -1342,12 +1351,12 @@
     <div class="story-box">
       <p class="opener">
         ここまでの所見を、ひとつの物語として繋ぎ直してみます。<br>
-        5年前の自分と今の自分を比べると、はっきりと見えてくる4つの線があります。
+        今回の血液とライフデータから見えてくる4つの線があります。
       </p>
       <ol class="story-timeline">
-        <li><strong>運動と体型はキープできている。</strong>体重・BMI・血圧は40歳時より少し改善し、悪玉コレステロールも明確に下がりました。健康への意識と行動は、確かに数値に反映されているように見えます。</li>
-        <li><strong>けれど血糖と塩分が、生活の中で少しずつ蓄積している<strong style="color:var(--orange);">可能性</strong>。</strong>HbA1c 5.3 → 5.7、塩分9.9g/日。「食べ過ぎ」というより「生活の重心がじわっと動いてきたサイン」として読めます。</li>
-        <li><strong>同時に、酸素運搬と解毒の余力が少し細っている<strong style="color:var(--orange);">かもしれません</strong>。</strong>ヘモグロビン・赤血球・γ-GTがそろって低下方向に動いていて、活動量に対して材料の補給がぴったり追いついていない可能性が見えます。</li>
+        <li><strong>運動と体型の土台は整っている。</strong>体重・BMI・血圧は理想域、悪玉コレステロールも理想内。活動量と循環系の基盤は十分に機能しています。</li>
+        <li><strong>けれど血糖と塩分が、理想の重心からずれ始めている<strong style="color:var(--orange);">可能性</strong>。</strong>HbA1c 5.7・塩分9.9g/日はいずれも理想を超えており、「食べ過ぎ」というより「生活の重心がずれてきたサイン」として読めます。</li>
+        <li><strong>同時に、解毒と材料補給の余力が細っている<strong style="color:var(--orange);">かもしれません</strong>。</strong>γ-GTが理想より低く、活動量に対して材料（タンパク質・ミネラル）の補給がぴったり追いついていない可能性が見えます。</li>
         <li><strong>Apple Watchの自律神経データが、その仮説を裏付けるように見える。</strong>HRVがやや低く、呼吸数もやや高め。「外では動けるが、内側で回復しきれていない」という状態が予測されます。</li>
       </ol>
       <div class="story-closer">HARDWARE (運動) は十分 — SOFTWARE (栄養) を整える時期かもしれません。</div>
@@ -1356,8 +1365,8 @@
 </section>
 
 <!-- ===== STEPS ===== -->
-<section class="s-steps">
-  <img class="deco bl" src="assets/pricing-plan-illustration.png" style="width:130px; opacity:0.7;">
+<section class="s-steps" style="overflow:hidden;">
+  <img class="deco bl" src="assets/pricing-plan-illustration.png" style="width:320px; opacity:0.95; bottom:-80px; left:-90px;">
   <div class="container">
     <div class="section-head">
       <h2>Next Steps</h2>
