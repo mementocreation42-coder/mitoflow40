@@ -107,7 +107,7 @@ export default async function AdminPage({
                       {post.title.rendered}
                     </Link>
                   </h2>
-                  <p style={{
+                  <div style={{
                     fontSize: 13, color: '#555', lineHeight: 1.5,
                     display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
                   }}

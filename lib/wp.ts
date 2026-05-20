@@ -41,6 +41,62 @@ export async function uploadMedia(file: Blob, filename: string): Promise<{ id: n
   return { id: data.id, source_url: data.source_url };
 }
 
+export interface MediaItem {
+  id: number;
+  source_url: string;
+  thumbnail_url: string;
+  title: string;
+  alt_text: string;
+  mime_type: string;
+  date: string;
+}
+
+export async function listMedia(opts: { page?: number; perPage?: number; search?: string } = {}): Promise<{ items: MediaItem[]; total: number; totalPages: number }> {
+  const page = opts.page ?? 1;
+  const perPage = opts.perPage ?? 24;
+  const params = new URLSearchParams({
+    page: String(page),
+    per_page: String(perPage),
+    media_type: 'image',
+    orderby: 'date',
+    order: 'desc',
+  });
+  if (opts.search) params.set('search', opts.search);
+
+  const url = `${writeUrl('/media')}&${params.toString()}`;
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: { Authorization: getAuthHeader() },
+    cache: 'no-store',
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`List media failed: ${res.status} – ${err}`);
+  }
+  const data = await res.json();
+  const total = parseInt(res.headers.get('x-wp-total') || '0', 10);
+  const totalPages = parseInt(res.headers.get('x-wp-totalpages') || '1', 10);
+
+  type WPMediaSize = { source_url?: string };
+  type WPMedia = {
+    id: number; source_url: string; mime_type: string; date: string;
+    title?: { rendered?: string }; alt_text?: string;
+    media_details?: { sizes?: { thumbnail?: WPMediaSize; medium?: WPMediaSize } };
+  };
+  const items: MediaItem[] = (data as WPMedia[]).map((m) => ({
+    id: m.id,
+    source_url: m.source_url,
+    thumbnail_url: m.media_details?.sizes?.thumbnail?.source_url
+      || m.media_details?.sizes?.medium?.source_url
+      || m.source_url,
+    title: m.title?.rendered || '',
+    alt_text: m.alt_text || '',
+    mime_type: m.mime_type,
+    date: m.date,
+  }));
+  return { items, total, totalPages };
+}
+
 export interface CreatePostInput {
   title: string;
   content: string;
@@ -94,9 +150,13 @@ export async function updateWPPost(id: number, input: Partial<CreatePostInput>):
 }
 
 export async function deleteWPPost(id: number): Promise<void> {
-  const res = await fetch(writeUrl(`/posts/${id}?force=true`), {
-    method: 'DELETE',
-    headers: { Authorization: getAuthHeader() },
+  // WAF (SiteGuard等) が DELETE メソッドを弾くため、POST + ?_method=DELETE で代替
+  const res = await fetch(`${writeUrl(`/posts/${id}`)}&force=true&_method=DELETE`, {
+    method: 'POST',
+    headers: {
+      Authorization: getAuthHeader(),
+      'X-HTTP-Method-Override': 'DELETE',
+    },
   });
   if (!res.ok) {
     const err = await res.text();

@@ -3,6 +3,8 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import LivePreview from './LivePreview';
+import ProductInsertModal from './ProductInsertModal';
+import MediaPickerModal from './MediaPickerModal';
 
 interface Category { id: number; name: string; slug: string; count: number }
 
@@ -108,6 +110,10 @@ export default function PostEditor({ categories, postId, defaultValues }: PostEd
   const [error, setError] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [showProductModal, setShowProductModal] = useState(false);
+  const [showLinkModal, setShowLinkModal] = useState(false);
+  const [linkUrl, setLinkUrl] = useState('');
+  const [mediaPicker, setMediaPicker] = useState<null | 'featured' | 'body'>(null);
 
   const featuredRef = useRef<HTMLInputElement>(null);
   const bodyImageRef = useRef<HTMLInputElement>(null);
@@ -224,7 +230,7 @@ export default function PostEditor({ categories, postId, defaultValues }: PostEd
           if (img) blocks.push(`<!-- wp:image {"id":${img.id}} -->\n<figure class="wp-block-image"><img src="${img.url}" class="wp-image-${img.id}" /></figure>\n<!-- /wp:image -->`);
         } else if (part.trim()) {
           const pt = part.trim();
-          if (/^<(h[2-6]|ul|ol|blockquote)/i.test(pt)) {
+          if (/^<(h[2-6]|ul|ol|blockquote|div|figure|table)/i.test(pt)) {
             blocks.push(`<!-- wp:html -->\n${pt}\n<!-- /wp:html -->`);
           } else {
             blocks.push(`<!-- wp:paragraph -->\n<p>${pt.replace(/\n/g, '<br>')}</p>\n<!-- /wp:paragraph -->`);
@@ -305,12 +311,20 @@ export default function PostEditor({ categories, postId, defaultValues }: PostEd
             }}>×</button>
           </div>
         ) : (
-          <div onClick={() => featuredRef.current?.click()} style={{
-            width: 200, height: 120, background: '#1a1a1a', border: '2px dashed #2a2a2a',
-            borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            cursor: 'pointer', color: '#555', fontSize: 13,
-          }}>
-            {uploading ? 'アップロード中...' : '+ 画像を選択'}
+          <div style={{ display: 'flex', gap: 8, alignItems: 'stretch' }}>
+            <div onClick={() => featuredRef.current?.click()} style={{
+              width: 200, height: 120, background: '#1a1a1a', border: '2px dashed #2a2a2a',
+              borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', color: '#555', fontSize: 13,
+            }}>
+              {uploading ? 'アップロード中...' : '+ 新規アップロード'}
+            </div>
+            <button type="button" onClick={() => setMediaPicker('featured')} style={{
+              padding: '0 18px', background: '#1a1a1a', border: '1px solid #2a2a2a',
+              borderRadius: 8, color: '#aaa', cursor: 'pointer', fontSize: 12, whiteSpace: 'nowrap',
+            }}>
+              🖼 メディアから選択
+            </button>
           </div>
         )}
         <input ref={featuredRef} type="file" accept="image/*" onChange={handleFeaturedUpload} style={{ display: 'none' }} />
@@ -354,18 +368,14 @@ export default function PostEditor({ categories, postId, defaultValues }: PostEd
           <button type="button" style={toolbarBtnStyle} onClick={() => wrapOrInsert('<blockquote>', '</blockquote>')}>❝</button>
           <span style={{ width: 1, height: 18, background: '#2a2a2a', margin: '0 4px' }} />
           <button type="button" style={{ ...toolbarBtnStyle, color: uploading ? '#444' : '#aaa' }}
-            disabled={uploading} onClick={() => bodyImageRef.current?.click()}>
+            disabled={uploading} onClick={() => bodyImageRef.current?.click()} title="新規アップロード">
             {uploading ? '⏳' : '📷'}
           </button>
-          <button type="button" style={toolbarBtnStyle} onClick={() => {
-            const url = prompt('URLを入力してください');
-            if (url?.startsWith('http')) {
-              const ta = textareaRef.current;
-              if (!ta) return;
-              const pos = ta.selectionStart;
-              setBody((b) => b.slice(0, pos) + '\n\n' + url.trim() + '\n\n' + b.slice(pos));
-            }
-          }}>🔗</button>
+          <button type="button" style={toolbarBtnStyle} onClick={() => setMediaPicker('body')} title="メディアライブラリから選択">
+            🖼
+          </button>
+          <button type="button" style={toolbarBtnStyle} onClick={() => { setLinkUrl(''); setShowLinkModal(true); }}>🔗</button>
+          <button type="button" style={toolbarBtnStyle} title="商品カードを挿入（画像アップロード対応）" onClick={() => setShowProductModal(true)}>🛒</button>
         </div>
 
         {/* テキストエリア */}
@@ -560,6 +570,80 @@ export default function PostEditor({ categories, postId, defaultValues }: PostEd
           {error}
         </div>
       )}
+
+      {showLinkModal && (
+        <div
+          onClick={() => setShowLinkModal(false)}
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{ background: '#141414', border: '1px solid #2a2a2a', borderRadius: 12, padding: 24, width: '100%', maxWidth: 440, color: '#e5e5e5' }}
+          >
+            <h2 style={{ fontSize: 15, fontWeight: 700, color: '#fff', margin: '0 0 16px' }}>🔗 リンクを挿入</h2>
+            <p style={{ fontSize: 12, color: '#666', marginBottom: 12 }}>
+              URLを単独行で挿入します。記事公開時にOGPカードに自動変換されます。
+            </p>
+            <input
+              autoFocus
+              value={linkUrl}
+              onChange={(e) => setLinkUrl(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && linkUrl.startsWith('http')) {
+                  const pos = cursorPosRef.current;
+                  setBody((b) => b.slice(0, pos) + '\n\n' + linkUrl.trim() + '\n\n' + b.slice(pos));
+                  setShowLinkModal(false);
+                }
+              }}
+              placeholder="https://..."
+              style={{ width: '100%', padding: '10px 12px', background: '#1a1a1a', border: '1px solid #2a2a2a', borderRadius: 8, color: '#e5e5e5', fontSize: 13, outline: 'none', boxSizing: 'border-box' }}
+            />
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 16 }}>
+              <button type="button" onClick={() => setShowLinkModal(false)} style={{ padding: '8px 16px', background: '#1e1e1e', border: '1px solid #2a2a2a', borderRadius: 6, color: '#aaa', cursor: 'pointer', fontSize: 12 }}>キャンセル</button>
+              <button
+                type="button"
+                disabled={!linkUrl.startsWith('http')}
+                onClick={() => {
+                  const pos = cursorPosRef.current;
+                  setBody((b) => b.slice(0, pos) + '\n\n' + linkUrl.trim() + '\n\n' + b.slice(pos));
+                  setShowLinkModal(false);
+                }}
+                style={{ padding: '8px 20px', background: linkUrl.startsWith('http') ? '#22c55e' : '#333', color: '#000', border: 'none', borderRadius: 6, fontSize: 13, fontWeight: 700, cursor: linkUrl.startsWith('http') ? 'pointer' : 'not-allowed' }}
+              >
+                挿入
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <MediaPickerModal
+        open={mediaPicker !== null}
+        onClose={() => setMediaPicker(null)}
+        title={mediaPicker === 'featured' ? 'アイキャッチ画像を選択' : '本文に挿入する画像を選択'}
+        onSelect={(item) => {
+          if (mediaPicker === 'featured') {
+            setFeaturedImage(item);
+          } else if (mediaPicker === 'body') {
+            setUploadedImages((prev) => {
+              const idx = prev.length;
+              const pos = cursorPosRef.current;
+              setBody((b) => b.slice(0, pos) + '\n[image:' + idx + ']\n' + b.slice(pos));
+              return [...prev, item];
+            });
+          }
+        }}
+      />
+
+      <ProductInsertModal
+        open={showProductModal}
+        onClose={() => setShowProductModal(false)}
+        onInsert={(html) => {
+          const ta = textareaRef.current;
+          const pos = ta ? cursorPosRef.current : body.length;
+          setBody((b) => b.slice(0, pos) + '\n\n' + html + '\n\n' + b.slice(pos));
+        }}
+      />
 
       {/* ── メインレイアウト ── */}
       <div style={{

@@ -92,13 +92,90 @@ function AuthorCard() {
   );
 }
 
+// ===== 商品カードプレビュー（Amazon/楽天） =====
+const AMAZON_RE = /amazon\.co\.jp|amzn\.to|amzn\.asia/i;
+const RAKUTEN_RE = /rakuten\.co\.jp|item\.rakuten/i;
+
+function ProductCardPreview({ url }: { url: string }) {
+  const [data, setData] = useState<{ title: string; image: string; price: string; brand: string } | null>(null);
+  const [failed, setFailed] = useState(false);
+  const isAmazon = AMAZON_RE.test(url);
+
+  useEffect(() => {
+    fetch(`/api/product-metadata?url=${encodeURIComponent(url)}`)
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((d) => setData({ title: d.title || '', image: d.image || '', price: d.price || '', brand: d.brand || '' }))
+      .catch(() => setFailed(true));
+  }, [url]);
+
+  if (failed) return (
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'block', padding: '12px 16px', border: '1px solid #e5e5e5', borderRadius: 12, color: '#41C9B4', fontSize: 13, wordBreak: 'break-all', margin: '16px 0' }}>{url}</a>
+  );
+  if (!data) return (
+    <div style={{ height: 140, border: '1px solid #e5e5e5', borderRadius: 16, margin: '20px 0', background: '#f9f9f9', animation: 'pulse 1.5s ease-in-out infinite' }} />
+  );
+
+  return (
+    <div style={{ margin: '20px 0', border: '1px solid #e5e5e5', borderRadius: 16, overflow: 'hidden', background: '#fff', display: 'flex' }}>
+      <div style={{ width: 140, flexShrink: 0, padding: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fafafa' }}>
+        {data.image ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={data.image} alt={data.title} style={{ maxWidth: '100%', maxHeight: 110, objectFit: 'contain' }} />
+        ) : (
+          <span style={{ color: '#ccc', fontSize: 12 }}>No Image</span>
+        )}
+      </div>
+      <div style={{ flex: 1, padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0 }}>
+        {data.brand && <span style={{ fontSize: 10, color: '#41C9B4', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase' }}>{data.brand}</span>}
+        <p style={{ fontSize: 14, fontWeight: 700, color: '#1A1A1A', margin: 0, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+          {data.title || url}
+        </p>
+        <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
+          {data.price && <span style={{ fontSize: 16, fontWeight: 700, color: '#1A1A1A' }}>{data.price}</span>}
+          <span style={{
+            padding: '5px 12px', borderRadius: 5, fontSize: 11, fontWeight: 700,
+            background: isAmazon ? '#ff9900' : '#bf0000', color: isAmazon ? '#000' : '#fff',
+          }}>
+            {isAmazon ? 'Amazonで探す' : '楽天で探す'}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ===== 本文レンダラー（URLをカードに変換） =====
 const STANDALONE_URL = /^https?:\/\/[^\s<>"]+$/;
 
+interface ProductData {
+  amazonUrl?: string; rakutenUrl?: string;
+  title?: string; image?: string; price?: string; brand?: string;
+}
+
 interface ContentBlock {
-  type: 'html' | 'url' | 'image';
+  type: 'html' | 'url' | 'product' | 'productCustom' | 'image';
   content: string;
   imageUrl?: string;
+  product?: ProductData;
+}
+
+function parseProductDiv(html: string): ProductData | null {
+  if (!/mf-product-card/.test(html)) return null;
+  const get = (attr: string) => {
+    const m = html.match(new RegExp(`data-${attr}="([^"]*)"`, 'i'));
+    return m ? decodeAttr(m[1]) : undefined;
+  };
+  const amazonUrl = get('amazon-url');
+  const rakutenUrl = get('rakuten-url');
+  if (!amazonUrl && !rakutenUrl) return null;
+  return {
+    amazonUrl, rakutenUrl,
+    title: get('title'), image: get('image'), price: get('price'), brand: get('brand'),
+  };
+}
+
+function decodeAttr(s: string) {
+  return s.replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
 }
 
 function parseBlocks(body: string, uploadedImages: { url: string; id: number }[]): ContentBlock[] {
@@ -119,12 +196,22 @@ function parseBlocks(body: string, uploadedImages: { url: string; id: number }[]
 
     // standalone URL
     if (STANDALONE_URL.test(t)) {
-      blocks.push({ type: 'url', content: t });
+      if (AMAZON_RE.test(t) || RAKUTEN_RE.test(t)) {
+        blocks.push({ type: 'product', content: t });
+      } else {
+        blocks.push({ type: 'url', content: t });
+      }
       continue;
     }
 
+    // 商品カードHTML
+    if (/^<div[^>]+class="mf-product-card"/i.test(t)) {
+      const pd = parseProductDiv(t);
+      if (pd) { blocks.push({ type: 'productCustom', content: t, product: pd }); continue; }
+    }
+
     // HTML block
-    if (/^<(h[2-6]|ul|ol|blockquote|figure|table)/i.test(t)) {
+    if (/^<(h[2-6]|ul|ol|blockquote|figure|table|div)/i.test(t)) {
       blocks.push({ type: 'html', content: t });
       continue;
     }
@@ -245,6 +332,40 @@ export default memo(function LivePreview({
               }
               if (block.type === 'url') {
                 return <OgpCardPreview key={i} url={block.content} />;
+              }
+              if (block.type === 'product') {
+                return <ProductCardPreview key={i} url={block.content} />;
+              }
+              if (block.type === 'productCustom' && block.product) {
+                const p = block.product;
+                const isAmazon = !!p.amazonUrl;
+                return (
+                  <div key={i} style={{ margin: '20px 0', border: '1px solid #e5e5e5', borderRadius: 16, overflow: 'hidden', background: '#fff', display: 'flex' }}>
+                    <div style={{ width: 140, flexShrink: 0, padding: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fafafa' }}>
+                      {p.image ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={p.image} alt={p.title || ''} style={{ maxWidth: '100%', maxHeight: 110, objectFit: 'contain' }} />
+                      ) : (
+                        <span style={{ color: '#ccc', fontSize: 12 }}>No Image</span>
+                      )}
+                    </div>
+                    <div style={{ flex: 1, padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0 }}>
+                      {p.brand && <span style={{ fontSize: 10, color: '#41C9B4', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase' }}>{p.brand}</span>}
+                      <p style={{ fontSize: 14, fontWeight: 700, color: '#1A1A1A', margin: 0, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                        {p.title || (p.amazonUrl || p.rakutenUrl)}
+                      </p>
+                      <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
+                        {p.price && <span style={{ fontSize: 16, fontWeight: 700, color: '#1A1A1A' }}>{p.price}</span>}
+                        <span style={{
+                          padding: '5px 12px', borderRadius: 5, fontSize: 11, fontWeight: 700,
+                          background: isAmazon ? '#ff9900' : '#bf0000', color: isAmazon ? '#000' : '#fff',
+                        }}>
+                          {isAmazon ? 'Amazonで探す' : '楽天で探す'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
               }
               return <div key={i} dangerouslySetInnerHTML={{ __html: block.content }} />;
             })}
