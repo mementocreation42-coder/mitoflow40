@@ -59,22 +59,54 @@ Apple Watch生XML（`~/Desktop/apple_health_export/export.xml`）は**絶対にR
 2. **理想値テーブル参照** — 性別に応じて `reference/optimal_ranges_female.md` または `optimal_ranges_male.md` を `Read` で取得。
 3. **項目ごとに信号判定** — 上記ルールに従う。
 4. **カウンセリング・Apple Watchと突き合わせ** — `reference/interpretation_rules.md` の三角測量ロジックを適用。
-5. **2タイプの出力を生成**:
-   - **解析者用** = `templates/analyst_report.md` の構造でMarkdown生成 → `outputs/<氏名_日付>/analyst.md` に保存 → **Notion DBへpush**（Notion本文 = この Markdown）
-     - DB URL: https://www.notion.so/49d0c0eac9254b58a0bba6b2098818c1
-     - data_source_id: `f965b1a4-6f9b-4a25-8283-4ef6c032b889`
-     - `mcp__notion__notion-create-pages` を使う
-     - **DBプロパティは7つに最小化**: 顧客ID(title) / 血液検査日(date) / 主要クラスタ(multi_select) / Vol(number) / お客様用URL(url) / 解析者用URL(url) / 作成日時(created_time)
-     - 主訴・統合所見・次回確認事項・確度・性別・年齢などは**本文Markdownに含めるのみでDB列にはしない**（プロパティ重複を避ける）
-     - プロパティ「顧客ID」には **氏名 / 解析日YYYY-MM-DD**（例: `小林大介 / 2026-05-19`）を入れる。同一人物の複数回でも解析日で識別できる
-     - プロパティ「Vol」には **その人にとっての解析回数（初回=1、2回目=2…）** を入れる。新規ページ作成前に、顧客ID prefix が氏名で始まる既存ページ数 +1 を Vol として設定。同じ氏名の継続/再来訪をクオンツに追跡できる
-   - **お客様用** = `templates/client_report.html` を `outputs/<氏名_日付>/client.html` にコピー → 値を流し込み（カバーの `For ◯◯様`, `Subject / Male, 45` 等を実データに置換）→ `scripts/html_to_pdf.sh outputs/<氏名_日付>/client.html outputs/<氏名_日付>/<氏名>_<検査日>_report.pdf` でPDF生成（自動オープン）
-6. **公開**: `./scripts/publish_report.sh <氏名_日付>` 実行
+4.5. **解析開始前の確認（初回のみ）**:
+   - **これがサンプル用か実顧客用かをユーザーに確認**
+     - サンプル: 氏名そのまま使用、サイト常設リンクOK
+     - 実顧客: 氏名扱い慎重、URLは個別共有のみ、外部発信時はマスキング前提
+   - 既に文脈で明らかなら省略可
+
+5. **2タイプの出力を生成（下書き）**:
+   - **解析者用** = `templates/analyst_report.md` の構造でMarkdown生成 → `outputs/<氏名_日付>/analyst.md` に保存
+   - **お客様用** = `templates/client_report.html` を `outputs/<氏名_日付>/client.html` にコピー → 値を流し込み（カバーの `For ◯◯様` 等を実データに置換）
+
+5.5. **Claude 自己チェック（プリフライト）— ユーザーに見せる前に必ず実施**:
+   - 言語: 「〜である」「〜が原因」「〜と診断される」などの断定形が混入していないか（`reference/language_rules.md` 準拠）
+   - 数値: 理想値が `reference/optimal_ranges_*.md` のレンジと一致しているか
+   - 整合性: カバーの氏名・解析日・性別・年齢が `meta.txt` と一致するか
+   - Vol番号: Notion DBで顧客ID prefix が氏名で始まる既存ページ数+1になっているか
+   - クラスタ: 主要クラスタタグが本文の所見と矛盾していないか
+   - **引っかかったら自分で修正→再チェック**。クリアした下書きだけをユーザーに提示
+
+6. **🛑 下書き確認をユーザーに依頼（必須・自動で先へ進まない）**:
+   - **この時点では Notion push も Blob 公開も絶対にしない**
+   - Claude Code のプレビュー機能で `outputs/<氏名_日付>/client.html` をブラウザ確認するよう案内
+   - analyst.md の要点（CORE PATTERN / 統合所見 / Vol番号 / 主要クラスタ判定）をチャットに簡潔に要約
+   - **承認チェックリストを提示** — ユーザーがチェックする項目を箇条書きで：
+     ```
+     レビューチェックリスト:
+     ☐ 数値（HbA1c X.X / 尿酸 X.X / Hb X.X …）が血液画像と一致
+     ☐ CORE PATTERN が腑に落ちる
+     ☐ 主要クラスタ判定でOK
+     ☐ Vol=X（リピート顧客なら前回との差分も妥当）
+     ☐ Next Steps が実行可能な範囲（3〜7個）
+     ☐ 公開してOK
+     ```
+   - ユーザーが「OK」「公開して」「これでよい」等と承認するまで次に進まない
+   - 修正指示が入ったら outputs/ のファイルを書き換え → 再度プリフライト → 再度プレビュー確認に戻る
+7. **承認後に Notion DB へ push**:
+   - DB URL: https://www.notion.so/49d0c0eac9254b58a0bba6b2098818c1
+   - data_source_id: `f965b1a4-6f9b-4a25-8283-4ef6c032b889`
+   - `mcp__notion__notion-create-pages` を使う（Notion本文 = analyst.md の内容）
+   - **DBプロパティは7つに最小化**: 顧客ID(title) / 血液検査日(date) / 主要クラスタ(multi_select) / Vol(number) / お客様用URL(url) / 解析者用URL(url) / 作成日時(created_time)
+   - 主訴・統合所見・次回確認事項・確度・性別・年齢などは**本文Markdownに含めるのみでDB列にはしない**（プロパティ重複を避ける）
+   - プロパティ「顧客ID」には **氏名 / 解析日YYYY-MM-DD**（例: `小林大介 / 2026-05-19`）
+   - プロパティ「Vol」には **その人にとっての解析回数（初回=1、2回目=2…）**。新規ページ作成前に、顧客ID prefix が氏名で始まる既存ページ数 +1 を Vol として設定
+8. **承認後に公開**: `./scripts/publish_report.sh <氏名_日付>` 実行
    - トークン発行 → Vercel Blob にアップロード（client.html + analyst.md→HTML）
-   - 公開URL: `https://mitoflow40.com/r/<token>`（お客様用）
-   - 解析者URL: `https://mitoflow40.com/r/<token>/analyst`（解析者用）
-7. **Notion 書き戻し**: 同じ顧客IDのNotionページを `mcp__notion__notion-update-page` で更新し、`お客様用URL` と `解析者用URL` を書き込む
-8. 完了後、Notionページ URL とお客様用URLをユーザーに提示。
+   - お客様用URL: `https://mitoflow40.com/r/<token>`
+   - 解析者用URL: `https://mitoflow40.com/r/<token>/analyst`
+9. **Notion 書き戻し**: 同じ顧客IDのNotionページを `mcp__notion__notion-update-page` で更新し、`お客様用URL` と `解析者用URL` を書き込む
+10. 完了後、Notionページ URL とお客様用URLをユーザーに提示。
 
 ## 解釈の方向性 — 複合指標による系統的解析
 

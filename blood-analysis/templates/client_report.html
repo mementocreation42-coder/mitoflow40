@@ -579,13 +579,17 @@
   .range-bar-marker::after {
     content: attr(data-val);
     position: absolute;
-    top: -22px;
+    top: -28px;
     left: 50%;
     transform: translateX(-50%);
     font-family: 'Space Grotesk', sans-serif;
     font-size: 9pt;
     font-weight: 700;
     white-space: nowrap;
+    color: var(--text);
+    background: rgba(255,255,255,0.85);
+    padding: 1px 6px;
+    border-radius: 8px;
   }
   .range-meta {
     display: flex;
@@ -927,10 +931,10 @@
     <table class="blood-table">
       <thead><tr><th style="width:24%;">項目</th><th style="width:14%;">現在値</th><th style="width:20%;">理想値</th><th>レンジ</th><th style="width:9%;">判定</th></tr></thead>
       <tbody>
-        <tr><td>HbA1c <span class="cat">血糖平均</span></td><td class="val">5.7 %</td><td class="ideal">5.0 – 5.3</td>
+        <tr><td>HbA1c <span class="cat">（過去2か月の血糖平均）</span></td><td class="val">5.7 %</td><td class="ideal">5.0 – 5.3</td>
           <td><div class="mini-bar"><div class="ideal-zone" style="left:0%; width:30%;"></div><div class="marker" style="left:70%;"></div></div></td>
           <td><span class="pill-sm r">注目</span></td></tr>
-        <tr><td>尿酸 <span class="cat">代謝負荷</span></td><td class="val">5.4 mg/dL</td><td class="ideal">4.0 – 4.7</td>
+        <tr><td>尿酸 <span class="cat">（プリン体由来の老廃物）</span></td><td class="val">5.4 mg/dL</td><td class="ideal">4.0 – 4.7</td>
           <td><div class="mini-bar"><div class="ideal-zone" style="left:25%; width:17.5%;"></div><div class="marker" style="left:60%;"></div></div></td>
           <td><span class="pill-sm y">ケア</span></td></tr>
       </tbody>
@@ -940,13 +944,13 @@
     <table class="blood-table">
       <thead><tr><th style="width:24%;">項目</th><th style="width:14%;">現在値</th><th style="width:20%;">理想値</th><th>レンジ</th><th style="width:9%;">判定</th></tr></thead>
       <tbody>
-        <tr><td>LDL <span class="cat">悪玉</span></td><td class="val">118 mg/dL</td><td class="ideal">&lt; 120</td>
+        <tr><td>LDL <span class="cat">（悪玉コレステロール）</span></td><td class="val">118 mg/dL</td><td class="ideal">&lt; 120</td>
           <td><div class="mini-bar"><div class="ideal-zone" style="left:0%; width:60%;"></div><div class="marker" style="left:59%;"></div></div></td>
           <td><span class="pill-sm g">良好</span></td></tr>
-        <tr><td>HDL <span class="cat">善玉</span></td><td class="val">66 mg/dL</td><td class="ideal">&gt; 60</td>
+        <tr><td>HDL <span class="cat">（善玉コレステロール）</span></td><td class="val">66 mg/dL</td><td class="ideal">&gt; 60</td>
           <td><div class="mini-bar"><div class="ideal-zone" style="left:60%; width:40%;"></div><div class="marker" style="left:66%;"></div></div></td>
           <td><span class="pill-sm g">良好</span></td></tr>
-        <tr><td>L/H比 <span class="cat">動脈硬化指標</span></td><td class="val">1.79</td><td class="ideal">&lt; 2.0</td>
+        <tr><td>L/H比 <span class="cat">（LDL÷HDLの比、動脈硬化リスク）</span></td><td class="val">1.79</td><td class="ideal">&lt; 2.0</td>
           <td><div class="mini-bar"><div class="ideal-zone" style="left:0%; width:67%;"></div><div class="marker" style="left:60%;"></div></div></td>
           <td><span class="pill-sm g">良好</span></td></tr>
       </tbody>
@@ -956,16 +960,16 @@
     <table class="blood-table">
       <thead><tr><th style="width:24%;">項目</th><th style="width:14%;">現在値</th><th style="width:20%;">理想値</th><th>レンジ</th><th style="width:9%;">判定</th></tr></thead>
       <tbody>
-        <tr><td>Hb <span class="cat">ヘモグロビン</span></td><td class="val">14.8 g/dL</td><td class="ideal">13 – 14</td>
+        <tr><td>Hb <span class="cat">（酸素を運ぶ赤い色素）</span></td><td class="val">14.8 g/dL</td><td class="ideal">13 – 14</td>
           <td><div class="mini-bar"><div class="ideal-zone" style="left:0%; width:33%;"></div><div class="marker" style="left:60%;"></div></div></td>
           <td><span class="pill-sm y">観察</span></td></tr>
-        <tr><td>RBC <span class="cat">赤血球</span></td><td class="val">487 万/μL</td><td class="ideal">430 – 470</td>
+        <tr><td>RBC <span class="cat">（酸素を運ぶ血球）</span></td><td class="val">487 万/μL</td><td class="ideal">430 – 470</td>
           <td><div class="mini-bar"><div class="ideal-zone" style="left:0%; width:57%;"></div><div class="marker" style="left:81%;"></div></div></td>
           <td><span class="pill-sm y">観察</span></td></tr>
-        <tr><td>γ-GT <span class="cat">解毒酵素</span></td><td class="val">17 U/L</td><td class="ideal">20 – 30</td>
+        <tr><td>γ-GT <span class="cat">（肝臓の解毒酵素）</span></td><td class="val">17 U/L</td><td class="ideal">20 – 30</td>
           <td><div class="mini-bar"><div class="ideal-zone" style="left:50%; width:25%;"></div><div class="marker" style="left:42%;"></div></div></td>
           <td><span class="pill-sm y">観察</span></td></tr>
-        <tr><td>AST <span class="cat">肝・酸化</span></td><td class="val">27 U/L</td><td class="ideal">18 – 22</td>
+        <tr><td>AST <span class="cat">（肝臓・筋肉の酵素）</span></td><td class="val">27 U/L</td><td class="ideal">18 – 22</td>
           <td><div class="mini-bar"><div class="ideal-zone" style="left:30%; width:20%;"></div><div class="marker" style="left:70%;"></div></div></td>
           <td><span class="pill-sm y">観察</span></td></tr>
       </tbody>
@@ -975,7 +979,7 @@
     <table class="blood-table">
       <thead><tr><th style="width:24%;">項目</th><th style="width:14%;">現在値</th><th style="width:20%;">理想値</th><th>レンジ</th><th style="width:9%;">判定</th></tr></thead>
       <tbody>
-        <tr><td>eGFR <span class="cat">腎機能</span></td><td class="val">81.9</td><td class="ideal">&gt; 75</td>
+        <tr><td>eGFR <span class="cat">（腎臓のろ過能力）</span></td><td class="val">81.9</td><td class="ideal">&gt; 75</td>
           <td><div class="mini-bar"><div class="ideal-zone" style="left:60%; width:40%;"></div><div class="marker" style="left:71%;"></div></div></td>
           <td><span class="pill-sm g">良好</span></td></tr>
         <tr><td>BMI</td><td class="val">21.4</td><td class="ideal">20 – 23</td>
