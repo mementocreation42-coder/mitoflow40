@@ -24,7 +24,7 @@ export default function Header() {
                 {/* Desktop Navigation */}
                 <nav className="hidden md:block">
                     <ul className="flex items-center gap-6">
-                        {navItems.slice(1, -1).map((item) => (
+                        {navItems.slice(0, -1).map((item) => (
                             <li key={item.href}>
                                 <Link
                                     href={item.href}
