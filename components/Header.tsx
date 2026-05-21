@@ -5,10 +5,8 @@ import { useState } from 'react';
 
 const navItems = [
     { href: '/', label: 'TOP' },
-    { href: '/#about', label: 'ABOUT' },
     { href: '/#pricing', label: 'PRICE' },
-    { href: '/#flow', label: 'FLOW' },
-    { href: '/#profile', label: 'PROFILE' },
+    { href: '/sample', label: 'SAMPLE' },
     { href: '/journal', label: 'JOURNAL' },
     { href: '/#contact', label: 'CONTACT' },
 ];

@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MitoFlow40 Blood Analysis Report</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -819,6 +820,41 @@
     font-size: 10pt;
     line-height: 1.9;
   }
+  /* === MOBILE OVERRIDES (last to win specificity battle) === */
+  @media (max-width: 640px) {
+    .cover {
+      padding: 16px 14px 200px;
+      min-height: 0;
+      background-image: url('assets/hero-bg-new.png');
+      background-size: cover;
+      background-position: top center;
+      background-repeat: no-repeat;
+      background-color: #B5DCF3;
+    }
+    .cover h1 { font-size: 28pt; line-height: 1.05; margin-bottom: 14px; }
+    .cover-sub { font-size: 10pt; margin-bottom: 0; }
+    .cover-eyebrow { font-size: 8pt; margin-bottom: 10px; letter-spacing: 0.16em; }
+    .cover-meta { position: static; margin-top: 24px; font-size: 8pt; flex-direction: column; gap: 4px; align-items: flex-start; padding: 12px 14px; background: rgba(255,255,255,0.88); border-radius: 8px; }
+    .cover-content { max-width: none; text-align: left; position: relative; z-index: 3; margin-top: 30px; }
+    .cover-illust { display: block; width: 220px; height: 220px; left: -10px; bottom: -10px; z-index: 1; }
+    .container { padding-left: 14px; padding-right: 14px; }
+    section { padding-left: 14px; padding-right: 14px; padding-top: 50px; padding-bottom: 90px; }
+    section .container { max-width: 100%; padding: 0; }
+    .snapshot-grid { grid-template-columns: 1fr; gap: 14px; }
+    .pattern-flow { grid-template-columns: 1fr; gap: 6px; }
+    .flow-arrow { transform: rotate(90deg); padding: 4px 0; }
+    .next-grid { grid-template-columns: 1fr; gap: 10px; }
+    /* Blood Snapshot table: ミニバー列を隠してスペース確保 */
+    .blood-table { font-size: 11px; table-layout: auto; }
+    .blood-table th, .blood-table td { padding: 6px 6px; }
+    .blood-table th:nth-child(4), .blood-table td:nth-child(4) { display: none; }
+    .blood-table th:nth-child(1), .blood-table td:nth-child(1) { width: 40%; }
+    .blood-table th:nth-child(2), .blood-table td:nth-child(2) { width: 25%; }
+    .blood-table th:nth-child(3), .blood-table td:nth-child(3) { width: 20%; }
+    .blood-table th:nth-child(5), .blood-table td:nth-child(5) { width: 15%; text-align: center; }
+    .blood-table .pill-sm { white-space: nowrap; padding: 2px 6px; }
+    .blood-table td.val, .blood-table td.ideal { white-space: nowrap; }
+  }
 </style>
 </head>
 <body>
@@ -842,8 +878,8 @@
 </div>
 
 <!-- ===== INTRO ===== -->
-<section class="s-intro">
-  <img class="deco br" src="assets/faq-illustration.png" style="width:180px; opacity:0.85;">
+<section class="s-intro" style="overflow:hidden;">
+  <img class="deco br" src="assets/24.png" style="width:280px; opacity:0.95; bottom:-50px; right:-50px;">
   <div class="container">
     <div class="section-head">
       <h2>Prologue</h2>
@@ -851,7 +887,7 @@
     </div>
     <p class="intro-lead" style="font-size:11pt; color:var(--text); line-height:1.95; text-align:left;">
       今回お預かりした血液データは、45歳時点の特定健診。そこに Apple Watch から直近30日の生活データを重ねて、ふたつの視点から体を読み取っていきます。<br><br>
-      このレポートでは、ひとつひとつの数値を単独で見るのではなく、複数の指標を束ねて<strong>「体の系（システム）」</strong>として読む方法をとっています。糖代謝・酸化・栄養・自律神経・脂質・炎症など、それぞれの系がどんなバランスで動いているかを複合スコアとして可視化しました。<br><br>
+      このレポートでは、ひとつひとつの数値を単独で見るのではなく、複数の指標を束ねて<strong>「体のはたらき」</strong>として読む方法をとっています。糖代謝・酸化・栄養・自律神経・脂質・炎症など、それぞれのはたらきがどんなバランスで動いているかを複合スコアとして可視化しました。<br><br>
       評価の軸は <strong>「現在値 vs 精密栄養学の理想値」</strong>。一般の基準値ではなく、最適に機能している体に見られるレンジを基準に、どの系統に余白があるかを読み解きます。<br><br>
       <span style="color:var(--muted); font-size:10pt;">※ 本レポートの内容は断定ではなく、現時点のデータから読み取れる <strong>予測</strong> です。今後の検査・問診・体感を重ねながら、少しずつアップデートしていく前提でお読みください。</span>
     </p>
@@ -862,8 +898,8 @@
 </section>
 
 <!-- ===== BLOOD SNAPSHOT (現在値 vs 理想値) ===== -->
-<section class="s-snapshot">
-  <img class="deco br" src="assets/for-you-science.png" style="width:260px; opacity:0.85; bottom:0; right:0;">
+<section class="s-snapshot" style="overflow:hidden;">
+  <img class="deco br" src="assets/for-you-science.png" style="width:340px; opacity:0.95; bottom:-80px; right:-90px;">
   <div class="container">
     <div class="section-head">
       <h2>Blood Snapshot</h2>
@@ -993,7 +1029,7 @@
 
       <!-- Radar chart -->
       <div class="radar-card">
-        <div class="gauge-label">体のシステム地図</div>
+        <div class="gauge-label">全体バランス図</div>
         <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
           <g transform="translate(160,160)">
             <!-- grid rings -->
@@ -1053,7 +1089,7 @@
 
 <!-- ===== SYSTEM BALANCE (Part 2) ===== -->
 <section class="s-snapshot" style="overflow:hidden;">
-  <img class="deco br" src="assets/for-you-science.png" style="width:340px; opacity:0.95; bottom:0; right:-110px;">
+  <img class="deco br" src="assets/about-illustration-bg.png" style="width:340px; opacity:0.95; bottom:0; right:-110px;">
   <div class="container">
     <div class="section-head">
       <h2>Composite Scores</h2>
@@ -1062,7 +1098,7 @@
 
     <!-- Composite score bars -->
     <div class="score-bars">
-      <div class="score-bars-head">複合指標スコア <span>個別の数値を束ねた、体の系（システム）ごとの現在地</span></div>
+      <div class="score-bars-head">複合指標スコア <span>個別の数値を束ねた、体のはたらきごとの現在地</span></div>
       <div class="score-row"><span class="score-name">Metabolism <em>糖代謝</em></span><div class="score-track"><div class="score-fill" style="width:30%; background:var(--orange);"></div></div><span class="score-val">1.5/5</span></div>
       <div class="score-row"><span class="score-name">Oxidation <em>酸化ストレス</em></span><div class="score-track"><div class="score-fill" style="width:50%; background:var(--orange);"></div></div><span class="score-val">2.5/5</span></div>
       <div class="score-row"><span class="score-name">Nutrition <em>栄養（材料供給）</em></span><div class="score-track"><div class="score-fill" style="width:50%; background:var(--orange);"></div></div><span class="score-val">2.5/5</span></div>

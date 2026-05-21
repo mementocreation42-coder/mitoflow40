@@ -27,7 +27,7 @@ const pricingPlans = [
         featured: false,
         hasButton: true,
         buttonText: '解析サンプル',
-        buttonLink: 'https://elegant-gingersnap-97643e.netlify.app/',
+        buttonLink: '/sample',
     },
 ];
 

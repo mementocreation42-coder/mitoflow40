@@ -64,14 +64,21 @@ Apple Watch生XML（`~/Desktop/apple_health_export/export.xml`）は**絶対にR
      - DB URL: https://www.notion.so/49d0c0eac9254b58a0bba6b2098818c1
      - data_source_id: `f965b1a4-6f9b-4a25-8283-4ef6c032b889`
      - `mcp__notion__notion-create-pages` を使う
-     - プロパティ「顧客ID」には **氏名_検査日**（例: `小林大介_20260518`）を入れる
-     - **公開後**: `scripts/publish_report.sh` 実行後、同じ顧客IDのNotionページを `mcp__notion__notion-update-page` で更新し、`公開URL`（お客様用）/ `解析者URL`（解析者用Markdown→HTML）/ `公開日` を書き込む。これでNotion単体で公開状態を追える
+     - **DBプロパティは7つに最小化**: 顧客ID(title) / 血液検査日(date) / 主要クラスタ(multi_select) / Vol(number) / お客様用URL(url) / 解析者用URL(url) / 作成日時(created_time)
+     - 主訴・統合所見・次回確認事項・確度・性別・年齢などは**本文Markdownに含めるのみでDB列にはしない**（プロパティ重複を避ける）
+     - プロパティ「顧客ID」には **氏名 / 解析日YYYY-MM-DD**（例: `小林大介 / 2026-05-19`）を入れる。同一人物の複数回でも解析日で識別できる
+     - プロパティ「Vol」には **その人にとっての解析回数（初回=1、2回目=2…）** を入れる。新規ページ作成前に、顧客ID prefix が氏名で始まる既存ページ数 +1 を Vol として設定。同じ氏名の継続/再来訪をクオンツに追跡できる
    - **お客様用** = `templates/client_report.html` を `outputs/<氏名_日付>/client.html` にコピー → 値を流し込み（カバーの `For ◯◯様`, `Subject / Male, 45` 等を実データに置換）→ `scripts/html_to_pdf.sh outputs/<氏名_日付>/client.html outputs/<氏名_日付>/<氏名>_<検査日>_report.pdf` でPDF生成（自動オープン）
-6. 完了後、Notionページ URL と PDFパスをユーザーに提示。
+6. **公開**: `./scripts/publish_report.sh <氏名_日付>` 実行
+   - トークン発行 → Vercel Blob にアップロード（client.html + analyst.md→HTML）
+   - 公開URL: `https://mitoflow40.com/r/<token>`（お客様用）
+   - 解析者URL: `https://mitoflow40.com/r/<token>/analyst`（解析者用）
+7. **Notion 書き戻し**: 同じ顧客IDのNotionページを `mcp__notion__notion-update-page` で更新し、`お客様用URL` と `解析者用URL` を書き込む
+8. 完了後、Notionページ URL とお客様用URLをユーザーに提示。
 
 ## 解釈の方向性 — 複合指標による系統的解析
 
-### 個別項目ではなく「体のシステム」で見る
+### 個別項目ではなく「体のはたらき」で見る
 判定軸は以下の8つの**複合指標（Composite Axes）**で行う。個別項目をこれらの軸にマッピングしてからスコアリングする。
 
 1. **Metabolism 糖代謝** — HbA1c, 血糖, インスリン, 1,5AG, 尿酸, 中性脂肪, 塩分
@@ -83,10 +90,11 @@ Apple Watch生XML（`~/Desktop/apple_health_export/export.xml`）は**絶対にR
 7. **Sleep 睡眠** — 問診の睡眠5項目, Watchの深睡眠/REM/在床
 8. **Activity 活動量** — 運動頻度, 歩数, 活動kcal, VO2max
 
-### 線的解析を最重視
-- 単時点の数値より、**「どの方向に動いているか」**を中心に語る。
-- 経年データがあれば必ず時系列比較。基準値内でも方向性が悪ければ Critical 扱い。
+### 単時点評価（v2フォーマット）
+- **最新の検査結果1点のみで評価**。経年比較・推移チャートは扱わない。
+- 「現在値 vs 精密栄養学の理想値」の距離で語る。
 - 中央値ど真ん中を「最適」、レンジ端は「やや乖離」として扱う。
+- 過去データが入力に含まれていても、出力には載せない。
 
 ### CORE PATTERN（中心テーマ）を必ず一つ抽出 — ただし「仮説」として
 「単項目の異常リスト」ではなく、**「何が起点で、何に波及している可能性があるか」**を1〜2文で明示する。
@@ -110,9 +118,9 @@ Apple Watch生XML（`~/Desktop/apple_health_export/export.xml`）は**絶対にR
 ## お客様用レポート — 固定フォーマット（v2: 単時点評価版）
 
 ### 評価軸ルール（最重要）
-- **単時点評価のみ**。複数時点の血液データがあっても、**最新の検査結果1点のみで評価**する。
+- **単時点評価のみ**。お客様用・解析者用ともに、最新の検査結果1点のみで評価する。
 - 経年比較・推移チャート・「5年前 → 今」のような表現は使わない。「動いてきた方向」ではなく「**現在値 vs 精密栄養学の理想値**」で語る。
-- 過去データは、解析者用レポート（analyst.md）の参考情報としてのみ保持。お客様用には登場させない。
+- 過去データが入力に含まれていても、レポート出力には載せない（必要なら `inputs/` 内の元データから参照する）。
 
 ### 固定セクション構成（11ページ）
 順序固定。追加・並べ替え禁止。情報量が多ければ意味のある単位で分割する（連番表記は不可）。
@@ -136,7 +144,7 @@ Apple Watch生XML（`~/Desktop/apple_health_export/export.xml`）は**絶対にR
   - Prologue 注記: 「データから読み取れる **予測**」
   - Disclaimer: 「栄養状態・体質傾向の **読み取り**」
   - ゲージ下: 「〜を軸にした **読み取り**」
-  - スコア説明: 「体の系ごとの **現在地**」
+  - スコア説明: 「体のはたらきごとの **現在地**」
 - 断定回避は維持（「〜可能性」「〜サインかもしれません」「〜と読み取れます」）。
 
 ### Cover メタ表記

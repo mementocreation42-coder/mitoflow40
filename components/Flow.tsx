@@ -22,7 +22,7 @@ const steps = [
             'カウンセリングシートや血液検査を解析した結果から、考えられる健康対策アドバイスをお伝えしていきます。合わせて解析サンプルもお渡しいたします。',
         hasButton: true,
         buttonText: '解析サンプル',
-        buttonLink: 'https://elegant-gingersnap-97643e.netlify.app/',
+        buttonLink: '/sample',
     },
     {
         number: '04',

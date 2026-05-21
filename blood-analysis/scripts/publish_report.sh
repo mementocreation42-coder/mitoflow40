@@ -27,7 +27,8 @@ TOKEN=$(openssl rand -base64 18 | tr -d '=+/' | cut -c1-24)
 mkdir -p "$PUBLIC_REPORTS"
 
 # HTMLコピー（asset参照を /reports/assets/ に書き換え）
-sed 's|src="assets/|src="/reports/assets/|g; s|url(.assets/|url(/reports/assets/|g' "$SRC_HTML" > "$PUBLIC_REPORTS/${TOKEN}.html"
+# 注: url() のクォート（' or "）を保持するためバックリファレンス使用
+sed -E "s|src=\"assets/|src=\"/reports/assets/|g; s|url\\((['\"])assets/|url(\\1/reports/assets/|g" "$SRC_HTML" > "$PUBLIC_REPORTS/${TOKEN}.html"
 
 # assets同期（共通・gitコミット対象）
 mkdir -p "$PUBLIC_REPORTS/assets"
