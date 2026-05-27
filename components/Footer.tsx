@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 const footerLinks = [
+    { href: '/check', label: 'FREE CHECK' },
     { href: '/sample', label: 'SAMPLE ANALYSIS' },
     { href: '/journal', label: 'JOURNAL' },
     { href: '/#contact', label: 'CONTACT' },

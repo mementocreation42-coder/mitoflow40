@@ -19,21 +19,25 @@ const HIGHLIGHTS = [
         tag: "BLOOD SNAPSHOT",
         ja: "血液データ一覧",
         body: "すべての検査項目を、現在値と精密栄養学の理想値で並べて表示。一般の「基準値」ではなく、最適に機能している体に見られるレンジで判定します。",
+        bg: "#FFE3D0",
     },
     {
         tag: "SYSTEM BALANCE",
         ja: "全体バランス図",
         body: "糖代謝・酸化・栄養・自律神経など8つの複合指標スコアで、体のどこに余白があるかを可視化。総合スコアとレーダーチャートで全体像を掴めます。",
+        bg: "#D9EFFB",
     },
     {
         tag: "CORE PATTERN",
         ja: "中心テーマ",
         body: "「何が起点で、何に波及している可能性があるか」を3つのノードで描く独自フロー。バラバラの異常値ではなく、ひとつながりの仮説として読み解きます。",
+        bg: "#F4DCEF",
     },
     {
         tag: "YOUR STORY",
         ja: "あなたの体で今起きていること",
         body: "数値の羅列ではなく、4本の補助線で「物語」として届けます。Apple Watchの生活データと血液所見を統合した、あなただけの解釈。",
+        bg: "#D5F5EC",
     },
 ];
 
@@ -106,7 +110,7 @@ export default function SamplePage() {
                             <div
                                 key={h.tag}
                                 className="p-5 rounded-2xl"
-                                style={{ background: "rgba(255,255,255,0.85)", border: "1px solid #1A1A1A" }}
+                                style={{ background: h.bg, border: "1px solid #1A1A1A" }}
                             >
                                 <div className="text-xs font-bold tracking-wider mb-1" style={{ color: "#FF9855", fontFamily: "'Space Grotesk', sans-serif" }}>
                                     {h.tag}
@@ -123,7 +127,7 @@ export default function SamplePage() {
                 </div>
 
                 {/* Format notes */}
-                <div className="mb-16 p-6 rounded-2xl" style={{ background: "rgba(255,255,255,0.7)" }}>
+                <div className="mb-16 p-6 rounded-2xl border border-[#1A1A1A]" style={{ background: "rgba(255,255,255,0.85)" }}>
                     <p className="text-xs tracking-widest text-[#1A1A1A] mb-4 font-bold" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         READING NOTES <span className="font-normal" style={{ letterSpacing: 0 }}>／ レポートの読み方</span>
                     </p>
@@ -135,6 +139,26 @@ export default function SamplePage() {
                             </li>
                         ))}
                     </ul>
+                </div>
+
+                {/* Free check teaser */}
+                <div className="mb-12 p-5 md:p-6 rounded-2xl border-2 border-dashed border-[#1A1A1A] bg-white/70 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+                    <div>
+                        <p className="text-xs font-bold tracking-widest mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: "#FF9855" }}>
+                            FREE · まず試してみる
+                        </p>
+                        <p className="text-sm md:text-base text-[#1A1A1A] font-bold">
+                            12問・約2分の無料ミトコンドリア・セルフチェック
+                        </p>
+                        <p className="text-xs text-[#4A4A4A] mt-1">
+                            自分のタイプ＆ケアの方向性を即時で確認できます。
+                        </p>
+                    </div>
+                    <Link href="/check"
+                        className="flex-shrink-0 inline-block px-6 py-3 rounded-full font-bold text-sm hover:opacity-90 transition whitespace-nowrap"
+                        style={{ background: "#1A1A1A", color: "#FFFFFF", fontFamily: "'Space Grotesk', sans-serif" }}>
+                        無料解析を試す →
+                    </Link>
                 </div>
 
                 {/* Secondary CTA */}
@@ -150,14 +174,14 @@ export default function SamplePage() {
                             className="inline-block px-6 py-3 rounded-full font-bold text-sm hover:opacity-90 transition"
                             style={{ background: "#FF9855", color: "#FFFFFF", fontFamily: "'Space Grotesk', sans-serif" }}
                         >
-                            サンプルをもう一度見る
+                            サンプルを見る
                         </Link>
                         <Link
-                            href="/#price"
+                            href="/#pricing"
                             className="inline-block px-6 py-3 rounded-full font-bold text-sm hover:opacity-90 transition"
                             style={{ background: "#1A1A1A", color: "#FFFFFF", fontFamily: "'Space Grotesk', sans-serif" }}
                         >
-                            料金プランを見る
+                            料金プラン
                         </Link>
                     </div>
                 </div>

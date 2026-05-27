@@ -27,7 +27,7 @@ const pricingPlans = [
         featured: false,
         hasButton: true,
         buttonText: '解析サンプル',
-        buttonLink: '/sample',
+        buttonLink: 'https://mitoflow40.com/r/SbCtC5JII0uqihoUR4Bf44l',
     },
 ];
 
@@ -93,6 +93,27 @@ export default function Pricing() {
                                 )}
                             </div>
                         ))}
+                    </div>
+                </FadeOnScroll>
+
+                <FadeOnScroll delay={0.3}>
+                    <div className="mt-10 p-5 md:p-6 rounded-2xl border-2 border-dashed border-[#1A1A1A] bg-white/60 backdrop-blur-[2px] flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+                        <div>
+                            <p className="text-xs font-bold tracking-widest mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
+                                FREE · まず試したい方へ
+                            </p>
+                            <p className="text-sm md:text-base text-[#1A1A1A] font-bold">
+                                12問・約2分の無料ミトコンドリア・セルフチェック
+                            </p>
+                            <p className="text-xs text-[#4A4A4A] mt-1">
+                                登録不要・即時結果。自分のタイプとケアの方向性が分かります。
+                            </p>
+                        </div>
+                        <Link href="/check"
+                            className="flex-shrink-0 inline-block px-6 py-3 rounded-full font-bold text-sm hover:opacity-90 transition whitespace-nowrap"
+                            style={{ background: '#1A1A1A', color: '#FFFFFF', fontFamily: "'Space Grotesk', sans-serif" }}>
+                            無料解析を試す →
+                        </Link>
                     </div>
                 </FadeOnScroll>
             </div>

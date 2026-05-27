@@ -28,6 +28,7 @@ export default function PrivacyPage() {
                 <li>支払関連情報（決済代行サービスを通じて取得）</li>
                 <li>お問い合わせ内容</li>
                 <li>本サイトの閲覧履歴（Cookie・アクセスログ）</li>
+                <li>無料セルフチェック機能における回答（年齢・性別・BMI・主観症状スコア等／匿名化のうえ統計利用）</li>
             </ul>
 
             <h2 className="text-xl font-bold mt-10 mb-3">2. 利用目的</h2>
@@ -37,6 +38,7 @@ export default function PrivacyPage() {
                 <li>利用者からのお問い合わせへの対応</li>
                 <li>料金の請求・受領</li>
                 <li>本サービスの改善・新サービスの企画</li>
+                <li>無料セルフチェック機能の精度改善・集計（個人を特定しない形での統計利用）</li>
                 <li>ニュースレター・お知らせの配信（同意いただいた場合）</li>
                 <li>法令に基づく対応</li>
             </ul>
