@@ -845,23 +845,6 @@ export function Result({ scores, onReset }: { scores: { axisScores: Record<Axis,
                     </div>
                 )}
 
-                {/* CTA */}
-                <div className="bg-white border-2 border-[#1A1A1A] rounded-2xl p-6 md:p-8 text-center mb-6">
-                    <p className="text-xs tracking-widest font-bold mb-3 text-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                        DEEPER ANALYSIS
-                    </p>
-                    <h3 className="text-lg md:text-xl font-bold mb-3">
-                        血液データの解析で<br />もっと深く読み解きませんか？
-                    </h3>
-                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5 max-w-[480px] mx-auto">
-                        このセルフチェックは「自覚症状」の可視化です。Mitoflow40 の解析サービスでは、血液検査の客観データと Apple Watch の生活ログを統合して、より深い仮説を導きます。
-                    </p>
-                    <Link href="/sample" className="inline-block px-6 py-3 rounded-full text-sm font-bold hover:opacity-90 transition"
-                        style={{ fontFamily: "'Space Grotesk', sans-serif", background: '#1A1A1A', color: '#FFFFFF' }}>
-                        解析サンプルを見る →
-                    </Link>
-                </div>
-
                 {/* Email + Newsletter opt-in */}
                 <EmailResultCard
                     archetypeName={archetype.name}
@@ -871,6 +854,23 @@ export function Result({ scores, onReset }: { scores: { axisScores: Record<Axis,
                     personalAnalysis={ai?.personal_analysis}
                     personalActions={ai?.personal_actions}
                 />
+
+                {/* CTA */}
+                <div className="bg-white border-2 border-[#1A1A1A] rounded-2xl p-6 md:p-8 text-center mb-6">
+                    <p className="text-xs tracking-widest font-bold mb-3 text-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                        DEEPER ANALYSIS
+                    </p>
+                    <h3 className="text-lg md:text-xl font-bold mb-3">
+                        血液データの解析で<br />もっと深く読み解きませんか？
+                    </h3>
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5 max-w-[480px] mx-auto">
+                        このセルフチェックは「自覚症状」の可視化です。Mitoflow40の解析サービスでは、血液検査の客観データとApple Watchなどの生活ログを統合して、より深い仮説を導きます。
+                    </p>
+                    <Link href="/sample" className="inline-block px-6 py-3 rounded-full text-sm font-bold hover:opacity-90 transition"
+                        style={{ fontFamily: "'Space Grotesk', sans-serif", background: '#1A1A1A', color: '#FFFFFF' }}>
+                        解析サンプルを見る →
+                    </Link>
+                </div>
 
 
                 {/* Reset */}
