@@ -116,10 +116,15 @@ export async function POST(req: Request) {
         }
         const parsed = JSON.parse(jsonMatch[0].replace(/^```json\s*|\s*```$/g, ''));
 
-        // 匿名統計として Notion に保存（NOTION_API_KEY が設定されていれば）
-        saveToNotion(body, parsed.personal_analysis).catch((err) => {
+        // 匿名統計として Notion に保存（NOTION_API_KEY が設定されていれば）。
+        // Vercel のサーバーレス環境では fire-and-forget だとレスポンス返却後に
+        // 実行が凍結され fetch が完了しないため、必ず await する。
+        // 保存失敗はユーザー体験に影響させず、ログのみ残す。
+        try {
+            await saveToNotion(body, parsed.personal_analysis);
+        } catch (err) {
             console.error('[api/check] notion save failed (non-fatal):', err);
-        });
+        }
 
         return NextResponse.json({
             ok: true,
