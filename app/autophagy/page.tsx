@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import JsonLd, { medicalWebPage } from '@/components/JsonLd';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
     title: 'オートファジー | Mitoflow40',
@@ -23,13 +24,14 @@ const switches = [
 export default function AutophagyPage() {
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#E7EEDA' }}>
-            <img src="/images/for-you-science.png" alt="" className="absolute pointer-events-none opacity-80 hidden md:block"
+            <img loading="lazy" decoding="async" src="/images/for-you-science.png" alt="" className="absolute pointer-events-none opacity-80 hidden md:block"
                 style={{ top: '60px', right: '-50px', width: '260px' }} />
-            <img src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-40"
+            <img loading="lazy" decoding="async" src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-40"
                 style={{ bottom: '-60px', left: '-70px', width: '320px', transform: 'scaleX(-1)' }} />
 
             <JsonLd data={medicalWebPage({ name: 'オートファジーとは', description: '細胞の自己リサイクル「オートファジー」を、仕組み・スイッチ・ミトコンドリアとの関係から解説。', path: '/autophagy' })} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: 'オートファジー' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         CELLULAR RECYCLING

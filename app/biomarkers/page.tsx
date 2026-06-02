@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getBiomarkersByCategory } from '@/lib/biomarkers';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
     title: 'BIOMARKERS | Mitoflow40',
@@ -19,12 +20,13 @@ export default function BiomarkersIndex() {
     return (
         <div className="relative overflow-hidden pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen" style={{ background: '#D9EBF7' }}>
             {/* Decorative illustrations */}
-            <img src="/images/for-you-science.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
+            <img loading="lazy" decoding="async" src="/images/for-you-science.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
                 style={{ top: '70px', right: '-50px', width: '280px' }} />
-            <img src="/images/about-illustration-bg.png" alt="" className="absolute pointer-events-none opacity-70"
+            <img loading="lazy" decoding="async" src="/images/about-illustration-bg.png" alt="" className="absolute pointer-events-none opacity-70"
                 style={{ bottom: '-80px', left: '-80px', width: '400px' }} />
 
             <div className="max-w-[1000px] mx-auto relative" style={{ zIndex: 1 }}>
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '血液検査' }]} />
                 <div className="text-center mb-12">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#41C9B4' }}>
                         BLOOD TEST GUIDE

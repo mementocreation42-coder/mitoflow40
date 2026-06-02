@@ -11,6 +11,20 @@ export default function JsonLd({ data }: { data: Record<string, unknown> }) {
 
 const BASE_URL = 'https://mitoflow40.com';
 
+// パンくず BreadcrumbList スキーマを生成
+export function breadcrumb(items: { name: string; path: string }[]) {
+    return {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: items.map((item, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: item.name,
+            item: `${BASE_URL}${item.path}`,
+        })),
+    };
+}
+
 // 健康・医療系の解説ページ向け MedicalWebPage スキーマを生成
 export function medicalWebPage(opts: {
     name: string;

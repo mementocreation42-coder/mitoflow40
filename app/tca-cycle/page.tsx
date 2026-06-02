@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getNutrientBySlug } from '@/lib/nutrients';
 import JsonLd, { medicalWebPage } from '@/components/JsonLd';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
     title: 'TCA回路（クエン酸回路） | Mitoflow40',
@@ -63,14 +64,15 @@ export default function TcaCyclePage() {
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#FFE9D2' }}>
             {/* Decorative illustrations */}
-            <img src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-80 hidden md:block"
+            <img loading="lazy" decoding="async" src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-80 hidden md:block"
                 style={{ top: '60px', right: '-50px', width: '260px' }} />
-            <img src="/images/for-you-science.png" alt="" className="absolute pointer-events-none opacity-40"
+            <img loading="lazy" decoding="async" src="/images/for-you-science.png" alt="" className="absolute pointer-events-none opacity-40"
                 style={{ bottom: '-60px', left: '-70px', width: '320px', transform: 'scaleX(-1)' }} />
 
             <JsonLd data={medicalWebPage({ name: 'TCA回路（クエン酸回路）とは', description: 'ミトコンドリアのエネルギー産生エンジン「TCA回路」を、流れ・役割・必要な栄養素から解説。', path: '/tca-cycle' })} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
                 {/* Hero */}
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: 'TCA回路' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         ENERGY ENGINE
@@ -192,12 +194,12 @@ export default function TcaCyclePage() {
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
                     <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">この先：電子伝達系へ</h2>
                     <p className="text-[#4A4A4A] leading-loose mb-5">
-                        TCA回路が生んだ NADH・FADH2 は、ミトコンドリア内膜の「電子伝達系」へ運ばれます。
+                        TCA回路が生んだ NADH・FADH2 は、ミトコンドリア内膜の「<Link href="/electron-transport-chain" className="underline decoration-[#FF9855] decoration-2 underline-offset-2 hover:text-[#FF9855]">電子伝達系</Link>」へ運ばれます。
                         そこで電子が受け渡される中で、<strong>CoQ10</strong> が電子の運搬役として働き、最終的に酸素と結びついて水になり、その過程で大量の <strong>ATP</strong> が作られます。
                         TCA回路（燃料を整える）と電子伝達系（ATPを作る）は、ひと続きのエネルギー生産ラインです。
                     </p>
-                    <Link href="/atp" className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm hover:opacity-90 transition" style={{ fontFamily: "'Space Grotesk', sans-serif", background: '#1A1A1A', color: '#FFFFFF' }}>
-                        ATP（エネルギー通貨）を見る <span>→</span>
+                    <Link href="/electron-transport-chain" className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm hover:opacity-90 transition" style={{ fontFamily: "'Space Grotesk', sans-serif", background: '#1A1A1A', color: '#FFFFFF' }}>
+                        電子伝達系を見る <span>→</span>
                     </Link>
                 </section>
 

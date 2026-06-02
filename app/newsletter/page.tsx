@@ -27,12 +27,12 @@ export default function NewsletterPage() {
         <div className="pt-40 pb-20 px-10 overflow-hidden" style={{ background: "#FFB6B6", flex: 1, position: "relative" }}>
             {/* Illustration - Top Right */}
             <div className="absolute top-0 right-0 w-[260px] md:w-[380px] h-[260px] md:h-[380px] pointer-events-none">
-                <img src="/images/for-you-illustration-bg.png" alt="" style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "top right" }} />
+                <img loading="lazy" decoding="async" src="/images/for-you-illustration-bg.png" alt="" style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "top right" }} />
             </div>
 
             {/* Illustration - Bottom Left */}
             <div className="absolute bottom-0 left-0 w-[300px] md:w-[440px] h-[300px] md:h-[440px] pointer-events-none">
-                <img src="/images/hero-illustration-bl.png" alt="" style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "bottom" }} />
+                <img loading="lazy" decoding="async" src="/images/hero-illustration-bl.png" alt="" style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "bottom" }} />
             </div>
             <div style={{ maxWidth: "600px", margin: "0 auto", textAlign: "left" }}>
 

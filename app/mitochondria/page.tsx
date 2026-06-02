@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getNutrientBySlug } from '@/lib/nutrients';
 import JsonLd, { medicalWebPage } from '@/components/JsonLd';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
     title: 'ミトコンドリアとは | Mitoflow40',
@@ -65,13 +66,14 @@ export default function MitochondriaPage() {
 
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#CFEAEC' }}>
-            <img src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-80 hidden md:block"
+            <img loading="lazy" decoding="async" src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-80 hidden md:block"
                 style={{ top: '60px', right: '-50px', width: '260px' }} />
-            <img src="/images/for-you-science.png" alt="" className="absolute pointer-events-none opacity-40"
+            <img loading="lazy" decoding="async" src="/images/for-you-science.png" alt="" className="absolute pointer-events-none opacity-40"
                 style={{ bottom: '-60px', left: '-70px', width: '320px', transform: 'scaleX(-1)' }} />
 
             <JsonLd data={medicalWebPage({ name: 'ミトコンドリアとは', description: 'ミトコンドリアの役割・構造・40代で重要な理由・元気に保つ方法を解説。', path: '/mitochondria' })} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: 'ミトコンドリア' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         THE POWERHOUSE

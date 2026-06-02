@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { genes } from '@/lib/genes';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
     title: 'GENES | Mitoflow40',
@@ -17,13 +18,14 @@ export default function GenesIndex() {
     return (
         <div className="relative overflow-hidden pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen" style={{ background: '#D7F0EC' }}>
             {/* Decorative illustrations */}
-            <img src="/images/for-you-science.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
+            <img loading="lazy" decoding="async" src="/images/for-you-science.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
                 style={{ top: '40px', right: '-50px', width: '300px' }} />
-            <img src="/images/about-illustration-bg.png" alt="" className="absolute pointer-events-none opacity-80"
+            <img loading="lazy" decoding="async" src="/images/about-illustration-bg.png" alt="" className="absolute pointer-events-none opacity-80"
                 style={{ bottom: '-80px', left: '-90px', width: '420px' }} />
-            <img src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-80 hidden md:block"
+            <img loading="lazy" decoding="async" src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-80 hidden md:block"
                 style={{ bottom: '40px', right: '-40px', width: '240px', transform: 'rotate(-6deg)' }} />
             <div className="max-w-[1000px] mx-auto relative" style={{ zIndex: 1 }}>
+            <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '遺伝子' }]} />
             <div className="text-center mb-12">
                 <h1 className="inline-block text-left font-bold mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                     <span className="block text-4xl md:text-5xl leading-none text-[#1A1A1A]">GENES</span>
@@ -31,6 +33,9 @@ export default function GenesIndex() {
                 </h1>
                 <p className="text-[#4A4A4A] mt-4 max-w-[600px] mx-auto">
                     7つの主要遺伝子と、それぞれの働きをクリーンに保つための栄養・生活習慣
+                </p>
+                <p className="text-xs text-[#4A4A4A]/80 mt-4 max-w-[560px] mx-auto leading-relaxed bg-white/60 border border-[#1A1A1A]/15 rounded-xl px-4 py-3">
+                    ※ ご自身の遺伝子タイプを正確に知るには、遺伝子検査が必要です。本ページは各遺伝子の働きと、整えるための一般的な栄養・生活習慣を学ぶためのものです。
                 </p>
             </div>
 

@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { nutrients, getNutrientBySlug } from '@/lib/nutrients';
 import { getGeneBySlug } from '@/lib/genes';
-import JsonLd, { medicalWebPage } from '@/components/JsonLd';
+import JsonLd, { medicalWebPage, breadcrumb } from '@/components/JsonLd';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export function generateStaticParams() {
     return nutrients.map((n) => ({ slug: n.slug }));
@@ -12,14 +13,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const { slug } = await params;
     const n = getNutrientBySlug(slug);
     if (!n) return {};
+    const description = `${n.name}（${n.en}）とは？${n.tagline}。働き・不足のサイン・多く含む食品・関わる遺伝子を、精密栄養学の視点でわかりやすく解説します。`;
     return {
         title: `${n.name} (${n.en}) | Mitoflow40`,
-        description: n.tagline,
+        description,
         alternates: { canonical: `https://mitoflow40.com/nutrients/${slug}` },
         robots: { index: true, follow: true },
         openGraph: {
             title: `${n.name} (${n.en}) | Mitoflow40`,
-            description: n.tagline,
+            description,
             url: `https://mitoflow40.com/nutrients/${slug}`,
             type: 'article',
         },
@@ -43,13 +45,15 @@ export default async function NutrientPage({ params }: { params: Promise<{ slug:
     return (
         <div className="pt-[60px] min-h-screen relative overflow-hidden" style={{ background: n.color }}>
             <JsonLd data={medicalWebPage({ name: `${n.name}（${n.en}）`, description: n.tagline, path: `/nutrients/${slug}` })} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '栄養素', path: '/nutrients' }, { name: n.name, path: `/nutrients/${slug}` }])} />
             {/* Decorative illustrations */}
-            <img src={n.illustration} alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
+            <img loading="lazy" decoding="async" src={n.illustration} alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
                 style={{ top: '90px', right: '-40px', width: '260px' }} />
-            <img src={n.illustration} alt="" className="absolute pointer-events-none opacity-40"
+            <img loading="lazy" decoding="async" src={n.illustration} alt="" className="absolute pointer-events-none opacity-40"
                 style={{ bottom: '-60px', left: '-70px', width: '320px', transform: 'scaleX(-1)' }} />
             <article className="max-w-[800px] mx-auto px-6 md:px-4 py-12 md:py-24 relative" style={{ zIndex: 1 }}>
                 <header className="mb-12">
+                    <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '栄養素', href: '/nutrients' }, { name: n.name }]} />
                     <div className="text-xs tracking-widest text-[#1A1A1A]/50 font-mono mb-4">
                         {n.category}
                     </div>

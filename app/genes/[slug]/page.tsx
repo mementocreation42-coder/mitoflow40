@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { genes, getGeneBySlug } from '@/lib/genes';
-import JsonLd, { medicalWebPage } from '@/components/JsonLd';
+import JsonLd, { medicalWebPage, breadcrumb } from '@/components/JsonLd';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export function generateStaticParams() {
     return genes.map((g) => ({ slug: g.slug }));
@@ -11,14 +12,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const { slug } = await params;
     const gene = getGeneBySlug(slug);
     if (!gene) return {};
+    const description = `${gene.symbol}（${gene.name}）とは？${gene.tagline}。役割・働きが乱れると出やすいサイン・整えるための栄養と生活習慣をわかりやすく解説します。`;
     return {
         title: `${gene.symbol} - ${gene.name} | Mitoflow40`,
-        description: gene.tagline,
+        description,
         alternates: { canonical: `https://mitoflow40.com/genes/${slug}` },
         robots: { index: true, follow: true },
         openGraph: {
             title: `${gene.symbol} - ${gene.name} | Mitoflow40`,
-            description: gene.tagline,
+            description,
             url: `https://mitoflow40.com/genes/${slug}`,
             type: 'article',
         },
@@ -34,13 +36,15 @@ export default async function GenePage({ params }: { params: Promise<{ slug: str
     return (
         <div className="pt-[60px] min-h-screen relative overflow-hidden" style={{ background: gene.color }}>
             <JsonLd data={medicalWebPage({ name: `${gene.symbol}（${gene.name}）`, description: gene.tagline, path: `/genes/${slug}` })} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '遺伝子', path: '/genes' }, { name: gene.symbol, path: `/genes/${slug}` }])} />
             {/* Decorative illustrations */}
-            <img src={gene.illustration} alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
+            <img loading="lazy" decoding="async" src={gene.illustration} alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
                 style={{ top: '90px', right: '-40px', width: '260px' }} />
-            <img src={gene.illustration} alt="" className="absolute pointer-events-none opacity-40"
+            <img loading="lazy" decoding="async" src={gene.illustration} alt="" className="absolute pointer-events-none opacity-40"
                 style={{ bottom: '-60px', left: '-70px', width: '320px', transform: 'scaleX(-1)' }} />
         <article className="max-w-[800px] mx-auto px-6 md:px-4 py-12 md:py-24 relative" style={{ zIndex: 1 }}>
             <header className="mb-12">
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '遺伝子', href: '/genes' }, { name: gene.symbol }]} />
                 <div className="text-xs tracking-widest text-[#1A1A1A]/50 font-mono mb-4">
                     {gene.category}
                 </div>

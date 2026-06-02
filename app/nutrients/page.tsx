@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getNutrientsByCategory } from '@/lib/nutrients';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
     title: 'NUTRIENTS | Mitoflow40',
@@ -17,11 +18,12 @@ export default function NutrientsIndex() {
     return (
         <div className="relative overflow-hidden pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen" style={{ background: '#FFF1DF' }}>
             {/* Decorative illustrations */}
-            <img src="/images/for-you-wellness.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
+            <img loading="lazy" decoding="async" src="/images/for-you-wellness.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
                 style={{ top: '70px', right: '-50px', width: '300px' }} />
-            <img src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-80"
+            <img loading="lazy" decoding="async" src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-80"
                 style={{ bottom: '-70px', left: '-80px', width: '380px' }} />
             <div className="max-w-[1000px] mx-auto relative" style={{ zIndex: 1 }}>
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '栄養素' }]} />
                 <div className="text-center mb-12">
                     <h1 className="inline-block text-left font-bold mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         <span className="block text-4xl md:text-5xl leading-none text-[#1A1A1A]">NUTRIENTS</span>

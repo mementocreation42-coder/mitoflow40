@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getNutrientBySlug } from '@/lib/nutrients';
 import JsonLd, { medicalWebPage } from '@/components/JsonLd';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
     title: '慢性炎症（くすぶる） | Mitoflow40',
@@ -51,13 +52,14 @@ export default function InflammationPage() {
 
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#F6DCD0' }}>
-            <img src="/images/for-you-recovery.png" alt="" className="absolute pointer-events-none opacity-80 hidden md:block"
+            <img loading="lazy" decoding="async" src="/images/for-you-recovery.png" alt="" className="absolute pointer-events-none opacity-80 hidden md:block"
                 style={{ top: '60px', right: '-50px', width: '260px' }} />
-            <img src="/images/about-illustration-bg.png" alt="" className="absolute pointer-events-none opacity-40"
+            <img loading="lazy" decoding="async" src="/images/about-illustration-bg.png" alt="" className="absolute pointer-events-none opacity-40"
                 style={{ bottom: '-70px', left: '-80px', width: '340px' }} />
 
             <JsonLd data={medicalWebPage({ name: '慢性炎症（くすぶる）とは', description: '老化を加速させる「慢性炎症」を、原因・影響・測り方・抑える習慣から解説。', path: '/inflammation' })} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '慢性炎症' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         CHRONIC INFLAMMATION ／ くすぶる

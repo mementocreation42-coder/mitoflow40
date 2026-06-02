@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { GoogleAnalytics } from '@next/third-parties/google';
+import JsonLd from "@/components/JsonLd";
 import { Space_Grotesk, Inter, Noto_Sans_JP, MuseoModerno, Special_Elite, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 
@@ -42,6 +43,7 @@ const notoSansJP = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://mitoflow40.com"),
   title: "Mitoflow40 | 40代からはじめる健康戦略ミトフロー",
   description:
     "40代。それはカラダの本当の声が無視できなくなる年齢。ミトコンドリア活性化で40代からの人生をフローさせる。パーソナルヘルスケアサービス by DAISUKE KOBAYASHI",
@@ -78,6 +80,32 @@ export default function RootLayout({
       <body
         className={`${spaceGrotesk.variable} ${inter.variable} ${notoSansJP.variable} ${museoModerno.variable} ${specialElite.variable} ${bebasNeue.variable} antialiased`}
       >
+        <JsonLd data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": "https://mitoflow40.com/#organization",
+              name: "Mitoflow40",
+              url: "https://mitoflow40.com",
+              logo: "https://mitoflow40.com/opengraph-image.png",
+              founder: { "@type": "Person", name: "小林大介" },
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://mitoflow40.com/#website",
+              name: "Mitoflow40",
+              url: "https://mitoflow40.com",
+              inLanguage: "ja",
+              publisher: { "@id": "https://mitoflow40.com/#organization" },
+              potentialAction: {
+                "@type": "SearchAction",
+                target: { "@type": "EntryPoint", urlTemplate: "https://mitoflow40.com/journal?q={search_term_string}" },
+                "query-input": "required name=search_term_string",
+              },
+            },
+          ],
+        }} />
         {children}
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
       </body>

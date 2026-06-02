@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getNutrientBySlug } from '@/lib/nutrients';
 import JsonLd, { medicalWebPage } from '@/components/JsonLd';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
     title: 'ATP（エネルギー通貨） | Mitoflow40',
@@ -42,14 +43,15 @@ export default function AtpPage() {
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#D7F0E8' }}>
             {/* Decorative illustrations */}
-            <img src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-80 hidden md:block"
+            <img loading="lazy" decoding="async" src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-80 hidden md:block"
                 style={{ top: '60px', right: '-50px', width: '260px' }} />
-            <img src="/images/for-you-science.png" alt="" className="absolute pointer-events-none opacity-40"
+            <img loading="lazy" decoding="async" src="/images/for-you-science.png" alt="" className="absolute pointer-events-none opacity-40"
                 style={{ bottom: '-60px', left: '-70px', width: '320px', transform: 'scaleX(-1)' }} />
 
             <JsonLd data={medicalWebPage({ name: 'ATP（アデノシン三リン酸）とは', description: '体のエネルギー通貨「ATP」を、作られ方・使われ方・支える栄養素から解説。', path: '/atp' })} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
                 {/* Hero */}
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: 'ATP' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         ENERGY CURRENCY

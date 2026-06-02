@@ -55,23 +55,22 @@ export default function LibraryIndex() {
     return (
         <div className="relative overflow-hidden pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen" style={{ background: '#ECE6F3' }}>
             {/* Decorative illustrations */}
-            <img src="/images/about-illustration-bg.png" alt="" className="absolute pointer-events-none opacity-70"
+            <img loading="lazy" decoding="async" src="/images/about-illustration-bg.png" alt="" className="absolute pointer-events-none opacity-70"
                 style={{ top: '40px', right: '-90px', width: '380px' }} />
-            <img src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-70 hidden md:block"
+            <img loading="lazy" decoding="async" src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-70 hidden md:block"
                 style={{ bottom: '-50px', left: '-60px', width: '260px', transform: 'rotate(-6deg)' }} />
 
             <div className="max-w-[920px] mx-auto relative" style={{ zIndex: 1 }}>
                 {/* Hero */}
-                <div className="text-center mb-12">
-                    <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
+                <div className="mb-12">
+                    <p className="text-xs tracking-widest font-bold mb-3" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         KNOWLEDGE LIBRARY
                     </p>
-                    <h1 className="text-4xl md:text-6xl font-bold mb-5 text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                        LIBRARY
+                    <h1 className="text-4xl md:text-6xl font-bold text-[#1A1A1A] leading-[1.2] tracking-tight mb-5">
+                        設計図を読み、<br />現在地を知り、<br />材料で整える。
                     </h1>
-                    <p className="text-[#4A4A4A] max-w-[620px] mx-auto leading-relaxed">
-                        自分の体を読み解く、3つの視点。<br className="hidden md:block" />
-                        <strong>遺伝子（設計図）</strong>・<strong>血液検査（現在地）</strong>・<strong>栄養素（材料）</strong>をつなげて理解する知識ライブラリです。
+                    <p className="text-sm md:text-base text-[#4A4A4A] max-w-[600px] leading-relaxed">
+                        遺伝子・血液検査・栄養素をつなげて、自分の体を読み解く知識ライブラリ。
                     </p>
                 </div>
 
@@ -110,7 +109,7 @@ export default function LibraryIndex() {
                             style={{ background: s.color }}
                         >
                             <div className="flex-shrink-0 flex items-center justify-center p-6 md:w-[220px] relative overflow-hidden">
-                                <img src={s.illustration} alt="" className="pointer-events-none w-[160px] md:w-[180px] opacity-90 group-hover:scale-105 transition-transform" />
+                                <img loading="lazy" decoding="async" src={s.illustration} alt="" className="pointer-events-none w-[160px] md:w-[180px] opacity-90 group-hover:scale-105 transition-transform" />
                             </div>
                             <div className="flex-1 p-6 md:py-8 md:pr-8">
                                 <div className="flex items-baseline gap-3 mb-2">
@@ -158,6 +157,17 @@ export default function LibraryIndex() {
                             </div>
                             <div className="text-lg font-bold text-[#1A1A1A] mb-2">TCA回路</div>
                             <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">食べたものをエネルギーに変える、ミトコンドリアの中心エンジン。</p>
+                            <span className="inline-flex items-center gap-1 text-sm font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
+                            </span>
+                        </Link>
+                        <Link href="/electron-transport-chain"
+                            className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#D9E6F2' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                ETC
+                            </div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-2">電子伝達系</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">酸素を使いATPの大半を生む最終工程。TCA回路とATPの架け橋。</p>
                             <span className="inline-flex items-center gap-1 text-sm font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                 見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                             </span>

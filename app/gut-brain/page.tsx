@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { getNutrientBySlug } from '@/lib/nutrients';
 import { getGeneBySlug } from '@/lib/genes';
 import JsonLd, { medicalWebPage } from '@/components/JsonLd';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
     title: '脳腸相関（gut-brain axis） | Mitoflow40',
@@ -36,13 +37,14 @@ export default function GutBrainPage() {
 
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#DCEFE4' }}>
-            <img src="/images/for-you-wellness.png" alt="" className="absolute pointer-events-none opacity-80 hidden md:block"
+            <img loading="lazy" decoding="async" src="/images/for-you-wellness.png" alt="" className="absolute pointer-events-none opacity-80 hidden md:block"
                 style={{ top: '60px', right: '-50px', width: '260px' }} />
-            <img src="/images/about-illustration-bg.png" alt="" className="absolute pointer-events-none opacity-40"
+            <img loading="lazy" decoding="async" src="/images/about-illustration-bg.png" alt="" className="absolute pointer-events-none opacity-40"
                 style={{ bottom: '-70px', left: '-80px', width: '340px' }} />
 
             <JsonLd data={medicalWebPage({ name: '脳腸相関とは', description: '腸と脳が双方向に影響し合う「脳腸相関」を、3つの経路・セロトニン・腸内環境から解説。', path: '/gut-brain' })} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '脳腸相関' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         GUT-BRAIN AXIS

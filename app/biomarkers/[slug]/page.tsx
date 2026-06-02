@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation';
 import { biomarkers, getBiomarkerBySlug } from '@/lib/biomarkers';
 import { getNutrientBySlug } from '@/lib/nutrients';
 import { getGeneBySlug } from '@/lib/genes';
-import JsonLd, { medicalWebPage } from '@/components/JsonLd';
+import JsonLd, { medicalWebPage, breadcrumb } from '@/components/JsonLd';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export function generateStaticParams() {
     return biomarkers.map((b) => ({ slug: b.slug }));
@@ -13,14 +14,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const { slug } = await params;
     const b = getBiomarkerBySlug(slug);
     if (!b) return {};
+    const description = `${b.name}（${b.en}）とは？${b.tagline}。基準値・精密栄養学視点の理想値・高い/低いときの意味を、40代の健康最適化の視点でわかりやすく解説します。`;
     return {
         title: `${b.name} (${b.en}) | Mitoflow40`,
-        description: b.tagline,
+        description,
         alternates: { canonical: `https://mitoflow40.com/biomarkers/${slug}` },
         robots: { index: true, follow: true },
         openGraph: {
             title: `${b.name} (${b.en}) | Mitoflow40`,
-            description: b.tagline,
+            description,
             url: `https://mitoflow40.com/biomarkers/${slug}`,
             type: 'article',
         },
@@ -45,14 +47,16 @@ export default async function BiomarkerPage({ params }: { params: Promise<{ slug
     return (
         <div className="pt-[60px] min-h-screen relative overflow-hidden" style={{ background: b.color }}>
             <JsonLd data={medicalWebPage({ name: `${b.name}（${b.en}）`, description: b.tagline, path: `/biomarkers/${slug}` })} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '血液検査', path: '/biomarkers' }, { name: b.name, path: `/biomarkers/${slug}` }])} />
             {/* Decorative illustrations */}
-            <img src={b.illustration} alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
+            <img loading="lazy" decoding="async" src={b.illustration} alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
                 style={{ top: '90px', right: '-40px', width: '240px' }} />
-            <img src={b.illustration} alt="" className="absolute pointer-events-none opacity-30"
+            <img loading="lazy" decoding="async" src={b.illustration} alt="" className="absolute pointer-events-none opacity-30"
                 style={{ bottom: '-60px', left: '-70px', width: '300px', transform: 'scaleX(-1)' }} />
 
             <article className="max-w-[800px] mx-auto px-6 md:px-4 py-12 md:py-24 relative" style={{ zIndex: 1 }}>
                 <header className="mb-12">
+                    <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '血液検査', href: '/biomarkers' }, { name: b.name }]} />
                     <div className="text-xs tracking-widest text-[#1A1A1A]/50 font-mono mb-4">
                         {b.category}
                     </div>

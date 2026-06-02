@@ -103,11 +103,11 @@ export default function CheckPage() {
     return (
         <div className="pt-28 pb-24 px-4 md:px-6 relative overflow-hidden" style={{ background: '#B2EBF2' }}>
             {/* Decorative illustrations */}
-            <img src="/images/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90"
+            <img loading="lazy" decoding="async" src="/images/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90"
                 style={{ top: '0', right: '-60px', width: '360px', transform: 'scaleY(-1)' }} />
-            <img src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-85 hidden md:block"
+            <img loading="lazy" decoding="async" src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-85 hidden md:block"
                 style={{ bottom: '60px', left: '-60px', width: '280px', transform: 'rotate(-8deg)' }} />
-            <img src="/images/about-illustration-bg.png" alt="" className="absolute pointer-events-none opacity-90"
+            <img loading="lazy" decoding="async" src="/images/about-illustration-bg.png" alt="" className="absolute pointer-events-none opacity-90"
                 style={{ bottom: '-80px', right: '-100px', width: '480px' }} />
             <div className="max-w-[760px] mx-auto relative" style={{ zIndex: 1 }}>
                 {/* Hero */}
@@ -671,11 +671,11 @@ export function Result({ scores, onReset }: { scores: { axisScores: Record<Axis,
 
     return (
         <div className="pt-28 pb-24 px-4 md:px-6 relative overflow-hidden" style={{ background: '#B2EBF2' }}>
-            <img src="/images/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90"
+            <img loading="lazy" decoding="async" src="/images/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90"
                 style={{ top: '0', right: '-60px', width: '360px', transform: 'scaleY(-1)' }} />
-            <img src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-85 hidden md:block"
+            <img loading="lazy" decoding="async" src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-85 hidden md:block"
                 style={{ bottom: '60px', left: '-60px', width: '280px', transform: 'rotate(-8deg)' }} />
-            <img src="/images/about-illustration-bg.png" alt="" className="absolute pointer-events-none opacity-90"
+            <img loading="lazy" decoding="async" src="/images/about-illustration-bg.png" alt="" className="absolute pointer-events-none opacity-90"
                 style={{ bottom: '-80px', right: '-100px', width: '480px' }} />
             <div className="max-w-[760px] mx-auto relative" style={{ zIndex: 1 }}>
                 {/* Header */}

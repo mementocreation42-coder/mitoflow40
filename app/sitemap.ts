@@ -52,6 +52,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         // からだのしくみ
         { path: '/mitochondria', priority: 0.8, changeFrequency: 'monthly' },
         { path: '/tca-cycle', priority: 0.6, changeFrequency: 'monthly' },
+        { path: '/electron-transport-chain', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/atp', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/ketones', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/gut-brain', priority: 0.6, changeFrequency: 'monthly' },

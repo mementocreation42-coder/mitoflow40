@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import FadeOnScroll from './FadeOnScroll';
 
 const forYouItems = [
@@ -58,6 +59,22 @@ export default function ForYou() {
                                 </div>
                             </div>
                         ))}
+                    </div>
+                </FadeOnScroll>
+
+                <FadeOnScroll delay={0.3}>
+                    <div className="mt-12 bg-[#FFF9C4] border border-[#1A1A1A] rounded-xl p-6 md:p-8 text-center">
+                        <p className="text-sm md:text-base text-[#1A1A1A] leading-relaxed mb-5 max-w-[520px] mx-auto">
+                            まずは「自分の体のしくみ」を知ることから。<br className="hidden md:block" />
+                            遺伝子・血液検査・栄養素をつなげて学べる知識ライブラリを用意しました。
+                        </p>
+                        <Link
+                            href="/library"
+                            className="inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-bold hover:opacity-90 transition"
+                            style={{ fontFamily: "var(--font-main)", background: '#1A1A1A', color: '#FFFFFF' }}
+                        >
+                            Library を見る <span>→</span>
+                        </Link>
                     </div>
                 </FadeOnScroll>
             </div>

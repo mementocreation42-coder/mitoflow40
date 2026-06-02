@@ -4,11 +4,22 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 const navItems = [
-    { href: '/check', label: 'FREE CHECK' },
-    { href: '/sample', label: 'SAMPLE ANALYSIS' },
-    { href: '/journal', label: 'JOURNAL' },
-    { href: '/#contact', label: 'CONTACT' },
+    { href: '/check', label: 'FREE CHECK', ja: '無料チェック' },
+    { href: '/sample', label: 'SAMPLE ANALYSIS', ja: '解析サンプル' },
+    { href: '/library', label: 'LIBRARY', ja: '知識ライブラリ' },
+    { href: '/journal', label: 'JOURNAL', ja: 'ジャーナル' },
+    { href: '/#contact', label: 'CONTACT', ja: 'お問い合わせ' },
 ];
+
+// ホバーで日本語に切り替わるラベル（レイアウトずれ防止のためグリッド重ね）
+function SwapLabel({ en, ja }: { en: string; ja: string }) {
+    return (
+        <span className="relative inline-block align-middle whitespace-nowrap">
+            <span className="transition-opacity duration-200 group-hover:opacity-0">{en}</span>
+            <span className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100" style={{ fontFamily: "'Noto Sans JP', sans-serif" }} aria-hidden="true">{ja}</span>
+        </span>
+    );
+}
 
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -29,18 +40,18 @@ export default function Header() {
                             <li key={item.href}>
                                 <Link
                                     href={item.href}
-                                    className="text-sm font-medium hover:text-[#4AF6C3] transition-colors"
+                                    className="group text-sm font-medium hover:text-[#4AF6C3] transition-colors pb-1 border-b-2 border-transparent hover:border-[#4AF6C3]"
                                 >
-                                    {item.label}
+                                    <SwapLabel en={item.label} ja={item.ja} />
                                 </Link>
                             </li>
                         ))}
                         <li>
                             <Link
                                 href="/#contact"
-                                className="px-4 py-2 bg-[#4AF6C3] text-[#1A1A1A] border border-[#1A1A1A] text-sm font-semibold rounded-full hover:bg-[#3AE6B3] transition-colors"
+                                className="group px-4 py-2 bg-[#4AF6C3] text-[#1A1A1A] border border-[#1A1A1A] text-sm font-semibold rounded-full hover:bg-[#3AE6B3] transition-colors"
                             >
-                                CONTACT
+                                <SwapLabel en="CONTACT" ja="お問い合わせ" />
                             </Link>
                         </li>
                     </ul>

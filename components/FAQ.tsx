@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import FadeOnScroll from './FadeOnScroll';
+import JsonLd from './JsonLd';
 
 const faqItems = [
     {
@@ -57,6 +58,18 @@ export default function FAQ() {
 
     return (
         <section id="faq" className="py-24 bg-[#E5D0E3] border-t border-[#1A1A1A] relative overflow-hidden">
+            <JsonLd data={{
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                mainEntity: faqItems.map((item) => ({
+                    "@type": "Question",
+                    name: item.question.replace(/^Q\.\s*/, ''),
+                    acceptedAnswer: {
+                        "@type": "Answer",
+                        text: item.answer.replace(/^A\.\s*/, ''),
+                    },
+                })),
+            }} />
             <div className="max-w-[800px] mx-auto px-4 relative z-10">
                 <FadeOnScroll>
                     <div className="text-center mb-12">
