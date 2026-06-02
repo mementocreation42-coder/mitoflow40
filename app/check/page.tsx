@@ -89,9 +89,6 @@ export default function CheckPage() {
     const submit = () => {
         if (!allAnswered) return;
         setSubmitted(true);
-        if (typeof window !== 'undefined') {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
     };
     const reset = () => {
         setAnswers({});
@@ -510,12 +507,12 @@ function EmailResultCard({ archetypeName, archetypeCatch, total, axisScores, per
     }
 
     return (
-        <form onSubmit={submit} className="bg-white border border-[#1A1A1A] rounded-2xl p-6 mb-6">
+        <form onSubmit={submit} className="border-2 border-[#FF9855] rounded-2xl p-6 mb-6" style={{ background: '#FFF1DF' }}>
             <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                 EMAIL · 結果をメールで受け取る
             </p>
-            <h3 className="text-base md:text-lg font-bold mb-2">
-                あとからじっくり読み返したい方へ
+            <h3 className="text-2xl md:text-3xl font-bold mb-3 leading-snug text-[#1A1A1A]">
+                あとから<br />じっくり読み返したい方へ
             </h3>
             <p className="text-xs text-[#4A4A4A] leading-relaxed mb-4">
                 Archetypeとスコア、AI解析、3つのアクションをメールでお届けします。
@@ -612,6 +609,14 @@ export function Result({ scores, onReset }: { scores: { axisScores: Record<Axis,
     type AiResult = { personal_analysis: string; personal_actions: string[]; next_question: string };
     const [ai, setAi] = useState<AiResult | null>(null);
     const [aiState, setAiState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+    // 結果表示時は必ずページ最上部から見せる
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            window.scrollTo({ top: 0, behavior: 'auto' });
+        }
+    }, []);
+
     useEffect(() => {
         let cancelled = false;
         const run = async () => {
@@ -856,7 +861,7 @@ export function Result({ scores, onReset }: { scores: { axisScores: Record<Axis,
                 />
 
                 {/* CTA */}
-                <div className="bg-white border-2 border-[#1A1A1A] rounded-2xl p-6 md:p-8 text-center mb-6">
+                <div className="border-2 border-[#1A1A1A] rounded-2xl p-6 md:p-8 text-center mb-6" style={{ background: '#D5F5EC' }}>
                     <p className="text-xs tracking-widest font-bold mb-3 text-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         DEEPER ANALYSIS
                     </p>

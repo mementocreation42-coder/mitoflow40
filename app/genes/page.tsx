@@ -15,10 +15,19 @@ export const metadata = {
 
 export default function GenesIndex() {
     return (
-        <div className="max-w-[1000px] mx-auto px-6 md:px-4 py-12 md:py-24">
+        <div className="relative overflow-hidden pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen" style={{ background: '#D7F0EC' }}>
+            {/* Decorative illustrations */}
+            <img src="/images/for-you-science.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
+                style={{ top: '40px', right: '-50px', width: '300px' }} />
+            <img src="/images/about-illustration-bg.png" alt="" className="absolute pointer-events-none opacity-80"
+                style={{ bottom: '-80px', left: '-90px', width: '420px' }} />
+            <img src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-80 hidden md:block"
+                style={{ bottom: '40px', right: '-40px', width: '240px', transform: 'rotate(-6deg)' }} />
+            <div className="max-w-[1000px] mx-auto relative" style={{ zIndex: 1 }}>
             <div className="text-center mb-12">
                 <h1 className="inline-block text-left font-bold mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                     <span className="block text-4xl md:text-5xl leading-none text-[#1A1A1A]">GENES</span>
+                    <span className="block text-center text-base md:text-lg mt-2 text-[#1A1A1A]/70" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>遺伝子</span>
                 </h1>
                 <p className="text-[#4A4A4A] mt-4 max-w-[600px] mx-auto">
                     7つの主要遺伝子と、それぞれの働きをクリーンに保つための栄養・生活習慣
@@ -30,18 +39,19 @@ export default function GenesIndex() {
                     <Link
                         key={gene.slug}
                         href={`/genes/${gene.slug}`}
-                        className="group block p-6 rounded-2xl border border-[#1A1A1A]/30 hover:border-[#41C9B4] hover:shadow-md transition-all bg-white"
+                        className="group block p-6 rounded-2xl border border-[#1A1A1A] hover:shadow-md hover:-translate-y-0.5 transition-all"
+                        style={{ background: gene.color }}
                     >
-                        <div className="text-xs tracking-widest text-[#41C9B4] font-mono mb-2">
+                        <div className="text-xs tracking-widest text-[#1A1A1A]/60 font-mono mb-2">
                             {gene.category}
                         </div>
                         <div className="flex items-baseline gap-3 mb-2">
-                            <h2 className="text-2xl font-bold text-[#1A1A1A] group-hover:text-[#41C9B4] transition-colors" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            <h2 className="text-2xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                 {gene.symbol}
                             </h2>
-                            <span className="text-xs text-[#4A4A4A]/70">{gene.name}</span>
+                            <span className="text-xs text-[#1A1A1A]/60">{gene.name}</span>
                         </div>
-                        <p className="text-sm text-[#4A4A4A] leading-relaxed">
+                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed">
                             {gene.tagline}
                         </p>
                     </Link>
@@ -51,6 +61,13 @@ export default function GenesIndex() {
             <p className="text-xs text-[#4A4A4A]/60 text-center mt-12 leading-relaxed">
                 ※ 本ページは Dr. Ben Lynch 著『Dirty Genes』を参考にした一般情報です。診断・治療目的ではありません。
             </p>
+
+            <div className="mt-10 text-center">
+                <Link href="/library" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
+                    ← Library に戻る
+                </Link>
+            </div>
+            </div>
         </div>
     );
 }

@@ -1,7 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-export default function GenesLayout({
+export default function NutrientsLayout({
     children,
 }: {
     children: React.ReactNode;
