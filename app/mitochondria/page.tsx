@@ -73,7 +73,7 @@ export default function MitochondriaPage() {
 
             <JsonLd data={medicalWebPage({ name: 'ミトコンドリアとは', description: 'ミトコンドリアの役割・構造・40代で重要な理由・元気に保つ方法を解説。', path: '/mitochondria' })} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: 'ミトコンドリア' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の仕組み', href: '/library#mechanism' }, { name: 'ミトコンドリア' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         THE POWERHOUSE
@@ -89,7 +89,7 @@ export default function MitochondriaPage() {
 
                 {/* とは */}
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">ミトコンドリアとは</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">ミトコンドリアとは</h2>
                     <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
                         ミトコンドリアは、私たちの細胞の中にある小さな器官（細胞小器官）です。食べたものと吸った酸素から、生きるためのエネルギー「ATP」を作り出す——いわば<strong>細胞の発電所</strong>です。
                         {'\n\n'}
@@ -101,7 +101,7 @@ export default function MitochondriaPage() {
 
                 {/* 構造 */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">ミトコンドリアの構造</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">ミトコンドリアの構造</h2>
                     <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
                         二重の膜を持つのが特徴で、内側の膜の構造がエネルギー産生の効率を決めています。
                     </p>
@@ -118,7 +118,7 @@ export default function MitochondriaPage() {
 
                 {/* エネルギー産生の流れ */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">エネルギーを作る流れ</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">エネルギーを作る流れ</h2>
                     <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
                         食べたものは、3つの工程を経てATPになります。大半はミトコンドリアの中で作られます。
                     </p>
@@ -153,7 +153,7 @@ export default function MitochondriaPage() {
 
                 {/* 役割 */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">ミトコンドリアの主な役割</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">ミトコンドリアの主な役割</h2>
                     <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
                         エネルギー産生が最大の仕事ですが、それだけではありません。
                     </p>
@@ -173,7 +173,7 @@ export default function MitochondriaPage() {
 
                 {/* なぜ40代 */}
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">なぜ40代で重要なのか</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">なぜ40代で重要なのか</h2>
                     <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
                         ミトコンドリアの量と質は、加齢とともに低下しやすくなります。発電所が減り、性能も落ちると、作れるエネルギーが減る——これが、40代以降に感じやすい「疲れやすい」「回復が遅い」「頭がモヤモヤする」の根っこにあります。
                         {'\n\n'}
@@ -185,7 +185,7 @@ export default function MitochondriaPage() {
 
                 {/* 弱っているサイン */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">ミトコンドリアが弱っているサイン</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">ミトコンドリアが弱っているサイン</h2>
                     <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
                         次のようなサインは、エネルギー産生がうまくいっていない可能性を示します。
                     </p>
@@ -203,7 +203,7 @@ export default function MitochondriaPage() {
 
                 {/* 元気に保つ */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">ミトコンドリアを元気に保つ習慣</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">ミトコンドリアを元気に保つ習慣</h2>
                     <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
                         ミトコンドリアは働きかけに応えてくれます。「増やす」と「入れ替える」を意識しましょう。
                     </p>
@@ -228,7 +228,7 @@ export default function MitochondriaPage() {
 
                 {/* もっと深く知る */}
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">もっと深く知る</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">もっと深く知る</h2>
                     <p className="text-sm text-[#4A4A4A] leading-relaxed mb-4">
                         ミトコンドリアにまつわる仕組みを、ステップごとに読み解けます。
                     </p>

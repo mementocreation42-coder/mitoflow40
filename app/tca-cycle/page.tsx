@@ -72,7 +72,7 @@ export default function TcaCyclePage() {
             <JsonLd data={medicalWebPage({ name: 'TCA回路（クエン酸回路）とは', description: 'ミトコンドリアのエネルギー産生エンジン「TCA回路」を、流れ・役割・必要な栄養素から解説。', path: '/tca-cycle' })} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
                 {/* Hero */}
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: 'TCA回路' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の仕組み', href: '/library#mechanism' }, { name: 'TCA回路' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         ENERGY ENGINE
@@ -88,7 +88,7 @@ export default function TcaCyclePage() {
 
                 {/* とは */}
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">TCA回路とは</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">TCA回路とは</h2>
                     <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
                         TCA回路（クエン酸回路、クレブス回路とも）は、ミトコンドリアの中（マトリックス）で行われる、エネルギー産生の中心的な代謝経路です。
                         糖・脂質・タンパク質はいずれも分解されて「アセチルCoA」という共通の燃料になり、この回路に投入されます。
@@ -101,7 +101,7 @@ export default function TcaCyclePage() {
 
                 {/* なぜ重要か */}
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">なぜ40代の体に重要か</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">なぜ40代の体に重要か</h2>
                     <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
                         疲れやすい・スタミナが落ちた・回復が遅い——こうした「エネルギー不足」の感覚は、TCA回路がうまく回っていないサインかもしれません。
                         この回路は単独では動かず、<strong>ビタミンB群・マグネシウム・鉄・アルファリポ酸</strong>といった補酵素（潤滑油）を必要とします。
@@ -113,7 +113,7 @@ export default function TcaCyclePage() {
 
                 {/* 回路の流れ */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">回路の流れ（8ステップ）</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">回路の流れ（8ステップ）</h2>
                     <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
                         アセチルCoAがオキサロ酢酸と結びついて始まり、8つの中間体を経て一周します。各ステップで電子の運び屋(NADH・FADH2)やGTPが生まれます。
                     </p>
@@ -170,7 +170,7 @@ export default function TcaCyclePage() {
 
                 {/* 回路を回す栄養素 */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">回路を回す栄養素</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">回路を回す栄養素</h2>
                     <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
                         TCA回路は、これらの栄養素を「潤滑油」として必要とします。各栄養素のページで詳しく読めます。
                     </p>
@@ -192,7 +192,7 @@ export default function TcaCyclePage() {
 
                 {/* 次のステップ */}
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">この先：電子伝達系へ</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">この先：電子伝達系へ</h2>
                     <p className="text-[#4A4A4A] leading-loose mb-5">
                         TCA回路が生んだ NADH・FADH2 は、ミトコンドリア内膜の「<Link href="/electron-transport-chain" className="underline decoration-[#FF9855] decoration-2 underline-offset-2 hover:text-[#FF9855]">電子伝達系</Link>」へ運ばれます。
                         そこで電子が受け渡される中で、<strong>CoQ10</strong> が電子の運搬役として働き、最終的に酸素と結びついて水になり、その過程で大量の <strong>ATP</strong> が作られます。
@@ -210,6 +210,9 @@ export default function TcaCyclePage() {
 
                 {/* Back links */}
                 <div className="text-center flex flex-wrap justify-center gap-3">
+                    <Link href="/library#mechanism" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
+                        身体の仕組み に戻る
+                    </Link>
                     <Link href="/library" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
                         ← Library に戻る
                     </Link>

@@ -49,7 +49,7 @@ export default function GlycationPage() {
 
             <JsonLd data={medicalWebPage({ name: '糖化・AGEs（こげる）とは', description: '体がこげる原因「糖化」とAGEsを、仕組み・血糖との関係・防ぐ習慣から解説。', path: '/glycation' })} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '糖化' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '老化', href: '/library#aging' }, { name: '糖化' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         GLYCATION ／ こげる
@@ -64,7 +64,7 @@ export default function GlycationPage() {
                 </header>
 
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">糖化とは</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">糖化とは</h2>
                     <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
                         糖化とは、血液中の余った<strong>糖がタンパク質や脂質と結びついて</strong>、本来の働きを損なわせる反応です。ホットケーキがこんがり焼けて茶色く硬くなるのと同じ反応（メイラード反応）が、体の中でもゆっくり起きていると考えるとイメージしやすいでしょう。
                         {'\n\n'}
@@ -76,7 +76,7 @@ export default function GlycationPage() {
 
                 {/* 影響 */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">糖化が引き起こすこと</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">糖化が引き起こすこと</h2>
                     <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
                         AGEsは、タンパク質でできた組織のあちこちに影響します。
                     </p>
@@ -92,7 +92,7 @@ export default function GlycationPage() {
 
                 {/* 酸化との関係 */}
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">「さびる」と「こげる」は連動する</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">「さびる」と「こげる」は連動する</h2>
                     <p className="text-[#4A4A4A] leading-loose">
                         糖化（こげる）と<Link href="/oxidative-stress" className="underline decoration-[#FF9855] decoration-2 underline-offset-2 hover:text-[#FF9855]">酸化（さびる）</Link>は、別々の現象ではなく、お互いを加速させる関係にあります。糖化でできたAGEsは活性酸素を増やし、酸化ストレスはさらに糖化を進める——この悪循環が、老化の大きなエンジンになります。
                         だからこそ、血糖を整える「糖化対策」と、抗酸化を高める「酸化対策」は、セットで取り組むのが効果的です。
@@ -101,7 +101,7 @@ export default function GlycationPage() {
 
                 {/* 防ぐ */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">糖化を防ぐ習慣</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">糖化を防ぐ習慣</h2>
                     <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
                         ポイントは「血糖を急上昇させない」ことと「高温調理を減らす」ことです。
                     </p>
@@ -126,7 +126,7 @@ export default function GlycationPage() {
 
                 {/* 関連 */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">糖化対策に関わる栄養素</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">糖化対策に関わる栄養素</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {nutrients.map(({ slug, why, n }) => (
                             <Link key={slug} href={`/nutrients/${slug}`}
@@ -143,11 +143,8 @@ export default function GlycationPage() {
                 </p>
 
                 <div className="text-center flex flex-wrap justify-center gap-3">
-                    <Link href="/oxidative-stress" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
-                        さびる（酸化）
-                    </Link>
-                    <Link href="/inflammation" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
-                        くすぶる（慢性炎症）
+                    <Link href="/library#aging" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
+                        老化 に戻る
                     </Link>
                     <Link href="/library" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
                         ← Library に戻る

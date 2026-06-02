@@ -57,6 +57,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { path: '/ketones', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/gut-brain', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/autophagy', priority: 0.6, changeFrequency: 'monthly' },
+        { path: '/methylation', priority: 0.6, changeFrequency: 'monthly' },
+        { path: '/blood-sugar', priority: 0.6, changeFrequency: 'monthly' },
+        { path: '/autonomic-nervous-system', priority: 0.6, changeFrequency: 'monthly' },
+        { path: '/circadian-rhythm', priority: 0.6, changeFrequency: 'monthly' },
+        { path: '/sleep', priority: 0.6, changeFrequency: 'monthly' },
+        { path: '/exercise', priority: 0.6, changeFrequency: 'monthly' },
+        { path: '/detox', priority: 0.6, changeFrequency: 'monthly' },
         // 老化の3大ルート
         { path: '/oxidative-stress', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/glycation', priority: 0.6, changeFrequency: 'monthly' },

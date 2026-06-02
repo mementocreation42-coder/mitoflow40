@@ -58,7 +58,7 @@ export default function OxidativeStressPage() {
 
             <JsonLd data={medicalWebPage({ name: '活性酸素・酸化ストレス（さびる）とは', description: '体がさびる原因「活性酸素」と抗酸化のしくみを、仕組み・影響・栄養素・遺伝子から解説。', path: '/oxidative-stress' })} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '活性酸素' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '老化', href: '/library#aging' }, { name: '活性酸素' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         OXIDATIVE STRESS ／ さびる
@@ -73,7 +73,7 @@ export default function OxidativeStressPage() {
                 </header>
 
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">活性酸素とは</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">活性酸素とは</h2>
                     <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
                         活性酸素（ROS）は、ふつうの酸素より反応性が高くなった酸素の仲間です。私たちがエネルギー(ATP)を作るとき、ミトコンドリアで酸素を使う過程で、副産物として必ず発生します。つまり、生きてエネルギーを作る限り、避けられないものです。
                         {'\n\n'}
@@ -85,7 +85,7 @@ export default function OxidativeStressPage() {
 
                 {/* 発生源 */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">活性酸素が増える原因</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">活性酸素が増える原因</h2>
                     <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
                         体の内側でも外側でも、さまざまな要因で活性酸素は増えます。
                     </p>
@@ -101,7 +101,7 @@ export default function OxidativeStressPage() {
 
                 {/* ミトコンドリアとの悪循環 */}
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">ミトコンドリアとの深い関係</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">ミトコンドリアとの深い関係</h2>
                     <p className="text-[#4A4A4A] leading-loose">
                         活性酸素の最大の発生源は<Link href="/mitochondria" className="underline decoration-[#FF9855] decoration-2 underline-offset-2 hover:text-[#FF9855]">ミトコンドリア</Link>そのものです。そして厄介なことに、傷ついたミトコンドリアはさらに多くの活性酸素を漏らすという<strong>悪循環</strong>に陥りやすい。
                         この循環を断つのが、傷んだミトコンドリアを片付ける<Link href="/autophagy" className="underline decoration-[#FF9855] decoration-2 underline-offset-2 hover:text-[#FF9855]">オートファジー（ミトファジー）</Link>であり、新しく増やす運動です。「質の良いミトコンドリアを保つ」ことが、酸化ストレス対策の本丸でもあります。
@@ -110,7 +110,7 @@ export default function OxidativeStressPage() {
 
                 {/* 抗酸化 */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">抗酸化の2段構え</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">抗酸化の2段構え</h2>
                     <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
                         体は、活性酸素に対して2つの防御を持っています。
                     </p>
@@ -132,7 +132,7 @@ export default function OxidativeStressPage() {
 
                 {/* 関連 */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">抗酸化を支える栄養素・遺伝子</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">抗酸化を支える栄養素・遺伝子</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {nutrients.map(({ slug, why, n }) => (
                             <Link key={slug} href={`/nutrients/${slug}`}
@@ -156,11 +156,8 @@ export default function OxidativeStressPage() {
                 </p>
 
                 <div className="text-center flex flex-wrap justify-center gap-3">
-                    <Link href="/glycation" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
-                        こげる（糖化）
-                    </Link>
-                    <Link href="/inflammation" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
-                        くすぶる（慢性炎症）
+                    <Link href="/library#aging" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
+                        老化 に戻る
                     </Link>
                     <Link href="/library" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
                         ← Library に戻る

@@ -31,7 +31,7 @@ export default function AutophagyPage() {
 
             <JsonLd data={medicalWebPage({ name: 'オートファジーとは', description: '細胞の自己リサイクル「オートファジー」を、仕組み・スイッチ・ミトコンドリアとの関係から解説。', path: '/autophagy' })} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: 'オートファジー' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の仕組み', href: '/library#mechanism' }, { name: 'オートファジー' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         CELLULAR RECYCLING
@@ -46,7 +46,7 @@ export default function AutophagyPage() {
                 </header>
 
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">オートファジーとは</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">オートファジーとは</h2>
                     <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
                         オートファジー（自食作用）は、細胞が自分の中の不要になったタンパク質や、傷ついた細胞内の部品を分解し、材料として再利用する仕組みです。2016年に大隅良典博士がこの研究でノーベル賞を受賞し、一気に注目されました。
                         {'\n\n'}
@@ -58,7 +58,7 @@ export default function AutophagyPage() {
 
                 {/* ミトファジー */}
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">ミトコンドリアとの関係：ミトファジー</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">ミトコンドリアとの関係：ミトファジー</h2>
                     <p className="text-[#4A4A4A] leading-loose">
                         オートファジーの中でも、傷ついたミトコンドリアを狙って片付ける働きを<strong>「ミトファジー」</strong>と呼びます。
                         ミトコンドリアはエネルギーを作る一方で、使い込まれると活性酸素を漏らし、細胞を傷つける"お荷物"になります。
@@ -67,9 +67,21 @@ export default function AutophagyPage() {
                     </p>
                 </section>
 
+                {/* もう一つの掃除システム：ユビキチン・プロテアソーム */}
+                <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">もう一つの掃除システム：ユビキチン・プロテアソーム</h2>
+                    <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
+                        細胞のゴミ処理には、実は2つの経路があります。オートファジーが「大きなゴミ」——傷んだ小器官やタンパク質の塊をまとめて分解するのに対し、もう一方の<strong>ユビキチン・プロテアソーム系（UPS）</strong>は、<strong>不要・損傷した個々のタンパク質をピンポイントで処理</strong>します。
+                        {'\n\n'}
+                        仕組みはこうです。役目を終えたタンパク質に「<strong>ユビキチン</strong>」という小さな目印が付けられ、それが「これは分解してOK」というゴミ出しのタグになります。タグの付いたタンパク質は、<strong>プロテアソーム</strong>という筒状の"シュレッダー"に送られ、細かく分解されてアミノ酸として再利用されます。
+                        {'\n\n'}
+                        この品質管理（プロテオスタシス）が衰えると、異常なタンパク質が溜まり、神経変性や老化と関わると考えられています。オートファジーとUPS——2つの掃除システムが協力して、細胞を新しく保っています。これを支えるのは、結局のところ<strong>十分なタンパク質・抗酸化・運動・睡眠</strong>といった土台です。
+                    </p>
+                </section>
+
                 {/* スイッチ */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">スイッチが入る条件</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">スイッチが入る条件</h2>
                     <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
                         オートファジーは、細胞が「軽い飢餓・ストレス」を感じたときに活性化します。
                     </p>
@@ -93,7 +105,7 @@ export default function AutophagyPage() {
 
                 {/* 注意 */}
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">バランスが大切</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">バランスが大切</h2>
                     <ul className="space-y-2 text-[#4A4A4A]">
                         <li className="flex gap-3"><span className="text-[#41C9B4] flex-shrink-0">●</span><span>「掃除（オートファジー）」と「合成（タンパク質を作る）」は両方必要。断食一辺倒ではなく、しっかり食べる時間とのメリハリが大切です。</span></li>
                         <li className="flex gap-3"><span className="text-[#41C9B4] flex-shrink-0">●</span><span>極端な断食は筋肉の分解を招くことも。とくに40代以降はタンパク質の確保とセットで考えます。</span></li>
@@ -106,8 +118,8 @@ export default function AutophagyPage() {
                 </p>
 
                 <div className="text-center flex flex-wrap justify-center gap-3">
-                    <Link href="/ketones" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
-                        ケトン体を見る
+                    <Link href="/library#mechanism" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
+                        身体の仕組み に戻る
                     </Link>
                     <Link href="/library" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
                         ← Library に戻る

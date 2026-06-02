@@ -66,7 +66,7 @@ export default function LibraryIndex() {
                     <p className="text-xs tracking-widest font-bold mb-3" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         KNOWLEDGE LIBRARY
                     </p>
-                    <h1 className="text-4xl md:text-6xl font-bold text-[#1A1A1A] leading-[1.2] tracking-tight mb-5">
+                    <h1 className="text-4xl md:text-6xl font-bold text-[#41C9B4] leading-[1.2] tracking-tight mb-5">
                         設計図を読み、<br />現在地を知り、<br />材料で整える。
                     </h1>
                     <p className="text-sm md:text-base text-[#4A4A4A] max-w-[600px] leading-relaxed">
@@ -74,33 +74,21 @@ export default function LibraryIndex() {
                     </p>
                 </div>
 
-                {/* 関係性の説明 */}
-                <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 md:p-8 mb-12 border border-black">
-                    <p className="text-xl md:text-2xl font-bold tracking-wide mb-4 text-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                        HOW THEY CONNECT ／ 3つはつながっている
-                    </p>
-                    <div className="flex flex-col md:flex-row items-stretch gap-3 md:gap-2">
-                        {sections.map((s, i) => (
-                            <div key={s.href} className="flex items-center gap-3 md:gap-2 flex-1">
-                                <div className="flex-1 rounded-xl p-4 text-center border border-black" style={{ background: s.color }}>
-                                    <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                        {s.label}
-                                    </div>
-                                    <div className="text-base font-bold text-[#1A1A1A]">{s.ja}</div>
-                                    <div className="text-xs text-[#1A1A1A]/60 mt-0.5">{s.role}</div>
-                                </div>
-                                {i < sections.length - 1 && (
-                                    <span className="text-[#1A1A1A]/30 font-bold rotate-90 md:rotate-0">→</span>
-                                )}
-                            </div>
-                        ))}
+                {/* 身体の地図 */}
+                <div id="map" className="mb-20 md:mb-24 scroll-mt-24">
+                    <div className="mb-5 flex items-stretch gap-3">
+                        <span className="w-1.5 rounded-full bg-[#41C9B4]" />
+                        <div className="py-0.5">
+                            <p className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>身体の地図</p>
+                            <p className="text-[10px] tracking-[0.2em] font-bold text-[#41C9B4]/60 mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>HOW THEY CONNECT</p>
+                        </div>
                     </div>
-                    <p className="text-sm text-[#4A4A4A] leading-relaxed mt-5">
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
                         生まれ持った<strong>遺伝子</strong>という設計図があり、今の状態は<strong>血液検査</strong>で「現在地」として可視化できます。そして<strong>栄養素</strong>は、その差を埋めて体をつくり整えるための「材料」です。3つを行き来することで、自分の体への理解が立体的になります。
                     </p>
 
                     {/* 3つのセクションカード */}
-                    <div className="space-y-4 mt-6 pt-6 border-t border-[#1A1A1A]/10">
+                    <div className="space-y-4">
                     {sections.map((s) => (
                         <Link
                             key={s.href}
@@ -131,10 +119,14 @@ export default function LibraryIndex() {
                 </div>
 
                 {/* からだのしくみ */}
-                <div className="mt-12">
-                    <p className="text-xl md:text-2xl font-bold tracking-wide mb-4 text-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                        MECHANISM ／ からだのしくみ
-                    </p>
+                <div id="mechanism" className="mt-20 md:mt-24 scroll-mt-24">
+                    <div className="mb-5 flex items-stretch gap-3">
+                        <span className="w-1.5 rounded-full bg-[#41C9B4]" />
+                        <div className="py-0.5">
+                            <p className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>身体の仕組み</p>
+                            <p className="text-[10px] tracking-[0.2em] font-bold text-[#41C9B4]/60 mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>MECHANISM</p>
+                        </div>
+                    </div>
                     <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
                         栄養素や生活習慣がなぜ効くのか——その答えは、細胞の中で起きている仕組みにあります。エネルギー産生から、腸と脳のつながり、細胞の再生まで。
                     </p>
@@ -194,6 +186,50 @@ export default function LibraryIndex() {
                                 見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                             </span>
                         </Link>
+                        <Link href="/methylation"
+                            className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E6EFD9' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                METHYLATION
+                            </div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-2">メチレーション</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">遺伝子・栄養素・血液検査が交わるハブ。解毒・気分・血管の土台。</p>
+                            <span className="inline-flex items-center gap-1 text-sm font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
+                            </span>
+                        </Link>
+                        <Link href="/blood-sugar"
+                            className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#FBEFD2' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                BLOOD SUGAR
+                            </div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-2">血糖コントロール</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">食後の眠気・甘いもの渇望の正体「血糖の波」。整える食べ方。</p>
+                            <span className="inline-flex items-center gap-1 text-sm font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
+                            </span>
+                        </Link>
+                        <Link href="/autonomic-nervous-system"
+                            className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#DCE7F0' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                ANS &amp; HRV
+                            </div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-2">自律神経とHRV</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">アクセルとブレーキのバランス。Apple Watchで測れるHRV。</p>
+                            <span className="inline-flex items-center gap-1 text-sm font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
+                            </span>
+                        </Link>
+                        <Link href="/circadian-rhythm"
+                            className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E2E0F0' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                CIRCADIAN RHYTHM
+                            </div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-2">サーカディアンリズム</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">約24時間の体内時計。睡眠・ホルモン・代謝を束ねるリズム。</p>
+                            <span className="inline-flex items-center gap-1 text-sm font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
+                            </span>
+                        </Link>
                         <Link href="/gut-brain"
                             className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#DCEFE4' }}>
                             <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
@@ -220,10 +256,14 @@ export default function LibraryIndex() {
                 </div>
 
                 {/* 老化の2大ルート */}
-                <div className="mt-12">
-                    <p className="text-xl md:text-2xl font-bold tracking-wide mb-4 text-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                        AGING ／ 老化の3大ルート
-                    </p>
+                <div id="aging" className="mt-20 md:mt-24 scroll-mt-24">
+                    <div className="mb-5 flex items-stretch gap-3">
+                        <span className="w-1.5 rounded-full bg-[#41C9B4]" />
+                        <div className="py-0.5">
+                            <p className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>老化</p>
+                            <p className="text-[10px] tracking-[0.2em] font-bold text-[#41C9B4]/60 mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>AGING</p>
+                        </div>
+                    </div>
                     <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
                         体の老化は、大きく「さびる（酸化）」「こげる（糖化）」「くすぶる（慢性炎症）」の3つの道で進みます。どれも連動し、互いを加速させます。
                     </p>
@@ -265,10 +305,14 @@ export default function LibraryIndex() {
                 </div>
 
                 {/* ホルモン */}
-                <div className="mt-12">
-                    <p className="text-xl md:text-2xl font-bold tracking-wide mb-4 text-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                        HORMONES ／ ホルモン
-                    </p>
+                <div id="hormones" className="mt-20 md:mt-24 scroll-mt-24">
+                    <div className="mb-5 flex items-stretch gap-3">
+                        <span className="w-1.5 rounded-full bg-[#41C9B4]" />
+                        <div className="py-0.5">
+                            <p className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>ホルモン</p>
+                            <p className="text-[10px] tracking-[0.2em] font-bold text-[#41C9B4]/60 mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>HORMONES</p>
+                        </div>
+                    </div>
                     <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
                         体じゅうに指令を届ける化学メッセンジャー。40代以降の変化と、血液検査とのつながり。
                     </p>
@@ -285,8 +329,45 @@ export default function LibraryIndex() {
                     </Link>
                 </div>
 
+                {/* 生活習慣 */}
+                <div id="lifestyle" className="mt-20 md:mt-24 scroll-mt-24">
+                    <div className="mb-5 flex items-stretch gap-3">
+                        <span className="w-1.5 rounded-full bg-[#41C9B4]" />
+                        <div className="py-0.5">
+                            <p className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>生活習慣</p>
+                            <p className="text-[10px] tracking-[0.2em] font-bold text-[#41C9B4]/60 mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>LIFESTYLE</p>
+                        </div>
+                    </div>
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
+                        しくみを動かすのは、日々の習慣。もっとも効果が大きい「打ち手」をまとめました。
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <Link href="/sleep"
+                            className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#DCE3F0' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>SLEEP</div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-2">睡眠</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">修復・再生の最強の回復時間。すべての土台。</p>
+                            <span className="inline-flex items-center gap-1 text-sm font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                        </Link>
+                        <Link href="/exercise"
+                            className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E1EFDD' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>EXERCISE</div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-2">運動</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">ミトコンドリアを増やす唯一の確実な方法。</p>
+                            <span className="inline-flex items-center gap-1 text-sm font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                        </Link>
+                        <Link href="/detox"
+                            className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7EFD8' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>DETOX</div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-2">解毒</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">肝臓・腸・腎臓に備わる本来の解毒システム。</p>
+                            <span className="inline-flex items-center gap-1 text-sm font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                        </Link>
+                    </div>
+                </div>
+
                 {/* セルフチェックへの導線 */}
-                <div className="bg-white border border-black rounded-2xl p-6 md:p-8 text-center mt-12">
+                <div className="bg-white border border-black rounded-2xl p-6 md:p-8 text-center mt-20 md:mt-24">
                     <p className="text-xs tracking-widest font-bold mb-3 text-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         START HERE
                     </p>

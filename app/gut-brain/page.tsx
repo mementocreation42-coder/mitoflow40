@@ -44,7 +44,7 @@ export default function GutBrainPage() {
 
             <JsonLd data={medicalWebPage({ name: '脳腸相関とは', description: '腸と脳が双方向に影響し合う「脳腸相関」を、3つの経路・セロトニン・腸内環境から解説。', path: '/gut-brain' })} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '脳腸相関' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の仕組み', href: '/library#mechanism' }, { name: '脳腸相関' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         GUT-BRAIN AXIS
@@ -59,7 +59,7 @@ export default function GutBrainPage() {
                 </header>
 
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">脳腸相関とは</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">脳腸相関とは</h2>
                     <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
                         脳腸相関とは、腸と脳が双方向に影響を与え合う仕組みのことです。緊張するとお腹が痛くなる、腸の調子が悪いと気分が晴れない——こうした経験は、腸と脳が密につながっている証拠です。
                         {'\n\n'}
@@ -70,7 +70,7 @@ export default function GutBrainPage() {
                 </section>
 
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">腸と脳をつなぐ3つの経路</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">腸と脳をつなぐ3つの経路</h2>
                     <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
                         腸の情報は、おもに次の3つのルートで脳とやり取りされます。
                     </p>
@@ -89,7 +89,7 @@ export default function GutBrainPage() {
                 </section>
 
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">セロトニンと腸</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">セロトニンと腸</h2>
                     <p className="text-[#4A4A4A] leading-loose">
                         「幸せホルモン」として知られる<strong>セロトニン</strong>は、実はその約9割が腸で作られています。材料は必須アミノ酸の<Link href="/nutrients/tryptophan" className="underline decoration-[#FF9855] decoration-2 underline-offset-2 hover:text-[#FF9855]">トリプトファン</Link>で、腸内細菌の状態がその合成や前駆体の供給に影響します。
                         腸内環境が乱れると、気分の安定に関わるセロトニン系のバランスも崩れやすくなります。腸を整えることが、メンタルケアの土台になるのはこのためです。
@@ -97,7 +97,7 @@ export default function GutBrainPage() {
                 </section>
 
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">腸内環境を整えるには</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">腸内環境を整えるには</h2>
                     <ul className="space-y-2 text-[#4A4A4A]">
                         <li className="flex gap-3"><span className="text-[#41C9B4] flex-shrink-0">●</span><span><strong>食物繊維</strong>を多様に摂る（野菜・豆・海藻・全粒穀物）— 腸内細菌のエサになる</span></li>
                         <li className="flex gap-3"><span className="text-[#41C9B4] flex-shrink-0">●</span><span><strong>発酵食品</strong>を取り入れる（納豆・味噌・ヨーグルト・キムチ）</span></li>
@@ -108,7 +108,7 @@ export default function GutBrainPage() {
 
                 {/* 関連 */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">関わる栄養素・遺伝子</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">関わる栄養素・遺伝子</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {nutrients.map(({ slug, why, n }) => (
                             <Link key={slug} href={`/nutrients/${slug}`}
@@ -132,6 +132,9 @@ export default function GutBrainPage() {
                 </p>
 
                 <div className="text-center flex flex-wrap justify-center gap-3">
+                    <Link href="/library#mechanism" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
+                        身体の仕組み に戻る
+                    </Link>
                     <Link href="/library" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
                         ← Library に戻る
                     </Link>

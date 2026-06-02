@@ -59,7 +59,7 @@ export default function InflammationPage() {
 
             <JsonLd data={medicalWebPage({ name: '慢性炎症（くすぶる）とは', description: '老化を加速させる「慢性炎症」を、原因・影響・測り方・抑える習慣から解説。', path: '/inflammation' })} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '慢性炎症' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '老化', href: '/library#aging' }, { name: '慢性炎症' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         CHRONIC INFLAMMATION ／ くすぶる
@@ -74,7 +74,7 @@ export default function InflammationPage() {
                 </header>
 
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">慢性炎症とは</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">慢性炎症とは</h2>
                     <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
                         炎症は本来、ケガや感染から体を守る大切な防御反応です。傷が赤く腫れて治っていくような「急性炎症」は、役目を終えると自然に収まります。
                         {'\n\n'}
@@ -86,7 +86,7 @@ export default function InflammationPage() {
 
                 {/* 原因 */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">慢性炎症の原因</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">慢性炎症の原因</h2>
                     <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
                         生活習慣のあちこちに、くすぶりの火種があります。
                     </p>
@@ -102,7 +102,7 @@ export default function InflammationPage() {
 
                 {/* 影響 */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">慢性炎症が引き起こすこと</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">慢性炎症が引き起こすこと</h2>
                     <div className="bg-white/70 rounded-2xl p-6 border border-black mt-5">
                         <ul className="space-y-2">
                             {effects.map((e, i) => (
@@ -117,7 +117,7 @@ export default function InflammationPage() {
 
                 {/* 測る */}
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">炎症は「測れる」</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">炎症は「測れる」</h2>
                     <p className="text-[#4A4A4A] leading-loose mb-4">
                         慢性炎症のレベルは、血液検査で客観的に把握できます。代表的な指標がこちらです。
                     </p>
@@ -133,7 +133,7 @@ export default function InflammationPage() {
 
                 {/* 抑える */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">くすぶりを鎮める習慣</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">くすぶりを鎮める習慣</h2>
                     <div className="space-y-3 mt-5">
                         {supports.map((s, i) => (
                             <div key={s.head} className="flex items-start gap-4 bg-white/70 rounded-xl p-4 border border-[#1A1A1A]/15">
@@ -155,7 +155,7 @@ export default function InflammationPage() {
 
                 {/* 関連 */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">炎症を抑える栄養素</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">炎症を抑える栄養素</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {nutrients.map(({ slug, why, n }) => (
                             <Link key={slug} href={`/nutrients/${slug}`}
@@ -172,11 +172,8 @@ export default function InflammationPage() {
                 </p>
 
                 <div className="text-center flex flex-wrap justify-center gap-3">
-                    <Link href="/oxidative-stress" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
-                        さびる（酸化）
-                    </Link>
-                    <Link href="/glycation" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
-                        こげる（糖化）
+                    <Link href="/library#aging" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
+                        老化 に戻る
                     </Link>
                     <Link href="/library" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
                         ← Library に戻る

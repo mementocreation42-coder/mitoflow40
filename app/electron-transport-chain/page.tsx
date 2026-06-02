@@ -44,7 +44,7 @@ export default function EtcPage() {
 
             <JsonLd data={medicalWebPage({ name: '電子伝達系（ETC）とは', description: 'ATPの大半を生み出す最終工程「電子伝達系」を、仕組み・酸素と活性酸素・必要な栄養素から解説。', path: '/electron-transport-chain' })} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '電子伝達系' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の仕組み', href: '/library#mechanism' }, { name: '電子伝達系' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         ENERGY FINAL STEP
@@ -86,7 +86,7 @@ export default function EtcPage() {
 
                 {/* とは */}
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">電子伝達系とは</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">電子伝達系とは</h2>
                     <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
                         電子伝達系（ETC）は、ミトコンドリアの内膜にずらりと並んだタンパク質の「リレー」です。<Link href="/tca-cycle" className="underline decoration-[#FF9855] decoration-2 underline-offset-2 hover:text-[#FF9855]">TCA回路</Link>が作った電子の運び屋（NADH・FADH2）から電子を受け取り、複合体から複合体へとバケツリレーのように受け渡していきます。
                         {'\n\n'}
@@ -98,7 +98,7 @@ export default function EtcPage() {
 
                 {/* 流れ */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">電子のリレー（ざっくり）</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">電子のリレー（ざっくり）</h2>
                     <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
                         内膜に並ぶ複合体を、電子が順に通り抜けていきます。
                     </p>
@@ -124,7 +124,7 @@ export default function EtcPage() {
 
                 {/* 活性酸素との関係 */}
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">活性酸素が生まれる場所でもある</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">活性酸素が生まれる場所でもある</h2>
                     <p className="text-[#4A4A4A] leading-loose">
                         電子伝達系は強力なエネルギー工場であると同時に、電子の一部が漏れて<Link href="/oxidative-stress" className="underline decoration-[#FF9855] decoration-2 underline-offset-2 hover:text-[#FF9855]">活性酸素</Link>が生まれる場所でもあります。
                         ミトコンドリアの質が落ちると電子の漏れが増え、酸化ストレスが高まる——だからこそ、<Link href="/autophagy" className="underline decoration-[#FF9855] decoration-2 underline-offset-2 hover:text-[#FF9855]">質の良いミトコンドリアを保つこと</Link>と、抗酸化の備えが、エネルギーと若さの両方に効いてきます。
@@ -133,7 +133,7 @@ export default function EtcPage() {
 
                 {/* 栄養素 */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">電子伝達系を支える栄養素</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">電子伝達系を支える栄養素</h2>
                     <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
                         電子の運搬と酸素利用には、これらの栄養素が欠かせません。
                     </p>
@@ -153,11 +153,8 @@ export default function EtcPage() {
                 </p>
 
                 <div className="text-center flex flex-wrap justify-center gap-3">
-                    <Link href="/tca-cycle" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
-                        TCA回路を見る
-                    </Link>
-                    <Link href="/atp" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
-                        ATPを見る
+                    <Link href="/library#mechanism" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
+                        身体の仕組み に戻る
                     </Link>
                     <Link href="/library" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
                         ← Library に戻る

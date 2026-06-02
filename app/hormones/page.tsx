@@ -74,7 +74,7 @@ export default function HormonesPage() {
 
             <JsonLd data={medicalWebPage({ name: 'ホルモンの種類', description: '主なホルモンの種類を、役割・加齢との関係・対応する血液検査から解説。', path: '/hormones' })} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: 'ホルモン' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: 'ホルモン', href: '/library#hormones' }, { name: 'ホルモンの種類' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         HORMONES
@@ -89,7 +89,7 @@ export default function HormonesPage() {
                 </header>
 
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">ホルモンとは</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">ホルモンとは</h2>
                     <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
                         ホルモンは、体のさまざまな器官で作られ、血液に乗って全身へ「指令」を届ける化学物質です。ごく微量で強力に働き、代謝・成長・生殖・ストレス応答・睡眠・気分など、生命活動のほぼすべてを調整しています。
                         {'\n\n'}
@@ -136,7 +136,7 @@ export default function HormonesPage() {
 
                 {/* 整える */}
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">ホルモンを整える土台</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">ホルモンを整える土台</h2>
                     <ul className="space-y-2 text-[#4A4A4A]">
                         <li className="flex gap-3"><span className="text-[#41C9B4] flex-shrink-0">●</span><span><strong>睡眠</strong>：成長ホルモン・テストステロン・メラトニンの分泌に直結</span></li>
                         <li className="flex gap-3"><span className="text-[#41C9B4] flex-shrink-0">●</span><span><strong>運動（特に筋トレ）</strong>：テストステロン・成長ホルモンを刺激</span></li>
@@ -158,8 +158,8 @@ export default function HormonesPage() {
                 </p>
 
                 <div className="text-center flex flex-wrap justify-center gap-3">
-                    <Link href="/biomarkers" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
-                        血液検査を見る
+                    <Link href="/library#hormones" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
+                        ホルモン に戻る
                     </Link>
                     <Link href="/library" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
                         ← Library に戻る

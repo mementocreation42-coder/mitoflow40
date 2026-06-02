@@ -25,7 +25,7 @@ export default function GenesIndex() {
             <img loading="lazy" decoding="async" src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-80 hidden md:block"
                 style={{ bottom: '40px', right: '-40px', width: '240px', transform: 'rotate(-6deg)' }} />
             <div className="max-w-[1000px] mx-auto relative" style={{ zIndex: 1 }}>
-            <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '遺伝子' }]} />
+            <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の地図', href: '/library#map' }, { name: '遺伝子' }]} />
             <div className="text-center mb-12">
                 <h1 className="inline-block text-left font-bold mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                     <span className="block text-4xl md:text-5xl leading-none text-[#1A1A1A]">GENES</span>

@@ -47,7 +47,7 @@ export default async function BiomarkerPage({ params }: { params: Promise<{ slug
     return (
         <div className="pt-[60px] min-h-screen relative overflow-hidden" style={{ background: b.color }}>
             <JsonLd data={medicalWebPage({ name: `${b.name}（${b.en}）`, description: b.tagline, path: `/biomarkers/${slug}` })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '血液検査', path: '/biomarkers' }, { name: b.name, path: `/biomarkers/${slug}` }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '身体の地図', path: '/library#map' }, { name: '血液検査', path: '/biomarkers' }, { name: b.name, path: `/biomarkers/${slug}` }])} />
             {/* Decorative illustrations */}
             <img loading="lazy" decoding="async" src={b.illustration} alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
                 style={{ top: '90px', right: '-40px', width: '240px' }} />
@@ -56,7 +56,7 @@ export default async function BiomarkerPage({ params }: { params: Promise<{ slug
 
             <article className="max-w-[800px] mx-auto px-6 md:px-4 py-12 md:py-24 relative" style={{ zIndex: 1 }}>
                 <header className="mb-12">
-                    <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '血液検査', href: '/biomarkers' }, { name: b.name }]} />
+                    <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の地図', href: '/library#map' }, { name: '血液検査', href: '/biomarkers' }, { name: b.name }]} />
                     <div className="text-xs tracking-widest text-[#1A1A1A]/50 font-mono mb-4">
                         {b.category}
                     </div>
@@ -73,7 +73,7 @@ export default async function BiomarkerPage({ params }: { params: Promise<{ slug
 
                 {/* 何を測っているか・なぜ重要か */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 pb-2 border-b border-[#1A1A1A]/10">
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">
                         {b.name} とは
                     </h2>
                     <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">{b.role}</p>
@@ -81,7 +81,7 @@ export default async function BiomarkerPage({ params }: { params: Promise<{ slug
 
                 {/* 検査値の読み方 */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 pb-2 border-b border-[#1A1A1A]/10">
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">
                         {b.name} の検査値の読み方
                     </h2>
                     <div className="space-y-3">
@@ -107,7 +107,7 @@ export default async function BiomarkerPage({ params }: { params: Promise<{ slug
 
                 {/* 高い・低いとき */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 pb-2 border-b border-[#1A1A1A]/10">
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">
                         値が変化しているとき
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -129,7 +129,7 @@ export default async function BiomarkerPage({ params }: { params: Promise<{ slug
                 {/* 関連する栄養素 */}
                 {relatedNutrients.length > 0 && (
                     <section className="mb-10">
-                        <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 pb-2 border-b border-[#1A1A1A]/10">
+                        <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">
                             {b.name} と関わる栄養素
                         </h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -152,7 +152,7 @@ export default async function BiomarkerPage({ params }: { params: Promise<{ slug
                 {/* 関連する遺伝子 */}
                 {relatedGenes.length > 0 && (
                     <section className="mb-10">
-                        <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 pb-2 border-b border-[#1A1A1A]/10">
+                        <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">
                             {b.name} と関わる遺伝子
                         </h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -174,7 +174,7 @@ export default async function BiomarkerPage({ params }: { params: Promise<{ slug
 
                 {/* 観察・改善のヒント */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-6 pb-2 border-b border-[#1A1A1A]/10">
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-6 border-l-4 border-[#41C9B4] pl-3 leading-tight">
                         {b.name} の観察・改善ヒント
                     </h2>
                     <ul className="space-y-3">

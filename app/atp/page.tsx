@@ -51,7 +51,7 @@ export default function AtpPage() {
             <JsonLd data={medicalWebPage({ name: 'ATP（アデノシン三リン酸）とは', description: '体のエネルギー通貨「ATP」を、作られ方・使われ方・支える栄養素から解説。', path: '/atp' })} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
                 {/* Hero */}
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: 'ATP' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の仕組み', href: '/library#mechanism' }, { name: 'ATP' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         ENERGY CURRENCY
@@ -67,7 +67,7 @@ export default function AtpPage() {
 
                 {/* とは */}
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">ATPとは</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">ATPとは</h2>
                     <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
                         ATP（アデノシン三リン酸）は、体が使えるエネルギーを蓄えた分子で、しばしば「エネルギー通貨」と呼ばれます。3つ連なったリン酸のうち、末端の結合が切れて ADP（二リン酸）になるとき、エネルギーが放出されます。
                         {'\n\n'}
@@ -79,7 +79,7 @@ export default function AtpPage() {
 
                 {/* 産生ライン */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">ATPはどう作られるか</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">ATPはどう作られるか</h2>
                     <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
                         食べたものは3つの工程を経てATPになります。大半のATPは、ミトコンドリアの電子伝達系で作られます。
                     </p>
@@ -124,7 +124,7 @@ export default function AtpPage() {
 
                 {/* ATP⇄ADP */}
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">使う ⇄ 作り直す のサイクル</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">使う ⇄ 作り直す のサイクル</h2>
                     <p className="text-[#4A4A4A] leading-loose">
                         ATPはエネルギーを放出すると <strong>ADP（アデノシン二リン酸）</strong> に変わります。ADPは再びミトコンドリアでエネルギーを受け取り、ATPに戻ります。
                         この「ATP ⇄ ADP」の循環が、休みなく回り続けることで、私たちは常に動けるのです。クレアチンは、この再生を筋肉や脳で素早く助ける役割を担います。
@@ -133,7 +133,7 @@ export default function AtpPage() {
 
                 {/* 支える栄養素 */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">ATP産生を支える栄養素</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">ATP産生を支える栄養素</h2>
                     <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
                         ATPを作り続けるには、これらの栄養素が欠かせません。各栄養素のページで詳しく読めます。
                     </p>
@@ -160,8 +160,8 @@ export default function AtpPage() {
 
                 {/* Back links */}
                 <div className="text-center flex flex-wrap justify-center gap-3">
-                    <Link href="/tca-cycle" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
-                        TCA回路を見る
+                    <Link href="/library#mechanism" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
+                        身体の仕組み に戻る
                     </Link>
                     <Link href="/library" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
                         ← Library に戻る

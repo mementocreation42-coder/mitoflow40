@@ -54,7 +54,7 @@ export default function KetonesPage() {
             <JsonLd data={medicalWebPage({ name: 'ケトン体とは', description: '脂肪から作られる第二のエネルギー源「ケトン体」を、仕組み・役割・代謝の柔軟性から解説。', path: '/ketones' })} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
                 {/* Hero */}
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: 'ケトン体' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の仕組み', href: '/library#mechanism' }, { name: 'ケトン体' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         ALTERNATIVE FUEL
@@ -70,7 +70,7 @@ export default function KetonesPage() {
 
                 {/* とは */}
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">ケトン体とは</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">ケトン体とは</h2>
                     <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
                         ケトン体は、糖（ブドウ糖）が不足したときに、肝臓が脂肪から作り出す代替エネルギー源です。断食中や低糖質のとき、長時間の運動時などに増えます。
                         {'\n\n'}
@@ -82,7 +82,7 @@ export default function KetonesPage() {
 
                 {/* 作られる流れ */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">ケトン体ができる流れ</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">ケトン体ができる流れ</h2>
                     <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
                         糖が足りなくなると、体は燃料を脂肪へ切り替えます。その過程で肝臓がケトン体を作ります。
                     </p>
@@ -116,7 +116,7 @@ export default function KetonesPage() {
 
                 {/* 種類 */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">ケトン体の3つの種類</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">ケトン体の3つの種類</h2>
                     <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
                         「ケトン体」とは、次の3つの物質の総称です。
                     </p>
@@ -135,7 +135,7 @@ export default function KetonesPage() {
 
                 {/* 代謝の柔軟性 */}
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">「代謝の柔軟性」とのつながり</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">「代謝の柔軟性」とのつながり</h2>
                     <p className="text-[#4A4A4A] leading-loose">
                         糖と脂肪（ケトン体）を、状況に応じてスムーズに切り替えて使える能力を<strong>「代謝の柔軟性」</strong>と呼びます。
                         糖質に頼りきった生活では、この切り替えが鈍り、食事の間隔が空くだけで集中力が落ちたり、強い空腹に襲われたりします。
@@ -146,7 +146,7 @@ export default function KetonesPage() {
 
                 {/* 注意点 */}
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">知っておきたいこと</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">知っておきたいこと</h2>
                     <ul className="space-y-2 text-[#4A4A4A]">
                         <li className="flex gap-3"><span className="text-[#9B7FD4] flex-shrink-0">●</span><span>生理的なケトーシス（断食・低糖質）と、糖尿病でみられる危険な「ケトアシドーシス」は別物です。</span></li>
                         <li className="flex gap-3"><span className="text-[#9B7FD4] flex-shrink-0">●</span><span>切り替え初期は、だるさ・頭痛・こむら返り（いわゆるケトフルー）が出ることがあります。水分とミネラル補給が大切です。</span></li>
@@ -156,7 +156,7 @@ export default function KetonesPage() {
 
                 {/* 関わる栄養素 */}
                 <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">ケトン体に関わる栄養素</h2>
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">ケトン体に関わる栄養素</h2>
                     <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
                         脂肪を燃料に切り替えるとき、これらの栄養素が支えになります。
                     </p>
@@ -183,8 +183,8 @@ export default function KetonesPage() {
 
                 {/* Back links */}
                 <div className="text-center flex flex-wrap justify-center gap-3">
-                    <Link href="/tca-cycle" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
-                        TCA回路を見る
+                    <Link href="/library#mechanism" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
+                        身体の仕組み に戻る
                     </Link>
                     <Link href="/library" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
                         ← Library に戻る

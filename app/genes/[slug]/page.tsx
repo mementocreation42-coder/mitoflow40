@@ -36,7 +36,7 @@ export default async function GenePage({ params }: { params: Promise<{ slug: str
     return (
         <div className="pt-[60px] min-h-screen relative overflow-hidden" style={{ background: gene.color }}>
             <JsonLd data={medicalWebPage({ name: `${gene.symbol}（${gene.name}）`, description: gene.tagline, path: `/genes/${slug}` })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '遺伝子', path: '/genes' }, { name: gene.symbol, path: `/genes/${slug}` }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '身体の地図', path: '/library#map' }, { name: '遺伝子', path: '/genes' }, { name: gene.symbol, path: `/genes/${slug}` }])} />
             {/* Decorative illustrations */}
             <img loading="lazy" decoding="async" src={gene.illustration} alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
                 style={{ top: '90px', right: '-40px', width: '260px' }} />
@@ -44,7 +44,7 @@ export default async function GenePage({ params }: { params: Promise<{ slug: str
                 style={{ bottom: '-60px', left: '-70px', width: '320px', transform: 'scaleX(-1)' }} />
         <article className="max-w-[800px] mx-auto px-6 md:px-4 py-12 md:py-24 relative" style={{ zIndex: 1 }}>
             <header className="mb-12">
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '遺伝子', href: '/genes' }, { name: gene.symbol }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の地図', href: '/library#map' }, { name: '遺伝子', href: '/genes' }, { name: gene.symbol }]} />
                 <div className="text-xs tracking-widest text-[#1A1A1A]/50 font-mono mb-4">
                     {gene.category}
                 </div>
@@ -62,7 +62,7 @@ export default async function GenePage({ params }: { params: Promise<{ slug: str
 
             {/* 役割 */}
             <section className="mb-12">
-                <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 pb-2 border-b border-[#1A1A1A]/10">
+                <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">
                     {gene.symbol} の役割
                 </h2>
                 <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">{gene.role}</p>
@@ -70,7 +70,7 @@ export default async function GenePage({ params }: { params: Promise<{ slug: str
 
             {/* Dirtyだと出やすい症状 */}
             <section className="mb-12">
-                <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 pb-2 border-b border-[#1A1A1A]/10">
+                <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">
                     {gene.symbol} の働きが乱れると出やすい症状
                 </h2>
                 <ul className="space-y-2">
@@ -85,7 +85,7 @@ export default async function GenePage({ params }: { params: Promise<{ slug: str
 
             {/* クリーンに保つ戦略 */}
             <section className="mb-12">
-                <h2 className="text-2xl font-bold text-[#1A1A1A] mb-6 pb-2 border-b border-[#1A1A1A]/10">
+                <h2 className="text-2xl font-bold text-[#1A1A1A] mb-6 border-l-4 border-[#41C9B4] pl-3 leading-tight">
                     {gene.symbol} をクリーンに保つ戦略
                 </h2>
                 <div className="space-y-6">
@@ -100,7 +100,7 @@ export default async function GenePage({ params }: { params: Promise<{ slug: str
 
             {/* 関連する栄養素 */}
             <section className="mb-12">
-                <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 pb-2 border-b border-[#1A1A1A]/10">
+                <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">
                     {gene.symbol} に関連する栄養素
                 </h2>
                 <div className="flex flex-wrap gap-2">
@@ -114,7 +114,7 @@ export default async function GenePage({ params }: { params: Promise<{ slug: str
 
             {/* 関連する症状 */}
             <section className="mb-12">
-                <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 pb-2 border-b border-[#1A1A1A]/10">
+                <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">
                     {gene.symbol} に関連する症状
                 </h2>
                 <div className="flex flex-wrap gap-2">

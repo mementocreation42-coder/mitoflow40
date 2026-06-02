@@ -26,7 +26,7 @@ export default function BiomarkersIndex() {
                 style={{ bottom: '-80px', left: '-80px', width: '400px' }} />
 
             <div className="max-w-[1000px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '血液検査' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の地図', href: '/library#map' }, { name: '血液検査' }]} />
                 <div className="text-center mb-12">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#41C9B4' }}>
                         BLOOD TEST GUIDE

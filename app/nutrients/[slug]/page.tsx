@@ -45,7 +45,7 @@ export default async function NutrientPage({ params }: { params: Promise<{ slug:
     return (
         <div className="pt-[60px] min-h-screen relative overflow-hidden" style={{ background: n.color }}>
             <JsonLd data={medicalWebPage({ name: `${n.name}（${n.en}）`, description: n.tagline, path: `/nutrients/${slug}` })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '栄養素', path: '/nutrients' }, { name: n.name, path: `/nutrients/${slug}` }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '身体の地図', path: '/library#map' }, { name: '栄養素', path: '/nutrients' }, { name: n.name, path: `/nutrients/${slug}` }])} />
             {/* Decorative illustrations */}
             <img loading="lazy" decoding="async" src={n.illustration} alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
                 style={{ top: '90px', right: '-40px', width: '260px' }} />
@@ -53,7 +53,7 @@ export default async function NutrientPage({ params }: { params: Promise<{ slug:
                 style={{ bottom: '-60px', left: '-70px', width: '320px', transform: 'scaleX(-1)' }} />
             <article className="max-w-[800px] mx-auto px-6 md:px-4 py-12 md:py-24 relative" style={{ zIndex: 1 }}>
                 <header className="mb-12">
-                    <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '栄養素', href: '/nutrients' }, { name: n.name }]} />
+                    <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の地図', href: '/library#map' }, { name: '栄養素', href: '/nutrients' }, { name: n.name }]} />
                     <div className="text-xs tracking-widest text-[#1A1A1A]/50 font-mono mb-4">
                         {n.category}
                     </div>
@@ -68,7 +68,7 @@ export default async function NutrientPage({ params }: { params: Promise<{ slug:
 
                 {/* 主な働き */}
                 <section className="mb-12">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 pb-2 border-b border-[#1A1A1A]/10">
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">
                         {n.name} の主な働き
                     </h2>
                     <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">{n.role}</p>
@@ -76,7 +76,7 @@ export default async function NutrientPage({ params }: { params: Promise<{ slug:
 
                 {/* 不足のサイン */}
                 <section className="mb-12">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 pb-2 border-b border-[#1A1A1A]/10">
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">
                         {n.name} が不足すると出やすいサイン
                     </h2>
                     <ul className="space-y-2">
@@ -91,7 +91,7 @@ export default async function NutrientPage({ params }: { params: Promise<{ slug:
 
                 {/* 多く含む食品 */}
                 <section className="mb-12">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 pb-2 border-b border-[#1A1A1A]/10">
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">
                         {n.name} を多く含む食品
                     </h2>
                     <div className="flex flex-wrap gap-2">
@@ -106,7 +106,7 @@ export default async function NutrientPage({ params }: { params: Promise<{ slug:
                 {/* 関わる遺伝子（相互リンク） */}
                 {relatedGenes.length > 0 && (
                     <section className="mb-12">
-                        <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 pb-2 border-b border-[#1A1A1A]/10">
+                        <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">
                             {n.name} と関わる遺伝子
                         </h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -129,7 +129,7 @@ export default async function NutrientPage({ params }: { params: Promise<{ slug:
                 {/* 関連する栄養素・アミノ酸（相互リンク） */}
                 {relatedNutrients.length > 0 && (
                     <section className="mb-12">
-                        <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 pb-2 border-b border-[#1A1A1A]/10">
+                        <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">
                             {n.name} を構成するアミノ酸
                         </h2>
                         <p className="text-sm text-[#4A4A4A] leading-relaxed mb-4">
@@ -154,7 +154,7 @@ export default async function NutrientPage({ params }: { params: Promise<{ slug:
 
                 {/* 摂り方のヒント */}
                 <section className="mb-12">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-6 pb-2 border-b border-[#1A1A1A]/10">
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-6 border-l-4 border-[#41C9B4] pl-3 leading-tight">
                         {n.name} の摂り方のヒント
                     </h2>
                     <ul className="space-y-3">

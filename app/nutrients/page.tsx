@@ -23,7 +23,7 @@ export default function NutrientsIndex() {
             <img loading="lazy" decoding="async" src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-80"
                 style={{ bottom: '-70px', left: '-80px', width: '380px' }} />
             <div className="max-w-[1000px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '栄養素' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の地図', href: '/library#map' }, { name: '栄養素' }]} />
                 <div className="text-center mb-12">
                     <h1 className="inline-block text-left font-bold mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         <span className="block text-4xl md:text-5xl leading-none text-[#1A1A1A]">NUTRIENTS</span>
