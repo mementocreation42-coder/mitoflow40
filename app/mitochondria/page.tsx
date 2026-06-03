@@ -25,7 +25,7 @@ const structure = [
 
 // エネルギー産生の流れ
 const energyFlow = [
-    { stage: '解糖系', place: '細胞質', note: 'ブドウ糖を分解し、少量のATPとピルビン酸を生む' },
+    { stage: '解糖系', place: '細胞質', note: 'ブドウ糖を分解し、少量のATPとピルビン酸を生む', href: '/glycolysis' },
     { stage: 'TCA回路', place: 'マトリックス', note: '燃料を分解し、電子の運び屋(NADH・FADH2)を生む', href: '/tca-cycle' },
     { stage: '電子伝達系', place: '内膜', note: '酸素を使い、大量のATPを産生する最終工程' },
     { stage: 'ATP', place: '', note: '全身のエネルギー通貨として使われる', href: '/atp' },

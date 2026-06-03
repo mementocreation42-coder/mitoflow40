@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { nutrients, getNutrientBySlug } from '@/lib/nutrients';
 import { getGeneBySlug } from '@/lib/genes';
+import { getFoodsByNutrient } from '@/lib/foods';
 import JsonLd, { medicalWebPage, breadcrumb } from '@/components/JsonLd';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
@@ -41,6 +42,8 @@ export default async function NutrientPage({ params }: { params: Promise<{ slug:
     const relatedNutrients = (n.relatedNutrients ?? [])
         .map((s) => getNutrientBySlug(s))
         .filter((x): x is NonNullable<typeof x> => Boolean(x));
+
+    const relatedFoods = getFoodsByNutrient(n.slug);
 
     return (
         <div className="pt-[60px] min-h-screen relative overflow-hidden" style={{ background: n.color }}>
@@ -103,6 +106,31 @@ export default async function NutrientPage({ params }: { params: Promise<{ slug:
                         ))}
                     </div>
                 </section>
+
+                {/* この栄養素を多く含む食べ物（相互リンク） */}
+                {relatedFoods.length > 0 && (
+                    <section className="mb-12">
+                        <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">
+                            {n.name} を多く含む食べ物
+                        </h2>
+                        <p className="text-sm text-[#4A4A4A] leading-relaxed mb-4">
+                            各食材ページで、40代向けの食べ方や組み合わせのヒントまで読めます。
+                        </p>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            {relatedFoods.map((food) => (
+                                <Link
+                                    key={food.slug}
+                                    href={`/foods/${food.slug}`}
+                                    className="flex items-center gap-2 px-4 py-3 rounded-xl border border-[#1A1A1A]/20 hover:border-[#1A1A1A] hover:-translate-y-0.5 hover:shadow-sm transition-all bg-white/70"
+                                    style={{ background: food.color }}
+                                >
+                                    <span className="text-lg" aria-hidden>{food.emoji}</span>
+                                    <span className="text-sm font-bold text-[#1A1A1A] leading-snug">{food.name}</span>
+                                </Link>
+                            ))}
+                        </div>
+                    </section>
+                )}
 
                 {/* 関わる遺伝子（相互リンク） */}
                 {relatedGenes.length > 0 && (

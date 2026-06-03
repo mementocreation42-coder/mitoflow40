@@ -3,6 +3,8 @@ import { getAllPostsForSitemap } from '@/lib/wp';
 import { genes } from '@/lib/genes';
 import { nutrients } from '@/lib/nutrients';
 import { biomarkers } from '@/lib/biomarkers';
+import { foods } from '@/lib/foods';
+import { organs } from '@/lib/organs';
 
 const BASE_URL = 'https://mitoflow40.com';
 
@@ -36,6 +38,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: 'monthly' as const,
         priority: 0.6,
     }));
+    const foodUrls = foods.map((f) => ({
+        url: `${BASE_URL}/foods/${f.slug}`,
+        lastModified: now,
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+    }));
+    const organUrls = organs.map((o) => ({
+        url: `${BASE_URL}/organs/${o.slug}`,
+        lastModified: now,
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+    }));
 
     // 固定ページ（トップ・ハブ・コンセプト解説など）
     const staticPages: { path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency'] }[] = [
@@ -44,13 +58,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { path: '/check', priority: 0.9, changeFrequency: 'monthly' },
         { path: '/sample', priority: 0.7, changeFrequency: 'monthly' },
         { path: '/library', priority: 0.8, changeFrequency: 'weekly' },
+        { path: '/precision-nutrition', priority: 0.8, changeFrequency: 'monthly' },
+        { path: '/molecular-nutrition', priority: 0.8, changeFrequency: 'monthly' },
         // カタログ一覧
         { path: '/genes', priority: 0.7, changeFrequency: 'monthly' },
         { path: '/nutrients', priority: 0.7, changeFrequency: 'monthly' },
         { path: '/biomarkers', priority: 0.7, changeFrequency: 'monthly' },
+        { path: '/foods', priority: 0.7, changeFrequency: 'monthly' },
+        { path: '/organs', priority: 0.7, changeFrequency: 'monthly' },
         { path: '/hormones', priority: 0.7, changeFrequency: 'monthly' },
         // からだのしくみ
         { path: '/mitochondria', priority: 0.8, changeFrequency: 'monthly' },
+        { path: '/glycolysis', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/tca-cycle', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/electron-transport-chain', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/atp', priority: 0.6, changeFrequency: 'monthly' },
@@ -64,6 +83,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { path: '/sleep', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/exercise', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/detox', priority: 0.6, changeFrequency: 'monthly' },
+        { path: '/wearables', priority: 0.6, changeFrequency: 'monthly' },
         // 老化の3大ルート
         { path: '/oxidative-stress', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/glycation', priority: 0.6, changeFrequency: 'monthly' },
@@ -85,6 +105,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ...geneUrls,
         ...nutrientUrls,
         ...biomarkerUrls,
+        ...foodUrls,
+        ...organUrls,
         ...journalUrls,
     ];
 }
