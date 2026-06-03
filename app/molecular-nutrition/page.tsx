@@ -112,8 +112,10 @@ export default function MolecularNutritionPage() {
                     </div>
                     <div className="mt-5">
                         <Link href="/precision-nutrition"
-                            className="inline-flex items-center gap-1 text-sm font-bold text-[#1A1A1A] underline decoration-[#FF9855] decoration-2 underline-offset-2 hover:text-[#FF9855]">
-                            精密栄養学とは を読む →
+                            className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold hover:opacity-90 transition"
+                            style={{ background: '#FF9855', color: '#1A1A1A' }}>
+                            精密栄養学とは を読む
+                            <span>→</span>
                         </Link>
                     </div>
                 </section>

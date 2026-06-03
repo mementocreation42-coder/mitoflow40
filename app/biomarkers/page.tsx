@@ -25,7 +25,7 @@ export default function BiomarkersIndex() {
             <img loading="lazy" decoding="async" src="/images/24.png" alt="" className="absolute pointer-events-none"
                 style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
 
-            <div className="max-w-[1000px] mx-auto relative" style={{ zIndex: 1 }}>
+            <div className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
                 <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の地図', href: '/library#map' }, { name: '血液検査' }]} />
                 <div className="text-center mb-12">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#41C9B4' }}>

@@ -25,7 +25,7 @@ export default function FoodsIndex() {
                 style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
 
             <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '食べ物', path: '/foods' }])} />
-            <div className="max-w-[1000px] mx-auto relative" style={{ zIndex: 1 }}>
+            <div className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
                 <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '食べ物' }]} />
                 <div className="text-center mb-12">
                     <h1 className="inline-block text-left font-bold mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>

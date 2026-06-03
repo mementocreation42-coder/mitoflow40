@@ -23,13 +23,6 @@ const compare = [
     { axis: 'ゴール', old: '病気でない状態', molecular: '細胞が最適に働く状態', precision: '疲れにくく、活力ある状態' },
 ];
 
-// 3つの視点
-const lenses = [
-    { label: 'GENES', ja: '遺伝子', role: '設計図', href: '/genes', note: '生まれ持った体質。栄養の使い方やストレス耐性のクセを決める「設計図」。変えられないからこそ、知って付き合う。' },
-    { label: 'BIOMARKERS', ja: '血液検査', role: '現在地', href: '/biomarkers', note: '今の体の状態を数値で映す「現在地」。基準値だけでなく、精密栄養学の理想値から状態を読み解く。' },
-    { label: 'NUTRIENTS', ja: '栄養素', role: '材料', href: '/nutrients', note: '設計図と現在地の差を埋める「材料」。何が足りず、何で整えるかを、食べ物に落とし込む。' },
-];
-
 export default function PrecisionNutritionPage() {
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#CDEBE2' }}>
@@ -61,7 +54,7 @@ export default function PrecisionNutritionPage() {
                     <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
                         精密栄養学（プレシジョン・ニュートリション）とは、<strong>一人ひとりの体質・状態・生活に合わせて、最適な栄養を考える栄養学</strong>です。
                         {'\n\n'}
-                        この考え方は、<strong>アメリカの研究</strong>から本格的に広がりました。2015年に米国が掲げた「プレシジョン・メディシン（精密医療）構想」を皮切りに、米国国立衛生研究所（NIH）が大規模な栄養研究プログラムを進めるなど、「平均ではなく個人に合わせる」という潮流が栄養の分野にも広がっていったのです。
+                        この考え方は、<strong>アメリカの研究</strong>から本格的に広がりました。2015年に米国が掲げた「<a href="https://obamawhitehouse.archives.gov/the-press-office/2015/01/30/fact-sheet-president-obama-s-precision-medicine-initiative/" target="_blank" rel="noopener noreferrer" className="text-[#41C9B4] underline underline-offset-2 hover:opacity-70">プレシジョン・メディシン（精密医療）構想</a>」を皮切りに「平均ではなく個人に合わせる」という潮流が生まれ、2022年には米国国立衛生研究所（NIH）が5年間で1億7,000万ドルを投じる大規模な精密栄養研究プログラム「<a href="https://www.nih.gov/news-events/news-releases/nih-awards-170-million-precision-nutrition-study" target="_blank" rel="noopener noreferrer" className="text-[#41C9B4] underline underline-offset-2 hover:opacity-70">Nutrition for Precision Health</a>」を開始するなど、この考え方が栄養の分野にも広がっていったのです。
                         {'\n\n'}
                         同じものを食べても、エネルギーに変えやすい人とそうでない人がいます。同じビタミンでも、たくさん必要な人と少しで足りる人がいます。その違いを生むのが、生まれ持った<strong>遺伝子</strong>、今の体の<strong>状態</strong>、そして毎日の<strong>生活習慣</strong>です。
                         {'\n\n'}
@@ -136,30 +129,6 @@ export default function PrecisionNutritionPage() {
                     </p>
                 </section>
 
-                {/* 3つの視点 */}
-                <section className="mb-10">
-                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">3つの視点で自分を読み解く</h2>
-                    <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
-                        精密栄養学では、「設計図（遺伝子）」「現在地（血液検査）」「材料（栄養素）」の3つを行き来して、自分の体を立体的に理解します。
-                    </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        {lenses.map((l) => (
-                            <Link key={l.href} href={l.href}
-                                className="group block bg-white/70 rounded-2xl p-5 border border-black hover:shadow-lg hover:-translate-y-0.5 transition-all">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <span className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{l.label}</span>
-                                    <span className="text-xs px-2 py-0.5 rounded-full bg-[#41C9B4]/15 text-[#1A1A1A]/70 font-bold">{l.role}</span>
-                                </div>
-                                <div className="text-sm font-bold text-[#1A1A1A]/70 mb-2">{l.ja}</div>
-                                <p className="text-xs text-[#4A4A4A] leading-snug mb-3">{l.note}</p>
-                                <span className="inline-flex items-center gap-1 text-sm font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                    見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                                </span>
-                            </Link>
-                        ))}
-                    </div>
-                </section>
-
                 {/* 基準値と理想値 */}
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
                     <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">「基準値」と「理想値」はちがう</h2>
@@ -170,8 +139,10 @@ export default function PrecisionNutritionPage() {
                     </p>
                     <div className="mt-5">
                         <Link href="/biomarkers"
-                            className="inline-flex items-center gap-1 text-sm font-bold text-[#1A1A1A] underline decoration-[#FF9855] decoration-2 underline-offset-2 hover:text-[#FF9855]">
-                            血液検査50項目の理想値を見る →
+                            className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold hover:opacity-90 transition"
+                            style={{ background: '#FF9855', color: '#1A1A1A' }}>
+                            血液検査50項目の理想値を見る
+                            <span>→</span>
                         </Link>
                     </div>
                 </section>
@@ -260,6 +231,39 @@ export default function PrecisionNutritionPage() {
                         無料セルフチェックを試す →
                     </Link>
                 </div>
+
+                {/* 参照 */}
+                <section className="mb-10">
+                    <h2 className="text-lg font-bold text-[#1A1A1A] mb-3 border-l-4 border-[#41C9B4] pl-3 leading-tight">このページの参照</h2>
+                    <ul className="bg-white/70 rounded-2xl p-5 md:p-6 border border-black space-y-2 text-sm">
+                        <li>
+                            <a href="https://obamawhitehouse.archives.gov/the-press-office/2015/01/30/fact-sheet-president-obama-s-precision-medicine-initiative/" target="_blank" rel="noopener noreferrer"
+                                className="text-[#1A1A1A] underline decoration-[#FF9855] decoration-2 underline-offset-2 hover:text-[#FF9855]">
+                                FACT SHEET: President Obama’s Precision Medicine Initiative
+                            </a>
+                            <span className="text-[#1A1A1A]/50"> — The White House（2015）</span>
+                        </li>
+                        <li>
+                            <a href="https://www.nih.gov/news-events/news-releases/nih-awards-170-million-precision-nutrition-study" target="_blank" rel="noopener noreferrer"
+                                className="text-[#1A1A1A] underline decoration-[#FF9855] decoration-2 underline-offset-2 hover:text-[#FF9855]">
+                                NIH awards $170 million for precision nutrition study
+                            </a>
+                            <span className="text-[#1A1A1A]/50"> — NIH（2022）</span>
+                        </li>
+                        <li>
+                            <a href="https://www.cell.com/fulltext/S0092-8674(15)01481-6" target="_blank" rel="noopener noreferrer"
+                                className="text-[#1A1A1A] underline decoration-[#FF9855] decoration-2 underline-offset-2 hover:text-[#FF9855]">
+                                Personalized Nutrition by Prediction of Glycemic Responses
+                            </a>
+                            <span className="text-[#1A1A1A]/50"> — Zeevi et al., Cell（2015）</span>
+                        </li>
+                    </ul>
+                    <p className="text-xs text-[#4A4A4A]/70 mt-2">
+                        全テーマの出典は{' '}
+                        <Link href="/references" className="underline decoration-[#41C9B4] decoration-2 underline-offset-2 font-bold hover:text-[#41C9B4]">参照文献・出典ページ</Link>
+                        {' '}にまとめています。
+                    </p>
+                </section>
 
                 <div className="text-center">
                     <Link href="/library" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">
