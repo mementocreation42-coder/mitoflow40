@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getNutrientBySlug } from '@/lib/nutrients';
-import JsonLd, { medicalWebPage } from '@/components/JsonLd';
+import JsonLd, { medicalWebPage, breadcrumb } from '@/components/JsonLd';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
@@ -42,12 +42,13 @@ export default function GlycationPage() {
 
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#F6E6CF' }}>
-            <img loading="lazy" decoding="async" src="/images/for-you-wellness.png" alt="" className="absolute pointer-events-none opacity-80 hidden md:block"
-                style={{ top: '60px', right: '-50px', width: '260px' }} />
-            <img loading="lazy" decoding="async" src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-40"
-                style={{ bottom: '-60px', left: '-70px', width: '320px', transform: 'scaleX(-1)' }} />
+            <img loading="lazy" decoding="async" src="/images/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
+                style={{ top: '0', right: '-40px', width: '260px', transform: 'scaleY(-1)' }} />
+            <img loading="lazy" decoding="async" src="/images/24.png" alt="" className="absolute pointer-events-none"
+                style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '糖化・AGEs（こげる）とは', description: '体がこげる原因「糖化」とAGEsを、仕組み・血糖との関係・防ぐ習慣から解説。', path: '/glycation' })} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '老化', path: '/library#aging' }, { name: '糖化', path: '/glycation' }])} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
                 <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '老化', href: '/library#aging' }, { name: '糖化' }]} />
                 <header className="mb-12 text-center">

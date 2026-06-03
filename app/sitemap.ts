@@ -69,6 +69,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { path: '/glycation', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/inflammation', priority: 0.6, changeFrequency: 'monthly' },
         // その他
+        { path: '/author', priority: 0.5, changeFrequency: 'yearly' },
         { path: '/newsletter', priority: 0.5, changeFrequency: 'monthly' },
     ];
 

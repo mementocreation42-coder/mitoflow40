@@ -89,7 +89,17 @@ export default function RootLayout({
               name: "Mitoflow40",
               url: "https://mitoflow40.com",
               logo: "https://mitoflow40.com/opengraph-image.png",
-              founder: { "@type": "Person", name: "小林大介" },
+              founder: { "@type": "Person", "@id": "https://mitoflow40.com/#author" },
+            },
+            {
+              "@type": "Person",
+              "@id": "https://mitoflow40.com/#author",
+              name: "小林大介",
+              alternateName: "Daisuke Kobayashi",
+              url: "https://mitoflow40.com/author",
+              image: "https://mitoflow40.com/images/profile.jpg",
+              jobTitle: "パーソナルヘルスケア実践者 / 精密栄養学",
+              sameAs: ["https://www.shinealight.jp/universe"],
             },
             {
               "@type": "WebSite",

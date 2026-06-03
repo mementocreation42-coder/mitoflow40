@@ -38,10 +38,11 @@ export default async function GenePage({ params }: { params: Promise<{ slug: str
             <JsonLd data={medicalWebPage({ name: `${gene.symbol}（${gene.name}）`, description: gene.tagline, path: `/genes/${slug}` })} />
             <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '身体の地図', path: '/library#map' }, { name: '遺伝子', path: '/genes' }, { name: gene.symbol, path: `/genes/${slug}` }])} />
             {/* Decorative illustrations */}
-            <img loading="lazy" decoding="async" src={gene.illustration} alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
-                style={{ top: '90px', right: '-40px', width: '260px' }} />
-            <img loading="lazy" decoding="async" src={gene.illustration} alt="" className="absolute pointer-events-none opacity-40"
-                style={{ bottom: '-60px', left: '-70px', width: '320px', transform: 'scaleX(-1)' }} />
+            <img loading="lazy" decoding="async" src="/images/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
+                style={{ top: '0', right: '-40px', width: '260px', transform: 'scaleY(-1)' }} />
+            <img loading="lazy" decoding="async" src="/images/24.png" alt="" className="absolute pointer-events-none"
+                style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
+            
         <article className="max-w-[800px] mx-auto px-6 md:px-4 py-12 md:py-24 relative" style={{ zIndex: 1 }}>
             <header className="mb-12">
                 <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の地図', href: '/library#map' }, { name: '遺伝子', href: '/genes' }, { name: gene.symbol }]} />
@@ -122,6 +123,24 @@ export default async function GenePage({ params }: { params: Promise<{ slug: str
                         <span key={s} className="px-3 py-1.5 bg-white border border-[#1A1A1A]/15 rounded-full text-sm text-[#4A4A4A]">
                             {s}
                         </span>
+                    ))}
+                </div>
+            </section>
+
+            {/* もっと学ぶ（しくみ・生活習慣への導線） */}
+            <section className="mb-12">
+                <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">もっと学ぶ</h2>
+                <p className="text-sm text-[#4A4A4A] mb-4 leading-relaxed">遺伝子が関わる「しくみ」や、整えるための「習慣」もあわせてどうぞ。</p>
+                <div className="flex flex-wrap gap-2">
+                    {[
+                        { href: '/methylation', label: 'メチレーション' },
+                        { href: '/mitochondria', label: 'ミトコンドリア' },
+                        { href: '/nutrients', label: '栄養素' },
+                        { href: '/biomarkers', label: '血液検査' },
+                    ].map((l) => (
+                        <Link key={l.href} href={l.href} className="px-4 py-2 rounded-full bg-white border border-[#1A1A1A] text-sm font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white transition-colors">
+                            {l.label} →
+                        </Link>
                     ))}
                 </div>
             </section>

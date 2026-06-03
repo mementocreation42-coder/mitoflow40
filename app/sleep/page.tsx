@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getNutrientBySlug } from '@/lib/nutrients';
-import JsonLd, { medicalWebPage } from '@/components/JsonLd';
+import JsonLd, { medicalWebPage, breadcrumb } from '@/components/JsonLd';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
@@ -47,12 +47,13 @@ export default function SleepPage() {
 
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#DCE3F0' }}>
-            <img loading="lazy" decoding="async" src="/images/for-you-recovery.png" alt="" className="absolute pointer-events-none opacity-80 hidden md:block"
-                style={{ top: '60px', right: '-50px', width: '260px' }} />
-            <img loading="lazy" decoding="async" src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-40"
-                style={{ bottom: '-60px', left: '-70px', width: '320px', transform: 'scaleX(-1)' }} />
+            <img loading="lazy" decoding="async" src="/images/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
+                style={{ top: '0', right: '-40px', width: '260px', transform: 'scaleY(-1)' }} />
+            <img loading="lazy" decoding="async" src="/images/24.png" alt="" className="absolute pointer-events-none"
+                style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '睡眠とは', description: '修復・再生の時間「睡眠」を、深い睡眠とレム・脳の洗浄・ホルモン・質を上げる習慣から解説。', path: '/sleep' })} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '生活習慣', path: '/library#lifestyle' }, { name: '睡眠', path: '/sleep' }])} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
                 <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '生活習慣', href: '/library#lifestyle' }, { name: '睡眠' }]} />
                 <header className="mb-12 text-center">

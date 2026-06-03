@@ -48,5 +48,15 @@ export function medicalWebPage(opts: {
             name: 'Mitoflow40',
             url: BASE_URL,
         },
+        author: {
+            '@type': 'Person',
+            name: '小林大介',
+            url: `${BASE_URL}/author`,
+        },
+        reviewedBy: {
+            '@type': 'Person',
+            name: '小林大介',
+            url: `${BASE_URL}/author`,
+        },
     };
 }

@@ -18,10 +18,11 @@ export default function NutrientsIndex() {
     return (
         <div className="relative overflow-hidden pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen" style={{ background: '#FFF1DF' }}>
             {/* Decorative illustrations */}
-            <img loading="lazy" decoding="async" src="/images/for-you-wellness.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
-                style={{ top: '70px', right: '-50px', width: '300px' }} />
-            <img loading="lazy" decoding="async" src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-80"
-                style={{ bottom: '-70px', left: '-80px', width: '380px' }} />
+            <img loading="lazy" decoding="async" src="/images/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
+                style={{ top: '0', right: '-40px', width: '260px', transform: 'scaleY(-1)' }} />
+            <img loading="lazy" decoding="async" src="/images/24.png" alt="" className="absolute pointer-events-none"
+                style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
+            
             <div className="max-w-[1000px] mx-auto relative" style={{ zIndex: 1 }}>
                 <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の地図', href: '/library#map' }, { name: '栄養素' }]} />
                 <div className="text-center mb-12">

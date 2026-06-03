@@ -192,6 +192,23 @@ export default async function JournalPost({ params }: { params: Promise<{ id: st
             {/* Newsletter */}
             <JournalNewsletter />
 
+            {/* Library への誘導 */}
+            <div className="mt-12 pt-12 border-t border-gray-200">
+                <div className="rounded-2xl border border-black p-6 md:p-8" style={{ background: '#ECE6F3' }}>
+                    <p className="text-[10px] font-bold tracking-[0.2em] mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#41C9B4' }}>KNOWLEDGE LIBRARY</p>
+                    <h2 className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-2">体のしくみから学ぶ</h2>
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-4">
+                        遺伝子・血液検査・栄養素、そしてエネルギー産生や老化のしくみまで。自分の体を読み解く知識ライブラリです。
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                        <Link href="/library" className="px-4 py-2 rounded-full bg-[#1A1A1A] text-white text-sm font-bold hover:opacity-90 transition" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>Library を見る →</Link>
+                        <Link href="/genes" className="px-4 py-2 rounded-full bg-white border border-black text-sm font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white transition-colors">遺伝子</Link>
+                        <Link href="/nutrients" className="px-4 py-2 rounded-full bg-white border border-black text-sm font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white transition-colors">栄養素</Link>
+                        <Link href="/biomarkers" className="px-4 py-2 rounded-full bg-white border border-black text-sm font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white transition-colors">血液検査</Link>
+                    </div>
+                </div>
+            </div>
+
             {/* Related Articles */}
             <div className="pt-12 border-t border-gray-200">
                 <h2 className="text-2xl font-bold text-center mb-12" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>

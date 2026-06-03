@@ -38,6 +38,7 @@ export default function Footer() {
                 {/* Legal */}
                 <nav className="mb-6">
                     <ul className="flex flex-wrap justify-center gap-3 md:gap-6 text-xs opacity-70">
+                        <li><Link href="/author" className="footer-link">著者・監修</Link></li>
                         <li><Link href="/terms" className="footer-link">利用規約</Link></li>
                         <li><Link href="/privacy" className="footer-link">プライバシーポリシー</Link></li>
                         <li><Link href="/legal" className="footer-link">特定商取引法に基づく表記</Link></li>

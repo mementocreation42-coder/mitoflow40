@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getNutrientBySlug } from '@/lib/nutrients';
 import { getGeneBySlug } from '@/lib/genes';
-import JsonLd, { medicalWebPage } from '@/components/JsonLd';
+import JsonLd, { medicalWebPage, breadcrumb } from '@/components/JsonLd';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
@@ -49,12 +49,13 @@ export default function DetoxPage() {
 
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#E7EFD8' }}>
-            <img loading="lazy" decoding="async" src="/images/for-you-science.png" alt="" className="absolute pointer-events-none opacity-80 hidden md:block"
-                style={{ top: '60px', right: '-50px', width: '260px' }} />
-            <img loading="lazy" decoding="async" src="/images/about-illustration-bg.png" alt="" className="absolute pointer-events-none opacity-40"
-                style={{ bottom: '-70px', left: '-80px', width: '340px' }} />
+            <img loading="lazy" decoding="async" src="/images/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
+                style={{ top: '0', right: '-40px', width: '260px', transform: 'scaleY(-1)' }} />
+            <img loading="lazy" decoding="async" src="/images/24.png" alt="" className="absolute pointer-events-none"
+                style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '解毒（デトックス）とは', description: '体に備わった解毒システムを、肝臓・腸・腎臓の仕組みと、支える栄養素・遺伝子から解説。', path: '/detox' })} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '生活習慣', path: '/library#lifestyle' }, { name: '解毒', path: '/detox' }])} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
                 <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '生活習慣', href: '/library#lifestyle' }, { name: '解毒' }]} />
                 <header className="mb-12 text-center">

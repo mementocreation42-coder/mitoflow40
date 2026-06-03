@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getNutrientBySlug } from '@/lib/nutrients';
 import { getGeneBySlug } from '@/lib/genes';
-import JsonLd, { medicalWebPage } from '@/components/JsonLd';
+import JsonLd, { medicalWebPage, breadcrumb } from '@/components/JsonLd';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
@@ -37,12 +37,13 @@ export default function GutBrainPage() {
 
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#DCEFE4' }}>
-            <img loading="lazy" decoding="async" src="/images/for-you-wellness.png" alt="" className="absolute pointer-events-none opacity-80 hidden md:block"
-                style={{ top: '60px', right: '-50px', width: '260px' }} />
-            <img loading="lazy" decoding="async" src="/images/about-illustration-bg.png" alt="" className="absolute pointer-events-none opacity-40"
-                style={{ bottom: '-70px', left: '-80px', width: '340px' }} />
+            <img loading="lazy" decoding="async" src="/images/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
+                style={{ top: '0', right: '-40px', width: '260px', transform: 'scaleY(-1)' }} />
+            <img loading="lazy" decoding="async" src="/images/24.png" alt="" className="absolute pointer-events-none"
+                style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '脳腸相関とは', description: '腸と脳が双方向に影響し合う「脳腸相関」を、3つの経路・セロトニン・腸内環境から解説。', path: '/gut-brain' })} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '身体の仕組み', path: '/library#mechanism' }, { name: '脳腸相関', path: '/gut-brain' }])} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
                 <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の仕組み', href: '/library#mechanism' }, { name: '脳腸相関' }]} />
                 <header className="mb-12 text-center">

@@ -24,7 +24,7 @@ const sections = [
         count: genes.length,
         unit: '遺伝子',
         color: '#DCF1EA',
-        illustration: '/images/for-you-science.png',
+        illustration: '/images/about-illustration-bg.png',
         description: '生まれ持った体質の「設計図」。MTHFRやCOMTなど、栄養の使い方やストレス耐性を左右する主要遺伝子を解説します。',
     },
     {
@@ -35,7 +35,7 @@ const sections = [
         count: biomarkers.length,
         unit: '項目',
         color: '#DEEDF7',
-        illustration: '/images/experience_vitality_new.png',
+        illustration: '/images/24.png',
         description: '今の体の「現在地」。血液検査50項目を精密栄養学の視点で読み解き、基準値だけでなく理想値から状態を捉えます。',
     },
     {
@@ -46,7 +46,7 @@ const sections = [
         count: nutrients.length,
         unit: '栄養素',
         color: '#FCE3D4',
-        illustration: '/images/for-you-wellness.png',
+        illustration: '/images/2.png',
         description: '体をつくり、整える「材料」。タンパク質・ビタミン・ミネラルなど、体を支えるための栄養素を働き・食品・摂り方から解説します。',
     },
 ];
@@ -55,10 +55,10 @@ export default function LibraryIndex() {
     return (
         <div className="relative overflow-hidden pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen" style={{ background: '#ECE6F3' }}>
             {/* Decorative illustrations */}
-            <img loading="lazy" decoding="async" src="/images/about-illustration-bg.png" alt="" className="absolute pointer-events-none opacity-70"
-                style={{ top: '40px', right: '-90px', width: '380px' }} />
-            <img loading="lazy" decoding="async" src="/images/experience_vitality_new.png" alt="" className="absolute pointer-events-none opacity-70 hidden md:block"
-                style={{ bottom: '-50px', left: '-60px', width: '260px', transform: 'rotate(-6deg)' }} />
+            <img loading="lazy" decoding="async" src="/images/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
+                style={{ top: '0', right: '-40px', width: '260px', transform: 'scaleY(-1)' }} />
+            <img loading="lazy" decoding="async" src="/images/24.png" alt="" className="absolute pointer-events-none"
+                style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
 
             <div className="max-w-[920px] mx-auto relative" style={{ zIndex: 1 }}>
                 {/* Hero */}
@@ -131,15 +131,18 @@ export default function LibraryIndex() {
                         栄養素や生活習慣がなぜ効くのか——その答えは、細胞の中で起きている仕組みにあります。エネルギー産生から、腸と脳のつながり、細胞の再生まで。
                     </p>
                     <Link href="/mitochondria"
-                        className="group block rounded-2xl border border-black p-6 mb-4 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#CFEAEC' }}>
-                        <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                            START HERE ／ THE POWERHOUSE
+                        className="group relative block overflow-hidden rounded-2xl border border-black p-6 mb-4 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#CFEAEC' }}>
+                        <img loading="lazy" decoding="async" src="/images/for-you-illustration-bl.png" alt="" className="pointer-events-none absolute bottom-0 right-0 w-[140px] md:w-[180px] opacity-90 group-hover:scale-105 transition-transform hidden sm:block" />
+                        <div className="relative" style={{ zIndex: 1 }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                START HERE ／ THE POWERHOUSE
+                            </div>
+                            <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-2">ミトコンドリアとは</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3 sm:max-w-[70%]">すべての出発点。細胞のエネルギー工場とは何か、なぜ40代で重要か、どう元気に保つか。</p>
+                            <span className="inline-flex items-center gap-1 text-sm font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
+                            </span>
                         </div>
-                        <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-2">ミトコンドリアとは</div>
-                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">すべての出発点。細胞のエネルギー工場とは何か、なぜ40代で重要か、どう元気に保つか。</p>
-                        <span className="inline-flex items-center gap-1 text-sm font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                            見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                        </span>
                     </Link>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <Link href="/tca-cycle"
