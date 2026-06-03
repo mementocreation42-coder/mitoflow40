@@ -6,7 +6,7 @@ import { useState } from 'react';
 const navItems = [
     { href: '/check', label: 'FREE CHECK', ja: '無料チェック' },
     { href: '/sample', label: 'SAMPLE ANALYSIS', ja: '解析サンプル' },
-    { href: '/library', label: 'LIBRARY', ja: '知識ライブラリ' },
+    { href: '/library', label: 'LIBRARY', ja: 'ライブラリ' },
     { href: '/journal', label: 'JOURNAL', ja: 'ジャーナル' },
     { href: '/#contact', label: 'CONTACT', ja: 'お問い合わせ' },
 ];

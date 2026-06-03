@@ -5,6 +5,8 @@ import { nutrients } from '@/lib/nutrients';
 import { biomarkers } from '@/lib/biomarkers';
 import { foods } from '@/lib/foods';
 import { organs } from '@/lib/organs';
+import { hormones } from '@/lib/hormones';
+import { symptoms } from '@/lib/symptoms';
 
 const BASE_URL = 'https://mitoflow40.com';
 
@@ -50,6 +52,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: 'monthly' as const,
         priority: 0.6,
     }));
+    const hormoneUrls = hormones.map((h) => ({
+        url: `${BASE_URL}/hormones/${h.slug}`,
+        lastModified: now,
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+    }));
+    const symptomUrls = symptoms.map((s) => ({
+        url: `${BASE_URL}/symptoms/${s.slug}`,
+        lastModified: now,
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+    }));
 
     // 固定ページ（トップ・ハブ・コンセプト解説など）
     const staticPages: { path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency'] }[] = [
@@ -67,6 +81,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { path: '/foods', priority: 0.7, changeFrequency: 'monthly' },
         { path: '/organs', priority: 0.7, changeFrequency: 'monthly' },
         { path: '/hormones', priority: 0.7, changeFrequency: 'monthly' },
+        { path: '/symptoms', priority: 0.8, changeFrequency: 'monthly' },
+        { path: '/supplements', priority: 0.7, changeFrequency: 'monthly' },
         // からだのしくみ
         { path: '/mitochondria', priority: 0.8, changeFrequency: 'monthly' },
         { path: '/glycolysis', priority: 0.6, changeFrequency: 'monthly' },
@@ -107,6 +123,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ...biomarkerUrls,
         ...foodUrls,
         ...organUrls,
+        ...hormoneUrls,
+        ...symptomUrls,
         ...journalUrls,
     ];
 }

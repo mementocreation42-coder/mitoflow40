@@ -1,59 +1,22 @@
 import Link from 'next/link';
 import { getNutrientBySlug } from '@/lib/nutrients';
+import { getHormonesByCategory } from '@/lib/hormones';
 import JsonLd, { medicalWebPage, breadcrumb } from '@/components/JsonLd';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
     title: 'ホルモンの種類 | Mitoflow40',
-    description: '体を調整する化学メッセンジャー「ホルモン」の主な種類を、役割・加齢との関係・対応する血液検査項目とともにわかりやすく解説。',
+    description: 'テストステロン・エストロゲン・コルチゾール・インスリン・甲状腺ホルモンなど、体を調整する化学メッセンジャー「ホルモン」を、役割・加齢との関係・対応する血液検査とともに個別ページでわかりやすく解説。',
     alternates: { canonical: 'https://mitoflow40.com/hormones' },
     openGraph: {
         title: 'ホルモンの種類 | Mitoflow40',
-        description: '主なホルモンの種類を、役割・加齢との関係・対応する血液検査から解説。',
+        description: '主なホルモンを、役割・加齢との関係・対応する血液検査から個別に解説。',
         url: 'https://mitoflow40.com/hormones',
         type: 'article',
     },
 };
 
-type H = { name: string; en: string; role: string; biomarker?: string };
-const groups: { category: string; color: string; items: H[] }[] = [
-    {
-        category: '性ホルモン', color: '#FCE3D4',
-        items: [
-            { name: 'テストステロン', en: 'TESTOSTERONE', role: '筋肉・意欲・性欲・骨を支える。男女ともに重要で、加齢で低下', biomarker: 'total-testosterone' },
-            { name: '遊離テストステロン', en: 'FREE T', role: '実際に細胞で使える有効分。SHBGとのバランスで効きが変わる', biomarker: 'free-testosterone' },
-            { name: 'エストラジオール', en: 'ESTRADIOL', role: '最も強力なエストロゲン。骨・血管・脳・気分を守る', biomarker: 'estradiol' },
-            { name: 'DHEA-S', en: 'DHEA-S', role: '副腎が作る性ホルモンの前駆体。活力の土台、加齢で急減', biomarker: 'dhea-s' },
-        ],
-    },
-    {
-        category: 'ストレス・副腎', color: '#F6DCD0',
-        items: [
-            { name: 'コルチゾール', en: 'CORTISOL', role: 'ストレス時に血糖を上げる。朝高く夜低い日内リズムが大切', biomarker: 'cortisol' },
-        ],
-    },
-    {
-        category: '代謝・成長', color: '#FBF0CE',
-        items: [
-            { name: '成長ホルモン / IGF-1', en: 'GH / IGF-1', role: '筋肉・骨の成長と修復、脂肪分解。睡眠と運動で分泌', biomarker: 'igf1' },
-            { name: 'インスリン', en: 'INSULIN', role: '血糖を下げる。過剰が続くとインスリン抵抗性・代謝の乱れに', biomarker: 'fasting-insulin' },
-        ],
-    },
-    {
-        category: '甲状腺', color: '#DCF1EA',
-        items: [
-            { name: 'TSH（甲状腺刺激ホルモン）', en: 'TSH', role: '甲状腺に指示を出す司令ホルモン。代謝の調整役', biomarker: 'tsh' },
-            { name: 'FT3 / FT4（甲状腺ホルモン）', en: 'FT3 / FT4', role: '代謝・体温・エネルギーを駆動する活性ホルモン', biomarker: 'ft3' },
-        ],
-    },
-    {
-        category: '睡眠・気分', color: '#E6E0F2',
-        items: [
-            { name: 'メラトニン', en: 'MELATONIN', role: '睡眠を促すホルモン。夜に分泌され、体内時計を整える' },
-            { name: 'セロトニン', en: 'SEROTONIN', role: '気分の安定に関わる。約9割が腸で作られる' },
-        ],
-    },
-];
+const grouped = getHormonesByCategory();
 
 const relNutrients = [
     { slug: 'zinc', why: 'テストステロンなどホルモン産生に必須' },
@@ -73,9 +36,9 @@ export default function HormonesPage() {
                 style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: 'ホルモンの種類', description: '主なホルモンの種類を、役割・加齢との関係・対応する血液検査から解説。', path: '/hormones' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: 'ホルモン', path: '/library#hormones' }, { name: 'ホルモンの種類', path: '/hormones' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: 'ホルモン', path: '/hormones' }])} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: 'ホルモン', href: '/library#hormones' }, { name: 'ホルモンの種類' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: 'ホルモン' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         HORMONES
@@ -98,39 +61,26 @@ export default function HormonesPage() {
                     </p>
                 </section>
 
-                {/* 種類 */}
-                {groups.map((g) => (
+                {/* 種類（個別ページへ） */}
+                {grouped.map((g) => (
                     <div key={g.category} className="mb-8">
                         <h2 className="text-sm font-bold tracking-widest mb-3 px-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                             {g.category}
                         </h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            {g.items.map((h) => {
-                                const inner = (
-                                    <>
-                                        <div className="flex items-baseline gap-2 mb-1 flex-wrap">
-                                            <span className="font-bold text-[#1A1A1A]">{h.name}</span>
-                                            <span className="text-[10px] text-[#1A1A1A]/40 font-mono">{h.en}</span>
-                                        </div>
-                                        <p className="text-xs text-[#4A4A4A] leading-snug">{h.role}</p>
-                                        {h.biomarker && (
-                                            <span className="inline-flex items-center gap-1 text-xs font-bold text-[#1A1A1A] mt-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                                血液検査を見る →
-                                            </span>
-                                        )}
-                                    </>
-                                );
-                                return h.biomarker ? (
-                                    <Link key={h.en} href={`/biomarkers/${h.biomarker}`}
-                                        className="block rounded-xl p-5 border border-black hover:shadow-md hover:-translate-y-0.5 transition-all" style={{ background: g.color }}>
-                                        {inner}
-                                    </Link>
-                                ) : (
-                                    <div key={h.en} className="rounded-xl p-5 border border-black" style={{ background: g.color }}>
-                                        {inner}
+                            {g.items.map((h) => (
+                                <Link key={h.slug} href={`/hormones/${h.slug}`}
+                                    className="group block rounded-xl p-5 border border-black hover:shadow-md hover:-translate-y-0.5 transition-all" style={{ background: h.color }}>
+                                    <div className="flex items-baseline gap-2 mb-1 flex-wrap">
+                                        <span className="font-bold text-[#1A1A1A]">{h.name}</span>
+                                        <span className="text-[10px] text-[#1A1A1A]/40 font-mono">{h.en}</span>
                                     </div>
-                                );
-                            })}
+                                    <p className="text-xs text-[#4A4A4A] leading-snug">{h.tagline}</p>
+                                    <span className="inline-flex items-center gap-1 text-xs font-bold text-[#1A1A1A] mt-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                        見る <span className="group-hover:translate-x-1 transition-transform">→</span>
+                                    </span>
+                                </Link>
+                            ))}
                         </div>
                     </div>
                 ))}

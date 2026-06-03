@@ -5,5 +5,5 @@ export const contentType = ogContentType;
 export const alt = 'Mitoflow40';
 
 export default function Image() {
-    return ogImage({ eyebrow: 'HORMONES', title: 'ホルモンの種類', subtitle: '体じゅうに指令を届ける化学メッセンジャー', bg: '#ECDCE6' });
+    return ogImage({ eyebrow: 'HOW TO CHOOSE', title: 'サプリメントの選び方', subtitle: '形態・吸収・タイミング', bg: '#EDE6D3' });
 }

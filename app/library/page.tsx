@@ -466,8 +466,8 @@ export default function LibraryIndex() {
                         <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                             HORMONES
                         </div>
-                        <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-2">ホルモンの種類</div>
-                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">性ホルモン・ストレス・代謝・甲状腺・睡眠まで、主なホルモンの役割と対応する血液検査。</p>
+                        <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-2">ホルモンの種類（9種）</div>
+                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">テストステロン・エストロゲン・コルチゾール・インスリン・甲状腺ホルモンなど、主なホルモンを個別ページで解説。</p>
                         <span className="inline-flex items-center gap-1 text-sm font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                             見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                         </span>
@@ -515,7 +515,39 @@ export default function LibraryIndex() {
                             <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">Apple Watchで自分の体を読む。HRV・睡眠・心肺機能の活かし方。</p>
                             <span className="inline-flex items-center gap-1 text-sm font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
                         </Link>
+                        <Link href="/supplements"
+                            className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#EDE6D3' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>SUPPLEMENTS</div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-2">サプリメントの選び方</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">形態・吸収・タイミングで効きが変わる。賢い選び方の地図。</p>
+                            <span className="inline-flex items-center gap-1 text-sm font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                        </Link>
                     </div>
+                </div>
+
+                {/* 症状から引く */}
+                <div id="symptoms" className="mt-20 md:mt-24 scroll-mt-24">
+                    <div className="mb-5 flex items-stretch gap-3">
+                        <span className="w-1.5 rounded-full bg-[#41C9B4]" />
+                        <div className="py-0.5">
+                            <p className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>症状から引く</p>
+                            <p className="text-[10px] tracking-[0.2em] font-bold text-[#41C9B4]/60 mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>FROM SYMPTOMS</p>
+                        </div>
+                    </div>
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
+                        「疲れやすい」「頭がぼんやり」「冷える」——気になる<strong>不調</strong>から逆引きで、考えられる背景・確認したい血液検査・関わる栄養素・関連する体のしくみへたどれます。原因の「あたり」をつける入口に。
+                    </p>
+                    <Link href="/symptoms"
+                        className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F0E7E0' }}>
+                        <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            FROM SYMPTOMS
+                        </div>
+                        <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-2">症状から引く（10の不調）</div>
+                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">疲れ・ブレインフォグ・冷え・むくみ・気分の落ち込みなどから、背景と打ち手を逆引き。</p>
+                        <span className="inline-flex items-center gap-1 text-sm font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            見る <span className="group-hover:translate-x-1 transition-transform">→</span>
+                        </span>
+                    </Link>
                 </div>
 
                 {/* セルフチェックへの導線 */}
