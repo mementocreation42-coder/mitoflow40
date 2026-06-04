@@ -71,6 +71,31 @@ export default function MolecularNutritionPage() {
                     </p>
                 </section>
 
+                {/* 生化学とは */}
+                <section id="biochemistry" className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black scroll-mt-24">
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">そもそも「生化学」とは？</h2>
+                    <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
+                        分子栄養学の土台にあるのが<strong>生化学（せいかがく）</strong>です。むずかしそうな言葉ですが、中身はシンプル。<strong>体の中で絶え間なく起きている「化学反応」のこと</strong>——いわゆる「代謝」です。食べたものをエネルギーに変える、古い細胞を作り替える、ホルモンや神経伝達物質を合成する。生きているとは、この無数の化学反応が休みなく進み続けている状態のことです。
+                        {'\n\n'}
+                        その一つひとつの反応を進める“職人”が<strong>酵素</strong>で、酵素が働くのを助ける“道具”が<strong>補酵素</strong>です。そして、その補酵素の正体こそが、<strong>ビタミンやミネラル</strong>。つまり——栄養が足りないと、酵素が十分に働けず、化学反応（代謝）が滞ります。これが、「材料（栄養）が不足すると不調になる」しくみの正体です。
+                        {'\n\n'}
+                        「なぜ栄養が体に効くのか」という問いの答えは、ここにあります。栄養は、体の生化学という巨大な工場を、滞りなく動かすための<strong>材料であり、潤滑油</strong>なのです。
+                    </p>
+                    <div className="mt-5 flex flex-wrap gap-2">
+                        {[
+                            { href: '/energy', label: 'エネルギー' },
+                            { href: '/methylation', label: 'メチレーション' },
+                            { href: '/nutrients', label: '栄養素（補酵素）' },
+                            { href: '/mitochondria', label: 'ミトコンドリア' },
+                        ].map((l) => (
+                            <Link key={l.href} href={l.href}
+                                className="text-xs px-3 py-1 rounded-full bg-white border border-[#1A1A1A]/20 font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white hover:border-[#41C9B4] transition-colors">
+                                {l.label}
+                            </Link>
+                        ))}
+                    </div>
+                </section>
+
                 {/* 中心となる考え方 */}
                 <section className="mb-10">
                     <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">中心となる4つの考え方</h2>

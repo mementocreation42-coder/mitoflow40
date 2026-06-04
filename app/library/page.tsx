@@ -125,13 +125,28 @@ export default function LibraryIndex() {
 
                 {/* 精密栄養学とは（思想の入口） */}
                 <Link href="/precision-nutrition"
-                    className="group mb-12 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    className="group mb-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all">
                     <div className="flex-shrink-0">
                         <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>START HERE ／ THE APPROACH</span>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">精密栄養学とは</div>
                     </div>
                     <p className="flex-1 text-sm text-[#4A4A4A] leading-relaxed">
                         このライブラリ全体を貫く考え方。「みんなの平均」ではなく「あなたの最適」を探す——その読み解き方をまず知ることから。
+                    </p>
+                    <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                        読む <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    </span>
+                </Link>
+
+                {/* なぜ、未病予防か（ミッション） */}
+                <Link href="/mission"
+                    className="group mb-12 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    <div className="flex-shrink-0">
+                        <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>OUR MISSION</span>
+                        <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">なぜ、未病予防か</div>
+                    </div>
+                    <p className="flex-1 text-sm text-[#4A4A4A] leading-relaxed">
+                        超高齢社会、医療費、健康寿命のギャップ——その一助になりうる「未病予防」の社会的意義と、Mitoflow40の役割。
                     </p>
                     <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         読む <span className="group-hover:translate-x-1 transition-transform">→</span>
@@ -291,6 +306,16 @@ export default function LibraryIndex() {
                     <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
                         栄養素や生活習慣がなぜ効くのか——その答えは、細胞の中で起きている仕組みにあります。エネルギー産生から、腸と脳のつながり、細胞の再生まで。
                     </p>
+                    <Link href="/molecular-nutrition#biochemistry"
+                        className="group block rounded-2xl border border-dashed border-[#1A1A1A]/40 p-5 mb-4 hover:border-[#1A1A1A] hover:bg-white/40 transition-all">
+                        <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/45 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            FOUNDATION ／ すべての土台
+                        </div>
+                        <div className="text-base md:text-lg font-bold text-[#1A1A1A] mb-1">生化学とは？</div>
+                        <p className="text-sm text-[#1A1A1A]/70 leading-relaxed">これから挙げる仕組みは、すべて「体の中の化学反応＝生化学」の話。栄養がなぜ効くのか、その土台をまず一言で。
+                            <span className="inline-block ml-1 font-bold text-[#1A1A1A] group-hover:translate-x-0.5 transition-transform">→</span>
+                        </p>
+                    </Link>
                     <Link href="/mitochondria"
                         className="group relative block overflow-hidden rounded-2xl border border-black p-6 mb-4 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#CFEAEC' }}>
                         <img loading="lazy" decoding="async" src="/images/for-you-illustration-bl.png" alt="" className="pointer-events-none absolute bottom-0 right-0 w-[140px] md:w-[180px] opacity-90 group-hover:scale-105 transition-transform hidden sm:block" />
@@ -304,6 +329,17 @@ export default function LibraryIndex() {
                                 見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                             </span>
                         </div>
+                    </Link>
+                    <Link href="/energy"
+                        className="group block rounded-2xl border border-black p-6 mb-4 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#DCEFE4' }}>
+                        <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            ENERGY &amp; METABOLISM
+                        </div>
+                        <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-2">エネルギーとは</div>
+                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3 sm:max-w-[70%]">疲れにくさの正体は「エネルギーを作り続けられること」。作るしくみと、その材料になる栄養までを、やさしく束ねる入口。</p>
+                        <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            見る <span className="group-hover:translate-x-1 transition-transform">→</span>
+                        </span>
                     </Link>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <Link href="/glycolysis"
@@ -412,6 +448,17 @@ export default function LibraryIndex() {
                             </div>
                             <div className="text-lg font-bold text-[#1A1A1A] mb-2">脳腸相関</div>
                             <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">腸と脳は会話している。お腹の調子と気分・集中・睡眠のつながり。</p>
+                            <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
+                            </span>
+                        </Link>
+                        <Link href="/digestion"
+                            className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#DCEFE4' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                DIGESTION & ABSORPTION
+                            </div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-2">消化・吸収</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">「食べた」と「吸収できた」は別の話。消化のリレーと酵素、吸収を高める習慣。</p>
                             <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                 見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                             </span>
@@ -613,6 +660,15 @@ export default function LibraryIndex() {
                         <span>→</span>
                     </Link>
                     <p className="text-xs text-[#4A4A4A]/70 mt-3">NIH・WHO・査読論文など、解説が依拠する一次情報をテーマ別にまとめています。</p>
+                </div>
+
+                {/* 進化していくLibrary */}
+                <div className="mt-12 md:mt-16 rounded-2xl border border-black p-6 md:p-8 text-center" style={{ background: '#EFEAF6' }}>
+                    <p className="text-[10px] font-bold tracking-widest text-[#41C9B4] mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>ALWAYS EVOLVING</p>
+                    <h2 className="text-lg md:text-xl font-bold text-[#1A1A1A] mb-3">このライブラリは、完成品ではありません</h2>
+                    <p className="text-sm text-[#4A4A4A] leading-loose max-w-[560px] mx-auto">
+                        精密栄養学は、いまも世界で研究が進む<strong>発展途上の分野</strong>です。だからこのLibraryも、一度作って終わりではなく、新しい知見が見つかるたびに見直し、加筆し、ときに書き換えながら、<strong>常に進化し続けます</strong>。今日ここに書かれていることも、未来にはもっと深く、正確になっているはずです。
+                    </p>
                 </div>
 
                 {/* セルフチェックへの導線 */}

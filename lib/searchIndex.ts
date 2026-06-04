@@ -25,8 +25,10 @@ const norm = (...parts: (string | undefined)[]) =>
 // 精密栄養学・しくみ・考え方などの固定ページ
 const conceptPages: Omit<SearchItem, 'keywords'>[] = [
     { title: '健康とは', sub: 'Mitoflow40の健康哲学', href: '/health-philosophy', group: '考え方' },
+    { title: 'なぜ、未病予防か', sub: 'Our Mission', href: '/mission', group: '考え方' },
     { title: '精密栄養学とは', sub: 'Precision Nutrition', href: '/precision-nutrition', group: '考え方' },
     { title: '分子栄養学とは', sub: 'Molecular Nutrition', href: '/molecular-nutrition', group: '考え方' },
+    { title: 'エネルギーとは', sub: 'Energy / 疲れにくさの正体', href: '/energy', group: 'しくみ' },
     { title: 'ミトコンドリア', sub: 'Mitochondria', href: '/mitochondria', group: 'しくみ' },
     { title: 'ATP', sub: 'エネルギー通貨', href: '/atp', group: 'しくみ' },
     { title: '解糖系', sub: 'Glycolysis', href: '/glycolysis', group: 'しくみ' },
@@ -43,6 +45,7 @@ const conceptPages: Omit<SearchItem, 'keywords'>[] = [
     { title: '自律神経', sub: 'Autonomic Nervous System', href: '/autonomic-nervous-system', group: 'しくみ' },
     { title: '概日リズム（体内時計）', sub: 'Circadian Rhythm', href: '/circadian-rhythm', group: 'しくみ' },
     { title: '腸脳相関', sub: 'Gut-Brain Axis', href: '/gut-brain', group: 'しくみ' },
+    { title: '消化・吸収', sub: 'Digestion & Absorption', href: '/digestion', group: 'しくみ' },
     { title: '睡眠', sub: 'Sleep', href: '/sleep', group: '生活習慣' },
     { title: '運動', sub: 'Exercise', href: '/exercise', group: '生活習慣' },
     { title: 'サプリメント', sub: 'Supplements', href: '/supplements', group: '生活習慣' },

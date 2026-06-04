@@ -70,6 +70,8 @@ export default function PrecisionNutritionPage() {
                         {'\n\n'}
                         一方で<strong>日本では、精密栄養学の研究・社会実装はまだ途上</strong>にあります。健康診断や栄養指導は「集団の基準値」を前提とした仕組みが中心で、遺伝子や詳細な血液データを個人の栄養最適化に活かす動きは、これからという段階です。分子栄養学（オーソモレキュラー）の素地はありながら、欧米に比べると研究基盤や臨床への応用で遅れている、というのが現状です。
                         {'\n\n'}
+                        そのため、日本ではまだ精密栄養学を<strong>体系的に学べる場は限られています</strong>。Mitoflow40の解説の土台となっている考え方も、運営者が<strong>神宮前統合医療クリニック</strong>で、実際の臨床・カウンセリングを通じて学んだものです。本サイトは、そこで得た知見を、一般の方にもわかりやすい形でお届けするために生まれました。
+                        {'\n\n'}
                         だからこそ、最新の知見をかみ砕いて伝え、自分の体を読み解く視点を届けることに意味があると、Mitoflow40は考えています。
                     </p>
                 </section>
@@ -100,6 +102,34 @@ export default function PrecisionNutritionPage() {
                         分子栄養学とは を読む
                         <span>→</span>
                     </Link>
+                </section>
+
+                {/* 東洋医学と響き合う */}
+                <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">東洋医学と響き合う発想</h2>
+                    <p className="text-[#4A4A4A] leading-loose whitespace-pre-line mb-5">
+                        「あなたに合わせる」という精密栄養学の発想は、実は<strong>東洋医学</strong>が何千年も前から大切にしてきた考え方と、深く響き合います。最新科学の結論が、古くからの知恵に追いついてきた——そう言えるかもしれません。
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
+                        <div className="rounded-xl p-5 border border-[#1A1A1A]/15" style={{ background: '#F3EEDF' }}>
+                            <div className="font-bold text-[#1A1A1A] mb-1">未病</div>
+                            <p className="text-xs text-[#4A4A4A] leading-relaxed">病気になる前の段階で整える、という発想。「未病」という言葉自体が東洋医学に由来します。</p>
+                        </div>
+                        <div className="rounded-xl p-5 border border-[#1A1A1A]/15" style={{ background: '#F3EEDF' }}>
+                            <div className="font-bold text-[#1A1A1A] mb-1">証（しょう）＝個体差</div>
+                            <p className="text-xs text-[#4A4A4A] leading-relaxed">同じ症状でも、その人の体質や状態に合わせて処方を変える。「平均ではなく個人」という視点。</p>
+                        </div>
+                        <div className="rounded-xl p-5 border border-[#1A1A1A]/15" style={{ background: '#F3EEDF' }}>
+                            <div className="font-bold text-[#1A1A1A] mb-1">全体を診る</div>
+                            <p className="text-xs text-[#4A4A4A] leading-relaxed">部分ではなく、心身まるごとのバランスを捉える。体を一つのつながりとして見る視点。</p>
+                        </div>
+                    </div>
+                    <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
+                        精密栄養学は、ここに<strong>現代のデータ（遺伝子・血液検査）</strong>という解像度を加えたものとも言えます。東洋の「全体を、その人に合わせて診る」という知恵と、西洋の「数値で個人を読み解く」科学。Mitoflow40は、その<strong>両方の良いところをつなぐ</strong>視点を大切にしています。
+                    </p>
+                    <p className="text-xs text-[#4A4A4A]/60 mt-4 leading-relaxed">
+                        ※ ここで述べているのは「考え方の親和性」です。漢方や鍼灸など特定の治療法の効果を主張するものではありません。
+                    </p>
                 </section>
 
                 {/* 従来との違い */}

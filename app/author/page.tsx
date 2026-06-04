@@ -17,7 +17,7 @@ export const metadata = {
 };
 
 const credentials = [
-    { title: '精密栄養学の実践', note: '2025年2月より精密栄養学を軸に学び、日々実践を継続' },
+    { title: '精密栄養学を学んだ場', note: '神宮前統合医療クリニックにて、臨床・カウンセリングを通じて精密栄養学の考え方を学ぶ。2025年2月より自身でも実践を継続' },
     { title: '自身の体での検証', note: '血液検査と生活ログ（Apple Watch等）をもとに、変化を客観的に記録・検証' },
     { title: 'クリエイターの視点', note: 'ビデオグラファー／フォトグラファー／ライター／作家として情報発信' },
 ];
@@ -67,6 +67,7 @@ export default function AuthorPage() {
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
                     <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">情報発信のスタンス</h2>
                     <ul className="space-y-2 text-[#4A4A4A]">
+                        <li className="flex gap-3"><span className="text-[#41C9B4] flex-shrink-0">●</span><span>Mitoflow40は、病気になってから治すのではなく、その手前で整える「未病予防」への取り組みです。</span></li>
                         <li className="flex gap-3"><span className="text-[#41C9B4] flex-shrink-0">●</span><span>本サイトは医療行為・診断ではなく、一般的な健康情報と実践の共有です。</span></li>
                         <li className="flex gap-3"><span className="text-[#41C9B4] flex-shrink-0">●</span><span>断定を避け、「可能性・仮説」として慎重に記述しています。</span></li>
                         <li className="flex gap-3"><span className="text-[#41C9B4] flex-shrink-0">●</span><span>検査・治療・サプリの判断は、必ず医療専門家にご相談ください。</span></li>
