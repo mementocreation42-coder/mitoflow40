@@ -223,6 +223,17 @@ export default function LibraryIndex() {
                         </Link>
                     ))}
                     </div>
+
+                    {/* 気をつけたい食品 */}
+                    <Link href="/caution-foods"
+                        className="group mt-4 flex items-center gap-4 rounded-2xl border border-black p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#FBE9D6' }}>
+                        <div className="flex-1">
+                            <div className="text-[10px] font-bold tracking-widest text-[#FF9855] mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>CAUTION FOODS</div>
+                            <div className="text-lg md:text-xl font-bold text-[#1A1A1A] mb-1">気をつけたい食品</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed">「食べてはいけない」ではなく、頻度と量に気をつけたい8つを、減らし方・代わりとセットで。</p>
+                        </div>
+                        <span className="flex-shrink-0 text-[#1A1A1A] font-bold group-hover:translate-x-1 transition-transform" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>→</span>
+                    </Link>
                 </div>
 
                 {/* 内臓・臓器 */}
@@ -565,6 +576,31 @@ export default function LibraryIndex() {
                         <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">疲れ・ブレインフォグ・冷え・むくみ・気分の落ち込みなどから、背景と打ち手を逆引き。</p>
                         <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                             見る <span className="group-hover:translate-x-1 transition-transform">→</span>
+                        </span>
+                    </Link>
+                </div>
+
+                {/* 思索（〇〇とは？） */}
+                <div id="thoughts" className="mt-20 md:mt-24 scroll-mt-24">
+                    <div className="mb-5 flex items-stretch gap-3">
+                        <span className="w-1.5 rounded-full bg-[#41C9B4]" />
+                        <div className="py-0.5">
+                            <p className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>思索</p>
+                            <p className="text-[10px] tracking-[0.2em] font-bold text-[#41C9B4]/60 mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>THOUGHTS</p>
+                        </div>
+                    </div>
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
+                        運命、自由、老い、幸せ——答えの出ない<strong>問い</strong>を「体・健康・生き方」の側から考えるコラム。哲学のようでいて、結局は今日の暮らし方の話です。
+                    </p>
+                    <Link href="/thoughts"
+                        className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7E0F2' }}>
+                        <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            THOUGHTS
+                        </div>
+                        <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-2">〇〇とは？</div>
+                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">運命とは？自由とは？老いるとは？幸せとは？——体の側から問いを見つめるエッセイ。</p>
+                        <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            読む <span className="group-hover:translate-x-1 transition-transform">→</span>
                         </span>
                     </Link>
                 </div>

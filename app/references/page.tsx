@@ -4,7 +4,7 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
     title: '参照文献・出典 | Mitoflow40',
-    description: 'Mitoflow40の解説記事が参照している一次情報・学術論文・公的機関の出典一覧。NIH（米国国立衛生研究所）、WHO、査読論文、ノーベル賞関連資料など、信頼できる情報源をテーマ別にまとめています。',
+    description: 'Mitoflow40の解説が参照する一次情報・学術論文・公的機関の出典一覧。NIH・WHO・査読論文・ノーベル賞関連資料などの信頼できる情報源を、テーマ別にまとめています。',
     alternates: { canonical: 'https://mitoflow40.com/references' },
     openGraph: {
         title: '参照文献・出典 | Mitoflow40',
@@ -143,6 +143,28 @@ const groups: RefGroup[] = [
                 url: 'https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/',
                 note: 'マグネシウムは300超の酵素反応の補因子。個別栄養素ファクトシートの代表例。',
                 backs: [{ href: '/nutrients', label: '栄養素' }],
+            },
+        ],
+    },
+    {
+        label: 'FOOD & DIET',
+        ja: '食べ物・食事',
+        items: [
+            {
+                title: 'Trans fat — Fact sheet',
+                publisher: 'WHO（世界保健機関）',
+                year: '—',
+                url: 'https://www.who.int/news-room/fact-sheets/detail/trans-fat',
+                note: '工業的に作られるトランス脂肪酸の健康影響と、食品からの削減を求めるWHOの見解。',
+                backs: [{ href: '/caution-foods', label: '気をつけたい食品' }],
+            },
+            {
+                title: 'Carcinogenicity of the consumption of red meat and processed meat',
+                publisher: 'WHO / IARC',
+                year: '—',
+                url: 'https://www.who.int/news-room/questions-and-answers/item/cancer-carcinogenicity-of-the-consumption-of-red-meat-and-processed-meat',
+                note: '加工肉を「発がん性あり（グループ1）」、赤身肉を「おそらく発がん性あり（2A）」と分類。リスクは量と頻度しだいという解説も。',
+                backs: [{ href: '/caution-foods', label: '気をつけたい食品' }],
             },
         ],
     },

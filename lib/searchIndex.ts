@@ -9,6 +9,7 @@ import { biomarkers } from './biomarkers';
 import { hormones } from './hormones';
 import { symptoms } from './symptoms';
 import { organs } from './organs';
+import { essays } from './essays';
 
 export interface SearchItem {
     title: string;       // 表示タイトル
@@ -46,6 +47,7 @@ const conceptPages: Omit<SearchItem, 'keywords'>[] = [
     { title: '運動', sub: 'Exercise', href: '/exercise', group: '生活習慣' },
     { title: 'サプリメント', sub: 'Supplements', href: '/supplements', group: '生活習慣' },
     { title: 'ウェアラブル活用', sub: 'Wearables', href: '/wearables', group: '生活習慣' },
+    { title: '気をつけたい食品', sub: 'Caution Foods', href: '/caution-foods', group: '食べ物' },
     { title: '参照文献・出典', sub: 'References', href: '/references', group: '考え方' },
 ];
 
@@ -102,6 +104,13 @@ export const searchIndex: SearchItem[] = [
     ...conceptPages.map((p) => ({
         ...p,
         keywords: norm(p.title, p.sub, p.group),
+    })),
+    ...essays.map((e) => ({
+        title: e.title,
+        sub: e.en,
+        href: `/thoughts/${e.slug}`,
+        group: '思索',
+        keywords: norm(e.title, e.en, e.tagline),
     })),
 ];
 
