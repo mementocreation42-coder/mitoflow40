@@ -551,6 +551,65 @@ export default function LibraryIndex() {
                     </Link>
                 </div>
 
+                {/* 心とからだ */}
+                <div id="mind" className="mt-20 md:mt-24 scroll-mt-24">
+                    <div className="mb-5 flex items-stretch gap-3">
+                        <span className="w-1.5 rounded-full bg-[#41C9B4]" />
+                        <div className="py-0.5">
+                            <p className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>心とからだ</p>
+                            <p className="text-[10px] tracking-[0.2em] font-bold text-[#41C9B4]/60 mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>MIND &amp; BODY</p>
+                        </div>
+                    </div>
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
+                        気分や不安は、「性格」や「気合い」の問題とは限りません。<strong>腸・栄養・睡眠・自律神経・血糖</strong>といった<strong>体の土台</strong>から、心を読み解きます。メンタルも“体から”整える、という視点です。
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {[
+                            { href: '/stress', en: 'STRESS', ja: 'ストレスとは', note: '敵ではなく信号。コルチゾールと自律神経のしくみ。', bg: '#EFEAF6' },
+                            { href: '/mood-nutrition', en: 'MOOD & FOOD', ja: '気分と栄養', note: 'セロトニン・ドーパミンの“材料”は栄養という視点。', bg: '#EFEAF6' },
+                            { href: '/anxiety', en: 'ANXIETY', ja: '不安と体', note: '血糖・腸・睡眠など、不安を揺さぶる体の要因。', bg: '#EFEAF6' },
+                            { href: '/mindfulness', en: 'BREATH', ja: 'マインドフルネス・呼吸', note: '呼吸という、自律神経への手動スイッチ。', bg: '#EFEAF6' },
+                        ].map((s) => (
+                            <Link key={s.href} href={s.href}
+                                className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: s.bg }}>
+                                <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{s.en}</div>
+                                <div className="text-lg font-bold text-[#1A1A1A] mb-2">{s.ja}</div>
+                                <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">{s.note}</p>
+                                <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                            </Link>
+                        ))}
+                    </div>
+                    <div className="mt-4 flex flex-wrap items-center gap-2">
+                        <span className="text-[10px] font-bold tracking-wider text-[#1A1A1A]/40" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>あわせて</span>
+                        {[
+                            { href: '/gut-brain', label: '腸脳相関' },
+                            { href: '/sleep', label: '睡眠' },
+                            { href: '/autonomic-nervous-system', label: '自律神経' },
+                            { href: '/nutrients/tryptophan', label: 'トリプトファン' },
+                        ].map((l) => (
+                            <Link key={l.href} href={l.href} className="text-xs px-3 py-1 rounded-full bg-white border border-[#1A1A1A]/20 font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white hover:border-[#41C9B4] transition-colors">{l.label}</Link>
+                        ))}
+                    </div>
+                    <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <Link href="/psychedelics-research"
+                            className="group flex items-center gap-3 rounded-xl border border-dashed border-[#1A1A1A]/40 p-4 hover:border-[#1A1A1A] hover:bg-white/40 transition-all">
+                            <div className="flex-1">
+                                <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/45 mb-0.5" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>RESEARCH FRONTIER</div>
+                                <div className="text-sm font-bold text-[#1A1A1A]">サイケデリック研究の潮流<span className="font-normal text-[#1A1A1A]/60">（中立・日本では違法）</span></div>
+                            </div>
+                            <span className="flex-shrink-0 text-[#1A1A1A] font-bold group-hover:translate-x-1 transition-transform">→</span>
+                        </Link>
+                        <Link href="/cannabis"
+                            className="group flex items-center gap-3 rounded-xl border border-dashed border-[#1A1A1A]/40 p-4 hover:border-[#1A1A1A] hover:bg-white/40 transition-all">
+                            <div className="flex-1">
+                                <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/45 mb-0.5" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>HISTORY &amp; POLICY</div>
+                                <div className="text-sm font-bold text-[#1A1A1A]">大麻をめぐる歴史と世界の動き<span className="font-normal text-[#1A1A1A]/60">（中立・日本では違法）</span></div>
+                            </div>
+                            <span className="flex-shrink-0 text-[#1A1A1A] font-bold group-hover:translate-x-1 transition-transform">→</span>
+                        </Link>
+                    </div>
+                </div>
+
                 {/* 生活習慣 */}
                 <div id="lifestyle" className="mt-20 md:mt-24 scroll-mt-24">
                     <div className="mb-5 flex items-stretch gap-3">
@@ -578,11 +637,25 @@ export default function LibraryIndex() {
                             <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">ミトコンドリアを増やす唯一の確実な方法。</p>
                             <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
                         </Link>
+                        <Link href="/stimulants"
+                            className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7EFD8' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>ON YOUR HABITS</div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-2">嗜好品と体</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">アルコール・タバコ・カフェイン。体への影響を知って、自分で選ぶ。</p>
+                            <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                        </Link>
                         <Link href="/detox"
                             className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7EFD8' }}>
                             <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>DETOX</div>
                             <div className="text-lg font-bold text-[#1A1A1A] mb-2">解毒</div>
                             <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">肝臓・腸・腎臓に備わる本来の解毒システム。</p>
+                            <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                        </Link>
+                        <Link href="/reduce-toxins"
+                            className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7EFD8' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>REDUCE EXPOSURE</div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-2">有害物質を減らす暮らし</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">農薬・水銀・マイクロプラスチック。「出す」と対になる「入れない」の話。</p>
                             <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
                         </Link>
                         <Link href="/wearables"

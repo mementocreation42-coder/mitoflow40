@@ -169,6 +169,44 @@ const groups: RefGroup[] = [
         ],
     },
     {
+        label: 'TOXINS & SAFETY',
+        ja: '有害物質・食の安全・嗜好品',
+        items: [
+            {
+                title: 'No level of alcohol consumption is safe for our health',
+                publisher: 'WHO（世界保健機関）',
+                year: '2023',
+                url: 'https://www.who.int/europe/news/item/04-01-2023-no-level-of-alcohol-consumption-is-safe-for-our-health',
+                note: '健康にとって安全な飲酒量は存在しないとするWHOの見解。アルコールはIARCのグループ1発がん性物質。',
+                backs: [{ href: '/stimulants', label: '嗜好品と体' }],
+            },
+            {
+                title: 'Tobacco — Fact sheet',
+                publisher: 'WHO（世界保健機関）',
+                year: '—',
+                url: 'https://www.who.int/news-room/fact-sheets/detail/tobacco',
+                note: '喫煙の健康影響に関するWHOのファクトシート。世界の主要な死亡原因のひとつ。',
+                backs: [{ href: '/stimulants', label: '嗜好品と体' }],
+            },
+            {
+                title: '魚介類に含まれる水銀について（妊婦への摂取目安）',
+                publisher: '厚生労働省',
+                year: '—',
+                url: 'https://www.mhlw.go.jp/topics/bukyoku/iyaku/syoku-anzen/suigin/',
+                note: '大型魚に蓄積しやすい水銀について、とくに妊娠中の摂取量の目安を示した厚労省の注意事項。',
+                backs: [{ href: '/reduce-toxins', label: '有害物質を減らす暮らし' }],
+            },
+            {
+                title: 'Microplastics in drinking-water',
+                publisher: 'WHO（世界保健機関）',
+                year: '2019',
+                url: 'https://www.who.int/publications/i/item/9789241516198',
+                note: '飲料水中のマイクロプラスチックについて、現時点で健康リスクの明確な証拠はないとしつつ、さらなる研究の必要性を指摘。',
+                backs: [{ href: '/reduce-toxins', label: '有害物質を減らす暮らし' }],
+            },
+        ],
+    },
+    {
         label: 'LIFESTYLE',
         ja: '生活習慣（睡眠・運動・体内時計）',
         items: [
