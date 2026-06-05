@@ -87,6 +87,25 @@ export default function BloodSugarPage() {
                     </p>
                 </section>
 
+                {/* 現代食と糖質過多 */}
+                <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#FF9855] pl-3 leading-tight">現代食は「糖質過多」になりやすい</h2>
+                    <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
+                        そもそも、なぜ現代人はこれほど血糖を乱しやすいのでしょうか。背景には、<strong>食生活の急激な変化</strong>があります。
+                        {'\n\n'}
+                        人類の歴史の大半で、糖質は<strong>貴重なエネルギー源</strong>でした。簡単には手に入らず、だからこそ私たちの体は「糖は手に入るうちに、しっかり取り込んで蓄える」よう設計されています。ところが現代は、<strong>白い砂糖・精製された小麦や米・甘い飲み物・お菓子・加工食品</strong>が、いつでも安く手に入ります。朝から夜まで、間食も含めて、ほぼ一日中、精製された糖質を口にできる環境です。
+                        {'\n\n'}
+                        つまり、<strong>飢餓を前提に作られた体</strong>と、<strong>糖質があふれる現代の環境</strong>とのあいだに、大きなミスマッチが生まれています。これが、血糖の乱高下、インスリンの酷使、内臓脂肪の蓄積、<Link href="/glycation" className="underline decoration-[#FF9855] decoration-2 underline-offset-2 hover:text-[#FF9855]">糖化</Link>、そして生活習慣病へとつながりやすい、現代特有の事情です。
+                        {'\n\n'}
+                        ただし、ここでも「糖質＝悪」ではありません。問題は<strong>「量・頻度・質（精製度）」</strong>。極端に糖質を断つ必要はなく、精製度の低い糖質を選び、食べ方を整えて波を小さくする——それで十分に変わります。
+                    </p>
+                    <div className="mt-5 flex flex-wrap gap-2">
+                        {[{ href: '/caution-foods', label: '気をつけたい食品' }, { href: '/glycation', label: '糖化' }, { href: '/foods/brown-rice', label: '玄米' }].map((l) => (
+                            <Link key={l.href} href={l.href} className="text-xs px-3 py-1 rounded-full bg-white border border-[#1A1A1A]/20 font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white hover:border-[#41C9B4] transition-colors">{l.label}</Link>
+                        ))}
+                    </div>
+                </section>
+
                 {/* サイン */}
                 <section className="mb-10">
                     <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">血糖の波が招くサイン</h2>

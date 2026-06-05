@@ -80,6 +80,37 @@ export default function ReduceToxinsPage() {
                     </p>
                 </section>
 
+                {/* 体に溜まると */}
+                <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#FF9855] pl-3 leading-tight">なぜ「溜まる」と問題なのか</h2>
+                    <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
+                        有害物質には、<strong>すぐに出ていくもの</strong>と、<strong>体に溜まりやすいもの</strong>があります。水に溶けるタイプの多くは尿などで比較的早く排出されます。一方で、<strong>水銀などの重金属</strong>や、脂に溶けるタイプの物質は、脂肪・腎臓・肝臓・骨などに少しずつ蓄積していきます。この体内にたまった総量を「<strong>体内負荷（ボディバーデン）</strong>」と呼びます。
+                        {'\n\n'}
+                        一回の量はごくわずかでも、<strong>毎日積み重なれば、じわじわと負荷が高まっていく</strong>。これが「溜まる」ことの怖さです。蓄積した有害物質は、長期的に次のような形で体に影響しうると考えられています。
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5">
+                        {[
+                            { head: '神経への負担', body: '水銀などの重金属は、神経系に影響しやすいとされる。だるさや集中力の低下として感じることも。' },
+                            { head: '肝臓・腎臓への負担', body: '多くの有害物質を処理・排出する肝臓と腎臓に、慢性的な負担がかかる（カビ毒や重金属など）。' },
+                            { head: '酸化ストレス・炎症', body: '有害物質は体内で活性酸素を増やし、酸化ストレスやくすぶり炎症を通じて老化を後押ししうる。' },
+                            { head: 'ホルモン・代謝の乱れ', body: '一部の化学物質は、ホルモンの働きをかく乱する可能性が指摘されている。' },
+                        ].map((x) => (
+                            <div key={x.head} className="rounded-xl p-4 border border-[#1A1A1A]/15 bg-[#F3EEDF]">
+                                <div className="font-bold text-[#1A1A1A] mb-1">{x.head}</div>
+                                <p className="text-xs text-[#4A4A4A] leading-relaxed">{x.body}</p>
+                            </div>
+                        ))}
+                    </div>
+                    <p className="text-[#4A4A4A] leading-loose whitespace-pre-line mt-5">
+                        ただし、体には本来、これらを処理して<strong>排出する力（解毒）</strong>が備わっています。問題は、入ってくる量が処理能力を上回り続けること。だから対策は、「<strong>入る量を減らす</strong>」と「<strong>出す力を保つ</strong>」の両輪になります。なお、溜まりやすさには、解毒に関わる遺伝子や、肝臓・腸の状態による<strong>個人差</strong>もあります。
+                    </p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                        {[{ href: '/detox', label: 'デトックス（出す力）' }, { href: '/mycotoxins', label: 'カビ毒' }, { href: '/oxidative-stress', label: '酸化ストレス' }, { href: '/genes', label: '解毒の個人差（遺伝子）' }].map((l) => (
+                            <Link key={l.href} href={l.href} className="text-xs px-3 py-1 rounded-full bg-white border border-[#1A1A1A]/20 font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white hover:border-[#41C9B4] transition-colors">{l.label}</Link>
+                        ))}
+                    </div>
+                </section>
+
                 {/* 一覧 */}
                 <section className="mb-6">
                     <h2 className="text-2xl font-bold text-[#1A1A1A] mb-5 border-l-4 border-[#FF9855] pl-3 leading-tight">減らしたい4つと、その対策</h2>
@@ -113,11 +144,16 @@ export default function ReduceToxinsPage() {
                     <p className="text-[#4A4A4A] leading-loose">
                         どれだけ気をつけても、入ってくるものをゼロにはできません。だからこそ、入ってきた有害物質を処理して排出する<strong>解毒（デトックス）</strong>の力を保つことが、同じくらい大切です。肝臓の働きを支え、腸を整え、しっかり出す。「入れない」と「出す」がそろってはじめて、体の負担は最小になります。
                     </p>
-                    <div className="mt-5">
+                    <div className="mt-5 flex flex-wrap gap-2">
                         <Link href="/detox"
                             className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold hover:opacity-90 transition"
                             style={{ background: '#FF9855', color: '#1A1A1A' }}>
                             デトックス（出す）を読む
+                            <span>→</span>
+                        </Link>
+                        <Link href="/mycotoxins"
+                            className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold bg-white border border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white transition-colors">
+                            カビ毒と食の安全
                             <span>→</span>
                         </Link>
                     </div>

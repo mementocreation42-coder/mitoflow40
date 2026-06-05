@@ -204,6 +204,14 @@ const groups: RefGroup[] = [
                 note: '飲料水中のマイクロプラスチックについて、現時点で健康リスクの明確な証拠はないとしつつ、さらなる研究の必要性を指摘。',
                 backs: [{ href: '/reduce-toxins', label: '有害物質を減らす暮らし' }],
             },
+            {
+                title: 'Mycotoxins — Fact sheet',
+                publisher: 'WHO（世界保健機関）',
+                year: '—',
+                url: 'https://www.who.int/news-room/fact-sheets/detail/mycotoxins',
+                note: 'カビが作る有害物質「カビ毒」の種類と健康影響。アフラトキシンはIARCグループ1の発がん性物質。',
+                backs: [{ href: '/mycotoxins', label: 'カビ毒と食の安全' }],
+            },
         ],
     },
     {

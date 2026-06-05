@@ -94,6 +94,68 @@ export default function DetoxPage() {
                             </div>
                         ))}
                     </div>
+                    <div className="mt-5 bg-white/70 rounded-2xl p-5 md:p-6 border border-black">
+                        <p className="text-sm text-[#4A4A4A] leading-loose whitespace-pre-line">
+                            出口の中で、もっとも大きいのは<strong>便</strong>です。分子栄養学などでよく言われる目安では、体外に出る不要物のうち、<strong>およそ便で7〜8割、尿で約2割、汗・髪・爪などはごくわずか</strong>とされます。
+                            {'\n\n'}
+                            つまり、「汗をかけばデトックス」というイメージほど、汗の役割は大きくありません。<strong>排出の主役は、便と尿</strong>。だからこそ、便通を整えることと、しっかり水分をとって尿を出すことが、解毒の土台になります（運動やサウナは、巡りを良くする補助として役立ちます）。
+                        </p>
+                        <p className="text-[11px] text-[#4A4A4A]/60 mt-3 leading-relaxed">
+                            ※ 割合は物質や個人によって変わり、研究で厳密に確定した数値ではありません。あくまで「便が大半・汗はわずか」という傾向の目安としてご覧ください。
+                        </p>
+                    </div>
+                </section>
+
+                {/* 便は健康のサイン */}
+                <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">お通じは、毎日読める健康のサイン</h2>
+                    <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
+                        便は、最大の排出経路であると同時に、<strong>その日の体調を映す「バロメーター」</strong>でもあります。消化・吸収の具合、腸内環境、水分や食物繊維の足り方、ストレスの状態まで——お通じは、検査をしなくても毎日チェックできる、もっとも身近な健康指標です。
+                        {'\n\n'}
+                        見るポイントは、<strong>かたさ・色・回数</strong>の3つ。
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-5">
+                        <div className="rounded-xl p-5 border border-[#1A1A1A]/15 bg-[#E3F2EE]">
+                            <div className="font-bold text-[#1A1A1A] mb-1">かたさ</div>
+                            <p className="text-xs text-[#4A4A4A] leading-relaxed">理想は、なめらかなバナナ状（医療で使う「ブリストルスケール」のタイプ3〜4）。コロコロは水分・繊維不足や便秘、泥状・水様は下痢のサイン。</p>
+                        </div>
+                        <div className="rounded-xl p-5 border border-[#1A1A1A]/15 bg-[#E3F2EE]">
+                            <div className="font-bold text-[#1A1A1A] mb-1">色</div>
+                            <p className="text-xs text-[#4A4A4A] leading-relaxed">黄〜茶色が通常。極端に黒い・赤い（血）・白っぽいといった色は、体からの注意信号のことがある。</p>
+                        </div>
+                        <div className="rounded-xl p-5 border border-[#1A1A1A]/15 bg-[#E3F2EE]">
+                            <div className="font-bold text-[#1A1A1A] mb-1">回数</div>
+                            <p className="text-xs text-[#4A4A4A] leading-relaxed">1日3回〜週3回くらいまでが目安の幅。大切なのは回数そのものより、自分にとっての「いつものリズム」が保てているか。</p>
+                        </div>
+                    </div>
+                    <p className="text-[#4A4A4A] leading-loose whitespace-pre-line mt-5">
+                        毎日すっきり出ることは、解毒の面でも重要です。便がとどまると、いったん処理して捨てたはずの毒素が、腸から<strong>再吸収</strong>されてしまうことがあります。だから「出す」を整えることは、入れない工夫と同じくらい大切。<strong>食物繊維・水分・発酵食品・適度な運動</strong>が、その土台になります。
+                    </p>
+                    <p className="text-[11px] text-[#4A4A4A]/60 mt-3 leading-relaxed">
+                        ※ 血が混じる・黒い便が続く・急に便通が大きく変わった・強い痛みや体重減少を伴う——そうした場合は、自己判断せず必ず医療機関を受診してください。
+                    </p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                        {[{ href: '/gut-brain', label: '腸脳相関' }, { href: '/digestion', label: '消化・吸収' }, { href: '/nutrients/fiber', label: '食物繊維' }].map((l) => (
+                            <Link key={l.href} href={l.href} className="text-xs px-3 py-1 rounded-full bg-white border border-[#1A1A1A]/20 font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white hover:border-[#41C9B4] transition-colors">{l.label}</Link>
+                        ))}
+                    </div>
+                </section>
+
+                {/* 痩せにくさと解毒 */}
+                <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
+                    <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">「がんばっても痩せない」と解毒</h2>
+                    <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
+                        食事や運動を見直しても、なかなか体重が落ちない——そんなとき、背景のひとつとして<strong>有害物質の蓄積</strong>を挙げる見方があります。水銀などの重金属や、カビ毒、化学物質が体にたまると、<strong>慢性的な炎症</strong>や、エネルギーを作る<strong>ミトコンドリアの働きの低下</strong>、ホルモン・代謝の乱れを通じて、<strong>痩せにくい状態</strong>につながる可能性が指摘されています。
+                        {'\n\n'}
+                        ただし、これは<strong>科学的に確立した結論ではありません</strong>。痩せにくさの原因は、睡眠不足・血糖の乱れ・ストレス・筋肉量・甲状腺など多岐にわたり、有害物質はそのひとつの可能性にすぎません。「痩せないのは毒のせい」と決めつけるのは早計です。
+                        {'\n\n'}
+                        現実的なのは、まず<strong>食事・運動・睡眠・血糖</strong>という土台を整えること。そのうえで、解毒の力（便通・水分・肝臓・腸）を保ち、入ってくる有害物質を減らす。それでも長く停滞が続く・気になる症状がある場合は、自己判断せず<strong>医療機関に相談</strong>するのが安心です。
+                    </p>
+                    <div className="mt-5 flex flex-wrap gap-2">
+                        {[{ href: '/reduce-toxins', label: '有害物質を減らす暮らし' }, { href: '/mycotoxins', label: 'カビ毒' }, { href: '/inflammation', label: '炎症' }, { href: '/mitochondria', label: 'ミトコンドリア' }].map((l) => (
+                            <Link key={l.href} href={l.href} className="text-xs px-3 py-1 rounded-full bg-white border border-[#1A1A1A]/20 font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white hover:border-[#41C9B4] transition-colors">{l.label}</Link>
+                        ))}
+                    </div>
                 </section>
 
                 {/* 肝臓の2段階 */}
