@@ -28,6 +28,7 @@ const conceptPages: Omit<SearchItem, 'keywords'>[] = [
     { title: 'なぜ、未病予防か', sub: 'Our Mission', href: '/mission', group: '考え方' },
     { title: '精密栄養学とは', sub: 'Precision Nutrition', href: '/precision-nutrition', group: '考え方' },
     { title: '分子栄養学とは', sub: 'Molecular Nutrition', href: '/molecular-nutrition', group: '考え方' },
+    { title: '学ぶと、何が変わる？', sub: '生化学・栄養学を知る価値 / Nutrition Literacy', href: '/nutrition-literacy', group: '考え方' },
     { title: 'エネルギーとは', sub: 'Energy / 疲れにくさの正体', href: '/energy', group: 'しくみ' },
     { title: 'ミトコンドリア', sub: 'Mitochondria', href: '/mitochondria', group: 'しくみ' },
     { title: 'ATP', sub: 'エネルギー通貨', href: '/atp', group: 'しくみ' },
@@ -54,6 +55,7 @@ const conceptPages: Omit<SearchItem, 'keywords'>[] = [
     { title: '気分と栄養', sub: 'Mood & Food', href: '/mood-nutrition', group: '心とからだ' },
     { title: '不安と体', sub: 'Anxiety', href: '/anxiety', group: '心とからだ' },
     { title: 'マインドフルネス・呼吸', sub: 'Breath / Mindfulness', href: '/mindfulness', group: '心とからだ' },
+    { title: 'スピリチュアリティと体', sub: '心身相関の科学 / 祈り・瞑想・つながり', href: '/spirituality', group: '心とからだ' },
     { title: '睡眠', sub: 'Sleep', href: '/sleep', group: '生活習慣' },
     { title: '運動', sub: 'Exercise', href: '/exercise', group: '生活習慣' },
     { title: '嗜好品と体', sub: 'アルコール・タバコ・カフェイン', href: '/stimulants', group: '生活習慣' },
@@ -62,6 +64,7 @@ const conceptPages: Omit<SearchItem, 'keywords'>[] = [
     { title: '気をつけたい食品', sub: 'Caution Foods', href: '/caution-foods', group: '食べ物' },
     { title: 'サイケデリック研究の潮流', sub: '海外の研究動向（中立解説）', href: '/psychedelics-research', group: '考え方' },
     { title: '大麻をめぐる歴史と世界の動き', sub: '歴史・法政策（中立解説・日本では違法）', href: '/cannabis', group: '考え方' },
+    { title: 'おすすめ書籍', sub: 'Recommended Books / もっと深く知るための本', href: '/books', group: '考え方' },
     { title: '参照文献・出典', sub: 'References', href: '/references', group: '考え方' },
 ];
 

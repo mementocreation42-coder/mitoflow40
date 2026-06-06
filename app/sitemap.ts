@@ -83,7 +83,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { path: '/mission', priority: 0.7, changeFrequency: 'monthly' },
         { path: '/precision-nutrition', priority: 0.8, changeFrequency: 'monthly' },
         { path: '/molecular-nutrition', priority: 0.8, changeFrequency: 'monthly' },
+        { path: '/nutrition-literacy', priority: 0.8, changeFrequency: 'monthly' },
         { path: '/thoughts', priority: 0.7, changeFrequency: 'monthly' },
+        { path: '/books', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/references', priority: 0.5, changeFrequency: 'monthly' },
         // カタログ一覧
         { path: '/genes', priority: 0.7, changeFrequency: 'monthly' },
@@ -111,6 +113,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { path: '/mood-nutrition', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/anxiety', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/mindfulness', priority: 0.6, changeFrequency: 'monthly' },
+        { path: '/spirituality', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/autophagy', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/methylation', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/blood-sugar', priority: 0.6, changeFrequency: 'monthly' },

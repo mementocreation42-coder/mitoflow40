@@ -108,6 +108,15 @@ export default function LibraryIndex() {
                 {/* 横断検索 */}
                 <LibrarySearch />
 
+                {/* はじめに */}
+                <div className="mt-12 mb-5 flex items-stretch gap-3">
+                    <span className="w-1.5 rounded-full bg-[#41C9B4]" />
+                    <div className="py-0.5">
+                        <p className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>はじめに</p>
+                        <p className="text-[10px] tracking-[0.2em] font-bold text-[#41C9B4]/60 mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>START HERE</p>
+                    </div>
+                </div>
+
                 {/* 健康とは（思想の最上流） */}
                 <Link href="/health-philosophy"
                     className="group mb-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all">
@@ -132,6 +141,21 @@ export default function LibraryIndex() {
                     </div>
                     <p className="flex-1 text-sm text-[#4A4A4A] leading-relaxed">
                         このライブラリ全体を貫く考え方。「みんなの平均」ではなく「あなたの最適」を探す——その読み解き方をまず知ることから。
+                    </p>
+                    <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                        読む <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    </span>
+                </Link>
+
+                {/* 生化学・栄養学を知ることの価値 */}
+                <Link href="/nutrition-literacy"
+                    className="group mb-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    <div className="flex-shrink-0">
+                        <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>WHY IT MATTERS</span>
+                        <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">学ぶと、何が変わる？</div>
+                    </div>
+                    <p className="flex-1 text-sm text-[#4A4A4A] leading-relaxed">
+                        体の仕組みがわかると、健康情報に振り回されず、自分の体を自分で読み解ける。学ぶことが、これからの数十年を支える力になる理由。
                     </p>
                     <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         読む <span className="group-hover:translate-x-1 transition-transform">→</span>
@@ -580,6 +604,7 @@ export default function LibraryIndex() {
                             { href: '/mood-nutrition', en: 'MOOD & FOOD', ja: '気分と栄養', note: 'セロトニン・ドーパミンの“材料”は栄養という視点。', bg: '#EFEAF6' },
                             { href: '/anxiety', en: 'ANXIETY', ja: '不安と体', note: '血糖・腸・睡眠など、不安を揺さぶる体の要因。', bg: '#EFEAF6' },
                             { href: '/mindfulness', en: 'BREATH', ja: 'マインドフルネス・呼吸', note: '呼吸という、自律神経への手動スイッチ。', bg: '#EFEAF6' },
+                            { href: '/spirituality', en: 'MIND & SPIRIT', ja: 'スピリチュアリティと体', note: '祈り・瞑想・つながりを“心身相関”で読み解く。', bg: '#EFEAF6' },
                         ].map((s) => (
                             <Link key={s.href} href={s.href}
                                 className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: s.bg }}>
@@ -743,13 +768,20 @@ export default function LibraryIndex() {
                     </Link>
                 </div>
 
-                {/* 参照文献への導線 */}
+                {/* 参照文献・書籍への導線 */}
                 <div className="mt-20 md:mt-24 text-center">
-                    <Link href="/references"
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FF9855] text-sm font-bold text-[#1A1A1A] hover:opacity-90 transition">
-                        解説の参照文献・出典を見る
-                        <span>→</span>
-                    </Link>
+                    <div className="flex flex-wrap justify-center gap-3">
+                        <Link href="/references"
+                            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FF9855] text-sm font-bold text-[#1A1A1A] hover:opacity-90 transition">
+                            解説の参照文献・出典を見る
+                            <span>→</span>
+                        </Link>
+                        <Link href="/books"
+                            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white border border-black text-sm font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white transition">
+                            おすすめ書籍を見る
+                            <span>→</span>
+                        </Link>
+                    </div>
                     <p className="text-xs text-[#4A4A4A]/70 mt-3">NIH・WHO・査読論文など、解説が依拠する一次情報をテーマ別にまとめています。</p>
                 </div>
 
