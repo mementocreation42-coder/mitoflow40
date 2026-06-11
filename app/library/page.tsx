@@ -98,10 +98,10 @@ export default function LibraryIndex() {
                         KNOWLEDGE LIBRARY
                     </p>
                     <h1 className="text-4xl md:text-6xl font-bold text-[#41C9B4] leading-[1.2] tracking-tight mb-5">
-                        設計図を読み、<br />現在地を知り、<br />材料で整える。
+                        仕組みを知り、<br />現在地を知り、<br />暮らしで整える。
                     </h1>
                     <p className="text-sm md:text-base text-[#4A4A4A] max-w-[600px] leading-relaxed">
-                        遺伝子・血液検査・栄養素をつなげて、自分の体を読み解く知識ライブラリ。
+                        遺伝子・血液検査・栄養素から、心と暮らしまで。自分の体を読み解く知識ライブラリ。
                     </p>
                 </div>
 
@@ -119,7 +119,7 @@ export default function LibraryIndex() {
 
                 {/* 健康とは（思想の最上流） */}
                 <Link href="/health-philosophy"
-                    className="group mb-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    className="group mb-12 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all">
                     <div className="flex-shrink-0">
                         <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>THE APPROACH</span>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">健康とは</div>
@@ -132,11 +132,50 @@ export default function LibraryIndex() {
                     </span>
                 </Link>
 
+                {/* 考え方と立ち位置 */}
+                <div className="mt-12 mb-5 flex items-stretch gap-3">
+                    <span className="w-1.5 rounded-full bg-[#41C9B4]" />
+                    <div className="py-0.5">
+                        <p className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>考え方と立ち位置</p>
+                        <p className="text-[10px] tracking-[0.2em] font-bold text-[#41C9B4]/60 mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>OUR APPROACH</p>
+                    </div>
+                </div>
+
+                {/* なぜ、未病予防か（ミッション） */}
+                <Link href="/mission"
+                    className="group mb-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    <div className="flex-shrink-0">
+                        <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>OUR MISSION</span>
+                        <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">なぜ、未病予防か</div>
+                    </div>
+                    <p className="flex-1 text-sm text-[#4A4A4A] leading-relaxed">
+                        超高齢社会、医療費、健康寿命のギャップ——その一助になりうる「未病予防」の社会的意義と、Mitoflow40の役割。
+                    </p>
+                    <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                        読む <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    </span>
+                </Link>
+
+                {/* 医療者の役割とMitoflow40の立ち位置 */}
+                <Link href="/medical-roles"
+                    className="group mb-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    <div className="flex-shrink-0">
+                        <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>WHO DOES WHAT</span>
+                        <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">医療者の役割と立ち位置</div>
+                    </div>
+                    <p className="flex-1 text-sm text-[#4A4A4A] leading-relaxed">
+                        医師・看護師・薬剤師・管理栄養士は何ができて、何ができないのか。診断も治療もしないMitoflow40が「未病の手前」でどこに立つのかを整理します。
+                    </p>
+                    <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                        読む <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    </span>
+                </Link>
+
                 {/* 精密栄養学とは（思想の入口） */}
                 <Link href="/precision-nutrition"
                     className="group mb-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all">
                     <div className="flex-shrink-0">
-                        <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>START HERE ／ THE APPROACH</span>
+                        <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>THE APPROACH</span>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">精密栄養学とは</div>
                     </div>
                     <p className="flex-1 text-sm text-[#4A4A4A] leading-relaxed">
@@ -149,28 +188,13 @@ export default function LibraryIndex() {
 
                 {/* 生化学・栄養学を知ることの価値 */}
                 <Link href="/nutrition-literacy"
-                    className="group mb-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    className="group mb-12 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all">
                     <div className="flex-shrink-0">
                         <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>WHY IT MATTERS</span>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">学ぶと、何が変わる？</div>
                     </div>
                     <p className="flex-1 text-sm text-[#4A4A4A] leading-relaxed">
                         体の仕組みがわかると、健康情報に振り回されず、自分の体を自分で読み解ける。学ぶことが、これからの数十年を支える力になる理由。
-                    </p>
-                    <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                        読む <span className="group-hover:translate-x-1 transition-transform">→</span>
-                    </span>
-                </Link>
-
-                {/* なぜ、未病予防か（ミッション） */}
-                <Link href="/mission"
-                    className="group mb-12 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all">
-                    <div className="flex-shrink-0">
-                        <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>OUR MISSION</span>
-                        <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">なぜ、未病予防か</div>
-                    </div>
-                    <p className="flex-1 text-sm text-[#4A4A4A] leading-relaxed">
-                        超高齢社会、医療費、健康寿命のギャップ——その一助になりうる「未病予防」の社会的意義と、Mitoflow40の役割。
                     </p>
                     <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         読む <span className="group-hover:translate-x-1 transition-transform">→</span>

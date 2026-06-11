@@ -80,6 +80,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { path: '/sample', priority: 0.7, changeFrequency: 'monthly' },
         { path: '/library', priority: 0.8, changeFrequency: 'weekly' },
         { path: '/health-philosophy', priority: 0.8, changeFrequency: 'monthly' },
+        { path: '/medical-roles', priority: 0.7, changeFrequency: 'monthly' },
         { path: '/mission', priority: 0.7, changeFrequency: 'monthly' },
         { path: '/precision-nutrition', priority: 0.8, changeFrequency: 'monthly' },
         { path: '/molecular-nutrition', priority: 0.8, changeFrequency: 'monthly' },

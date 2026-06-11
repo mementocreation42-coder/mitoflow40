@@ -5,6 +5,8 @@ import { getNutrientBySlug } from '@/lib/nutrients';
 import { getGeneBySlug } from '@/lib/genes';
 import JsonLd, { medicalWebPage, breadcrumb } from '@/components/JsonLd';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import MemberGate from '@/components/MemberGate';
+import { isMember, isBiomarkerGated } from '@/lib/auth';
 
 export function generateStaticParams() {
     return biomarkers.map((b) => ({ slug: b.slug }));
@@ -43,6 +45,9 @@ export default async function BiomarkerPage({ params }: { params: Promise<{ slug
         .filter((g): g is NonNullable<typeof g> => Boolean(g));
 
     const sameCategory = biomarkers.filter((x) => x.category === b.category && x.slug !== b.slug);
+
+    // 会員限定（深さで線引き）：対象項目 かつ 未ログインのとき、後半をゲートする
+    const gate = isBiomarkerGated(slug) && !(await isMember());
 
     return (
         <div className="pt-[60px] min-h-screen relative overflow-hidden" style={{ background: b.color }}>
@@ -91,19 +96,24 @@ export default async function BiomarkerPage({ params }: { params: Promise<{ slug
                             </div>
                             <p className="text-sm font-bold text-[#1A1A1A]">{b.standardRange}</p>
                         </div>
-                        {b.optimalRange && (
-                            <div className="p-4 bg-white/70 rounded-xl border border-[#41C9B4]/40">
-                                <div className="text-xs font-bold tracking-wider mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#41C9B4' }}>
-                                    精密栄養学視点の理想値
-                                </div>
-                                <p className="text-sm font-bold text-[#1A1A1A]">{b.optimalRange}</p>
-                            </div>
-                        )}
                     </div>
-                    <p className="text-xs text-[#4A4A4A]/60 mt-2 leading-relaxed">
-                        ※ 精密栄養学視点の理想値は参考情報です。判断は必ず医療専門家にご相談ください。
-                    </p>
                 </section>
+
+                {/* ── ここから会員限定（深さで線引き）─────────────── */}
+                <MemberGate active={gate}>
+                {b.optimalRange && (
+                    <section className="mb-10">
+                        <div className="p-4 bg-white/70 rounded-xl border border-[#41C9B4]/40">
+                            <div className="text-xs font-bold tracking-wider mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#41C9B4' }}>
+                                精密栄養学視点の理想値
+                            </div>
+                            <p className="text-sm font-bold text-[#1A1A1A]">{b.optimalRange}</p>
+                        </div>
+                        <p className="text-xs text-[#4A4A4A]/60 mt-2 leading-relaxed">
+                            ※ 精密栄養学視点の理想値は参考情報です。判断は必ず医療専門家にご相談ください。
+                        </p>
+                    </section>
+                )}
 
                 {/* 高い・低いとき */}
                 <section className="mb-10">
@@ -188,6 +198,8 @@ export default async function BiomarkerPage({ params }: { params: Promise<{ slug
                         ))}
                     </ul>
                 </section>
+                </MemberGate>
+                {/* ── 会員限定ここまで ───────────────────────── */}
 
                 {/* Disclaimer */}
                 <p className="text-xs text-[#4A4A4A]/60 leading-relaxed mb-12 p-4 bg-white/60 rounded-lg">
