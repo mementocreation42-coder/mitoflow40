@@ -15,7 +15,7 @@ export const metadata = {
 };
 
 const switches = [
-    { title: '空腹・断食', en: 'FASTING', note: '最も強力なスイッチ。糖が枯れると細胞は自己リサイクルを始める', href: '/ketones' },
+    { title: '空腹・断食', en: 'FASTING', note: '最も強力なスイッチ。糖が枯れると細胞は自己リサイクルを始める', href: '/fasting' },
     { title: '運動', en: 'EXERCISE', note: '適度な負荷が細胞のストレス応答を刺激し、掃除を促す' },
     { title: '睡眠', en: 'SLEEP', note: '特に脳では、睡眠中に老廃物の除去が進む' },
     { title: '特定の栄養', en: 'NUTRIENTS', note: 'スペルミジン（納豆・きのこ・チーズ）やポリフェノールが後押し' },

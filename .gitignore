@@ -48,3 +48,5 @@ next-env.d.ts
 /blood-analysis/血液検査データ理想値_*.pdf
 /public/reports/*.html
 /public/reports/_published_tokens.log
+
+.claude/worktrees/

@@ -86,7 +86,7 @@ export default function StimulantsPage() {
                         <p className="text-sm text-[#1A1A1A]/85 leading-relaxed">午後（おおむね14時以降）は控えめに／エナジードリンクの常用を避ける／不安や不眠が気になる人は、まずカフェインを見直してみる。</p>
                     </div>
                     <div className="mt-3 flex flex-wrap gap-2">
-                        {[{ href: '/sleep', label: '睡眠' }, { href: '/anxiety', label: '不安と体' }].map((l) => (
+                        {[{ href: '/caffeine', label: 'カフェインを詳しく' }, { href: '/sleep', label: '睡眠' }, { href: '/anxiety', label: '不安と体' }].map((l) => (
                             <Link key={l.href} href={l.href} className="text-xs px-3 py-1 rounded-full bg-white border border-[#1A1A1A]/20 font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white hover:border-[#41C9B4] transition-colors">{l.label}</Link>
                         ))}
                     </div>

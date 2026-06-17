@@ -119,13 +119,28 @@ export default function LibraryIndex() {
 
                 {/* 健康とは（思想の最上流） */}
                 <Link href="/health-philosophy"
-                    className="group mb-12 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    className="group mb-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all">
                     <div className="flex-shrink-0">
                         <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>THE APPROACH</span>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">健康とは</div>
                     </div>
                     <p className="flex-1 text-sm text-[#4A4A4A] leading-relaxed">
                         「病気でない」がゴールではありません。本来の力を発揮できる状態へ——すべての土台になる、Mitoflow40の健康の考え方。
+                    </p>
+                    <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                        読む <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    </span>
+                </Link>
+
+                {/* 生化学・栄養学を知ることの価値 */}
+                <Link href="/nutrition-literacy"
+                    className="group mb-12 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    <div className="flex-shrink-0">
+                        <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>WHY IT MATTERS</span>
+                        <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">学ぶと、何が変わる？</div>
+                    </div>
+                    <p className="flex-1 text-sm text-[#4A4A4A] leading-relaxed">
+                        体の仕組みがわかると、健康情報に振り回されず、自分の体を自分で読み解ける。学ぶことが、これからの数十年を支える力になる理由。
                     </p>
                     <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         読む <span className="group-hover:translate-x-1 transition-transform">→</span>
@@ -180,21 +195,6 @@ export default function LibraryIndex() {
                     </div>
                     <p className="flex-1 text-sm text-[#4A4A4A] leading-relaxed">
                         このライブラリ全体を貫く考え方。「みんなの平均」ではなく「あなたの最適」を探す——その読み解き方をまず知ることから。
-                    </p>
-                    <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                        読む <span className="group-hover:translate-x-1 transition-transform">→</span>
-                    </span>
-                </Link>
-
-                {/* 生化学・栄養学を知ることの価値 */}
-                <Link href="/nutrition-literacy"
-                    className="group mb-12 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all">
-                    <div className="flex-shrink-0">
-                        <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>WHY IT MATTERS</span>
-                        <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">学ぶと、何が変わる？</div>
-                    </div>
-                    <p className="flex-1 text-sm text-[#4A4A4A] leading-relaxed">
-                        体の仕組みがわかると、健康情報に振り回されず、自分の体を自分で読み解ける。学ぶことが、これからの数十年を支える力になる理由。
                     </p>
                     <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         読む <span className="group-hover:translate-x-1 transition-transform">→</span>
@@ -286,6 +286,39 @@ export default function LibraryIndex() {
                         </Link>
                     ))}
                     </div>
+
+                    {/* 小麦と健康 */}
+                    <Link href="/wheat"
+                        className="group mt-4 flex items-center gap-4 rounded-2xl border border-black p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F6E9CF' }}>
+                        <div className="flex-1">
+                            <div className="text-[10px] font-bold tracking-widest text-[#FF9855] mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>WHEAT</div>
+                            <div className="text-lg md:text-xl font-bold text-[#1A1A1A] mb-1">小麦と健康</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed">「小麦は体に悪い」は本当？ 血糖・グルテン・精製・超加工に切り分けて、上手なつき合い方を中立に。</p>
+                        </div>
+                        <span className="flex-shrink-0 text-[#1A1A1A] font-bold group-hover:translate-x-1 transition-transform" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>→</span>
+                    </Link>
+
+                    {/* 白米・玄米 */}
+                    <Link href="/rice"
+                        className="group mt-4 flex items-center gap-4 rounded-2xl border border-black p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F3EEDC' }}>
+                        <div className="flex-1">
+                            <div className="text-[10px] font-bold tracking-widest text-[#FF9855] mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>RICE</div>
+                            <div className="text-lg md:text-xl font-bold text-[#1A1A1A] mb-1">白米・玄米の真実</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed">「玄米は正義、白米は悪」は本当？ 血糖・栄養・フィチン酸・ヒ素まで、フェアに比べて自分に合う一杯を。</p>
+                        </div>
+                        <span className="flex-shrink-0 text-[#1A1A1A] font-bold group-hover:translate-x-1 transition-transform" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>→</span>
+                    </Link>
+
+                    {/* 食べない時間の力 */}
+                    <Link href="/fasting"
+                        className="group mt-4 flex items-center gap-4 rounded-2xl border border-black p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E6E0F2' }}>
+                        <div className="flex-1">
+                            <div className="text-[10px] font-bold tracking-widest text-[#FF9855] mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>FASTING</div>
+                            <div className="text-lg md:text-xl font-bold text-[#1A1A1A] mb-1">食べない時間の力</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed">「何を食べるか」だけでなく「食べない時間をつくる」選択。断食・空腹の効果と、向く人・向かない人を安全第一で。</p>
+                        </div>
+                        <span className="flex-shrink-0 text-[#1A1A1A] font-bold group-hover:translate-x-1 transition-transform" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>→</span>
+                    </Link>
 
                     {/* 気をつけたい食品 */}
                     <Link href="/caution-foods"
@@ -500,6 +533,17 @@ export default function LibraryIndex() {
                                 見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                             </span>
                         </Link>
+                        <Link href="/microbiome"
+                            className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#DCEFE4' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                MICROBIOME
+                            </div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-2">腸内フローラ・プレ/プロ</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">善玉菌・悪玉菌のバランスと、プレ/プロ/シン/ポストバイオティクスの違い。</p>
+                            <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
+                            </span>
+                        </Link>
                         <Link href="/gut-brain"
                             className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#DCEFE4' }}>
                             <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
@@ -536,17 +580,17 @@ export default function LibraryIndex() {
                     </div>
                 </div>
 
-                {/* 老化の2大ルート */}
+                {/* 老化と不調の土台（酸化・糖化・炎症） */}
                 <div id="aging" className="mt-20 md:mt-24 scroll-mt-24">
                     <div className="mb-5 flex items-stretch gap-3">
                         <span className="w-1.5 rounded-full bg-[#41C9B4]" />
                         <div className="py-0.5">
-                            <p className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>老化</p>
-                            <p className="text-[10px] tracking-[0.2em] font-bold text-[#41C9B4]/60 mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>AGING</p>
+                            <p className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>老化と不調の土台</p>
+                            <p className="text-[10px] tracking-[0.2em] font-bold text-[#41C9B4]/60 mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>AGING &amp; DISEASE</p>
                         </div>
                     </div>
                     <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
-                        体の老化は、大きく「さびる（酸化）」「こげる（糖化）」「くすぶる（慢性炎症）」の3つの道で進みます。どれも連動し、互いを加速させます。
+                        体の中では今この瞬間も、「<strong>さびる（酸化）</strong>」「<strong>こげる（糖化）</strong>」「<strong>くすぶる（慢性炎症）</strong>」という3つのダメージが静かに進んでいます。これらは見た目の老化を進めるだけでなく、疲れやすさや肌の不調といった日々の不調から、生活習慣病まで、多くの<strong>体の不調の共通の根っこ</strong>です。やっかいなのは、3つが連動して互いを加速させること。けれど裏を返せば、<strong>毎日の食事・運動・睡眠で減らしていけるダメージ</strong>でもあります。「歳のせい」とあきらめる前に、まず仕組みから知っていきましょう。
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <Link href="/oxidative-stress"
@@ -584,6 +628,36 @@ export default function LibraryIndex() {
                         </Link>
                     </div>
                 </div>
+
+                {/* 現代病ハブ */}
+                <Link href="/modern-diseases"
+                    className="group mt-8 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F0E2D8' }}>
+                    <div className="flex-shrink-0">
+                        <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>MODERN DISEASES</span>
+                        <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">現代病とは</div>
+                    </div>
+                    <p className="flex-1 text-sm text-[#4A4A4A] leading-relaxed">
+                        生活習慣病・慢性炎症・自律神経の乱れ・睡眠負債・座りすぎ——現代病の多くは「体の進化」と「変わりすぎた環境」のズレから。全体像を俯瞰し、対策テーマへつなぎます。
+                    </p>
+                    <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                        見る <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    </span>
+                </Link>
+
+                {/* 糖尿病ハブ */}
+                <Link href="/diabetes"
+                    className="group mt-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F7E2DC' }}>
+                    <div className="flex-shrink-0">
+                        <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>DIABETES</span>
+                        <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">糖尿病とは</div>
+                    </div>
+                    <p className="flex-1 text-sm text-[#4A4A4A] leading-relaxed">
+                        現代病の代表格。1型・2型の違い、見逃しやすいサイン、HbA1c、合併症、そして「境界型」のうちにできること。正しく知り、医療につなぐための解説です。
+                    </p>
+                    <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                        見る <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    </span>
+                </Link>
 
                 {/* ホルモン */}
                 <div id="hormones" className="mt-20 md:mt-24 scroll-mt-24">
@@ -629,6 +703,8 @@ export default function LibraryIndex() {
                             { href: '/anxiety', en: 'ANXIETY', ja: '不安と体', note: '血糖・腸・睡眠など、不安を揺さぶる体の要因。', bg: '#EFEAF6' },
                             { href: '/mindfulness', en: 'BREATH', ja: 'マインドフルネス・呼吸', note: '呼吸という、自律神経への手動スイッチ。', bg: '#EFEAF6' },
                             { href: '/spirituality', en: 'MIND & SPIRIT', ja: 'スピリチュアリティと体', note: '祈り・瞑想・つながりを“心身相関”で読み解く。', bg: '#EFEAF6' },
+                            { href: '/sound', en: 'SOUND', ja: '音と健康', note: 'α波・振動・音楽療法と、周波数ヒーリングの潮流を中立に。', bg: '#EFEAF6' },
+                            { href: '/smell', en: 'SMELL', ja: '匂いと健康', note: '記憶・感情・脳とのつながりと、アロマの効果の見極め。', bg: '#EFEAF6' },
                         ].map((s) => (
                             <Link key={s.href} href={s.href}
                                 className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: s.bg }}>
@@ -650,22 +726,41 @@ export default function LibraryIndex() {
                             <Link key={l.href} href={l.href} className="text-xs px-3 py-1 rounded-full bg-white border border-[#1A1A1A]/20 font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white hover:border-[#41C9B4] transition-colors">{l.label}</Link>
                         ))}
                     </div>
-                    <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                </div>
+
+                {/* 研究と社会のフロンティア */}
+                <div id="frontier" className="mt-20 md:mt-24 scroll-mt-24">
+                    <div className="mb-5 flex items-stretch gap-3">
+                        <span className="w-1.5 rounded-full bg-[#41C9B4]" />
+                        <div className="py-0.5">
+                            <p className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>研究と社会のフロンティア</p>
+                            <p className="text-[10px] tracking-[0.2em] font-bold text-[#41C9B4]/60 mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>FRONTIER</p>
+                        </div>
+                    </div>
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
+                        賛否や法律が国によって大きく異なり、いま世界で研究・議論が進んでいるテーマです。<strong>すすめるためでも、否定するためでもなく</strong>、何が分かっていて何が分かっていないかを中立に整理します。<strong className="text-[#E8896B]">いずれも日本では法律で規制されています。</strong>
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <Link href="/psychedelics-research"
-                            className="group flex items-center gap-3 rounded-xl border border-dashed border-[#1A1A1A]/40 p-4 hover:border-[#1A1A1A] hover:bg-white/40 transition-all">
-                            <div className="flex-1">
-                                <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/45 mb-0.5" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>RESEARCH FRONTIER</div>
-                                <div className="text-sm font-bold text-[#1A1A1A]">サイケデリック研究の潮流<span className="font-normal text-[#1A1A1A]/60">（中立・日本では違法）</span></div>
-                            </div>
-                            <span className="flex-shrink-0 text-[#1A1A1A] font-bold group-hover:translate-x-1 transition-transform">→</span>
+                            className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7E0F2' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>RESEARCH FRONTIER</div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-2">サイケデリック研究の潮流</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">うつ・PTSDなどへの治療応用をめぐり、海外で進む研究の潮流を中立に。<span className="font-bold text-[#E8896B]">日本では違法。</span></p>
+                            <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
                         </Link>
                         <Link href="/cannabis"
-                            className="group flex items-center gap-3 rounded-xl border border-dashed border-[#1A1A1A]/40 p-4 hover:border-[#1A1A1A] hover:bg-white/40 transition-all">
-                            <div className="flex-1">
-                                <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/45 mb-0.5" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>HISTORY &amp; POLICY</div>
-                                <div className="text-sm font-bold text-[#1A1A1A]">大麻をめぐる歴史と世界の動き<span className="font-normal text-[#1A1A1A]/60">（中立・日本では違法）</span></div>
-                            </div>
-                            <span className="flex-shrink-0 text-[#1A1A1A] font-bold group-hover:translate-x-1 transition-transform">→</span>
+                            className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7E0F2' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>HISTORY &amp; POLICY</div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-2">大麻をめぐる歴史と世界の動き</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">医療・嗜好をめぐる各国の制度の変化と歴史を中立に整理。<span className="font-bold text-[#E8896B]">日本では違法。</span></p>
+                            <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                        </Link>
+                        <Link href="/counterculture"
+                            className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all sm:col-span-2" style={{ background: '#E7E0F2' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>HISTORY &amp; IDEAS</div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-2">対抗文化が生んだもの</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">グレイトフル・デッド、フラワームーブメント、ホール・アース・カタログ、パソコン、ジョブズ、EFF、そして規制。「個人に道具を」という思想史を事実ベースで。</p>
+                            <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
                         </Link>
                     </div>
                 </div>
@@ -690,6 +785,13 @@ export default function LibraryIndex() {
                             <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">修復・再生の最強の回復時間。すべての土台。</p>
                             <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
                         </Link>
+                        <Link href="/sunlight"
+                            className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#FBEFD2' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>SUNLIGHT</div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-2">日光と健康</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">体内時計・セロトニン・ビタミンDをつくる太陽の光と、紫外線との付き合い方。</p>
+                            <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                        </Link>
                         <Link href="/exercise"
                             className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E1EFDD' }}>
                             <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>EXERCISE</div>
@@ -702,6 +804,13 @@ export default function LibraryIndex() {
                             <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>ON YOUR HABITS</div>
                             <div className="text-lg font-bold text-[#1A1A1A] mb-2">嗜好品と体</div>
                             <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">アルコール・タバコ・カフェイン。体への影響を知って、自分で選ぶ。</p>
+                            <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                        </Link>
+                        <Link href="/caffeine"
+                            className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#EDE6D3' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>CAFFEINE</div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-2">カフェイン</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">眠気が飛ぶ仕組み・半減期・代謝の個人差から、自分に合うコーヒーの飲み方を。</p>
                             <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
                         </Link>
                         <Link href="/detox"
@@ -730,6 +839,13 @@ export default function LibraryIndex() {
                             <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>WEARABLES</div>
                             <div className="text-lg font-bold text-[#1A1A1A] mb-2">ウェアラブル活用術</div>
                             <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">Apple Watchで自分の体を読む。HRV・睡眠・心肺機能の活かし方。</p>
+                            <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                        </Link>
+                        <Link href="/cgm"
+                            className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#DCE8EC' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>CGM</div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-2">血糖モニタリング</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">フリースタイルリブレ等で「何が自分の血糖を上げるか」を可視化。自分実験の道具。</p>
                             <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
                         </Link>
                         <Link href="/supplements"
@@ -789,6 +905,36 @@ export default function LibraryIndex() {
                         <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                             読む <span className="group-hover:translate-x-1 transition-transform">→</span>
                         </span>
+                    </Link>
+                </div>
+
+                {/* 著書：健康とは、カウンターカルチャーである */}
+                <div className="mt-20 md:mt-24">
+                    <div className="mb-5 flex items-stretch gap-3">
+                        <span className="w-1.5 rounded-full bg-[#C0392B]" />
+                        <div className="py-0.5">
+                            <p className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>学んで、感じたこと</p>
+                            <p className="text-[10px] tracking-[0.2em] font-bold text-[#C0392B]/70 mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>MANIFESTO</p>
+                        </div>
+                    </div>
+                    <Link href="/health-counterculture"
+                        className="group block rounded-2xl border border-black overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#EAE6DD' }}>
+                        <div className="flex flex-col sm:flex-row items-center gap-5 md:gap-7 p-6 md:p-8">
+                            <div className="flex-shrink-0 w-[130px] h-[185px] rounded-md border border-black/20 flex flex-col items-center justify-center text-center px-3 shadow-sm" style={{ background: '#C0392B' }}>
+                                <span className="text-white font-bold leading-snug" style={{ fontFamily: "'Noto Sans JP', sans-serif", fontSize: '14px' }}>健康とは、カウンターカルチャーである。</span>
+                                <span className="mt-2 text-white/80 text-[10px]">小林 大介</span>
+                            </div>
+                            <div className="flex-1 text-center sm:text-left">
+                                <div className="text-[10px] font-bold tracking-widest text-[#C0392B] mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>身体から始める静かな反抗</div>
+                                <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-3">健康とは、カウンターカルチャーである。</div>
+                                <p className="text-sm text-[#4A4A4A] leading-relaxed mb-4">
+                                    生化学や栄養学を学んでいくうちに、たどり着いた一つの実感——健康とは、もう一度<strong>自分の身体の主権を取り戻す</strong>静かな反抗なのではないか。学びの先に感じたことを綴った一冊を、章ごとに紹介します。
+                                </p>
+                                <span className="inline-flex items-center gap-1 px-5 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                    読む <span className="group-hover:translate-x-1 transition-transform">→</span>
+                                </span>
+                            </div>
+                        </div>
                     </Link>
                 </div>
 

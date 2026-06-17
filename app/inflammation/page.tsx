@@ -58,9 +58,9 @@ export default function InflammationPage() {
                 style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '慢性炎症（くすぶる）とは', description: '老化を加速させる「慢性炎症」を、原因・影響・測り方・抑える習慣から解説。', path: '/inflammation' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '老化', path: '/library#aging' }, { name: '慢性炎症', path: '/inflammation' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '老化と不調の土台', path: '/library#aging' }, { name: '慢性炎症', path: '/inflammation' }])} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '老化', href: '/library#aging' }, { name: '慢性炎症' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '老化と不調の土台', href: '/library#aging' }, { name: '慢性炎症' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         CHRONIC INFLAMMATION ／ くすぶる

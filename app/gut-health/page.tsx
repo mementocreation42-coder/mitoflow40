@@ -118,6 +118,7 @@ export default function GutHealthPage() {
                     <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">あわせて読む</h2>
                     <div className="flex flex-wrap gap-2">
                         {[
+                            { href: '/microbiome', label: '腸内フローラ・プレ/プロ' },
                             { href: '/gut-troubles', label: 'グルテン・SIBO等' },
                             { href: '/gut-brain', label: '腸脳相関' },
                             { href: '/digestion', label: '消化・吸収' },

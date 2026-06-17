@@ -100,7 +100,7 @@ export default function BloodSugarPage() {
                         ただし、ここでも「糖質＝悪」ではありません。問題は<strong>「量・頻度・質（精製度）」</strong>。極端に糖質を断つ必要はなく、精製度の低い糖質を選び、食べ方を整えて波を小さくする——それで十分に変わります。
                     </p>
                     <div className="mt-5 flex flex-wrap gap-2">
-                        {[{ href: '/caution-foods', label: '気をつけたい食品' }, { href: '/glycation', label: '糖化' }, { href: '/foods/brown-rice', label: '玄米' }].map((l) => (
+                        {[{ href: '/diabetes', label: '糖尿病とは' }, { href: '/cgm', label: '血糖モニタリング（CGM）' }, { href: '/caution-foods', label: '気をつけたい食品' }, { href: '/glycation', label: '糖化' }, { href: '/foods/brown-rice', label: '玄米' }].map((l) => (
                             <Link key={l.href} href={l.href} className="text-xs px-3 py-1 rounded-full bg-white border border-[#1A1A1A]/20 font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white hover:border-[#41C9B4] transition-colors">{l.label}</Link>
                         ))}
                     </div>

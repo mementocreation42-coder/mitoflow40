@@ -50,6 +50,9 @@ export default function GutTroublesPage() {
                     <p className="text-[11px] text-[#4A4A4A]/60 mt-3 leading-relaxed">
                         ※ グルテンで不調が疑われる場合、自己判断で完全に除去する前に医師にご相談を。先に抜いてしまうと、セリアック病などの正確な検査ができなくなることがあります。
                     </p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                        <Link href="/wheat" className="text-xs px-3 py-1 rounded-full bg-white border border-[#1A1A1A]/20 font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white hover:border-[#41C9B4] transition-colors">小麦と健康（血糖・精製も）</Link>
+                    </div>
                 </section>
 
                 {/* カゼイン */}

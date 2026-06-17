@@ -57,9 +57,9 @@ export default function OxidativeStressPage() {
                 style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '活性酸素・酸化ストレス（さびる）とは', description: '体がさびる原因「活性酸素」と抗酸化のしくみを、仕組み・影響・栄養素・遺伝子から解説。', path: '/oxidative-stress' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '老化', path: '/library#aging' }, { name: '活性酸素', path: '/oxidative-stress' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '老化と不調の土台', path: '/library#aging' }, { name: '活性酸素', path: '/oxidative-stress' }])} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '老化', href: '/library#aging' }, { name: '活性酸素' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '老化と不調の土台', href: '/library#aging' }, { name: '活性酸素' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         OXIDATIVE STRESS ／ さびる

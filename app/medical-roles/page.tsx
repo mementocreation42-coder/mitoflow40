@@ -22,6 +22,7 @@ type Role = {
     summary: string;
     can: string[];
     cannot: string[];
+    license?: '国家資格' | '民間資格';
 };
 
 const roles: Role[] = [
@@ -97,6 +98,42 @@ const roles: Role[] = [
         can: ['歯・口腔の「診断」と治療', '歯科領域の薬の処方・麻酔・手術', '口腔ケアの指導'],
         cannot: ['歯科以外の全身疾患の診断・治療（専門外は医師へ）'],
     },
+    {
+        name: 'はり師・きゅう師（鍼灸師）',
+        en: 'ACUPUNCTURIST',
+        color: '#F3DDD9',
+        license: '国家資格',
+        summary: '東洋医学にもとづき、はり・きゅうで体のバランスを整える。',
+        can: ['はり・きゅうによる施術', '東洋医学の考え方にもとづく体調へのアプローチ', '肩こり・腰痛などへの施術（医師の同意が必要な場合あり）'],
+        cannot: ['病名の「診断」', '薬の「処方」', '西洋医学的な治療の代替を約束すること'],
+    },
+    {
+        name: 'あん摩マッサージ指圧師',
+        en: 'MASSAGE THERAPIST',
+        color: '#EDE3D4',
+        license: '国家資格',
+        summary: 'あん摩・マッサージ・指圧で、筋肉や血流の状態を整える手技の専門家。',
+        can: ['あん摩・マッサージ・指圧の施術', 'こり・血行・疲労へのケア', '医療機関と連携した施術'],
+        cannot: ['病名の「診断」', '薬の「処方」', '骨折・脱臼などの治療（柔道整復師・医師の領域）'],
+    },
+    {
+        name: '柔道整復師',
+        en: 'JUDO THERAPIST',
+        color: '#E2E8D6',
+        license: '国家資格',
+        summary: '骨・関節・筋のケガ（打撲・捻挫・脱臼・骨折）を手技で施術する専門家。',
+        can: ['打撲・捻挫・挫傷の施術', '脱臼・骨折の応急手当', '接骨院・整骨院での施術'],
+        cannot: ['病名の「診断」（レントゲン等による医学的診断）', '薬の「処方」・手術', '内科的な病気の治療'],
+    },
+    {
+        name: '整体師・カイロプラクターなど',
+        en: 'BODYWORK (NON-LICENSED)',
+        color: '#E6DCEA',
+        license: '民間資格',
+        summary: '体の歪みや姿勢へのアプローチを掲げる民間療法。国家資格ではない点に注意。',
+        can: ['リラクゼーション・ボディケア（民間の範囲）', '姿勢・生活習慣に関する一般的なアドバイス'],
+        cannot: ['病名の「診断」', '薬の「処方」', '医行為・国家資格者だけに許された施術（はり・きゅう・骨折治療など）'],
+    },
 ];
 
 export default function MedicalRolesPage() {
@@ -138,14 +175,29 @@ export default function MedicalRolesPage() {
                 {/* 役割マップ */}
                 <section className="mb-10">
                     <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2 border-l-4 border-[#41C9B4] pl-3 leading-tight">医療者の役割マップ</h2>
-                    <p className="text-sm text-[#4A4A4A] mb-5 leading-relaxed">
-                        主な医療職の「担うこと」と「できること・できないこと」を整理しました。共通するのは、<strong>「診断」と「処方」は医師にしかできない</strong>という大原則です。
+                    <p className="text-sm text-[#4A4A4A] mb-3 leading-relaxed">
+                        主な医療職、そして東洋医学・手技療法の担い手まで、「担うこと」と「できること・できないこと」を整理しました。共通するのは、<strong>「診断」と「処方」は医師にしかできない</strong>という大原則です。
+                    </p>
+                    <p className="text-xs text-[#4A4A4A] mb-5 leading-relaxed bg-white/60 border border-black/10 rounded-xl p-3">
+                        <strong className="text-[#2E9E89]">国家資格</strong>（鍼灸師・あん摩マッサージ指圧師・柔道整復師など）は法律で定められた施術ができますが、<strong className="text-[#C76B53]">民間資格</strong>（整体師・カイロプラクターなど）は国家資格ではなく、業務範囲も国によって定められていません。同じ「体を整える」でも、この線引きは知っておくと安心です。
                     </p>
                     <div className="space-y-4">
                         {roles.map((r) => (
                             <div key={r.en} className="rounded-2xl p-5 md:p-6 border border-black" style={{ background: r.color }}>
                                 <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{r.en}</div>
-                                <div className="text-xl font-bold text-[#1A1A1A] mb-1">{r.name}</div>
+                                <div className="flex items-center flex-wrap gap-2 mb-1">
+                                    <span className="text-xl font-bold text-[#1A1A1A]">{r.name}</span>
+                                    {r.license && (
+                                        <span
+                                            className="text-[10px] font-bold px-2 py-0.5 rounded-full border"
+                                            style={r.license === '国家資格'
+                                                ? { color: '#2E9E89', borderColor: '#2E9E89', background: 'rgba(65,201,180,0.12)' }
+                                                : { color: '#C76B53', borderColor: '#E08A6E', background: 'rgba(224,138,110,0.12)' }}
+                                        >
+                                            {r.license}
+                                        </span>
+                                    )}
+                                </div>
                                 <p className="text-sm text-[#4A4A4A] leading-relaxed mb-4">{r.summary}</p>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <div className="rounded-xl bg-white/70 border border-black/10 p-4">

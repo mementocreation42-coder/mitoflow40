@@ -144,6 +144,7 @@ export default function WearablesPage() {
                     </p>
                     <div className="flex flex-wrap gap-2">
                         {[
+                            { href: '/cgm', label: '血糖モニタリング（CGM）' },
                             { href: '/autonomic-nervous-system', label: '自律神経とHRV' },
                             { href: '/sleep', label: '睡眠' },
                             { href: '/exercise', label: '運動' },

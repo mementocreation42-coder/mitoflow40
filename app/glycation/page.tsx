@@ -48,9 +48,9 @@ export default function GlycationPage() {
                 style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '糖化・AGEs（こげる）とは', description: '体がこげる原因「糖化」とAGEsを、仕組み・血糖との関係・防ぐ習慣から解説。', path: '/glycation' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '老化', path: '/library#aging' }, { name: '糖化', path: '/glycation' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '老化と不調の土台', path: '/library#aging' }, { name: '糖化', path: '/glycation' }])} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '老化', href: '/library#aging' }, { name: '糖化' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '老化と不調の土台', href: '/library#aging' }, { name: '糖化' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         GLYCATION ／ こげる
