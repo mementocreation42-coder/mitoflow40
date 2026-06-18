@@ -119,6 +119,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { path: '/stress', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/mood-nutrition', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/anxiety', priority: 0.6, changeFrequency: 'monthly' },
+        { path: '/migraine', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/mindfulness', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/spirituality', priority: 0.6, changeFrequency: 'monthly' },
         { path: '/sound', priority: 0.6, changeFrequency: 'monthly' },

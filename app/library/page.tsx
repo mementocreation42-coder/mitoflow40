@@ -701,6 +701,7 @@ export default function LibraryIndex() {
                             { href: '/stress', en: 'STRESS', ja: 'ストレスとは', note: '敵ではなく信号。コルチゾールと自律神経のしくみ。', bg: '#EFEAF6' },
                             { href: '/mood-nutrition', en: 'MOOD & FOOD', ja: '気分と栄養', note: 'セロトニン・ドーパミンの“材料”は栄養という視点。', bg: '#EFEAF6' },
                             { href: '/anxiety', en: 'ANXIETY', ja: '不安と体', note: '血糖・腸・睡眠など、不安を揺さぶる体の要因。', bg: '#EFEAF6' },
+                            { href: '/migraine', en: 'MIGRAINE', ja: '片頭痛と体', note: '引き金・栄養（Mg・B2・CoQ10）・危険な頭痛の見分け方。', bg: '#EFEAF6' },
                             { href: '/mindfulness', en: 'BREATH', ja: 'マインドフルネス・呼吸', note: '呼吸という、自律神経への手動スイッチ。', bg: '#EFEAF6' },
                             { href: '/spirituality', en: 'MIND & SPIRIT', ja: 'スピリチュアリティと体', note: '祈り・瞑想・つながりを“心身相関”で読み解く。', bg: '#EFEAF6' },
                             { href: '/sound', en: 'SOUND', ja: '音と健康', note: 'α波・振動・音楽療法と、周波数ヒーリングの潮流を中立に。', bg: '#EFEAF6' },
