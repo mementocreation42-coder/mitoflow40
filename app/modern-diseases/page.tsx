@@ -59,6 +59,7 @@ const groups = [
         items: [
             { href: '/gut-health', label: '腸内環境の乱れ' },
             { href: '/gut-troubles', label: 'リーキーガット等' },
+            { href: '/periodontal-disease', label: '歯周病' },
             { href: '/reduce-toxins', label: '有害物質を減らす' },
             { href: '/wheat', label: '小麦・超加工食品' },
             { href: '/caution-foods', label: '気をつけたい食品' },

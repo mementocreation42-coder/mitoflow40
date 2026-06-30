@@ -305,6 +305,122 @@ export const symptoms: Symptom[] = [
             'ストレスケアでコルチゾールを抑える',
         ],
     },
+    {
+        slug: 'palpitations',
+        name: '動悸・息切れ',
+        en: 'Palpitations',
+        color: '#F6D7D2',
+        tagline: '胸のドキドキ・息切れ。心臓だけでなく代謝のサインも。',
+        intro:
+            '動悸（胸がドキドキする・脈が飛ぶ感じ）や、少し動いただけの息切れは、心臓そのものだけでなく、貧血・甲状腺・血糖・自律神経・カフェインなど全身の状態を映すサインです。鉄不足による貧血は「酸素を運ぶ力」の低下から心臓を代償的に働かせ、甲状腺機能の亢進は代謝と心拍の高ぶりから、動悸を起こします。一方で、胸の痛みを伴う・安静時にも続く・意識が遠のくといった動悸は、見逃せない心臓のサインのこともあります。気になるときは自己判断せず、循環器の受診を。',
+        causes: [
+            '鉄不足・貧血（酸素を運ぶ力の低下を心臓が代償）',
+            '甲状腺機能の亢進（代謝・心拍の高ぶり）',
+            '血糖の乱高下（低血糖時の動悸）',
+            '自律神経の乱れ・ストレス（交感神経の高ぶり）',
+            'カフェイン・アルコール・脱水、マグネシウム不足',
+        ],
+        relatedBiomarkers: ['ferritin', 'hemoglobin', 'tsh', 'ft3', 'ft4', 'hba1c'],
+        relatedNutrients: ['iron', 'magnesium', 'b12', 'coq10'],
+        relatedLinks: [
+            { href: '/organs/heart', label: '心臓' },
+            { href: '/hormones/thyroid-hormone', label: '甲状腺ホルモン' },
+            { href: '/autonomic-nervous-system', label: '自律神経とHRV' },
+            { href: '/blood-sugar', label: '血糖コントロール' },
+        ],
+        selfCare: [
+            'カフェイン・アルコールを控え、水分をしっかり摂る',
+            '鉄・マグネシウムなど不足しやすい栄養を見直す',
+            '深い呼吸で副交感神経を優位にし、脈を落ち着かせる',
+        ],
+    },
+    {
+        slug: 'dizziness',
+        name: 'めまい・立ちくらみ',
+        en: 'Dizziness',
+        color: '#D9EBEA',
+        tagline: 'くらっとする立ちくらみ。鉄・血圧・血糖から探る。',
+        intro:
+            'めまいや立ちくらみは、脳へ届く血流・酸素と、平衡感覚（内耳）のバランスが崩れたときに起こります。立ち上がった瞬間にくらっとする「立ちくらみ」は、鉄不足の貧血や血圧の調整（起立性低血圧）、脱水が背景にあることが多く、低血糖やビタミンB12の不足でも起こります。ぐるぐる回る回転性のめまいは内耳が関わることもあります。突然の激しいめまいに、ろれつの回りにくさ・手足のしびれ・激しい頭痛を伴う場合は、すぐ受診を。',
+        causes: [
+            '鉄不足・貧血（脳への酸素供給の低下）',
+            '起立性低血圧・血圧調整の乱れ・脱水',
+            '血糖の乱高下（低血糖）',
+            'ビタミンB12の不足（造血・神経への影響）',
+            '内耳（前庭）の不調・自律神経の乱れ',
+        ],
+        relatedBiomarkers: ['ferritin', 'hemoglobin', 'hematocrit', 'hba1c', 'vitamin-b12-serum'],
+        relatedNutrients: ['iron', 'b12', 'folate', 'magnesium'],
+        relatedLinks: [
+            { href: '/organs/brain', label: '脳' },
+            { href: '/organs/heart', label: '心臓・血圧' },
+            { href: '/blood-sugar', label: '血糖コントロール' },
+            { href: '/autonomic-nervous-system', label: '自律神経とHRV' },
+        ],
+        selfCare: [
+            'ゆっくり立ち上がり、こまめに水分・塩分を補う',
+            '鉄・ビタミンB12など造血に関わる栄養を見直す',
+            '空腹を避け、血糖を安定させる',
+        ],
+    },
+    {
+        slug: 'allergy',
+        name: 'アレルギー・むずむず（鼻炎・かゆみ）',
+        en: 'Allergy & Histamine',
+        color: '#ECEFCF',
+        tagline: '鼻炎・かゆみ・むずむず。ヒスタミンと免疫から読む。',
+        intro:
+            'くしゃみ・鼻水・目や肌のかゆみといった「むずむず」は、免疫が花粉や食べ物などに過剰に反応し、ヒスタミンが放出されて起こります。ヒスタミンはアレルギーの「悪者」だけでなく、胃酸分泌や脳の覚醒も担う物質で、つくる量と分解する力（DAO/HNMT酵素）のバランスが鍵。腸内環境・慢性炎症・ビタミンやミネラルの状態が、反応のしやすさに関わります。症状が強い・通年続く場合は、アレルギー科の受診も検討を。',
+        causes: [
+            '免疫の過剰反応とヒスタミンの放出',
+            'ヒスタミン分解酵素（DAO/HNMT）の働きの低下',
+            '腸内環境の乱れ（免疫の多くは腸に）',
+            '慢性炎症・酸化ストレス',
+            'ビタミンC・ビタミンB6・銅など分解に関わる栄養の不足',
+        ],
+        relatedBiomarkers: ['hscrp', 'wbc', 'ferritin', 'vitamin-d-serum'],
+        relatedNutrients: ['vitamin-c', 'b6', 'copper', 'omega3', 'magnesium'],
+        relatedLinks: [
+            { href: '/histamine', label: 'ヒスタミン' },
+            { href: '/organs/gut', label: '腸' },
+            { href: '/inflammation', label: '慢性炎症' },
+            { href: '/oxidative-stress', label: '活性酸素' },
+        ],
+        selfCare: [
+            '腸活（食物繊維・発酵食品）で免疫の土台を整える',
+            'ビタミンC・B6など、ヒスタミン分解を支える栄養を意識',
+            '睡眠と炎症ケアで過敏な反応を鎮める',
+        ],
+    },
+    {
+        slug: 'oral-gum',
+        name: '口臭・歯ぐきの不調',
+        en: 'Oral & Gums',
+        color: '#F0DEEC',
+        tagline: '口臭・歯ぐきの腫れや出血。全身の炎症ともつながる。',
+        intro:
+            '口臭や歯ぐきの腫れ・出血は、口の中だけの問題に見えて、全身とつながるサインです。歯ぐきの細菌による慢性炎症（歯周病）は、糖尿病・心血管・腸内環境とも双方向に関わることがわかってきました。血糖の乱れは歯周病を悪化させ、歯周病は血糖を乱す——という悪循環も。唾液の減少（ドライマウス・口呼吸）やビタミン・栄養の不足も、口内環境を左右します。出血や腫れが続くときは、歯科の受診を。',
+        causes: [
+            '歯ぐきの細菌による慢性炎症（歯周病）',
+            '血糖の乱れ（高血糖と歯周病の悪循環）',
+            '唾液の減少（ドライマウス・口呼吸）',
+            'ビタミンC・ビタミンD・亜鉛などの不足',
+            '腸内環境・全身の炎症との関わり',
+        ],
+        relatedBiomarkers: ['hba1c', 'fasting-glucose', 'hscrp', 'vitamin-d-serum'],
+        relatedNutrients: ['vitamin-c', 'vitamin-d', 'zinc', 'coq10'],
+        relatedLinks: [
+            { href: '/periodontal-disease', label: '歯周病' },
+            { href: '/blood-sugar', label: '血糖コントロール' },
+            { href: '/inflammation', label: '慢性炎症' },
+            { href: '/organs/gut', label: '腸' },
+        ],
+        selfCare: [
+            'ていねいな歯みがき・歯間ケアで細菌を減らす',
+            '血糖を安定させ、歯ぐきの炎症を抑える',
+            'ビタミンC・D・亜鉛など歯ぐきの材料を満たす',
+        ],
+    },
 ];
 
 export function getSymptomBySlug(slug: string): Symptom | undefined {

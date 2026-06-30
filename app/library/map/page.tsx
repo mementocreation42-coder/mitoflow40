@@ -32,6 +32,7 @@ const sections: Sec[] = [
             { href: '/molecular-nutrition', label: '分子栄養学' },
             { href: '/precision-nutrition', label: '精密栄養学' },
             { href: '/nutrition-literacy', label: '学ぶと何が変わる？' },
+            { href: '/nutrition-history', label: '栄養学の歴史' },
             { href: '/food-journey', label: '食べてから動くまで' },
         ],
     },
@@ -43,6 +44,7 @@ const sections: Sec[] = [
             { href: '/rice', label: '米' },
             { href: '/wheat', label: '小麦' },
             { href: '/caution-foods', label: '注意したい食べ物' },
+            { href: '/calories', label: 'カロリーの誤解' },
         ],
     },
     {
@@ -111,6 +113,7 @@ const sections: Sec[] = [
             { href: '/exercise', label: '運動' },
             { href: '/fasting', label: '断食' },
             { href: '/sunlight', label: '日光' },
+            { href: '/water', label: '水' },
             { href: '/detox', label: 'デトックス' },
             { href: '/nutrient-density', label: '栄養価の変化' },
             { href: '/supplements', label: 'サプリメント' },
