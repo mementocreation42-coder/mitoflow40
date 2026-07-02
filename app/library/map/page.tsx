@@ -3,12 +3,12 @@ import JsonLd, { medicalWebPage, breadcrumb } from '@/components/JsonLd';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
-    title: 'ライブラリ・マップ｜全体の構造をひと目で | Mitoflow40',
-    description: 'Mitoflow40ライブラリの全体像を、インフォグラフィックでひと目に。身体の地図・食べ物・内臓・仕組み・老化と不調・ホルモン・心・フロンティア・生活習慣・症状・思索——11のセクションの構造と、それぞれの代表ページへの入口をまとめた、軽やかな見取り図です。',
+    title: 'ライブラリマップ｜全体の構造をひと目で | Mitoflow40',
+    description: 'Mitoflow40ライブラリの全体像を、インフォグラフィックでひと目に。身体の地図・食べ物・生活習慣・内臓・仕組み・老化と不調・ホルモン・心・フロンティア・症状・思索——11のセクションの構造と、それぞれの代表ページへの入口をまとめた、軽やかなライブラリマップです。',
     alternates: { canonical: 'https://mitoflow40.com/library/map' },
     openGraph: {
-        title: 'ライブラリ・マップ｜全体の構造をひと目で | Mitoflow40',
-        description: 'ライブラリの全11セクションの構造を、インフォグラフィックでひと目に。代表ページへの入口つき見取り図。',
+        title: 'ライブラリマップ｜全体の構造をひと目で | Mitoflow40',
+        description: 'ライブラリの全11セクションの構造を、インフォグラフィックでひと目に。代表ページへの入口つきライブラリマップ。',
         url: 'https://mitoflow40.com/library/map',
         type: 'website',
     },
@@ -48,7 +48,20 @@ const sections: Sec[] = [
         ],
     },
     {
-        n: 3, en: 'YOUR ORGANS', ja: '内臓・臓器', anchor: '#organs', color: '#F0E2D8',
+        n: 3, en: 'LIFESTYLE', ja: '生活習慣', anchor: '#lifestyle', color: '#E7EFD8',
+        desc: '運動・断食・光・解毒・サプリ・計測。知識を日々の暮らしに落とし込む。',
+        pages: [
+            { href: '/exercise', label: '運動' },
+            { href: '/fasting', label: '断食' },
+            { href: '/sunlight', label: '日光' },
+            { href: '/water', label: '水' },
+            { href: '/detox', label: 'デトックス' },
+            { href: '/nutrient-density', label: '栄養価の変化' },
+            { href: '/supplements', label: 'サプリメント' },
+        ],
+    },
+    {
+        n: 4, en: 'YOUR ORGANS', ja: '内臓・臓器', anchor: '#organs', color: '#F0E2D8',
         desc: '肝臓・腎臓・腸・心臓・脳など、主要な臓器の役割と、関わる検査・栄養。',
         pages: [
             { href: '/organs', label: '8臓器を見る' },
@@ -57,7 +70,7 @@ const sections: Sec[] = [
         ],
     },
     {
-        n: 4, en: 'MECHANISM', ja: '身体の仕組み', anchor: '#mechanism', color: '#D7F0E8',
+        n: 5, en: 'MECHANISM', ja: '身体の仕組み', anchor: '#mechanism', color: '#D7F0E8',
         desc: '細胞の中で起きていること。エネルギー産生から消化・腸・酵素まで、土台の生化学。',
         pages: [
             { href: '/mitochondria', label: 'ミトコンドリア' },
@@ -68,7 +81,7 @@ const sections: Sec[] = [
         ],
     },
     {
-        n: 5, en: 'AGING & DISEASE', ja: '老化と不調の土台', anchor: '#aging', color: '#F7E2DC',
+        n: 6, en: 'AGING & DISEASE', ja: '老化と不調の土台', anchor: '#aging', color: '#F7E2DC',
         desc: 'さびる・こげる・くすぶる——共通の根と、そこから生まれる現代病たち。',
         pages: [
             { href: '/oxidative-stress', label: '酸化' },
@@ -82,14 +95,14 @@ const sections: Sec[] = [
         ],
     },
     {
-        n: 6, en: 'HORMONES', ja: 'ホルモン', anchor: '#hormones', color: '#F3E0EC',
+        n: 7, en: 'HORMONES', ja: 'ホルモン', anchor: '#hormones', color: '#F3E0EC',
         desc: '体じゅうに指令を届ける化学メッセンジャー。9種のホルモンと40代の変化。',
         pages: [
             { href: '/hormones', label: 'ホルモンの種類' },
         ],
     },
     {
-        n: 7, en: 'MIND & BODY', ja: '心とからだ', anchor: '#mind', color: '#E6E0F2',
+        n: 8, en: 'MIND & BODY', ja: '心とからだ', anchor: '#mind', color: '#E6E0F2',
         desc: '気分や不安を「体の土台」から読み解く。ストレス・睡眠・自律神経・栄養。',
         pages: [
             { href: '/stress', label: 'ストレス' },
@@ -99,24 +112,11 @@ const sections: Sec[] = [
         ],
     },
     {
-        n: 8, en: 'FRONTIER', ja: '研究と社会のフロンティア', anchor: '#frontier', color: '#E2EAF2',
+        n: 9, en: 'FRONTIER', ja: '研究と社会のフロンティア', anchor: '#frontier', color: '#E2EAF2',
         desc: '今まさに研究が進む領域。期待と注意の両方を、フラットに見渡す。',
         pages: [
             { href: '/psychedelics-research', label: 'サイケデリックス研究' },
             { href: '/cannabis', label: 'カンナビス' },
-        ],
-    },
-    {
-        n: 9, en: 'LIFESTYLE', ja: '生活習慣', anchor: '#lifestyle', color: '#E7EFD8',
-        desc: '運動・断食・光・解毒・サプリ・計測。知識を日々の暮らしに落とし込む。',
-        pages: [
-            { href: '/exercise', label: '運動' },
-            { href: '/fasting', label: '断食' },
-            { href: '/sunlight', label: '日光' },
-            { href: '/water', label: '水' },
-            { href: '/detox', label: 'デトックス' },
-            { href: '/nutrient-density', label: '栄養価の変化' },
-            { href: '/supplements', label: 'サプリメント' },
         ],
     },
     {
@@ -145,15 +145,15 @@ export default function LibraryMapPage() {
             <img loading="lazy" decoding="async" src="/images/24.png" alt="" className="absolute pointer-events-none"
                 style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
 
-            <JsonLd data={medicalWebPage({ name: 'ライブラリ・マップ｜全体の構造をひと目で', description: 'ライブラリの全11セクションの構造を、インフォグラフィックでひと目に。代表ページへの入口つき見取り図。', path: '/library/map' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: 'ライブラリ・マップ', path: '/library/map' }])} />
+            <JsonLd data={medicalWebPage({ name: 'ライブラリマップ｜全体の構造をひと目で', description: 'ライブラリの全11セクションの構造を、インフォグラフィックでひと目に。代表ページへの入口つきライブラリマップ。', path: '/library/map' })} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: 'ライブラリマップ', path: '/library/map' }])} />
 
             <article className="max-w-[920px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: 'ライブラリ・マップ' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: 'ライブラリマップ' }]} />
                 <header className="mb-10 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>LIBRARY MAP</p>
                     <h1 className="text-3xl md:text-5xl font-bold mt-4 mb-6 text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                        ライブラリの見取り図
+                        ライブラリマップ
                     </h1>
                     <p className="text-sm md:text-base text-[#1A1A1A] font-medium leading-loose max-w-[600px] mx-auto">
                         このライブラリは、<strong>11のセクション</strong>でできています。全体の構造をひと目で見渡し、気になる入口から読みはじめてください。
