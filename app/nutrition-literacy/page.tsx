@@ -7,6 +7,8 @@ export const metadata = {
     description: 'なぜ生化学や栄養学を学ぶ価値があるのか。体の仕組みがわかると、健康情報に振り回されず、自分の体調を読み解き、一生使える判断軸が手に入る——40代からの健康最適化の視点で、知ることの意味をわかりやすく解説します。',
     alternates: { canonical: 'https://mitoflow40.com/nutrition-literacy' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '学ぶと、何が変わる？｜生化学・栄養学を知る価値 | Mitoflow40',
         description: '体の仕組みを知ると、健康情報に振り回されず、自分の体を読み解ける。生化学・栄養学を学ぶ意味を解説。',
         url: 'https://mitoflow40.com/nutrition-literacy',

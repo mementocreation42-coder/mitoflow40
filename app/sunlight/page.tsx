@@ -7,6 +7,8 @@ export const metadata = {
     description: '太陽の光は、体内時計を整え、セロトニンやビタミンDをつくる強力なスイッチ。一方で紫外線は浴びすぎれば老化や肌の負担にもなります。朝の光・ビタミンD・紫外線のメリットとデメリット、賢い日光浴のコツを精密栄養学の視点でやさしく解説します。',
     alternates: { canonical: 'https://mitoflow40.com/sunlight' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '日光と健康 | Mitoflow40',
         description: '体内時計・セロトニン・ビタミンDをつくる太陽の光と、紫外線との上手なつき合い方。',
         url: 'https://mitoflow40.com/sunlight',

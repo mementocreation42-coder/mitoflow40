@@ -7,6 +7,8 @@ export const metadata = {
     description: '水は体の約60%を占め、運搬・体温調節・老廃物の排出・反応の場として働く、もっとも基本の「材料」です。1日に必要な水分量と脱水のサイン、軽い脱水が認知や気分に及ぼす影響、硬水と軟水の違い、そして水素水・アルカリイオン水・「構造水」など機能水の主張を、根拠の確かさで分けて中立に整理します。',
     alternates: { canonical: 'https://mitoflow40.com/water' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '水と健康 | Mitoflow40',
         description: '体の約60%は水。役割・必要量・脱水のサインと、「機能水」の主張を根拠の確かさで分けて中立に整理。',
         url: 'https://mitoflow40.com/water',

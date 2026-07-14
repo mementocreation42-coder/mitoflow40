@@ -8,6 +8,8 @@ export const metadata = {
     description: '卵・鮭・牡蠣・納豆など、40代の健康最適化に効く栄養豊富な食べ物を厳選。各食材で摂れる栄養素・40代向けの食べ方・組み合わせをわかりやすく解説します。',
     alternates: { canonical: 'https://mitoflow40.com/foods' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'FOODS | 栄養が豊富な食べ物 | Mitoflow40',
         description: '40代の健康最適化に効く栄養豊富な食べ物を、摂れる栄養素・食べ方・組み合わせから解説。',
         url: 'https://mitoflow40.com/foods',

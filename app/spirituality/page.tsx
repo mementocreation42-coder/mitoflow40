@@ -7,6 +7,8 @@ export const metadata = {
     description: '祈り・瞑想・感謝・人とのつながり・生きる意味——いわゆる「スピリチュアル」とされる営みを、自律神経・ストレスホルモン・炎症・プラセボといった“測れる体の反応”の視点で、40代の健康最適化のために中立に読み解きます。',
     alternates: { canonical: 'https://mitoflow40.com/spirituality' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'スピリチュアリティと体 ｜ 心身相関の科学 | Mitoflow40',
         description: '祈り・瞑想・感謝・つながり・生きる意味を、自律神経やストレス反応など測れる体の反応として読み解く。',
         url: 'https://mitoflow40.com/spirituality',

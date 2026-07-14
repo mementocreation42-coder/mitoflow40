@@ -8,6 +8,8 @@ export const metadata = {
     description: '自覚なく体をむしばむ「慢性炎症（くすぶる）」を、急性炎症との違い・原因・体への影響・測り方（hs-CRP）・抑える習慣からわかりやすく解説。',
     alternates: { canonical: 'https://mitoflow40.com/inflammation' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '慢性炎症（くすぶる） | Mitoflow40',
         description: '老化を加速させる「慢性炎症」を、原因・影響・測り方・抑える習慣から解説。',
         url: 'https://mitoflow40.com/inflammation',

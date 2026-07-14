@@ -9,6 +9,8 @@ export const metadata = {
     description: '体を自動で調整する「自律神経」と、その状態を映す指標「HRV（心拍変動）」を、仕組み・ストレスとの関係・整える方法から解説。Apple Watchで測れるHRVの読み方も。',
     alternates: { canonical: 'https://mitoflow40.com/autonomic-nervous-system' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '自律神経とHRV | Mitoflow40',
         description: '「自律神経」と「HRV（心拍変動）」を、仕組み・ストレス・整える方法から解説。',
         url: 'https://mitoflow40.com/autonomic-nervous-system',

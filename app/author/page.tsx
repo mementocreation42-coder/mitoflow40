@@ -9,6 +9,8 @@ export const metadata = {
     description: 'Mitoflow40 の著者・小林大介のプロフィール。精密栄養学を軸に、血液検査と生活ログをもとに自身の体で検証を重ねる実践者。40代からの健康戦略を発信。',
     alternates: { canonical: 'https://mitoflow40.com/author' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '著者・監修：小林大介 | Mitoflow40',
         description: 'Mitoflow40 の著者・小林大介のプロフィール。精密栄養学の実践者。',
         url: 'https://mitoflow40.com/author',

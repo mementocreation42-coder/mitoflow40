@@ -7,6 +7,8 @@ export const metadata = {
     description: '日本語の「和」には、調和（バランス）・和食（食の知恵）・人との和（つながり）という、健康と深く響き合う意味が重なっています。さらに一説では「和」の語源は一人称「わ＝我々」。沖縄や東北に残る「わん」、柳田國男の方言周圏論、サピア＝ウォーフ仮説までを手がかりに、「足すより整える」健康のかたちを綴るエッセイです。',
     alternates: { canonical: 'https://mitoflow40.com/harmony' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '健康と和 ｜ Mitoflow40',
         description: '調和・和食・人との和。「和」という言葉から、足すより整える健康のかたちを考える。',
         url: 'https://mitoflow40.com/harmony',

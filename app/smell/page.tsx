@@ -7,6 +7,8 @@ export const metadata = {
     description: '嗅覚は、視床を介さず感情と記憶の脳に直接つながる特別な感覚。匂いが気分や自律神経に作用する仕組み、嗅覚の低下が認知症やパーキンソン病の早期サインになりうること、嗅覚トレーニング、そしてアロマテラピーの「実証されていること／未確立のこと」を中立に整理します。',
     alternates: { canonical: 'https://mitoflow40.com/smell' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '匂いと健康 | Mitoflow40',
         description: '匂いが気分・記憶・脳に届く仕組みと、アロマの効果を根拠の確かさで分けて中立に整理。',
         url: 'https://mitoflow40.com/smell',

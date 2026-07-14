@@ -7,6 +7,8 @@ export const metadata = {
     description: 'うつ・不安・燃え尽きといった「心の現代病」は、気合いや性格の問題ではありません。慢性ストレス・睡眠不足・腸内環境・栄養・炎症など、心は「体から」も大きく影響を受けています。その仕組みを生化学ベースで整理し、医療や専門家につなぐための視点を、出典つきにやさしく解説します。',
     alternates: { canonical: 'https://mitoflow40.com/mental-health' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '心の現代病とは｜うつ・不安・燃え尽きを「体から」とらえる | Mitoflow40',
         description: '心の不調は気合いの問題ではない。ストレス・睡眠・腸・栄養・炎症から心をとらえ、医療につなぐ視点を解説。',
         url: 'https://mitoflow40.com/mental-health',

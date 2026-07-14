@@ -7,6 +7,8 @@ export const metadata = {
     description: '酵素とは、体内の化学反応を進める「触媒」。消化酵素と代謝酵素の働き、補酵素としてのビタミン・ミネラルの役割、そして「酵素ドリンク」「生酵素サプリ」をめぐる誤解を、生化学に基づいて出典つきでやさしく整理します。',
     alternates: { canonical: 'https://mitoflow40.com/enzymes' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '酵素とは｜体を動かす「触媒」の正体と、酵素ドリンクの誤解 | Mitoflow40',
         description: '酵素＝体内反応の触媒。消化酵素・代謝酵素・補酵素の働きと、酵素ドリンクの誤解を生化学ベースで整理。',
         url: 'https://mitoflow40.com/enzymes',

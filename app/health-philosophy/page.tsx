@@ -7,6 +7,8 @@ export const metadata = {
     description: '「健康とは何か」を体の視点から問い直す。病気でないことはゴールではない——WHOの健康定義・健康寿命・基準値と理想値の違いから、40代の健康の考え方をやさしく解説します。',
     alternates: { canonical: 'https://mitoflow40.com/health-philosophy' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '健康とは | Mitoflow40',
         description: '病気でない状態がゴールではなく、自分本来の力を発揮できる状態へ。Mitoflow40が考える「健康とは何か」。',
         url: 'https://mitoflow40.com/health-philosophy',

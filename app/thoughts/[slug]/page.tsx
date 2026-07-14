@@ -17,6 +17,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         description: e.tagline,
         alternates: { canonical: `https://mitoflow40.com/thoughts/${slug}` },
         openGraph: {
+            siteName: 'Mitoflow40',
+            locale: 'ja_JP',
             title: `${e.title} ｜ 思索 | Mitoflow40`,
             description: e.tagline,
             url: `https://mitoflow40.com/thoughts/${slug}`,

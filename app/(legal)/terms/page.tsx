@@ -3,6 +3,14 @@ export const metadata = {
     description: "Mitoflow40の利用規約です。",
     alternates: { canonical: "https://mitoflow40.com/terms" },
     robots: { index: true, follow: true },
+    openGraph: {
+        title: "利用規約 | Mitoflow40",
+        description: "Mitoflow40の利用規約です。",
+        url: "https://mitoflow40.com/terms",
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
+        type: 'website',
+    },
 };
 
 export default function TermsPage() {

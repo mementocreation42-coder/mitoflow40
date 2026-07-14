@@ -7,6 +7,8 @@ export const metadata = {
     description: '細胞が自分の中の老廃物を分解・再利用する「オートファジー」を、仕組み・スイッチが入る条件・ミトコンドリアとの関係（ミトファジー）・整える習慣からわかりやすく解説。',
     alternates: { canonical: 'https://mitoflow40.com/autophagy' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'オートファジー | Mitoflow40',
         description: '細胞の自己掃除・再生システム「オートファジー」を、仕組み・スイッチ・ミトコンドリアとの関係から解説。',
         url: 'https://mitoflow40.com/autophagy',

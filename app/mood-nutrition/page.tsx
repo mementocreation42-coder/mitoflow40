@@ -7,6 +7,8 @@ export const metadata = {
     description: '気分を左右するセロトニンやドーパミンは、栄養を材料に作られます。トリプトファン・チロシン、B6・鉄・葉酸・マグネシウムなどの補酵素、腸との関係から、「気分は体から」を精密栄養学の視点で解説します。',
     alternates: { canonical: 'https://mitoflow40.com/mood-nutrition' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '気分と栄養 ｜ Mitoflow40',
         description: 'セロトニン・ドーパミンの材料は栄養。気分の土台を食べ物から整える視点。',
         url: 'https://mitoflow40.com/mood-nutrition',

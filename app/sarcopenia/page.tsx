@@ -7,6 +7,8 @@ export const metadata = {
     description: 'サルコペニアとは、加齢にともなう筋肉量・筋力の減少。じつは40代からじわじわ始まります。なぜ減るのか、放っておくと何が起きるか（代謝低下・血糖の悪化・転倒・フレイル）、そして運動とたんぱく質でどう防ぐかを、生化学ベースで出典つきに解説します。',
     alternates: { canonical: 'https://mitoflow40.com/sarcopenia' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'サルコペニア・フレイルとは｜40代から始まる筋肉の減少 | Mitoflow40',
         description: '加齢で筋肉が減るサルコペニア。40代から始まる理由、代謝・血糖への影響、運動とたんぱく質での防ぎ方を解説。',
         url: 'https://mitoflow40.com/sarcopenia',

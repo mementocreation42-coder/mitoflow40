@@ -7,6 +7,8 @@ export const metadata = {
     description: '生活習慣病、慢性炎症、自律神経の乱れ、睡眠負債、デジタル疲労、座りすぎ、孤独——現代病の多くは「体の進化」と「変わりすぎた環境」のミスマッチから生まれます。現代の暮らしが体に何をしているのかを俯瞰し、対策につながる各テーマへ案内します。',
     alternates: { canonical: 'https://mitoflow40.com/modern-diseases' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '現代病とは | Mitoflow40',
         description: '体の進化と、変わりすぎた環境のミスマッチ。現代病の正体を俯瞰し、対策へつなぐ。',
         url: 'https://mitoflow40.com/modern-diseases',

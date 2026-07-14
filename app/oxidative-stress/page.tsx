@@ -9,6 +9,8 @@ export const metadata = {
     description: '体が"さびる"原因「活性酸素」と「酸化ストレス」を、発生する仕組み・体への影響・抗酸化のしくみ・支える栄養素と遺伝子からわかりやすく解説。',
     alternates: { canonical: 'https://mitoflow40.com/oxidative-stress' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '活性酸素・酸化ストレス（さびる） | Mitoflow40',
         description: '体が"さびる"原因「活性酸素」と抗酸化のしくみを、仕組み・影響・栄養素・遺伝子から解説。',
         url: 'https://mitoflow40.com/oxidative-stress',

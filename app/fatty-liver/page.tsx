@@ -7,6 +7,8 @@ export const metadata = {
     description: '脂肪肝とは、肝臓に脂肪がたまりすぎた状態。いまはお酒を飲まない人の脂肪肝（MASLD／旧NAFLD）が急増しています。原因（糖質・果糖・内臓脂肪・インスリン抵抗性）、自覚症状の乏しさ、糖尿病や心血管病の入口になる理由、そして戻せる段階での対策を、生化学ベースで出典つきに解説します。',
     alternates: { canonical: 'https://mitoflow40.com/fatty-liver' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '脂肪肝（MASLD）とは｜お酒を飲まなくてもなる"沈黙の現代病" | Mitoflow40',
         description: '肝臓に脂肪がたまる脂肪肝（MASLD）。原因・無症状で進む怖さ・糖尿病や心血管病との関係・戻せる対策を解説。',
         url: 'https://mitoflow40.com/fatty-liver',

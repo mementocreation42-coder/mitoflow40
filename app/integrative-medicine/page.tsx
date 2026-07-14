@@ -7,6 +7,8 @@ export const metadata = {
     description: '統合医療とは、西洋医学（標準治療）を土台にしながら、鍼灸・ヨガ・瞑想・食事・サプリといった補完的なアプローチを、エビデンスにもとづいて組み合わせる考え方です。補完医療・代替医療・統合医療の違い、「自然＝安全」という誤解、薬との相互作用、そして「代替だけに頼らない」という最も大切な原則までを、出典つきで中立に整理します。診断・治療は医療機関で。',
     alternates: { canonical: 'https://mitoflow40.com/integrative-medicine' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '統合医療とは ｜ Mitoflow40',
         description: '西洋医学を土台に、補完療法をエビデンスで組み合わせる「統合医療」を中立に。用語の整理・安全の原則・Mitoflow40の立ち位置まで。',
         url: 'https://mitoflow40.com/integrative-medicine',

@@ -7,6 +7,8 @@ export const metadata = {
     description: '腸内フローラ（腸内細菌叢）とは何か。善玉菌・悪玉菌・日和見菌のバランス、プロバイオティクス（菌そのもの）・プレバイオティクス（菌のエサ）・シンバイオティクス・ポストバイオティクスの違い、短鎖脂肪酸の役割までを精密栄養学の視点でやさしく解説します。',
     alternates: { canonical: 'https://mitoflow40.com/microbiome' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '腸内フローラとプレ・プロバイオティクス | Mitoflow40',
         description: 'プロ・プレ・シン・ポストバイオティクスの違いと、善玉菌を育てる食べ方をやさしく解説。',
         url: 'https://mitoflow40.com/microbiome',

@@ -8,6 +8,8 @@ export const metadata = {
     description: 'ミトコンドリアでエネルギー(ATP)を生み出す中心エンジン「TCA回路（クエン酸回路・クレブス回路）」を、流れ・役割・回すために必要な栄養素からわかりやすく解説。',
     alternates: { canonical: 'https://mitoflow40.com/tca-cycle' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'TCA回路（クエン酸回路） | Mitoflow40',
         description: 'ミトコンドリアのエネルギー産生エンジン「TCA回路」を、流れ・役割・必要な栄養素から解説。',
         url: 'https://mitoflow40.com/tca-cycle',

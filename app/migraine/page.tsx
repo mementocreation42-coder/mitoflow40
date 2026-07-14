@@ -7,6 +7,8 @@ export const metadata = {
     description: '片頭痛は「ただの頭痛」ではなく、脳とエネルギー代謝が深く関わる神経の不調です。引き金（トリガー）の見つけ方、マグネシウム・ビタミンB2・CoQ10といった栄養の視点、そして「すぐ受診すべき危険な頭痛」の見分け方までを、出典つきで中立に解説します。診断・治療は医療機関で。',
     alternates: { canonical: 'https://mitoflow40.com/migraine' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '片頭痛と体 ｜ Mitoflow40',
         description: '片頭痛の引き金・栄養（Mg・B2・CoQ10）の視点・危険な頭痛の見分け方を中立に。',
         url: 'https://mitoflow40.com/migraine',

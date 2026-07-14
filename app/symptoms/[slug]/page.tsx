@@ -21,6 +21,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         alternates: { canonical: `https://mitoflow40.com/symptoms/${slug}` },
         robots: { index: true, follow: true },
         openGraph: {
+            siteName: 'Mitoflow40',
+            locale: 'ja_JP',
             title: `${s.name} | 症状から引く | Mitoflow40`,
             description,
             url: `https://mitoflow40.com/symptoms/${slug}`,

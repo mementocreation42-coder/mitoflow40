@@ -19,6 +19,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         alternates: { canonical: `https://mitoflow40.com/genes/${slug}` },
         robots: { index: true, follow: true },
         openGraph: {
+            siteName: 'Mitoflow40',
+            locale: 'ja_JP',
             title: `${gene.symbol} - ${gene.name} | Mitoflow40`,
             description,
             url: `https://mitoflow40.com/genes/${slug}`,

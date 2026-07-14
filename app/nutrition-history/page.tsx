@@ -7,6 +7,8 @@ export const metadata = {
     description: '栄養学はまだ150年ほどの若い学問です。食を「エネルギー（カロリー）」として測り始めたアトウォーターから、ビタミンの発見（鈴木梅太郎・高木兼寛）、栄養所要量、そして分子・細胞・個別化へ——世界の流れと、GHQ・学校給食・キッチンカー・粉食奨励・日本型食生活という日本の戦後の食卓史を、事実ベースで中立にたどります。',
     alternates: { canonical: 'https://mitoflow40.com/nutrition-history' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '栄養学の歴史 | Mitoflow40',
         description: 'カロリー→ビタミン→細胞へ。そして日本の戦後、食卓が変わった物語を中立にたどる。',
         url: 'https://mitoflow40.com/nutrition-history',

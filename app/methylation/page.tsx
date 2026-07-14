@@ -9,6 +9,8 @@ export const metadata = {
     description: '解毒・神経伝達物質・DNA・血管を支える体の根幹反応「メチレーション（メチル化）」を、仕組み・関わる遺伝子と栄養素・ホモシステインとの関係からわかりやすく解説。',
     alternates: { canonical: 'https://mitoflow40.com/methylation' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'メチレーション（メチル化） | Mitoflow40',
         description: '体の根幹反応「メチレーション」を、仕組み・関わる遺伝子と栄養素・ホモシステインから解説。',
         url: 'https://mitoflow40.com/methylation',

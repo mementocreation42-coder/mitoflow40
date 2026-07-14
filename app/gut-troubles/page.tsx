@@ -7,6 +7,8 @@ export const metadata = {
     description: 'グルテンフリー、カゼイン（乳タンパク質）、リーキーガット、SIBO——腸まわりでよく耳にする言葉を、「医学的に確立していること」と「まだ仮説の段階のこと」を分けて中立に解説します。自己判断せず、気になる症状は医療機関への相談を。',
     alternates: { canonical: 'https://mitoflow40.com/gut-troubles' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '気になる腸のキーワード ｜ Mitoflow40',
         description: 'グルテンフリー・リーキーガット・SIBO を、確立した事実と仮説を分けて中立に解説。',
         url: 'https://mitoflow40.com/gut-troubles',

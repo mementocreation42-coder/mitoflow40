@@ -9,6 +9,8 @@ export const metadata = {
     description: 'テストステロン・エストロゲン・コルチゾール・インスリン・甲状腺ホルモンなど、体を調整する化学メッセンジャー「ホルモン」を、役割・加齢との関係・対応する血液検査とともに個別ページでわかりやすく解説。',
     alternates: { canonical: 'https://mitoflow40.com/hormones' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'ホルモンの種類 | Mitoflow40',
         description: '主なホルモンを、役割・加齢との関係・対応する血液検査から個別に解説。',
         url: 'https://mitoflow40.com/hormones',

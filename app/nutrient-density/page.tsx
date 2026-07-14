@@ -7,6 +7,8 @@ export const metadata = {
     description: '昔と同じ野菜を食べても、栄養素は減っているかもしれない——多収化を狙った品種改良・土壌の劣化・大気CO₂の上昇による「希釈効果」を、出典つきで解説。一方でUV照射によりビタミンDが増えるきのこのように、むしろ栄養価が高まった食品もある。事実ベースで、40代の食選びの視点をまとめます。',
     alternates: { canonical: 'https://mitoflow40.com/nutrient-density' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '食べ物の栄養価は変わってきている｜下がる野菜と、上がるきのこ | Mitoflow40',
         description: '野菜の栄養素は数十年で減少傾向。一方UV照射きのこはビタミンDが増える。事実ベースで食の栄養価の変化を解説。',
         url: 'https://mitoflow40.com/nutrient-density',

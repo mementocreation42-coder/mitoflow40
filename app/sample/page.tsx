@@ -7,6 +7,8 @@ export const metadata = {
     description: "Mitoflow40の血液解析レポートのサンプル。血液・カウンセリング・Apple Watch を統合した、精密栄養学視点の解析を体験できます。",
     alternates: { canonical: "https://mitoflow40.com/sample" },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: "解析サンプル | Mitoflow40",
         description: "実際の解析レポートのフォーマットと内容をご覧いただけます。",
         url: "https://mitoflow40.com/sample",

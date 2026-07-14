@@ -8,6 +8,8 @@ export const metadata = {
     alternates: { canonical: 'https://mitoflow40.com/counterculture' },
     robots: { index: true, follow: true },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '対抗文化が生んだもの｜フラワームーブメントからパソコンまで | Mitoflow40',
         description: 'グレイトフル・デッド・フラワームーブメント・ホール・アース・カタログ・コンピュータ・ジョブズ・EFF・規制。「個人に道具を」の思想史を事実ベースで。',
         url: 'https://mitoflow40.com/counterculture',

@@ -8,6 +8,8 @@ export const metadata = {
     description: '細胞のエネルギー工場「ミトコンドリア」とは何か。構造・役割・エネルギー産生の流れ・40代で重要な理由・弱るサイン・量と質を保つ方法を、仕組みと栄養素のページにつなげて徹底解説。',
     alternates: { canonical: 'https://mitoflow40.com/mitochondria' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'ミトコンドリアとは | Mitoflow40',
         description: '細胞のエネルギー工場「ミトコンドリア」を、構造・役割・40代での重要性・元気に保つ方法から徹底解説。',
         url: 'https://mitoflow40.com/mitochondria',

@@ -7,6 +7,8 @@ export const metadata = {
     description: 'Mitoflow40の解説が参照する一次情報・学術論文・公的機関の出典一覧。NIH・WHO・査読論文・ノーベル賞関連資料などの信頼できる情報源を、テーマ別にまとめています。',
     alternates: { canonical: 'https://mitoflow40.com/references' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '参照文献・出典 | Mitoflow40',
         description: 'Mitoflow40の解説が依拠する一次情報・学術論文・公的機関の出典一覧。NIH・WHO・査読論文などをテーマ別に掲載。',
         url: 'https://mitoflow40.com/references',

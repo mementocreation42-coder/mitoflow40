@@ -7,6 +7,8 @@ export const metadata = {
     description: 'ジョギングは体に何を起こすのか。ミトコンドリア・心肺・メンタルへの効果、「膝に悪い」という通説の真偽、そして「どれだけ走ればいいか」の用量反応（U字の関係）まで——走るという最も原始的な運動を、出典つきで中立に読み解きます。',
     alternates: { canonical: 'https://mitoflow40.com/jogging' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'ジョギングと体 ｜ Mitoflow40',
         description: 'ジョギングの効果・「膝に悪い」の真偽・最適な走る量を、出典つきで中立に。',
         url: 'https://mitoflow40.com/jogging',

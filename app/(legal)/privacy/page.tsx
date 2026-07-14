@@ -3,6 +3,14 @@ export const metadata = {
     description: "Mitoflow40のプライバシーポリシー（個人情報保護方針）です。",
     alternates: { canonical: "https://mitoflow40.com/privacy" },
     robots: { index: true, follow: true },
+    openGraph: {
+        title: "プライバシーポリシー | Mitoflow40",
+        description: "Mitoflow40のプライバシーポリシー（個人情報保護方針）です。",
+        url: "https://mitoflow40.com/privacy",
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
+        type: 'website',
+    },
 };
 
 export default function PrivacyPage() {

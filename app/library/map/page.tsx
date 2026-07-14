@@ -7,6 +7,8 @@ export const metadata = {
     description: 'Mitoflow40ライブラリの全体像を、インフォグラフィックでひと目に。身体の地図・食べ物・生活習慣・内臓・仕組み・老化と不調・ホルモン・心・フロンティア・症状・思索——11のセクションの構造と、それぞれの代表ページへの入口をまとめた、軽やかなライブラリマップです。',
     alternates: { canonical: 'https://mitoflow40.com/library/map' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'ライブラリマップ｜全体の構造をひと目で | Mitoflow40',
         description: 'ライブラリの全11セクションの構造を、インフォグラフィックでひと目に。代表ページへの入口つきライブラリマップ。',
         url: 'https://mitoflow40.com/library/map',

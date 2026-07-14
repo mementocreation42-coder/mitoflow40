@@ -11,6 +11,8 @@ export const metadata = {
     description: '遺伝子・栄養素・血液検査の3つの視点から、自分の体を読み解く知識ライブラリ。設計図(遺伝子)・現在地(血液検査)・材料(栄養素)をつなげて理解する。',
     alternates: { canonical: 'https://mitoflow40.com/library' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'LIBRARY | Mitoflow40',
         description: '遺伝子・栄養素・血液検査の3つの視点から、自分の体を読み解く知識ライブラリ。',
         url: 'https://mitoflow40.com/library',
@@ -624,7 +626,7 @@ export default function LibraryIndex() {
                         <span className="inline-block w-5 h-0.5 rounded-full bg-[#41C9B4]" />
                         代謝と細胞のしくみ
                     </h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         <Link href="/glycolysis"
                             className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F4EFCE' }}>
                             <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
@@ -985,6 +987,7 @@ export default function LibraryIndex() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                         {[
                             { href: '/stress', en: 'STRESS', ja: 'ストレスとは', note: '敵ではなく信号。コルチゾールと自律神経のしくみ。', bg: '#EFEAF6' },
+                            { href: '/hsp', en: 'HSP', ja: 'HSP・繊細さん', note: '感覚処理感受性と遺伝子（COMT・5-HTTLPR他）。“気質”と“体の状態”を切り分ける。', bg: '#EFEAF6' },
                             { href: '/mood-nutrition', en: 'MOOD & FOOD', ja: '気分と栄養', note: 'セロトニン・ドーパミンの“材料”は栄養という視点。', bg: '#EFEAF6' },
                             { href: '/anxiety', en: 'ANXIETY', ja: '不安と体', note: '血糖・腸・睡眠など、不安を揺さぶる体の要因。', bg: '#EFEAF6' },
                             { href: '/neuroinflammation', en: 'NEUROINFLAMMATION', ja: '神経炎症と心', note: 'IL-6など炎症性サイトカインが脳に及ぶとき。だるさ・うつ・ブレインフォグを中立に。', bg: '#EFEAF6' },

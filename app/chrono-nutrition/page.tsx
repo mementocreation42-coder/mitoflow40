@@ -7,6 +7,8 @@ export const metadata = {
     description: 'クロノニュートリション（時間栄養学）は、「何を食べるか」だけでなく「いつ食べるか」で体への効き方が変わる、という体内時計と栄養を結びつけた分野です。脳と内臓それぞれの時計、朝と夜で違う代謝、朝食による時計のリセット、時間制限食（TRE）、夜遅い食事のコスト、そして朝型・夜型の個人差までを、出典つきで中立に解説します。',
     alternates: { canonical: 'https://mitoflow40.com/chrono-nutrition' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '時間栄養学（クロノニュートリション）とは ｜ Mitoflow40',
         description: '「いつ食べるか」で体は変わる。体内時計・朝と夜の代謝差・時間制限食・個人差を中立に。',
         url: 'https://mitoflow40.com/chrono-nutrition',

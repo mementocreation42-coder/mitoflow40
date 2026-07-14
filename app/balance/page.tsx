@@ -7,6 +7,8 @@ export const metadata = {
     description: '「足すより引く」の先にあるのは、引きすぎない「ちょうどよさ」。運動・タンパク質・水・日光・ストレス——体にまつわる多くのことは、少なすぎても多すぎても良くない「U字」の関係にあります。アリストテレスの中庸からホルミシス（適度な負荷が体を強くする）まで、健康の core にある「バランス」を中立に考えるエッセイ。',
     alternates: { canonical: 'https://mitoflow40.com/balance' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'バランス（中庸）｜ Mitoflow40',
         description: '体は「ちょうどよさ」でできている。U字とホルミシスから、バランスという健康の core を考える。',
         url: 'https://mitoflow40.com/balance',

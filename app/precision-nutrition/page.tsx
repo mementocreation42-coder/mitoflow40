@@ -7,6 +7,8 @@ export const metadata = {
     description: '精密栄養学（プレシジョン・ニュートリション）とは何か。「平均」ではなく「あなた」に合わせる栄養学の考え方を、遺伝子・血液検査・栄養素の3つの視点、基準値と理想値の違い、40代での活かし方からわかりやすく解説します。',
     alternates: { canonical: 'https://mitoflow40.com/precision-nutrition' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '精密栄養学とは | Mitoflow40',
         description: '「平均」ではなく「あなた」に合わせる栄養学。遺伝子・血液検査・栄養素の3つの視点から、自分に最適な健康を読み解く考え方を解説。',
         url: 'https://mitoflow40.com/precision-nutrition',

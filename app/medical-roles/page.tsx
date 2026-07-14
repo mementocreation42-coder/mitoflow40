@@ -7,6 +7,8 @@ export const metadata = {
     description: '医師・看護師・薬剤師・管理栄養士・保健師など、医療従事者それぞれの役割・できること・できないことを整理。そのうえで、診断や治療は行わず「未病のうちに整える」を支えるMitoflow40の立ち位置をやさしく解説します。',
     alternates: { canonical: 'https://mitoflow40.com/medical-roles' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '医療者の役割とMitoflow40の立ち位置 | Mitoflow40',
         description: '誰が何を担い、何ができて何ができないのか。医療者の役割を整理し、Mitoflow40がどこに立つのかを明らかにします。',
         url: 'https://mitoflow40.com/medical-roles',

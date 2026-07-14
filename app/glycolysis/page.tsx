@@ -8,6 +8,8 @@ export const metadata = {
     description: 'エネルギー産生の最初のステップ「解糖系（グリコリシス）」とは。ブドウ糖がピルビン酸になるまでの流れ、酸素がいらない理由、乳酸との関係、TCA回路への橋渡し、必要な栄養素を40代の視点でわかりやすく解説。',
     alternates: { canonical: 'https://mitoflow40.com/glycolysis' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '解糖系（グリコリシス）とは | Mitoflow40',
         description: 'エネルギー産生の最初のステップ「解糖系」を、流れ・酸素との関係・TCA回路への橋渡し・必要な栄養素から解説。',
         url: 'https://mitoflow40.com/glycolysis',

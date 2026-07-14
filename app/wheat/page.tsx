@@ -7,6 +7,8 @@ export const metadata = {
     description: 'パン・パスタ・麺・お菓子——小麦は食卓の主役のひとつ。なぜ「小麦は体に悪い」と言われるのか、血糖の上がりやすさ、精製と全粒の違い、グルテン、現代小麦や残留農薬をめぐる議論を、確かなことと未確立のことを分けて中立に整理します。',
     alternates: { canonical: 'https://mitoflow40.com/wheat' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '小麦と健康 | Mitoflow40',
         description: '血糖・精製・グルテンの観点から、小麦との上手なつき合い方を中立に整理。',
         url: 'https://mitoflow40.com/wheat',

@@ -8,6 +8,8 @@ export const metadata = {
     description: 'サプリメントは「形態・吸収・タイミング」で効きが変わります。マグネシウム・鉄・ビタミンB・D・オメガ3などの選び方、吸収を高めるコツ、飲むタイミング、注意点を精密栄養学の視点でわかりやすく解説します。',
     alternates: { canonical: 'https://mitoflow40.com/supplements' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'サプリメントの選び方（形態・吸収・タイミング） | Mitoflow40',
         description: '形態・吸収・タイミングで効きが変わる。主要サプリの選び方とコツ、注意点を解説。',
         url: 'https://mitoflow40.com/supplements',

@@ -7,6 +7,8 @@ export const metadata = {
     description: '超高齢社会、医療費の増大、健康寿命と平均寿命のギャップ——その解決の一助になりうるのが「未病予防」です。一人ひとりが病気の手前で整えることの社会的意義と、Mitoflow40の役割を考えます。',
     alternates: { canonical: 'https://mitoflow40.com/mission' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'なぜ、未病予防か ｜ Mitoflow40がめざすこと',
         description: '超高齢社会・医療費・健康寿命のギャップ。その一助になりうる「未病予防」の社会的意義とMitoflow40の役割。',
         url: 'https://mitoflow40.com/mission',

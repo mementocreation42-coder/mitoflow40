@@ -8,6 +8,8 @@ export const metadata = {
     alternates: { canonical: 'https://mitoflow40.com/cannabis' },
     robots: { index: true, follow: true },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '大麻をめぐる歴史と世界の動き ｜ Mitoflow40',
         description: '麻の文化史・禁止の経緯・世界の合法化・日本の2024年法改正を中立的に。日本では違法です。',
         url: 'https://mitoflow40.com/cannabis',

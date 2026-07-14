@@ -9,6 +9,8 @@ export const metadata = {
     description: '体に備わった解毒システム（肝臓のPhase I/II・腸・腎臓・汗）を、仕組み・グルタチオンや遺伝子GST/GPXとの関係・解毒力を支える習慣からわかりやすく解説。"毒出し神話"ではない本当の解毒。',
     alternates: { canonical: 'https://mitoflow40.com/detox' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '解毒（デトックス） | Mitoflow40',
         description: '体に備わった解毒システムを、肝臓・腸・腎臓の仕組みと、支える栄養素・遺伝子から解説。',
         url: 'https://mitoflow40.com/detox',

@@ -7,6 +7,8 @@ export const metadata = {
     description: '「食べてはいけない」ではなく「頻度と量に気をつけたい」食品を、超加工食品・甘い飲み物・トランス脂肪酸・加工肉などカテゴリ別に、減らし方と代わりまでやさしく解説します。',
     alternates: { canonical: 'https://mitoflow40.com/caution-foods' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '気をつけたい食品 | Mitoflow40',
         description: '「ゼロにしなくていい、でも頻度と量に気をつけたい」食品を、しくみと減らし方からやさしく解説。',
         url: 'https://mitoflow40.com/caution-foods',

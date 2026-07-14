@@ -7,6 +7,8 @@ export const metadata = {
     description: '分子栄養学（オーソモレキュラー）とは何か。ライナス・ポーリングが提唱した「至適濃度」の考え方、生化学的個体差、酵素と補酵素の関係、精密栄養学との違いを、40代の健康最適化の視点でわかりやすく解説します。',
     alternates: { canonical: 'https://mitoflow40.com/molecular-nutrition' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '分子栄養学とは | Mitoflow40',
         description: '細胞・分子レベルで体を最適化する「分子栄養学（オーソモレキュラー）」。至適濃度・生化学的個体差・酵素と補酵素の考え方を解説。',
         url: 'https://mitoflow40.com/molecular-nutrition',

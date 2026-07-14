@@ -8,6 +8,8 @@ export const metadata = {
     description: '疲れやすい・ブレインフォグ・冷え・むくみ・気分の落ち込みなど、気になる症状から、考えられる背景・確認したい血液検査・関わる栄養素・関連する体のしくみを引けるリバース索引。',
     alternates: { canonical: 'https://mitoflow40.com/symptoms' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'SYMPTOMS | 症状から引く | Mitoflow40',
         description: '気になる症状から、背景・血液検査・栄養素・体のしくみを引けるリバース索引。',
         url: 'https://mitoflow40.com/symptoms',

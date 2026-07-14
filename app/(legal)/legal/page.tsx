@@ -3,6 +3,14 @@ export const metadata = {
     description: "Mitoflow40の特定商取引法に基づく表記です。",
     alternates: { canonical: "https://mitoflow40.com/legal" },
     robots: { index: true, follow: true },
+    openGraph: {
+        title: "特定商取引法に基づく表記 | Mitoflow40",
+        description: "Mitoflow40の特定商取引法に基づく表記です。",
+        url: "https://mitoflow40.com/legal",
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
+        type: 'website',
+    },
 };
 
 const ROWS: { label: string; value: React.ReactNode }[] = [

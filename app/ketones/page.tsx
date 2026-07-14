@@ -8,6 +8,8 @@ export const metadata = {
     description: '脂肪から作られる「第二のエネルギー源」ケトン体を、作られる仕組み・役割・代謝の柔軟性との関係・関わる栄養素からわかりやすく解説。',
     alternates: { canonical: 'https://mitoflow40.com/ketones' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'ケトン体 | Mitoflow40',
         description: '脂肪から作られる第二のエネルギー源「ケトン体」を、仕組み・役割・代謝の柔軟性から解説。',
         url: 'https://mitoflow40.com/ketones',

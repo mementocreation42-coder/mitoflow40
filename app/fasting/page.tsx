@@ -7,6 +7,8 @@ export const metadata = {
     description: '「何を食べるか」だけでなく「食べない時間をつくる」という選択。空腹がオートファジーや脂肪燃焼（ケトン）のスイッチになる仕組み、間欠的ファスティング（16:8など）の種類、期待できることと誇張、そして断食が向かない人・危険なケースを、安全第一で中立に整理します。',
     alternates: { canonical: 'https://mitoflow40.com/fasting' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '食べない時間の力 | Mitoflow40',
         description: '断食・空腹の効果と仕組み、向く人・向かない人を、安全第一で中立に整理。',
         url: 'https://mitoflow40.com/fasting',

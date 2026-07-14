@@ -7,6 +7,8 @@ export const metadata = {
     description: '街角に24時間ジムが増え続けている。「健康志向の高まり」だけでは説明しきれない、ビジネスモデルとしての構造、運動を生活から切り離して「買う」近代の発明、そして毎日の代謝（NEAT・ミトコンドリア）の視点まで——ジムの乱立という現象を、否定でも礼賛でもなく中立に読み解きます。',
     alternates: { canonical: 'https://mitoflow40.com/gym-boom' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'ジムの乱立を読む ｜ Mitoflow40',
         description: 'なぜジムは増えるのか。運動を「買う」時代の構造と、毎日の代謝の視点を中立に。',
         url: 'https://mitoflow40.com/gym-boom',

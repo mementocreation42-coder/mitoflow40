@@ -65,6 +65,9 @@ export const metadata: Metadata = {
     url: "https://mitoflow40.com",
     siteName: "Mitoflow40",
   },
+  twitter: {
+    card: "summary_large_image",
+  },
   alternates: {
     canonical: "https://mitoflow40.com",
   },

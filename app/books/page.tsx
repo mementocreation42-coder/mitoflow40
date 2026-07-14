@@ -7,6 +7,8 @@ export const metadata = {
     description: '生化学・栄養学・睡眠・腸内環境・運動・老化など、体の仕組みをもっと深く知るためのおすすめ書籍を、40代の健康最適化の視点でテーマ別に紹介します。Libraryと合わせて読むと理解が立体的になります。',
     alternates: { canonical: 'https://mitoflow40.com/books' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'おすすめ書籍 | Mitoflow40',
         description: '体の仕組みをもっと深く知るための本を、テーマ別に紹介。Libraryと合わせて読むと理解が立体的に。',
         url: 'https://mitoflow40.com/books',

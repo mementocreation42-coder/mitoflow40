@@ -8,6 +8,8 @@ export const metadata = {
     description: 'ミトコンドリアでATPの大半を生み出す最終工程「電子伝達系」を、仕組み・酸素と活性酸素の関係・必要な栄養素から、TCA回路・ATPとのつながりとあわせてわかりやすく解説。',
     alternates: { canonical: 'https://mitoflow40.com/electron-transport-chain' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '電子伝達系（ETC） | Mitoflow40',
         description: 'ATPの大半を生み出す最終工程「電子伝達系」を、仕組み・酸素と活性酸素・必要な栄養素から解説。',
         url: 'https://mitoflow40.com/electron-transport-chain',

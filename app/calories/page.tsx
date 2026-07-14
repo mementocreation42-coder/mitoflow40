@@ -7,6 +7,8 @@ export const metadata = {
     description: 'カロリーは便利な目安ですが、それは「燃料の量」を測る単位であって「健康」の単位ではありません。なぜ私たちはカロリーで考えるようになったのか（アトウォーターと従来栄養学の歴史）、よくある5つの誤解、そして本当に大切な「ATP（細胞のエネルギー通貨）」の視点まで——カロリーベースの健康観を問い直します。',
     alternates: { canonical: 'https://mitoflow40.com/calories' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'カロリーの誤解 | Mitoflow40',
         description: '「1kcalは1kcal」は本当？ カロリーをめぐる5つの誤解を解き、便利な目安の正しい使い方を中立に整理。',
         url: 'https://mitoflow40.com/calories',

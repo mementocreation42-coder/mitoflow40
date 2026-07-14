@@ -9,6 +9,8 @@ export const metadata = {
     description: '腸と脳が双方向に影響し合う「脳腸相関」を、3つの伝達経路・セロトニンと腸・整えるための栄養と習慣からわかりやすく解説。',
     alternates: { canonical: 'https://mitoflow40.com/gut-brain' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '脳腸相関（gut-brain axis） | Mitoflow40',
         description: '腸と脳が会話する「脳腸相関」を、3つの経路・セロトニン・腸内環境から解説。',
         url: 'https://mitoflow40.com/gut-brain',

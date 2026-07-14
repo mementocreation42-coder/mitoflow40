@@ -7,6 +7,8 @@ export const metadata = {
     description: '音は「空気の振動」として体に届き、自律神経や気分に作用します。脳波（α波）と音の関係、音楽療法など実証されていること、骨や体に響く振動、そして528Hzやタイムウェーバーなど「周波数ヒーリング」の潮流を、科学的根拠の確かさを分けて中立に整理します。',
     alternates: { canonical: 'https://mitoflow40.com/sound' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '音と健康 | Mitoflow40',
         description: 'α波・振動・音楽療法の実証と、周波数ヒーリングの潮流を、根拠の確かさで分けて中立に整理。',
         url: 'https://mitoflow40.com/sound',

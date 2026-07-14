@@ -7,6 +7,8 @@ export const metadata = {
     description: 'ヒスタミンは「アレルギーの悪者」だけではありません。アミノ酸ヒスチジンから作られ、アレルギー反応・胃酸分泌・脳の覚醒（神経伝達物質）など多くの役割を担う生理活性物質です。H1/H2受容体と抗ヒスタミン薬、分解酵素DAO・HNMT（メチレーション）の個人差、ヒスタミン不耐症と食べ物の関係、そしてアナフィラキシーやヒスタミン食中毒の注意までを、出典つきで中立に解説します。',
     alternates: { canonical: 'https://mitoflow40.com/histamine' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'ヒスタミンとは ｜ Mitoflow40',
         description: 'アレルギー・胃酸・脳の覚醒という3つの顔と、分解酵素DAO/HNMTの個人差、ヒスタミン不耐症を中立に。',
         url: 'https://mitoflow40.com/histamine',

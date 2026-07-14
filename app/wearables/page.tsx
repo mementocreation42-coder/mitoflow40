@@ -7,6 +7,8 @@ export const metadata = {
     description: 'Apple Watchなどのウェアラブルで、自分の体をどう読むか。安静時心拍数・心拍変動（HRV）・睡眠・VO2 Max・活動量の見方と、40代の健康最適化への活かし方を精密栄養学の視点で解説します。',
     alternates: { canonical: 'https://mitoflow40.com/wearables' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'ウェアラブル活用術（Apple Watch） | Mitoflow40',
         description: 'Apple Watchなどのウェアラブルで自分の体を読む。RHR・HRV・睡眠・VO2 Max・活動量の見方と活かし方を解説。',
         url: 'https://mitoflow40.com/wearables',

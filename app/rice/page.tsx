@@ -7,6 +7,8 @@ export const metadata = {
     description: '「玄米は健康、白米は悪」と言い切れるのか。白米と玄米それぞれの長所と短所、血糖の上がりやすさ、玄米の食物繊維やビタミンと、フィチン酸・ヒ素・消化負担といった注意点を、確かなことと誇張を分けて中立に整理。あなたに合うお米の食べ方を考えます。',
     alternates: { canonical: 'https://mitoflow40.com/rice' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '白米・玄米の真実 | Mitoflow40',
         description: '白米と玄米、どちらが正解？ 血糖・栄養・フィチン酸・ヒ素を中立に整理し、自分に合う食べ方へ。',
         url: 'https://mitoflow40.com/rice',

@@ -7,6 +7,8 @@ export const metadata = {
     description: '40代の健康最適化に効く15のビタミン・ミネラル・栄養素。それぞれの働き、不足のサイン、多く含む食品、関わる遺伝子をわかりやすく解説。',
     alternates: { canonical: 'https://mitoflow40.com/nutrients' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'NUTRIENTS | Mitoflow40',
         description: '40代の健康最適化に効く15のビタミン・ミネラル・栄養素を、働き・不足サイン・食品・関わる遺伝子から解説。',
         url: 'https://mitoflow40.com/nutrients',

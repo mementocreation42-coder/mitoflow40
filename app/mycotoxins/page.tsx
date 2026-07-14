@@ -7,6 +7,8 @@ export const metadata = {
     description: 'カビ毒（マイコトキシン）とは、カビが作る有害物質。アフラトキシンやオクラトキシンAなどの種類、加熱で分解されにくい性質、家庭でできる減らし方を、神経質になりすぎず、出典つきでやさしく解説します。',
     alternates: { canonical: 'https://mitoflow40.com/mycotoxins' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'カビ毒（マイコトキシン）と食の安全 | Mitoflow40',
         description: 'カビが作る有害物質「カビ毒」。種類・性質・家庭での減らし方を、煽らずやさしく解説。',
         url: 'https://mitoflow40.com/mycotoxins',

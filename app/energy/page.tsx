@@ -7,6 +7,8 @@ export const metadata = {
     description: '疲れにくさの正体は「エネルギー（ATP）を作り続けられること」。エネルギーを作るしくみと、その材料になる栄養（ビタミンB群・鉄・マグネシウム・CoQ10など）、作る力が落ちる原因を、精密栄養学の視点でやさしく解説します。',
     alternates: { canonical: 'https://mitoflow40.com/energy' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'エネルギーとは ｜ 疲れにくさの正体 | Mitoflow40',
         description: '疲れにくさ＝エネルギーを作り続けられること。作るしくみと材料になる栄養、作る力が落ちる原因をやさしく解説。',
         url: 'https://mitoflow40.com/energy',

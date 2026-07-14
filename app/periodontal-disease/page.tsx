@@ -7,6 +7,8 @@ export const metadata = {
     description: '歯周病は、歯ぐきの細菌感染から始まる慢性の炎症性疾患。歯肉炎と歯周炎の違い、見逃しやすいサイン、そして糖尿病・心血管・腸内環境とつながる「全身への波及」を、精密栄養学の視点で中立に整理します。痛みなく静かに進む「沈黙の炎症」を、口の外まで含めて捉え直すページです。診断・治療は歯科・医療機関で。',
     alternates: { canonical: 'https://mitoflow40.com/periodontal-disease' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '歯周病とは | Mitoflow40',
         description: '歯ぐきの慢性炎症が、糖尿病・心血管・腸へと広がる。口の中だけの病気ではない歯周病を中立に。診断・治療は歯科で。',
         url: 'https://mitoflow40.com/periodontal-disease',

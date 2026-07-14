@@ -7,6 +7,8 @@ export const metadata = {
     description: '腸は消化だけでなく、免疫・気分・解毒の交差点。腸内細菌叢（マイクロバイオーム）の多様性、腸が担う仕事、リーキーガット、食物繊維と発酵食品による腸活までを、精密栄養学の視点でやさしく解説します。',
     alternates: { canonical: 'https://mitoflow40.com/gut-health' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '腸内環境とは ｜ 腸活の基本 | Mitoflow40',
         description: '免疫・気分・解毒の交差点である腸。腸内細菌の多様性と、腸活の基本をやさしく解説。',
         url: 'https://mitoflow40.com/gut-health',

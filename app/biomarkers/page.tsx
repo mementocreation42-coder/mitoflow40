@@ -7,6 +7,8 @@ export const metadata = {
     description: '血液検査50項目を40代・ミトコンドリアの視点で解説。各指標の意味・基準値・最適域・関わる栄養素・遺伝子をわかりやすくまとめました。',
     alternates: { canonical: 'https://mitoflow40.com/biomarkers' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'BIOMARKERS | Mitoflow40',
         description: '血液検査50項目を40代・ミトコンドリアの視点で解説。',
         url: 'https://mitoflow40.com/biomarkers',

@@ -8,6 +8,8 @@ export const metadata = {
     description: 'ミトコンドリアを増やす唯一の確実な方法「運動」を、有酸素・HIIT・筋トレの役割と、40代からの組み立て方からわかりやすく解説。血糖・自律神経・サルコペニアとの関係も。',
     alternates: { canonical: 'https://mitoflow40.com/exercise' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '運動 | Mitoflow40',
         description: 'ミトコンドリアを増やす「運動」を、有酸素・HIIT・筋トレの役割と40代の組み立て方から解説。',
         url: 'https://mitoflow40.com/exercise',

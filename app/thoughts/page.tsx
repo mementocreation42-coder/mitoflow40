@@ -8,6 +8,8 @@ export const metadata = {
     description: '運命とは？自由とは？老いるとは？幸せとは？——答えのない問いを、遺伝子・体・健康の視点からやさしく考えるMitoflow40の思想コラム。',
     alternates: { canonical: 'https://mitoflow40.com/thoughts' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '思索 ｜ 〇〇とは？を体から考える | Mitoflow40',
         description: '運命・自由・老い・幸せ——答えのない問いを、体と健康の視点から考えるコラム。',
         url: 'https://mitoflow40.com/thoughts',

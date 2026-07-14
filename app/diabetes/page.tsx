@@ -7,6 +7,8 @@ export const metadata = {
     description: '糖尿病は、血糖を下げるインスリンの働きが不足し、慢性的に血糖が高くなる病気。1型・2型・妊娠糖尿病の違い、自覚しにくい初期サイン、HbA1cなどの指標、合併症、そして「境界型（予備群）」のうちにできる生活の工夫を、精密栄養学の視点で中立に整理します。診断・治療は医療機関で。',
     alternates: { canonical: 'https://mitoflow40.com/diabetes' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '糖尿病とは | Mitoflow40',
         description: '糖尿病の種類・サイン・指標・合併症と、境界型のうちにできること。診断・治療は医療機関で。',
         url: 'https://mitoflow40.com/diabetes',

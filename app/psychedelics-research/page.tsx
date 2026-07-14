@@ -8,6 +8,8 @@ export const metadata = {
     alternates: { canonical: 'https://mitoflow40.com/psychedelics-research' },
     robots: { index: true, follow: true },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'サイケデリック研究の潮流（海外）｜ Mitoflow40',
         description: '海外で進むサイケデリックのメンタルヘルス研究を中立的に解説。日本では違法・使用推奨ではありません。',
         url: 'https://mitoflow40.com/psychedelics-research',

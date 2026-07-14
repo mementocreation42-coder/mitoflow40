@@ -8,6 +8,8 @@ export const metadata = {
     description: '体が"こげる"原因「糖化」とAGEs（終末糖化産物）を、起こる仕組み・体への影響・血糖との関係・防ぐ習慣からわかりやすく解説。',
     alternates: { canonical: 'https://mitoflow40.com/glycation' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '糖化・AGEs（こげる） | Mitoflow40',
         description: '体が"こげる"原因「糖化」とAGEsを、仕組み・血糖との関係・防ぐ習慣から解説。',
         url: 'https://mitoflow40.com/glycation',

@@ -7,6 +7,8 @@ export const metadata = {
     description: '呼吸は、自律神経に意識的に働きかけられる数少ないスイッチ。ゆっくり吐く呼吸とマインドフルネスで「休息モード（副交感神経）」を取り戻す——合法・安全な“整える”実践を、やさしく解説します。',
     alternates: { canonical: 'https://mitoflow40.com/mindfulness' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'マインドフルネス・呼吸 ｜ Mitoflow40',
         description: '呼吸は自律神経のスイッチ。休息モードを取り戻す、安全な整える実践。',
         url: 'https://mitoflow40.com/mindfulness',

@@ -12,6 +12,8 @@ export const metadata: Metadata = {
     description: '40代からの健康実践・ミトコンドリア最適化・精密栄養学など、最先端の健康情報と実践の記録。',
     alternates: { canonical: 'https://mitoflow40.com/journal' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'JoUrNaL | Mitoflow40',
         description: '40代からの健康実践・ミトコンドリア最適化・精密栄養学など、最先端の健康情報と実践の記録。',
         url: 'https://mitoflow40.com/journal',

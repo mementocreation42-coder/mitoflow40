@@ -7,6 +7,8 @@ export const metadata = {
     description: '「食べた＝吸収された」ではありません。口・胃・小腸の消化のリレーと消化酵素（アミラーゼ・プロテアーゼ・リパーゼ）、40代で落ちる消化力と吸収を高める習慣を、精密栄養学の視点でやさしく解説します。',
     alternates: { canonical: 'https://mitoflow40.com/digestion' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '消化・吸収とは ｜ 食べた栄養を活かすしくみ | Mitoflow40',
         description: '「食べた＝吸収された」ではない。消化のリレーと消化酵素、40代で落ちる消化力と吸収を高める習慣を解説。',
         url: 'https://mitoflow40.com/digestion',

@@ -8,6 +8,8 @@ export const metadata = {
     description: '約24時間で全身を調整する「体内時計（サーカディアンリズム）」を、仕組み・乱れの影響・ホルモンや血糖との関係・整える1日の過ごし方からわかりやすく解説。',
     alternates: { canonical: 'https://mitoflow40.com/circadian-rhythm' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'サーカディアンリズム（体内時計） | Mitoflow40',
         description: '体内時計を、仕組み・乱れの影響・ホルモンや血糖との関係・整える1日の過ごし方から解説。',
         url: 'https://mitoflow40.com/circadian-rhythm',

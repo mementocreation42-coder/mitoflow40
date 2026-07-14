@@ -8,6 +8,8 @@ export const metadata = {
     description: '肝臓・腎臓・腸・心臓・脳・膵臓・甲状腺・副腎など、主要な内臓の役割を40代の視点で解説。各臓器の働き・加齢による変化・関わる血液検査と栄養素をわかりやすくまとめました。',
     alternates: { canonical: 'https://mitoflow40.com/organs' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'ORGANS | 内臓・臓器 | Mitoflow40',
         description: '主要な内臓の役割を40代の視点で解説。働き・加齢による変化・関わる血液検査と栄養素から読み解く。',
         url: 'https://mitoflow40.com/organs',

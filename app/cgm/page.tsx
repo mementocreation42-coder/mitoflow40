@@ -7,6 +7,8 @@ export const metadata = {
     description: '持続血糖モニタリング（CGM）は、腕に貼ったセンサーで血糖の動きを24時間追える技術。フリースタイルリブレなどで「自分にとって何が血糖を上げるか」を可視化できます。仕組み、何が分かるか、活かし方、そして数字に振り回されないための注意点を中立に整理します。',
     alternates: { canonical: 'https://mitoflow40.com/cgm' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '血糖モニタリング（CGM）| Mitoflow40',
         description: 'フリースタイルリブレなどのCGMで自分の血糖を可視化する。仕組み・活かし方・注意点を中立に。',
         url: 'https://mitoflow40.com/cgm',

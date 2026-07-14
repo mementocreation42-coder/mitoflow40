@@ -7,6 +7,8 @@ export const metadata = {
     description: 'ストレスは悪者ではなく、体を守るための信号。コルチゾールと自律神経のしくみ、慢性ストレスが血糖・睡眠・腸に与える影響、40代の整え方を、精密栄養学の視点でやさしく解説します。',
     alternates: { canonical: 'https://mitoflow40.com/stress' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'ストレスとは ｜ Mitoflow40',
         description: 'ストレスは敵ではなく信号。コルチゾール・自律神経のしくみと、体から整える方法。',
         url: 'https://mitoflow40.com/stress',

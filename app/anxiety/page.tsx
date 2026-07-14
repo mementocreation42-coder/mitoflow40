@@ -7,6 +7,8 @@ export const metadata = {
     description: '理由のない不安や動悸の裏に、血糖の乱高下・腸内環境・睡眠不足・カフェイン・栄養不足など「体の要因」が隠れていることがあります。不安を性格の問題にせず、体から見直す視点を解説します。',
     alternates: { canonical: 'https://mitoflow40.com/anxiety' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '不安と体 ｜ Mitoflow40',
         description: '不安は性格ではなく、体のサインのことも。血糖・腸・睡眠から見直す視点。',
         url: 'https://mitoflow40.com/anxiety',

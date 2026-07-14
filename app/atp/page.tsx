@@ -8,6 +8,8 @@ export const metadata = {
     description: '体のすべての活動を支えるエネルギー通貨「ATP（アデノシン三リン酸）」を、作られ方（解糖系→TCA回路→電子伝達系）・使われ方・支える栄養素からわかりやすく解説。',
     alternates: { canonical: 'https://mitoflow40.com/atp' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'ATP（エネルギー通貨） | Mitoflow40',
         description: '体のエネルギー通貨「ATP」を、作られ方・使われ方・支える栄養素から解説。',
         url: 'https://mitoflow40.com/atp',

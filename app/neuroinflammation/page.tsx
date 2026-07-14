@@ -7,6 +7,8 @@ export const metadata = {
     description: '原因のはっきりしないだるさ・意欲の低下・ブレインフォグ——その裏に「炎症」があるかもしれません。IL-6やTNF-αといった炎症性サイトカインが脳に信号を送り、ミクログリアを介して起こる「神経炎症（ニューロインフレメーション）」。病気のときのだるさ（sickness behavior）から、慢性炎症とうつ・気分の関係、炎症の源（内臓脂肪・腸・睡眠・ストレス）、hs-CRPでの可視化までを、出典つきで中立に解説します。',
     alternates: { canonical: 'https://mitoflow40.com/neuroinflammation' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '神経炎症とは ｜ Mitoflow40',
         description: 'IL-6などの炎症性サイトカインが脳と心に及ぶ「神経炎症」。だるさ・うつ・ブレインフォグとの関係を中立に。',
         url: 'https://mitoflow40.com/neuroinflammation',

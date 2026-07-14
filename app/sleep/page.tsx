@@ -8,6 +8,8 @@ export const metadata = {
     description: '体と脳が修復・再生する時間「睡眠」を、深い睡眠とレムの役割・脳の老廃物洗浄・ホルモンとの関係・質を上げる習慣からわかりやすく解説。',
     alternates: { canonical: 'https://mitoflow40.com/sleep' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '睡眠 | Mitoflow40',
         description: '修復・再生の時間「睡眠」を、深い睡眠とレム・脳の洗浄・ホルモン・質を上げる習慣から解説。',
         url: 'https://mitoflow40.com/sleep',

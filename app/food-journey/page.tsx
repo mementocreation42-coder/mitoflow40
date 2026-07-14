@@ -7,6 +7,8 @@ export const metadata = {
     description: '食事から始まり、消化・吸収・運搬・代謝・利用・排出へ——私たちの体が「食べたもの」をどうエネルギーや材料に変え、活動しているのかを、生化学ベースでインフォグラフィックとともに客観的に俯瞰します。三大栄養素が体内でたどる道のりを一枚の地図に。',
     alternates: { canonical: 'https://mitoflow40.com/food-journey' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '食べてから、動くまで｜体の中で起きていること | Mitoflow40',
         description: '消化・吸収・運搬・代謝・利用・排出。食べたものが活動になるまでの全体像を、生化学ベースの地図で俯瞰。',
         url: 'https://mitoflow40.com/food-journey',

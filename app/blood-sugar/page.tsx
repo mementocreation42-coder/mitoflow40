@@ -8,6 +8,8 @@ export const metadata = {
     description: '食後の眠気・甘いもの渇望・夕方のだるさの正体「血糖の波」を、仕組み・インスリン抵抗性・糖化との関係・整える食べ方からわかりやすく解説。HbA1cやインスリンとのつながりも。',
     alternates: { canonical: 'https://mitoflow40.com/blood-sugar' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '血糖コントロール（血糖の波） | Mitoflow40',
         description: '「血糖の波」を、仕組み・インスリン抵抗性・糖化との関係・整える食べ方から解説。',
         url: 'https://mitoflow40.com/blood-sugar',

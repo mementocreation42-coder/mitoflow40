@@ -7,6 +7,8 @@ export const metadata = {
     description: '完全には避けられないからこそ、できる範囲で“入れる量を減らす”。農薬とオーガニック、大型魚の水銀、マイクロプラスチック、食品添加物について、神経質になりすぎず減らすコツを、出典つきでやさしく解説します。',
     alternates: { canonical: 'https://mitoflow40.com/reduce-toxins' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '有害物質を減らす暮らし | Mitoflow40',
         description: '農薬・水銀・マイクロプラスチック・添加物。神経質になりすぎず、できる範囲で曝露を減らすコツ。',
         url: 'https://mitoflow40.com/reduce-toxins',

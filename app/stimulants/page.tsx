@@ -7,6 +7,8 @@ export const metadata = {
     description: 'お酒・タバコ・カフェインは人生の楽しみでもあり、体に負担もかける嗜好品。「やめなさい」ではなく、体への影響を正しく知って自分で選ぶ——アルコール・タバコ・カフェインとの付き合い方を、出典つきでやさしく解説します。',
     alternates: { canonical: 'https://mitoflow40.com/stimulants' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '嗜好品と体 ｜ Mitoflow40',
         description: 'アルコール・タバコ・カフェイン。体への影響を知って、自分で選ぶための視点。',
         url: 'https://mitoflow40.com/stimulants',

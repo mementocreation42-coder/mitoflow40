@@ -7,6 +7,8 @@ export const metadata = {
     description: 'Mitoflow40の背景にある一冊『健康とは、カウンターカルチャーである。――身体から始める静かな反抗』（小林大介）の考え方を紹介します。健康を制度や市場に明け渡すのではなく、自分の身体の主権を取り戻す——食べない・休む・感じるという、もっとも静かで根源的な反抗について。',
     alternates: { canonical: 'https://mitoflow40.com/health-counterculture' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '健康とは、カウンターカルチャーである。｜身体から始める静かな反抗',
         description: '健康を制度や市場に明け渡さず、自分の身体の主権を取り戻す。Mitoflow40の背景にある一冊の思想。',
         url: 'https://mitoflow40.com/health-counterculture',

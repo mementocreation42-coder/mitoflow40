@@ -7,6 +7,8 @@ export const metadata = {
     description: 'コーヒー・緑茶のカフェインは敵か味方か。眠気が飛ぶ仕組み（アデノシン受容体）、半減期とタイミング、代謝の個人差（CYP1A2遺伝子）、適量の目安、L-テアニンとの相性、上手な減らし方までを精密栄養学の視点でやさしく解説します。',
     alternates: { canonical: 'https://mitoflow40.com/caffeine' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: 'カフェインとの付き合い方 | Mitoflow40',
         description: '眠気が飛ぶ仕組み・半減期・代謝の個人差から、自分に合うコーヒーの飲み方を考える。',
         url: 'https://mitoflow40.com/caffeine',

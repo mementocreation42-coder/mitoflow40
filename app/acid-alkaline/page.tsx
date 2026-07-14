@@ -7,6 +7,8 @@ export const metadata = {
     description: '酸性・アルカリ性（pH）とは何か。血液のpHは体が厳密に保っており、食べ物で体が酸性・アルカリ性に「傾く」ことは基本的にありません。アルカリ性食品・アルカリイオン水・酸性体質といった話のどこが本当で、どこが誤解なのかを、生化学に基づいて出典つきで整理します。',
     alternates: { canonical: 'https://mitoflow40.com/acid-alkaline' },
     openGraph: {
+        siteName: 'Mitoflow40',
+        locale: 'ja_JP',
         title: '酸性・アルカリ性とは｜体のpHと「アルカリ性食品」の誤解 | Mitoflow40',
         description: '血液のpHは体が厳密に管理。食べ物で体は酸性・アルカリ性に傾かない。アルカリ性食品の誤解を生化学ベースで整理。',
         url: 'https://mitoflow40.com/acid-alkaline',
