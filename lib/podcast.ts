@@ -1,28 +1,16 @@
-// SAL Radio（Spotify）のエピソードを取得し、ヘルスケア回だけを自動キュレーションする。
+// SAL Radio のエピソードを RSS から取得し、ヘルスケア回だけを自動キュレーションする。
 //
 // 「どれがヘルスケア回か」を人手で登録しないのが方針。
-// タイトル／説明文をキーワードで判定し、条件に合った回だけが自動で /podcast に載る。
-// 判定を変えたいときは、このファイル上部の3つの定数だけを触ればよい。
+// タイトルに「ヘルスケア」という言葉が含まれる回だけが自動で /podcast に載る。
 
 export const SHOW_ID = '3g1Jexgm6ZWa1XYTFLGIxo';
 export const SHOW_NAME = 'SAL Radio｜釣りと身体とものづくりの雑談';
 export const SHOW_URL = `https://open.spotify.com/show/${SHOW_ID}`;
 
-/** これを含むエピソードをヘルスケア回とみなす（タイトル優先、なければ説明文も見る） */
-const HEALTH_KEYWORDS = [
-    'ヘルスケア', '健康', 'ヘルス', 'Mitoflow', 'ミトフロー',
-    '体調', '不調', '疲れ', '疲労', '未病',
-    '栄養', '食事', '食べ', '血糖', '血液検査', '健康診断',
-    '腸', '睡眠', 'ミトコンドリア', '細胞', '代謝', 'ATP',
-    'ストレス', 'メンタル', '自律神経', 'ホルモン',
-    'サプリ', '断食', 'ファスティング', '呼吸',
-];
+const RSS_URL = 'https://anchor.fm/s/f035da90/podcast/rss';
 
-/** これを含むものは、健康ワードを持っていてもヘルスケア回として扱わない（釣り／制作ブランド回） */
-const EXCLUDE_KEYWORDS = ['HL Fishing', 'HLフィッシング'];
-
-/** キーワード判定を飛び越して必ず載せたい回があれば、エピソードIDをここに足す */
-const PINNED_EPISODE_IDS: string[] = [];
+/** これをタイトルに含むものだけをヘルスケア回とみなす */
+const HEALTH_KEYWORD = 'ヘルスケア';
 
 export interface Episode {
     id: string;
@@ -31,82 +19,76 @@ export interface Episode {
     releaseDate: string;
     durationMin: number;
     imageUrl: string | null;
+    /** エピソードのリンク先（Spotify for Podcasters） */
     spotifyUrl: string;
-    embedUrl: string;
-    /** 手動ピンで載っているか（キーワード判定ではなく） */
-    pinned: boolean;
+    /** 再生用の音源URL（RSSのenclosure） */
+    audioUrl: string;
 }
 
-interface SpotifyEpisode {
-    id: string;
-    name: string;
-    description: string;
-    release_date: string;
-    duration_ms: number;
-    images?: { url: string; width: number }[];
-    external_urls?: { spotify?: string };
+export function isHealthEpisode(title: string): boolean {
+    return title.includes(HEALTH_KEYWORD);
 }
 
-let tokenCache: { token: string; expiresAt: number } | null = null;
-
-async function getAccessToken(): Promise<string | null> {
-    const id = process.env.SPOTIFY_CLIENT_ID;
-    const secret = process.env.SPOTIFY_CLIENT_SECRET;
-    if (!id || !secret) return null;
-
-    if (tokenCache && tokenCache.expiresAt > Date.now() + 30_000) return tokenCache.token;
-
-    const res = await fetch('https://accounts.spotify.com/api/token', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: `Basic ${Buffer.from(`${id}:${secret}`).toString('base64')}`,
-        },
-        body: 'grant_type=client_credentials',
-        cache: 'no-store',
-    });
-    if (!res.ok) {
-        console.error('[podcast] Spotify token request failed:', res.status, await res.text());
-        return null;
-    }
-    const data = (await res.json()) as { access_token: string; expires_in: number };
-    tokenCache = { token: data.access_token, expiresAt: Date.now() + data.expires_in * 1000 };
-    return data.access_token;
+function decodeEntities(s: string): string {
+    return s
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'");
 }
 
-function normalize(s: string): string {
-    return s.toLowerCase();
+function extractTag(block: string, tag: string): string | null {
+    const cdataMatch = block.match(new RegExp(`<${tag}[^>]*><!\\[CDATA\\[([\\s\\S]*?)\\]\\]></${tag}>`));
+    if (cdataMatch) return cdataMatch[1].trim();
+    const plainMatch = block.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`));
+    if (plainMatch) return decodeEntities(plainMatch[1].trim());
+    return null;
 }
 
-function isExcluded(ep: SpotifyEpisode): boolean {
-    const hay = normalize(ep.name);
-    return EXCLUDE_KEYWORDS.some((k) => hay.includes(normalize(k)));
+function extractAttr(block: string, tag: string, attr: string): string | null {
+    const match = block.match(new RegExp(`<${tag}[^>]*\\s${attr}="([^"]*)"[^>]*/?>`));
+    return match ? match[1] : null;
 }
 
-/** ヘルスケア回かどうか。タイトルに健康ワードがあれば確定、なければ説明文でも拾う。 */
-export function isHealthEpisode(ep: SpotifyEpisode): boolean {
-    if (PINNED_EPISODE_IDS.includes(ep.id)) return true;
-    if (isExcluded(ep)) return false;
-    const title = normalize(ep.name);
-    if (HEALTH_KEYWORDS.some((k) => title.includes(normalize(k)))) return true;
-    // 説明文は共通のリンク集が入るため、判定には「健康」の明示ワードのみを使う
-    const desc = normalize(ep.description || '');
-    return ['ヘルスケア', '健康法', '健康の話'].some((k) => desc.includes(normalize(k)));
+function parseDurationToMin(raw: string | null): number {
+    if (!raw) return 0;
+    const parts = raw.split(':').map((p) => Number.parseInt(p, 10));
+    if (parts.some((p) => Number.isNaN(p))) return 0;
+    let seconds = 0;
+    for (const p of parts) seconds = seconds * 60 + p;
+    return Math.round(seconds / 60);
 }
 
-function toEpisode(ep: SpotifyEpisode): Episode {
-    const image = (ep.images || []).slice().sort((a, b) => (b.width || 0) - (a.width || 0))[0];
+function toIsoDate(pubDate: string | null): string {
+    if (!pubDate) return '';
+    const d = new Date(pubDate);
+    if (Number.isNaN(d.getTime())) return '';
+    return d.toISOString().slice(0, 10);
+}
+
+function parseItem(block: string, channelImage: string | null): Episode | null {
+    const title = extractTag(block, 'title');
+    const enclosureUrl = extractAttr(block, 'enclosure', 'url');
+    const guid = extractTag(block, 'guid');
+    if (!title || !enclosureUrl || !guid) return null;
+
+    const rawDescription = extractTag(block, 'description') || '';
+    const description = rawDescription
+        .replace(/<[^>]*>/g, ' ')
+        .split(/▶|https?:\/\//)[0]
+        .replace(/\s+/g, ' ')
+        .trim();
+
     return {
-        id: ep.id,
-        name: ep.name,
-        // 説明文の末尾に毎回同じリンク集が付くので、最初の段落だけを表示用に使う
-        description: (ep.description || '').split(/▶|https?:\/\//)[0].trim(),
-        releaseDate: ep.release_date,
-        durationMin: Math.round(ep.duration_ms / 60000),
-        imageUrl: image?.url ?? null,
-        spotifyUrl: ep.external_urls?.spotify ?? `https://open.spotify.com/episode/${ep.id}`,
-        embedUrl: `https://open.spotify.com/embed/episode/${ep.id}?utm_source=generator&theme=0`,
-        pinned: PINNED_EPISODE_IDS.includes(ep.id),
+        id: guid,
+        name: title,
+        description,
+        releaseDate: toIsoDate(extractTag(block, 'pubDate')),
+        durationMin: parseDurationToMin(extractTag(block, 'itunes:duration')),
+        imageUrl: extractAttr(block, 'itunes:image', 'href') ?? channelImage,
+        spotifyUrl: extractTag(block, 'link') ?? SHOW_URL,
+        audioUrl: enclosureUrl,
     };
 }
 
@@ -115,47 +97,37 @@ export interface PodcastResult {
     episodes: Episode[];
     /** 番組全体の配信本数（取得できなかった場合は null） */
     totalEpisodes: number | null;
-    /** Spotify から取得できたか。false ならキーワード判定以前の問題（未設定・失敗） */
+    /** RSS から取得できたか */
     available: boolean;
 }
 
 /**
- * 番組の全エピソードを取得し、ヘルスケア回だけに絞って返す。
- * 認証情報が無い／取得に失敗した場合も throw せず available:false を返す（ビルドを落とさない）。
+ * RSS フィードから全エピソードを取得し、タイトルに「ヘルスケア」を含む回だけに絞って返す。
+ * 取得に失敗した場合も throw せず available:false を返す（ビルドを落とさない）。
  */
 export async function getHealthEpisodes(): Promise<PodcastResult> {
-    const token = await getAccessToken();
-    if (!token) return { episodes: [], totalEpisodes: null, available: false };
-
-    const all: SpotifyEpisode[] = [];
-    let url: string | null =
-        `https://api.spotify.com/v1/shows/${SHOW_ID}/episodes?market=JP&limit=50`;
-
     try {
-        while (url) {
-            const res: Response = await fetch(url, {
-                headers: { Authorization: `Bearer ${token}` },
-                next: { revalidate: 3600 },
-            });
-            if (!res.ok) {
-                console.error('[podcast] Spotify episodes request failed:', res.status, await res.text());
-                return { episodes: [], totalEpisodes: null, available: false };
-            }
-            const data = (await res.json()) as { items: (SpotifyEpisode | null)[]; next: string | null };
-            all.push(...data.items.filter((x): x is SpotifyEpisode => Boolean(x)));
-            url = data.next;
+        const res = await fetch(RSS_URL, { next: { revalidate: 3600 } });
+        if (!res.ok) {
+            console.error('[podcast] RSS fetch failed:', res.status);
+            return { episodes: [], totalEpisodes: null, available: false };
         }
+        const xml = await res.text();
+        const channelImage = extractAttr(xml, 'itunes:image', 'href');
+        const itemBlocks = xml.match(/<item>[\s\S]*?<\/item>/g) ?? [];
+        const all = itemBlocks
+            .map((block) => parseItem(block, channelImage))
+            .filter((ep): ep is Episode => ep !== null);
+
+        const episodes = all
+            .filter((ep) => isHealthEpisode(ep.name))
+            .sort((a, b) => b.releaseDate.localeCompare(a.releaseDate));
+
+        return { episodes, totalEpisodes: all.length, available: true };
     } catch (e) {
-        console.error('[podcast] Spotify fetch error:', e);
+        console.error('[podcast] RSS parse error:', e);
         return { episodes: [], totalEpisodes: null, available: false };
     }
-
-    const episodes = all
-        .filter(isHealthEpisode)
-        .map(toEpisode)
-        .sort((a, b) => b.releaseDate.localeCompare(a.releaseDate));
-
-    return { episodes, totalEpisodes: all.length, available: true };
 }
 
 export function formatDate(iso: string): string {

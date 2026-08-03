@@ -7,7 +7,7 @@ import { Suspense } from 'react';
 
 function LoginForm() {
   const searchParams = useSearchParams();
-  const from = searchParams.get('from') || '/admin';
+  const from = searchParams.get('from') || '/admin/journal';
   const [state, formAction, isPending] = useActionState(login, { error: '' });
 
   return (

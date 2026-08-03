@@ -24,7 +24,7 @@ export default async function AdminClientsPage() {
     return (
         <div className={styles.shell}>
             <header className={styles.header}>
-                <Link href="/admin" className={styles.brand} aria-label="管理ダッシュボードへ">
+                <Link href="/admin/journal" className={styles.brand} aria-label="管理ダッシュボードへ">
                     <span className={styles.brandMark}>M</span>
                     <span>
                         <span className={styles.brandName}>Mitoflow40 Admin</span>
@@ -32,17 +32,20 @@ export default async function AdminClientsPage() {
                     </span>
                 </Link>
                 <div className={styles.headerActions}>
-                    <Link href="/admin" className={styles.logout}>← 記事管理</Link>
+                    <Link href="/admin/journal" className={styles.newButton}>← 記事管理</Link>
                     <form action={logout}><button type="submit" className={styles.logout}>ログアウト</button></form>
                 </div>
             </header>
 
-            <main className={styles.main} style={{ maxWidth: 820 }}>
+            <main className={styles.main} style={{ maxWidth: 680 }}>
                 <p className={styles.eyebrow}>Client Intake</p>
                 <div className={styles.titleRow}>
-                    <h1 className={styles.title}>クライアント一覧</h1>
-                    <span className={styles.resultMeta}>{clients.length} 名</span>
+                    <div>
+                        <h1 className={styles.title}>クライアント一覧</h1>
+                    </div>
+                    <Link href="/counseling-sheet" target="_blank" className={styles.newButton}>カウンセリング票フォーム ↗</Link>
                 </div>
+                <span className={styles.resultMeta}>{clients.length} 名</span>
                 <p className={styles.description}>/counseling-sheet からカウンセリング票を提出したクライアントの一覧。同じメールアドレスの提出はまとめています。最近提出した順。</p>
 
                 {!linkSecretOk && (

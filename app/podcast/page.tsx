@@ -81,16 +81,12 @@ export default async function PodcastPage() {
                                     {ep.description && (
                                         <p className="text-sm text-[#4A4A4A] leading-loose mb-4">{ep.description}</p>
                                     )}
-                                    <iframe
-                                        src={ep.embedUrl}
-                                        title={ep.name}
-                                        width="100%"
-                                        height="152"
-                                        frameBorder="0"
-                                        loading="lazy"
-                                        allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                        className="rounded-xl"
-                                    />
+                                    <audio controls preload="none" src={ep.audioUrl} className="w-full" />
+                                    <div className="mt-3">
+                                        <a href={ep.spotifyUrl} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-[#41C9B4] hover:underline">
+                                            Spotifyで聴く ↗
+                                        </a>
+                                    </div>
                                 </article>
                             ))}
                         </div>

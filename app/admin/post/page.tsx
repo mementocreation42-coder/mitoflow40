@@ -16,7 +16,7 @@ export default async function NewPostPage() {
         backdropFilter: 'blur(12px)', padding: '0 8px',
         display: 'flex', alignItems: 'center', height: 56, gap: 16,
       }}>
-        <Link href="/admin" style={{ color: '#666', textDecoration: 'none', fontSize: 13 }}>
+        <Link href="/admin/journal" style={{ color: '#666', textDecoration: 'none', fontSize: 13 }}>
           ← ダッシュボード
         </Link>
         <h1 style={{ fontSize: 15, fontWeight: 600, color: '#1a1a1a', margin: 0 }}>新規投稿</h1>
