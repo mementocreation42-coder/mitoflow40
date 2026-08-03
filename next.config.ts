@@ -15,6 +15,13 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'image.rakuten.co.jp', pathname: '/**' },
     ],
   },
+  async redirects() {
+    return [
+      // 旧カウンセリングフォームは /counseling-sheet に統合。古い直リンクを新URLへ。
+      { source: '/counseling', destination: '/counseling-sheet', permanent: true },
+      { source: '/counseling/:path*', destination: '/counseling-sheet', permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

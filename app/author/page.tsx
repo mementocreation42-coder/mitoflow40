@@ -44,7 +44,7 @@ export default function AuthorPage() {
 
                 <div className="grid md:grid-cols-[260px_1fr] gap-8 items-start mb-10">
                     <div className="rounded-2xl overflow-hidden border border-black">
-                        <Image src="/images/profile.jpg" alt="小林大介" width={300} height={300} className="w-full h-full object-cover object-top" />
+                        <Image src="/images/misc/profile.jpg" alt="小林大介" width={300} height={300} className="w-full h-full object-cover object-top" />
                     </div>
                     <div className="bg-white/70 rounded-2xl p-6 border border-black">
                         <p className="text-sm text-[#1A1A1A]/70 mb-3">{AUTHOR.jobTitle}</p>

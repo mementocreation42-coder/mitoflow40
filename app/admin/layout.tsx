@@ -1,14 +1,11 @@
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
+import { isAdminAuthenticated } from '@/lib/admin-auth';
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const cookieStore = await cookies();
-  const auth = cookieStore.get('mito_admin_auth');
-
-  if (!auth || auth.value !== 'true') {
+  if (!(await isAdminAuthenticated())) {
     const headersList = await headers();
-    const pathname = headersList.get('x-invoke-path') || '/admin';
+    const pathname = headersList.get('x-pathname') || '/admin';
     redirect(`/login?from=${encodeURIComponent(pathname)}`);
   }
 

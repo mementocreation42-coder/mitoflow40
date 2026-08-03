@@ -40,9 +40,9 @@ export default async function GenePage({ params }: { params: Promise<{ slug: str
             <JsonLd data={medicalWebPage({ name: `${gene.symbol}（${gene.name}）`, description: gene.tagline, path: `/genes/${slug}` })} />
             <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '身体の地図', path: '/library#map' }, { name: '遺伝子', path: '/genes' }, { name: gene.symbol, path: `/genes/${slug}` }])} />
             {/* Decorative illustrations */}
-            <img loading="lazy" decoding="async" src="/images/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
+            <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
                 style={{ top: '0', right: '-40px', width: '260px', transform: 'scaleY(-1)' }} />
-            <img loading="lazy" decoding="async" src="/images/24.png" alt="" className="absolute pointer-events-none"
+            <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none"
                 style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
             
         <article className="max-w-[800px] mx-auto px-6 md:px-4 py-12 md:py-24 relative" style={{ zIndex: 1 }}>

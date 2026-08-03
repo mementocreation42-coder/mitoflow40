@@ -3,17 +3,17 @@ import FadeOnScroll from './FadeOnScroll';
 
 const benefits = [
     {
-        image: '/images/experience_vitality_new.png',
+        image: '/images/experience/experience_vitality_new.png',
         alt: 'Vitality',
         text: '朝目覚めた瞬間からエネルギーが満ち溢れる感覚。日中の倦怠感を払拭し、アクティブな毎日へ。',
     },
     {
-        image: '/images/experience_focus_new.png',
+        image: '/images/experience/experience_focus_new.png',
         alt: 'Focus',
         text: '霧が晴れたようなクリアな思考。集中力が持続し、クリエイティブな作業もスムーズに。',
     },
     {
-        image: '/images/experience_sleep_new.png',
+        image: '/images/experience/experience_sleep_new.png',
         alt: 'Sleep',
         text: '深く質の高い睡眠がもたらす、朝の爽快感。夜はぐっすり、朝まで途切れない休息を。',
     },

@@ -25,9 +25,9 @@ const stages = [
 export default function FattyLiverPage() {
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#F3E2D2' }}>
-            <img loading="lazy" decoding="async" src="/images/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
+            <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
                 style={{ top: '0', right: '-40px', width: '260px', transform: 'scaleY(-1)' }} />
-            <img loading="lazy" decoding="async" src="/images/24.png" alt="" className="absolute pointer-events-none"
+            <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none"
                 style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '脂肪肝（MASLD）とは', description: '肝臓に脂肪がたまる脂肪肝（MASLD）。原因・無症状で進む怖さ・糖尿病や心血管病との関係・戻せる対策を解説。', path: '/fatty-liver' })} />
@@ -59,7 +59,7 @@ export default function FattyLiverPage() {
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
                     <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#FF9855] pl-3 leading-tight">なぜたまるのか</h2>
                     <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
-                        食べすぎた糖質、とくに<strong>果糖（清涼飲料・お菓子・果汁）</strong>は、肝臓で脂肪に変えられて蓄えられます。さらに<strong>インスリン抵抗性</strong>（インスリンが効きにくい状態）があると、脂肪が肝臓にたまりやすくなります。
+                        食べすぎた糖質、とくに<strong>果糖（清涼飲料・お菓子・果汁）</strong>は、肝臓で脂肪に変えられて蓄えられます。さらに<Link href="/insulin-resistance" className="underline decoration-[#41C9B4] decoration-2 underline-offset-2 font-bold hover:text-[#41C9B4]">インスリン抵抗性</Link>（インスリンが効きにくい状態）があると、脂肪が肝臓にたまりやすくなります。
                         {'\n\n'}
                         だから脂肪肝は、<strong>血糖の乱れ・内臓肥満・脂質異常と同じ根っこ</strong>を持つ「メタボの一員」。お酒の有無にかかわらず、<strong>糖と内臓脂肪のコントロール</strong>がカギになります。
                     </p>

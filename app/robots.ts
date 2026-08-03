@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
             {
                 userAgent: '*',
                 allow: '/',
-                disallow: ['/admin', '/login'],
+                disallow: ['/admin', '/login', '/counseling-sheet', '/r/'],
             },
         ],
         sitemap: 'https://mitoflow40.com/sitemap.xml',

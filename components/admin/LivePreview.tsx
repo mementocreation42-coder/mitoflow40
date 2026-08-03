@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, memo } from 'react';
+import { useEffect, useState, memo } from 'react';
 
 // ===== OGPカード（本番と同じ /api/ogp を使用） =====
 interface OgpData { url: string; title: string; description: string | null; image: string | null; siteName: string; favicon: string }
@@ -79,7 +79,7 @@ function AuthorCard() {
     }}>
       <div style={{ width: 56, height: 56, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, border: '2px solid #41C9B4' }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/images/profile.jpg" alt="Daisuke Kobayashi" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} />
+        <img src="/images/misc/profile.jpg" alt="Daisuke Kobayashi" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} />
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
         <p style={{ fontSize: 11, letterSpacing: '0.1em', color: 'rgba(74,74,74,0.6)', marginBottom: 2 }}>DAISUKE KOBAYASHI</p>
@@ -250,17 +250,23 @@ interface LivePreviewProps {
   selectedCats: number[];
   categories: { id: number; name: string }[];
   uploadedImages: { url: string; id: number }[];
+  onUploadFeatured: () => void;
+  onChooseFeatured: () => void;
+  onRemoveFeatured: () => void;
+  onToggleCategory: (id: number) => void;
 }
 
 export default memo(function LivePreview({
   title, date, body, featuredImage, selectedCats, categories, uploadedImages,
+  onUploadFeatured, onChooseFeatured, onRemoveFeatured, onToggleCategory,
 }: LivePreviewProps) {
   const blocks = parseBlocks(body, uploadedImages);
 
   return (
-    <div style={{
-      background: '#fff', borderRadius: 12, overflow: 'hidden',
-      border: '1px solid #e5e5e5', position: 'sticky', top: 112,
+    <div className="admin-live-preview" style={{
+      background: '#fff', borderRadius: 10, overflow: 'hidden',
+      border: '1px solid #d5ddda', position: 'sticky', top: 60,
+      height: 'calc(100vh - 64px)', display: 'flex', flexDirection: 'column',
     }}>
       {/* ブラウザバー */}
       <div style={{
@@ -275,15 +281,30 @@ export default memo(function LivePreview({
       </div>
 
       {/* スクロールエリア */}
-      <div style={{ maxHeight: 'calc(100vh - 180px)', overflowY: 'auto', padding: '0 0 40px' }}>
+      <div className="admin-live-preview-scroll" style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '0 0 24px' }}>
         <style>{PROSE_CSS}</style>
 
-        <article style={{ maxWidth: 660, margin: '0 auto', padding: '40px 24px' }}>
+        <article style={{ maxWidth: 660, margin: '0 auto', padding: '28px 24px' }}>
           {/* アイキャッチ */}
           {featuredImage && (
-            <div style={{ aspectRatio: '16/9', position: 'relative', width: '100%', overflow: 'hidden', borderRadius: 16, marginBottom: 32 }}>
+            <div style={{ aspectRatio: '16/9', position: 'relative', width: '100%', overflow: 'hidden', borderRadius: 16, marginBottom: 12 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={featuredImage.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div style={{ position: 'absolute', right: 8, bottom: 8, display: 'flex', gap: 6 }}>
+                <button className="admin-preview-control" type="button" onClick={onUploadFeatured} style={{ padding: '6px 10px', border: '1px solid rgba(0,0,0,.2)', borderRadius: 999, fontSize: 10, cursor: 'pointer' }}>画像を変更</button>
+                <button className="admin-preview-control" type="button" onClick={onChooseFeatured} style={{ padding: '6px 10px', border: '1px solid rgba(0,0,0,.2)', borderRadius: 999, fontSize: 10, cursor: 'pointer' }}>メディア</button>
+                <button className="admin-preview-control admin-preview-remove" type="button" onClick={onRemoveFeatured} aria-label="アイキャッチを削除" style={{ width: 28, border: '1px solid rgba(0,0,0,.2)', borderRadius: '50%', fontSize: 13, cursor: 'pointer' }}>×</button>
+              </div>
+            </div>
+          )}
+
+          {!featuredImage && (
+            <div style={{ padding: '24px 12px', marginBottom: 16, border: '2px dashed #9dcbbb', borderRadius: 16, background: '#effbf7', textAlign: 'center' }}>
+              <p style={{ margin: '0 0 10px', color: '#547068', fontSize: 11 }}>アイキャッチ画像</p>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: 8, flexWrap: 'wrap' }}>
+                <button className="admin-preview-control admin-preview-primary" type="button" onClick={onUploadFeatured} style={{ padding: '7px 12px', border: '1px solid #1a1a1a', borderRadius: 999, fontSize: 10, fontWeight: 700, cursor: 'pointer' }}>アップロード</button>
+                <button className="admin-preview-control" type="button" onClick={onChooseFeatured} style={{ padding: '7px 12px', border: '1px solid #a9b8b3', borderRadius: 999, fontSize: 10, cursor: 'pointer' }}>メディアから選択</button>
+              </div>
             </div>
           )}
 
@@ -301,19 +322,22 @@ export default memo(function LivePreview({
           </h1>
 
           {/* カテゴリ */}
-          {selectedCats.length > 0 && (
-            <div style={{ display: 'flex', gap: 8, marginBottom: 24, flexWrap: 'wrap' }}>
-              {selectedCats.map((id) => {
-                const cat = categories.find((c) => c.id === id);
-                return cat ? (
-                  <span key={id} style={{
-                    fontSize: 12, padding: '4px 12px', background: '#f0fdf9',
-                    border: '1px solid #41C9B4', borderRadius: 20, color: '#41C9B4',
-                  }}>{cat.name}</span>
-                ) : null;
+          <div style={{ marginBottom: 24 }}>
+            <p style={{ margin: '0 0 7px', color: '#79827f', fontSize: 10 }}>カテゴリーを選択</p>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+              {categories.map((cat) => {
+                const selected = selectedCats.includes(cat.id);
+                return (
+                  <button key={cat.id} className="admin-preview-control" data-selected={selected} type="button" onClick={() => onToggleCategory(cat.id)} style={{
+                    fontSize: 10, padding: '4px 10px', cursor: 'pointer',
+                    background: selected ? '#4AF6C3' : '#fff',
+                    border: selected ? '1px solid #1a1a1a' : '1px solid #cbd5d1',
+                    borderRadius: 20, color: '#1a1a1a', fontWeight: selected ? 700 : 400,
+                  }}>{selected ? '✓ ' : ''}{cat.name}</button>
+                );
               })}
             </div>
-          )}
+          </div>
 
           {/* 著者カード */}
           <AuthorCard />

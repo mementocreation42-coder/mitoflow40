@@ -28,9 +28,9 @@ const compare = [
 export default function RicePage() {
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#F3EEDC' }}>
-            <img loading="lazy" decoding="async" src="/images/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
+            <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
                 style={{ top: '0', right: '-40px', width: '260px', transform: 'scaleY(-1)' }} />
-            <img loading="lazy" decoding="async" src="/images/24.png" alt="" className="absolute pointer-events-none"
+            <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none"
                 style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '白米・玄米の真実', description: '白米と玄米、どちらが正解？ 血糖・栄養・フィチン酸・ヒ素を中立に整理し、自分に合う食べ方へ。', path: '/rice' })} />

@@ -1,14 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 import { listMedia } from '@/lib/wp';
-
-async function checkAuth() {
-  const cookieStore = await cookies();
-  return cookieStore.get('mito_admin_auth')?.value === 'true';
-}
+import { isAdminAuthenticated } from '@/lib/admin-auth';
 
 export async function GET(request: NextRequest) {
-  if (!(await checkAuth())) {
+  if (!(await isAdminAuthenticated())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

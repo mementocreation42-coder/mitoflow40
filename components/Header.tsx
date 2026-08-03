@@ -4,10 +4,10 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 const navItems = [
-    { href: '/check', label: 'FREE CHECK', ja: '無料チェック' },
     { href: '/sample', label: 'SAMPLE ANALYSIS', ja: '解析サンプル' },
     { href: '/library', label: 'LIBRARY', ja: 'ライブラリ' },
     { href: '/journal', label: 'JOURNAL', ja: 'ジャーナル' },
+    { href: '/podcast', label: 'PODCAST', ja: 'ポッドキャスト' },
     { href: '/#contact', label: 'CONTACT', ja: 'お問い合わせ' },
 ];
 
@@ -35,12 +35,12 @@ export default function Header() {
 
                 {/* Desktop Navigation */}
                 <nav className="hidden md:block">
-                    <ul className="flex items-center gap-6">
+                    <ul className="flex items-center gap-5">
                         {navItems.slice(0, -1).map((item) => (
                             <li key={item.href}>
                                 <Link
                                     href={item.href}
-                                    className="group text-sm font-medium hover:text-[#4AF6C3] transition-colors pb-1 border-b-2 border-transparent hover:border-[#4AF6C3]"
+                                    className="group text-xs font-medium hover:text-[#4AF6C3] transition-colors pb-1 border-b-2 border-transparent hover:border-[#4AF6C3]"
                                 >
                                     <SwapLabel en={item.label} ja={item.ja} />
                                 </Link>
@@ -49,7 +49,7 @@ export default function Header() {
                         <li>
                             <Link
                                 href="/#contact"
-                                className="group px-4 py-2 bg-[#4AF6C3] text-[#1A1A1A] border border-[#1A1A1A] text-sm font-semibold rounded-full hover:bg-[#3AE6B3] transition-colors"
+                                className="group px-3.5 py-1.5 bg-[#4AF6C3] text-[#1A1A1A] border border-[#1A1A1A] text-xs font-semibold rounded-full hover:bg-[#3AE6B3] transition-colors"
                             >
                                 <SwapLabel en="CONTACT" ja="お問い合わせ" />
                             </Link>

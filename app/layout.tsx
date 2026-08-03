@@ -100,7 +100,7 @@ export default function RootLayout({
               name: "小林大介",
               alternateName: "Daisuke Kobayashi",
               url: "https://mitoflow40.com/author",
-              image: "https://mitoflow40.com/images/profile.jpg",
+              image: "https://mitoflow40.com/images/misc/profile.jpg",
               jobTitle: "パーソナルヘルスケア実践者 / 精密栄養学",
               sameAs: ["https://www.shinealight.jp/universe"],
             },

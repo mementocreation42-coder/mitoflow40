@@ -36,6 +36,7 @@ const sections: Sec[] = [
             { href: '/nutrition-literacy', label: '学ぶと何が変わる？' },
             { href: '/nutrition-history', label: '栄養学の歴史' },
             { href: '/food-journey', label: '食べてから動くまで' },
+            { href: '/health-check-guide', label: '健康診断の読み方' },
         ],
     },
     {
@@ -77,6 +78,7 @@ const sections: Sec[] = [
         pages: [
             { href: '/mitochondria', label: 'ミトコンドリア' },
             { href: '/energy', label: 'エネルギー' },
+            { href: '/insulin-resistance', label: 'インスリン抵抗性' },
             { href: '/enzymes', label: '酵素' },
             { href: '/acid-alkaline', label: '酸性・アルカリ性' },
             { href: '/gut-health', label: '腸内環境' },
@@ -90,7 +92,11 @@ const sections: Sec[] = [
             { href: '/glycation', label: '糖化' },
             { href: '/inflammation', label: '炎症' },
             { href: '/modern-diseases', label: '現代病' },
+            { href: '/metabolic-syndrome', label: 'メタボリックシンドローム' },
             { href: '/diabetes', label: '糖尿病' },
+            { href: '/hypertension', label: '高血圧' },
+            { href: '/dyslipidemia', label: '脂質異常症' },
+            { href: '/chronic-kidney-disease', label: '慢性腎臓病（CKD）' },
             { href: '/fatty-liver', label: '脂肪肝' },
             { href: '/sarcopenia', label: 'サルコペニア' },
             { href: '/mental-health', label: '心の現代病' },
@@ -101,6 +107,8 @@ const sections: Sec[] = [
         desc: '体じゅうに指令を届ける化学メッセンジャー。9種のホルモンと40代の変化。',
         pages: [
             { href: '/hormones', label: 'ホルモンの種類' },
+            { href: '/menopause', label: '更年期・更年期移行期' },
+            { href: '/male-menopause', label: '男性更年期（LOH症候群）' },
         ],
     },
     {
@@ -111,6 +119,7 @@ const sections: Sec[] = [
             { href: '/mood-nutrition', label: '気分と栄養' },
             { href: '/mindfulness', label: 'マインドフルネス' },
             { href: '/sleep', label: '睡眠' },
+            { href: '/electrotherapy', label: '電気療法' },
         ],
     },
     {
@@ -135,6 +144,7 @@ const sections: Sec[] = [
             { href: '/health-philosophy', label: '健康哲学' },
             { href: '/spirituality', label: 'スピリチュアリティ' },
             { href: '/counterculture', label: 'カウンターカルチャー' },
+            { href: '/black-jack', label: 'ブラック・ジャック' },
         ],
     },
 ];
@@ -142,9 +152,9 @@ const sections: Sec[] = [
 export default function LibraryMapPage() {
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#FFF1DF' }}>
-            <img loading="lazy" decoding="async" src="/images/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
+            <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
                 style={{ top: '0', right: '-40px', width: '260px', transform: 'scaleY(-1)' }} />
-            <img loading="lazy" decoding="async" src="/images/24.png" alt="" className="absolute pointer-events-none"
+            <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none"
                 style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: 'ライブラリマップ｜全体の構造をひと目で', description: 'ライブラリの全11セクションの構造を、インフォグラフィックでひと目に。代表ページへの入口つきライブラリマップ。', path: '/library/map' })} />

@@ -1,0 +1,42 @@
+{
+  "id": "mitochan",
+  "no": 1,
+  "name": {
+    "nickname": "ミトちゃん",
+    "identity": "ミトコンドリア",
+    "title": "エネルギー工場長"
+  },
+  "category": "metabolism",
+  "location": "ほぼ全ての細胞の中",
+  "role": {
+    "kids": "食べたものと酸素から、体を動かす力を作るよ",
+    "adult": "酸素と栄養素からATP（アデノシン三リン酸）を産生する、細胞のエネルギー工場"
+  },
+  "mechanism": {
+    "kids": "工場の中で、食べたものを少しずつ分解して力に変えていくんだ",
+    "adult": "TCA回路で得た電子を電子伝達系で受け渡し、生じたプロトン勾配でATP合成酵素を回してATPを作る"
+  },
+  "personality": {
+    "trait": "働き者で世話好き。無理をさせられると弱音を吐く",
+    "tone": "やさしい・丁寧",
+    "catchphrase": "エネルギー、ちゃんと作っとくね！"
+  },
+  "lifestyle": [
+    { "message": "よく動くと数が増えて、もっと元気に働く", "direction": "good" },
+    { "message": "しっかり眠ると、傷んだ工場が修理される", "direction": "good" },
+    { "message": "食べすぎ・動かなすぎが続くと、工場がうまく回らなくなる", "direction": "bad" }
+  ],
+  "relations": [
+    { "targetId": "red-blood-cell", "type": "partner", "basis": "赤血球が運んでくる酸素を使ってATPを作る" },
+    { "targetId": "reactive-oxygen", "type": "enemy", "basis": "エネルギーを作る過程で活性酸素が生じ、増えすぎると工場自身が傷つく" }
+  ],
+  "art": {
+    "image": null,
+    "placeholder": true
+  },
+  "i18n": {},
+  "sources": [
+    "ミトコンドリアの酸化的リン酸化：標準的な生化学教科書レベルの記述",
+    "運動によるミトコンドリア新生（biogenesis）：要一次文献の裏取り"
+  ]
+}

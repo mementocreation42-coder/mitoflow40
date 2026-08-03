@@ -47,9 +47,9 @@ const topics = [
 export default function SpiritualityPage() {
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#ECE5F4' }}>
-            <img loading="lazy" decoding="async" src="/images/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
+            <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
                 style={{ top: '0', right: '-40px', width: '260px', transform: 'scaleY(-1)' }} />
-            <img loading="lazy" decoding="async" src="/images/24.png" alt="" className="absolute pointer-events-none"
+            <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none"
                 style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: 'スピリチュアリティと体 ― 心身相関の科学', description: '祈り・瞑想・感謝・つながり・生きる意味を、自律神経やストレス反応など測れる体の反応として読み解く。', path: '/spirituality' })} />

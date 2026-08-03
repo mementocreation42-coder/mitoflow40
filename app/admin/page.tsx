@@ -2,145 +2,141 @@ import Link from 'next/link';
 import { getPostsPaginated } from '@/lib/wp';
 import { logout } from '@/app/login/actions';
 import PostActions from '@/components/admin/PostActions';
+import styles from './admin.module.css';
 
 export const metadata = { title: { absolute: 'ダッシュボード | Mitoflow40 Admin' }, robots: { index: false, follow: false } };
 export const dynamic = 'force-dynamic';
 
-export default async function AdminPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ page?: string }>;
-}) {
-  const { page: pageParam } = await searchParams;
-  const page = parseInt(pageParam || '1', 10);
-  const { posts, totalPages } = await getPostsPaginated(page, 20);
+const CATEGORY_COLORS: Record<number, { background: string; borderColor: string; color: string }> = {
+  1: { background: '#FAD9CE', borderColor: '#E9A58E', color: '#8C3E25' }, // 食事・栄養
+  5: { background: '#D5F0DF', borderColor: '#95D4AC', color: '#246B42' }, // 運動
+  10: { background: '#CDD8F5', borderColor: '#9FB2E2', color: '#36568F' }, // 生活習慣
+  11: { background: '#ECCAE3', borderColor: '#D69AC3', color: '#7D3566' }, // サプリメント
+  12: { background: '#F5EAC0', borderColor: '#DDC976', color: '#735F12' }, // データ・効果検証
+};
+
+const DEFAULT_CATEGORY_COLOR = { background: '#D7F7ED', borderColor: '#94DFC9', color: '#246E58' };
+
+const CATEGORY_CARD_COLORS: Record<number, { background: string; borderColor: string }> = {
+  1: { background: '#FFF8F5', borderColor: '#EFC8BA' }, // 食事・栄養
+  5: { background: '#F5FCF7', borderColor: '#B9DFC7' }, // 運動
+  10: { background: '#F5F7FD', borderColor: '#BDC9E9' }, // 生活習慣
+  11: { background: '#FCF5FA', borderColor: '#E2BAD6' }, // サプリメント
+  12: { background: '#FFFDF4', borderColor: '#E5D89F' }, // データ・効果検証
+};
+
+const DEFAULT_CARD_COLOR = { background: '#F5FCFA', borderColor: '#B8E4D7' };
+
+function cleanText(html: string) {
+  const namedEntities: Record<string, string> = {
+    amp: '&', nbsp: ' ', quot: '"', apos: "'", lt: '<', gt: '>',
+    hellip: '…', ldquo: '“', rdquo: '”', lsquo: '‘', rsquo: '’', mdash: '—', ndash: '–',
+  };
+
+  return html
+    .replace(/<[^>]*>/g, '')
+    .replace(/&#(x[\da-f]+|\d+);/gi, (_, value: string) =>
+      String.fromCodePoint(value.toLowerCase().startsWith('x')
+        ? Number.parseInt(value.slice(1), 16)
+        : Number.parseInt(value, 10)))
+    .replace(/&([a-z]+);/gi, (entity, name: string) => namedEntities[name.toLowerCase()] ?? entity)
+    .trim();
+}
+
+export default async function AdminPage({ searchParams }: { searchParams: Promise<{ page?: string; q?: string }> }) {
+  const params = await searchParams;
+  const requestedPage = Number.parseInt(params.page || '1', 10);
+  const page = Number.isFinite(requestedPage) && requestedPage > 0 ? requestedPage : 1;
+  const query = params.q?.trim() || '';
+  const { posts, totalPages } = await getPostsPaginated(page, 20, query || undefined);
+  const queryPart = query ? `&q=${encodeURIComponent(query)}` : '';
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0a0a0a', color: '#fff', fontFamily: 'sans-serif' }}>
-      {/* ヘッダー */}
-      <header style={{
-        position: 'sticky', top: 0, zIndex: 50,
-        background: 'rgba(10,10,10,0.9)', backdropFilter: 'blur(12px)',
-        borderBottom: '1px solid #1a1a1a', padding: '0 24px',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 56,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <Link href="/" style={{ color: '#fff', textDecoration: 'none', fontWeight: 700, fontSize: 15 }}>
-            Mitoflow40
-          </Link>
-          <span style={{
-            fontSize: 11, padding: '2px 8px', background: '#22c55e20', color: '#22c55e',
-            borderRadius: 4, border: '1px solid #22c55e40', letterSpacing: '0.05em',
-          }}>
-            Admin
-          </span>
+    <div className={styles.shell}>
+      <header className={styles.header}>
+        <div className={styles.brand}>
+          <span className={styles.brandMark}>M</span>
+          <span><span className={styles.brandName}>Mitoflow40</span><span className={styles.brandMeta}>ジャーナル・クライアント</span></span>
         </div>
-        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-          <Link href="/admin/post" style={{
-            padding: '8px 16px', background: '#22c55e', color: '#000',
-            borderRadius: 8, textDecoration: 'none', fontSize: 13, fontWeight: 600,
-          }}>
-            + 新規投稿
-          </Link>
-          <form action={logout}>
-            <button type="submit" style={{
-              padding: '8px 14px', background: 'transparent', color: '#666',
-              border: '1px solid #2a2a2a', borderRadius: 8, cursor: 'pointer', fontSize: 13,
-            }}>
-              ログアウト
-            </button>
-          </form>
+        <div className={styles.headerActions}>
+          <Link href="/admin/clients" className={styles.newButton} style={{ background: '#41C9B4', color: '#06231d' }}>クライアント一覧</Link>
+          <Link href="/admin/post" className={styles.newButton}>＋ 新しい記事</Link>
+          <form action={logout}><button type="submit" className={styles.logout}>ログアウト</button></form>
         </div>
       </header>
 
-      {/* コンテンツ */}
-      <main style={{ maxWidth: 900, margin: '0 auto', padding: '32px 24px' }}>
-        <h1 style={{ fontSize: 20, fontWeight: 700, marginBottom: 24, color: '#fff' }}>投稿一覧</h1>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-          {posts.map((post) => {
-            const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url;
-            const categories = post._embedded?.['wp:term']?.[0] ?? [];
-            const date = new Date(post.date).toLocaleDateString('ja-JP', {
-              year: 'numeric', month: '2-digit', day: '2-digit',
-            });
-
-            return (
-              <div key={post.id} style={{
-                background: '#141414', border: '1px solid #1e1e1e', borderRadius: 10,
-                padding: '16px 20px', display: 'flex', gap: 16, alignItems: 'flex-start',
-              }}>
-                {featuredImage && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={featuredImage}
-                    alt=""
-                    style={{ width: 72, height: 72, objectFit: 'cover', borderRadius: 6, flexShrink: 0 }}
-                  />
-                )}
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 6 }}>
-                    <span style={{ fontSize: 12, color: '#555' }}>{date}</span>
-                    {post.status === 'draft' && (
-                      <span style={{
-                        fontSize: 11, padding: '2px 8px', background: '#2a1e00',
-                        border: '1px solid #4a3a00', borderRadius: 20, color: '#f59e0b',
-                      }}>
-                        下書き
-                      </span>
-                    )}
-                    {categories.map((cat) => (
-                      <span key={cat.id} style={{
-                        fontSize: 11, padding: '2px 8px', background: '#1e1e1e',
-                        border: '1px solid #2a2a2a', borderRadius: 20, color: '#888',
-                      }}>
-                        {cat.name}
-                      </span>
-                    ))}
-                  </div>
-                  <h2 style={{ fontSize: 15, fontWeight: 600, marginBottom: 4, color: '#e5e5e5' }}>
-                    <Link
-                      href={`/journal/${post.id}`}
-                      target="_blank"
-                      style={{ color: 'inherit', textDecoration: 'none' }}
-                    >
-                      {post.title.rendered}
-                    </Link>
-                  </h2>
-                  <div style={{
-                    fontSize: 13, color: '#555', lineHeight: 1.5,
-                    display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
-                  }}
-                    dangerouslySetInnerHTML={{ __html: post.excerpt?.rendered ?? '' }}
-                  />
-                </div>
-                <PostActions postId={post.id} />
-              </div>
-            );
-          })}
+      <main className={styles.main} style={{ maxWidth: 820 }}>
+        <div className={styles.titleRow}>
+          <div>
+            <p className={styles.eyebrow}>Content</p>
+            <h1 className={styles.title}>記事を管理</h1>
+            <p className={styles.description}>コンテンツの作成、編集、公開状況の確認ができます。</p>
+          </div>
         </div>
 
-        {/* ページネーション */}
-        {totalPages > 1 && (
-          <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 32, alignItems: 'center' }}>
-            {page > 1 && (
-              <Link href={`/admin?page=${page - 1}`} style={{
-                padding: '8px 16px', background: '#1e1e1e', color: '#fff',
-                borderRadius: 8, textDecoration: 'none', fontSize: 13,
-              }}>
-                ← 前
-              </Link>
-            )}
-            <span style={{ fontSize: 13, color: '#555' }}>{page} / {totalPages}</span>
-            {page < totalPages && (
-              <Link href={`/admin?page=${page + 1}`} style={{
-                padding: '8px 16px', background: '#1e1e1e', color: '#fff',
-                borderRadius: 8, textDecoration: 'none', fontSize: 13,
-              }}>
-                次 →
-              </Link>
-            )}
+        <div className={styles.toolbar}>
+          <form className={styles.search} action="/admin">
+            <svg className={styles.searchIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+            <input className={styles.searchInput} name="q" defaultValue={query} placeholder="タイトルや本文を検索" aria-label="記事を検索" />
+            {query && <Link className={styles.clearSearch} href="/admin" aria-label="検索を解除">×</Link>}
+          </form>
+          <span className={styles.resultMeta}>{query ? `「${query}」の検索結果` : `ページ ${page} / ${Math.max(totalPages, 1)}`}</span>
+        </div>
+
+        {posts.length > 0 ? (
+          <div className={styles.list}>
+            {posts.map((post) => {
+              const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url;
+              const categories = post._embedded?.['wp:term']?.[0] ?? [];
+              const cardColor = categories[0]
+                ? CATEGORY_CARD_COLORS[categories[0].id] ?? DEFAULT_CARD_COLOR
+                : { background: '#FFFFFF', borderColor: '#D9DFDC' };
+              const date = new Date(post.date).toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' });
+              return (
+                <article key={post.id} className={styles.post} style={cardColor}>
+                  {featuredImage ? (
+                    // WordPress側の任意ドメイン画像を管理画面でそのまま表示する
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={featuredImage} alt="" className={styles.thumb} />
+                  ) : (
+                    <div className={styles.thumbPlaceholder} aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m4 17 5-4 3 2 3-3 5 5"/></svg></div>
+                  )}
+                  <div className={styles.postContent}>
+                    <div className={styles.meta}>
+                      <span className={styles.date}>{date}</span>
+                      {post.status === 'draft' && <span className={`${styles.badge} ${styles.draft}`}>下書き</span>}
+                      {categories.slice(0, 3).map((cat) => (
+                        <span
+                          key={cat.id}
+                          className={styles.badge}
+                          style={CATEGORY_COLORS[cat.id] ?? DEFAULT_CATEGORY_COLOR}
+                        >
+                          {cat.name}
+                        </span>
+                      ))}
+                    </div>
+                    <h2 className={styles.postTitle}><Link href={`/journal/${post.id}`} target="_blank">{cleanText(post.title.rendered)}</Link></h2>
+                    <div className={styles.excerpt}>{cleanText(post.excerpt?.rendered ?? '') || '抜粋はまだ設定されていません。'}</div>
+                  </div>
+                  <PostActions postId={post.id} classes={{ actions: styles.actions, edit: styles.edit, delete: styles.delete }} />
+                </article>
+              );
+            })}
           </div>
+        ) : (
+          <div className={styles.empty}>
+            <div className={styles.emptyIcon}>⌕</div>
+            <h2 className={styles.emptyTitle}>{query ? '一致する記事がありません' : '記事がまだありません'}</h2>
+            <p className={styles.emptyText}>{query ? 'キーワードを変えて、もう一度検索してください。' : '「新しい記事」から最初の記事を作成しましょう。'}</p>
+          </div>
+        )}
+
+        {totalPages > 1 && (
+          <nav className={styles.pagination} aria-label="ページ送り">
+            {page > 1 && <Link href={`/admin?page=${page - 1}${queryPart}`} className={styles.pageButton}>← 前へ</Link>}
+            <span className={styles.pageCount}>{page} / {totalPages}</span>
+            {page < totalPages && <Link href={`/admin?page=${page + 1}${queryPart}`} className={styles.pageButton}>次へ →</Link>}
+          </nav>
         )}
       </main>
     </div>

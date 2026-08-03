@@ -29,7 +29,7 @@ const sections = [
         count: genes.length,
         unit: '遺伝子',
         color: '#DCF1EA',
-        illustration: '/images/about-illustration-bg.png',
+        illustration: '/images/about/about-illustration-bg.png',
         description: '生まれ持った体質の「設計図」。MTHFRやCOMTなど、栄養の使い方やストレス耐性を左右する主要遺伝子を解説します。',
     },
     {
@@ -40,7 +40,7 @@ const sections = [
         count: biomarkers.length,
         unit: '項目',
         color: '#DEEDF7',
-        illustration: '/images/24.png',
+        illustration: '/images/misc/24.png',
         description: '今の体の「現在地」。血液検査50項目を精密栄養学の視点で読み解き、基準値だけでなく理想値から状態を捉えます。',
     },
     {
@@ -51,7 +51,7 @@ const sections = [
         count: nutrients.length,
         unit: '栄養素',
         color: '#FCE3D4',
-        illustration: '/images/2.png',
+        illustration: '/images/misc/2.png',
         description: '体をつくり、整える「材料」。タンパク質・ビタミン・ミネラルなど、体を支えるための栄養素を働き・食品・摂り方から解説します。',
     },
 ];
@@ -65,7 +65,7 @@ const foodSections = [
         count: foods.length,
         unit: '食材',
         color: '#FFEFD6',
-        illustration: '/images/25.png',
+        illustration: '/images/misc/25.png',
         description: '「材料」を実際に運ぶ食卓。卵・鮭・納豆など身近な食材で何が摂れるか、40代向けの食べ方・組み合わせから解説します。',
     },
 ];
@@ -79,7 +79,7 @@ const organSections = [
         count: organs.length,
         unit: '臓器',
         color: '#F4E2D2',
-        illustration: '/images/13.png',
+        illustration: '/images/misc/13.png',
         description: '肝臓・腎臓・腸・心臓・脳など、主要な内臓の役割。40代での変化と、関わる血液検査・栄養素をあわせて読み解きます。',
     },
 ];
@@ -88,9 +88,9 @@ export default function LibraryIndex() {
     return (
         <div className="relative overflow-hidden pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen" style={{ background: '#ECE6F3' }}>
             {/* Decorative illustrations */}
-            <img loading="lazy" decoding="async" src="/images/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
+            <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
                 style={{ top: '0', right: '-40px', width: '260px', transform: 'scaleY(-1)' }} />
-            <img loading="lazy" decoding="async" src="/images/24.png" alt="" className="absolute pointer-events-none"
+            <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none"
                 style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
 
             <div className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
@@ -153,6 +153,13 @@ export default function LibraryIndex() {
                     <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         読む <span className="group-hover:translate-x-1 transition-transform">→</span>
                     </span>
+                </Link>
+                <Link href="/health-check-guide"
+                    className="group block rounded-2xl border border-black p-7 md:p-9 mt-4 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#FFF1DF' }}>
+                    <div className="text-[10px] font-bold tracking-widest text-[#D67845] mb-1">HEALTH CHECK GUIDE</div>
+                    <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-2">40代の健康診断の読み方</div>
+                    <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">A・B判定だけで終わらせず、経年変化と関連項目をつなぎ、再検査・受診まで行動に変える。</p>
+                    <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]">見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
                 </Link>
 
                 {/* 考え方と立ち位置 */}
@@ -598,7 +605,7 @@ export default function LibraryIndex() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <Link href="/mitochondria"
                             className="group relative block overflow-hidden rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#CFEAEC' }}>
-                            <img loading="lazy" decoding="async" src="/images/for-you-illustration-bl.png" alt="" className="pointer-events-none absolute bottom-0 right-0 w-[120px] md:w-[140px] opacity-90 group-hover:scale-105 transition-transform hidden sm:block" />
+                            <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="pointer-events-none absolute bottom-0 right-0 w-[120px] md:w-[140px] opacity-90 group-hover:scale-105 transition-transform hidden sm:block" />
                             <div className="relative" style={{ zIndex: 1 }}>
                                 <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                     START HERE ／ THE POWERHOUSE
@@ -733,6 +740,15 @@ export default function LibraryIndex() {
                             </div>
                             <div className="text-lg font-bold text-[#1A1A1A] mb-2">血糖コントロール</div>
                             <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">食後の眠気・甘いもの渇望の正体「血糖の波」。整える食べ方。</p>
+                            <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
+                            </span>
+                        </Link>
+                        <Link href="/insulin-resistance"
+                            className="group rounded-2xl border border-black p-6 hover:shadow-md hover:-translate-y-0.5 transition-all" style={{ background: '#F6E6CF' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#D67845] mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>INSULIN RESISTANCE</div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-2">インスリン抵抗性</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">血糖が上がる前から始まる代謝の変化。筋肉・脂肪・肝臓と膵臓の負担をつなげて理解する。</p>
                             <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                 見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                             </span>
@@ -901,6 +917,24 @@ export default function LibraryIndex() {
                             見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                         </span>
                     </Link>
+                    <Link href="/metabolic-syndrome"
+                        className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F0E2D8' }}>
+                        <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1">METABOLIC SYNDROME</div>
+                        <div className="text-lg font-bold text-[#1A1A1A] mb-2">メタボリックシンドローム</div>
+                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">腹囲・血圧・血糖・脂質を、別々の数字ではなく内臓脂肪からつながる一枚の代謝地図として読む。</p>
+                        <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]">見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                    </Link>
+                    <Link href="/hypertension"
+                        className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E2EAF2' }}>
+                        <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            HYPERTENSION
+                        </div>
+                        <div className="text-lg font-bold text-[#1A1A1A] mb-2">高血圧とは</div>
+                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">症状がなくても血管・心臓・脳・腎臓に積み重なる負担。数字の意味、家庭血圧の測り方、受診の目安、生活で整える方向を解説。</p>
+                        <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            見る <span className="group-hover:translate-x-1 transition-transform">→</span>
+                        </span>
+                    </Link>
                     <Link href="/fatty-liver"
                         className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F3E2D2' }}>
                         <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
@@ -912,6 +946,13 @@ export default function LibraryIndex() {
                             見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                         </span>
                     </Link>
+                    <Link href="/dyslipidemia"
+                        className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7EFD8' }}>
+                        <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>DYSLIPIDEMIA</div>
+                        <div className="text-lg font-bold text-[#1A1A1A] mb-2">脂質異常症とは</div>
+                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">LDL・HDL・中性脂肪・non-HDLを、善玉・悪玉だけでなく血管リスクの全体像から読む。</p>
+                        <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]">見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                    </Link>
                     <Link href="/sarcopenia"
                         className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7EEDA' }}>
                         <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
@@ -922,6 +963,13 @@ export default function LibraryIndex() {
                         <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                             見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                         </span>
+                    </Link>
+                    <Link href="/chronic-kidney-disease"
+                        className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#DDE9E6' }}>
+                        <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1">CHRONIC KIDNEY DISEASE</div>
+                        <div className="text-lg font-bold text-[#1A1A1A] mb-2">慢性腎臓病（CKD）</div>
+                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">症状が出にくい腎臓の変化を、eGFR・クレアチニン・尿たんぱくの両面から読む。</p>
+                        <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]">見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
                     </Link>
                     <Link href="/mental-health"
                         className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E6E0F2' }}>
@@ -970,6 +1018,20 @@ export default function LibraryIndex() {
                             見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                         </span>
                     </Link>
+                    <Link href="/menopause"
+                        className="group block rounded-2xl border border-black p-6 mt-4 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F3E0EC' }}>
+                        <div className="text-[10px] font-bold tracking-widest text-[#A65D92] mb-1">MENOPAUSAL TRANSITION</div>
+                        <div className="text-lg font-bold text-[#1A1A1A] mb-2">更年期・更年期移行期</div>
+                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">ほてりだけでなく、睡眠・気分・骨・筋肉・血管まで。新しいホルモン環境へ移る時間を知る。</p>
+                        <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]">見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                    </Link>
+                    <Link href="/male-menopause"
+                        className="group block rounded-2xl border border-black p-6 mt-4 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E2EAF2' }}>
+                        <div className="text-[10px] font-bold tracking-widest text-[#557A9D] mb-1">MALE MENOPAUSE</div>
+                        <div className="text-lg font-bold text-[#1A1A1A] mb-2">男性更年期（LOH症候群）</div>
+                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">疲れ・意欲・睡眠・筋力・性機能の変化を、テストステロンと全身の両面から読む。</p>
+                        <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]">見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                    </Link>
                 </div>
 
                 {/* 心とからだ */}
@@ -998,6 +1060,7 @@ export default function LibraryIndex() {
                             { href: '/smell', en: 'SMELL', ja: '匂いと健康', note: '記憶・感情・脳とのつながりと、アロマの効果の見極め。', bg: '#EFEAF6' },
                             { href: '/gym-boom', en: 'GYM BOOM', ja: 'ジムの乱立を読む', note: 'なぜジムは増える？運動を「買う」時代の構造と、毎日の代謝の視点を中立に。', bg: '#EFEAF6' },
                             { href: '/jogging', en: 'JOGGING', ja: 'ジョギングと体', note: '効果・「膝に悪い」の真偽・どれだけ走ればいいかの用量反応を中立に。', bg: '#EFEAF6' },
+                            { href: '/electrotherapy', en: 'ELECTROTHERAPY', ja: '電気療法とミトコンドリア', note: '整体・接骨院の「電気」。低周波・EMS・微弱電流の違いと、ATPの主張の出どころを中立に。', bg: '#EFEAF6' },
                         ].map((s) => (
                             <Link key={s.href} href={s.href}
                                 className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: s.bg }}>
@@ -1106,6 +1169,19 @@ export default function LibraryIndex() {
                             読む <span className="group-hover:translate-x-1 transition-transform">→</span>
                         </span>
                     </Link>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-3">
+                        {[
+                            { href: '/black-jack', en: 'BLACK JACK', ja: 'ブラック・ジャックを読む', note: '無免許医という設定は何を問うているのか。免許・医療の値段・「治せなさ」を作品から考える。', bg: '#ECE6DA' },
+                        ].map((s) => (
+                            <Link key={s.href} href={s.href}
+                                className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: s.bg }}>
+                                <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{s.en}</div>
+                                <div className="text-lg font-bold text-[#1A1A1A] mb-2">{s.ja}</div>
+                                <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">{s.note}</p>
+                                <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                            </Link>
+                        ))}
+                    </div>
                 </div>
 
                 {/* 著書：健康とは、カウンターカルチャーである */}

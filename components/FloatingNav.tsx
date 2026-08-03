@@ -64,7 +64,7 @@ export default function FloatingNav() {
                     >
                         <div className="w-6 h-6 rounded-full overflow-hidden ring-2 ring-[#41C9B4]/60">
                             <Image
-                                src="/images/profile.jpg"
+                                src="/images/misc/profile.jpg"
                                 alt="Daisuke Kobayashi"
                                 width={24}
                                 height={24}

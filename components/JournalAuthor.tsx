@@ -6,7 +6,7 @@ export default function JournalAuthor() {
         <div className="flex items-center gap-4 px-5 py-5 rounded-2xl bg-white mb-10">
             <div className="w-14 h-14 rounded-full overflow-hidden flex-shrink-0 ring-2 ring-[#41C9B4]">
                 <Image
-                    src="/images/profile.jpg"
+                    src="/images/misc/profile.jpg"
                     alt="Daisuke Kobayashi"
                     width={56}
                     height={56}

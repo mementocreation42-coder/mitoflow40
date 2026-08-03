@@ -25,6 +25,7 @@ type Role = {
     can: string[];
     cannot: string[];
     license?: '国家資格' | '民間資格';
+    note?: string;
 };
 
 const roles: Role[] = [
@@ -32,6 +33,8 @@ const roles: Role[] = [
         name: '医師',
         en: 'DOCTOR',
         color: '#F6DAD4',
+        license: '国家資格',
+        note: '医師法にもとづく国家資格。医学部で6年学び、国家試験合格後は2年以上の臨床研修が義務づけられています。',
         summary: '病気の診断・治療の最終責任を負う、医療の中心。',
         can: ['病名を「診断」する', '薬の処方・注射・手術などの医行為', '検査の指示と結果の医学的判断', '診断書・処方箋の発行'],
         cannot: ['一人ですべての生活習慣まで伴走するのは時間的に困難', '診療は基本的に「病気がある人」が対象'],
@@ -40,6 +43,8 @@ const roles: Role[] = [
         name: '看護師',
         en: 'NURSE',
         color: '#FBE9D6',
+        license: '国家資格',
+        note: '保健師助産師看護師法にもとづく国家資格。なお「准看護師」は国家資格ではなく、都道府県知事が免許を交付します。',
         summary: '医師の指示のもと、療養上の世話と診療の補助を担う。',
         can: ['採血・点滴・注射など診療の補助（医師の指示下）', '療養上の世話・ケア・観察', '患者・家族への療養指導'],
         cannot: ['病名の「診断」', '薬の「処方」', '医師の指示なしの医行為'],
@@ -48,6 +53,8 @@ const roles: Role[] = [
         name: '薬剤師',
         en: 'PHARMACIST',
         color: '#E4E9D2',
+        license: '国家資格',
+        note: '薬剤師法にもとづく国家資格。薬学部で6年学び、国家試験に合格する必要があります。調剤は薬剤師の独占業務です。',
         summary: '薬の専門家。調剤と、薬の安全な使い方を支える。',
         can: ['処方箋にもとづく調剤', '飲み合わせ・副作用のチェックと説明', '市販薬・サプリの相談対応'],
         cannot: ['病名の「診断」', '処方箋なしの医療用医薬品の交付'],
@@ -56,6 +63,8 @@ const roles: Role[] = [
         name: '管理栄養士・栄養士',
         en: 'DIETITIAN',
         color: '#D7EAE2',
+        license: '国家資格',
+        note: '「管理栄養士」は国家試験に合格して厚生労働大臣の免許を受ける国家資格。一方「栄養士」は養成施設を卒業すると都道府県知事から免許が交付され、国家試験はありません。同じようで、この2つは別の資格です。',
         summary: '食事・栄養の専門家。病態や目的に応じた食事を設計する。',
         can: ['栄養状態の評価と食事計画の作成', '疾患に応じた栄養指導（医師の指示下での栄養食事指導）', '健康な人への食生活アドバイス'],
         cannot: ['病名の「診断」', '薬の「処方」', '治療としての医行為'],
@@ -64,6 +73,8 @@ const roles: Role[] = [
         name: '保健師',
         en: 'PUBLIC HEALTH NURSE',
         color: '#CDE3EE',
+        license: '国家資格',
+        note: '保健師助産師看護師法にもとづく国家資格。保健師として働くには、看護師免許もあわせて必要です。',
         summary: '地域・職域で、集団と個人の「予防」と健康づくりを担う。',
         can: ['健診後の保健指導・特定保健指導', '生活習慣病の予防支援', '地域・企業の健康づくり'],
         cannot: ['病名の「診断」', '薬の「処方」', '治療行為'],
@@ -72,6 +83,8 @@ const roles: Role[] = [
         name: '理学療法士など（PT/OT/ST）',
         en: 'THERAPISTS',
         color: '#E6DCEA',
+        license: '国家資格',
+        note: '理学療法士(PT)・作業療法士(OT)・言語聴覚士(ST)は、それぞれ別の国家資格です。いずれも業務は医師の指示のもとで行われます。',
         summary: 'リハビリの専門家。動き・生活・嚥下などの機能回復を支える。',
         can: ['医師の指示下でのリハビリ（運動・作業・言語/嚥下）', '機能評価と訓練プログラムの作成'],
         cannot: ['病名の「診断」', '薬の「処方」', '医師の指示によらない単独の医行為'],
@@ -80,6 +93,8 @@ const roles: Role[] = [
         name: '臨床検査技師',
         en: 'LAB TECHNOLOGIST',
         color: '#D9E7D2',
+        license: '国家資格',
+        note: '臨床検査技師等に関する法律にもとづく国家資格。検査値そのものは技師が出しますが、それを「診断」に変えるのは医師の役割です。',
         summary: '検査の専門家。血液・尿・心電図などを正確に測り、診断を支える。',
         can: ['採血・各種検体検査・生理機能検査（心電図・超音波など）', '検査データの精度管理', '検査結果の作成（医師の指示下）'],
         cannot: ['検査結果から病名を「診断」すること', '薬の「処方」', '治療としての医行為'],
@@ -88,6 +103,8 @@ const roles: Role[] = [
         name: '公認心理師・臨床心理士',
         en: 'PSYCHOLOGIST',
         color: '#E3DCEA',
+        license: '国家資格',
+        note: 'ここは混同されやすい箇所です。「公認心理師」は2017年に始まった心理職初の国家資格。一方「臨床心理士」は民間団体が認定する民間資格で、国家資格ではありません（歴史は長く、専門性の評価も確立しています）。',
         summary: '心の専門家。心理面のアセスメントとカウンセリングを担う。',
         can: ['心理状態のアセスメント（心理検査など）', 'カウンセリング・心理的支援', '関係者への助言・連携'],
         cannot: ['精神疾患の医学的「診断」', '薬の「処方」', '医行為'],
@@ -96,6 +113,8 @@ const roles: Role[] = [
         name: '歯科医師',
         en: 'DENTIST',
         color: '#F1DEC9',
+        license: '国家資格',
+        note: '歯科医師法にもとづく国家資格。医師とは別の免許で、歯科衛生士・歯科技工士もそれぞれ独立した国家資格です。',
         summary: '口腔の専門医。歯・口の診断と治療を担う、もう一人の「医師」。',
         can: ['歯・口腔の「診断」と治療', '歯科領域の薬の処方・麻酔・手術', '口腔ケアの指導'],
         cannot: ['歯科以外の全身疾患の診断・治療（専門外は医師へ）'],
@@ -105,6 +124,7 @@ const roles: Role[] = [
         en: 'ACUPUNCTURIST',
         color: '#F3DDD9',
         license: '国家資格',
+        note: '「はり師」と「きゅう師」は、法律上それぞれ別の国家資格です（両方を持つ人を通称「鍼灸師」と呼びます）。養成校で3年以上学び、国家試験に合格する必要があります。',
         summary: '東洋医学にもとづき、はり・きゅうで体のバランスを整える。',
         can: ['はり・きゅうによる施術', '東洋医学の考え方にもとづく体調へのアプローチ', '肩こり・腰痛などへの施術（医師の同意が必要な場合あり）'],
         cannot: ['病名の「診断」', '薬の「処方」', '西洋医学的な治療の代替を約束すること'],
@@ -114,6 +134,7 @@ const roles: Role[] = [
         en: 'MASSAGE THERAPIST',
         color: '#EDE3D4',
         license: '国家資格',
+        note: '国家資格。ここが重要な線引きで、「マッサージ」を業として行えるのは、この資格（または医師）だけです。無資格でマッサージを業とすることは法律で禁じられています。',
         summary: 'あん摩・マッサージ・指圧で、筋肉や血流の状態を整える手技の専門家。',
         can: ['あん摩・マッサージ・指圧の施術', 'こり・血行・疲労へのケア', '医療機関と連携した施術'],
         cannot: ['病名の「診断」', '薬の「処方」', '骨折・脱臼などの治療（柔道整復師・医師の領域）'],
@@ -123,6 +144,7 @@ const roles: Role[] = [
         en: 'JUDO THERAPIST',
         color: '#E2E8D6',
         license: '国家資格',
+        note: '国家資格。ただし骨折・脱臼の施術は、応急手当の場合を除いて医師の同意が必要と法律で定められています。「接骨院・整骨院」は柔道整復師の施術所で、「整体院」とは制度上まったく別のものです。',
         summary: '骨・関節・筋のケガ（打撲・捻挫・脱臼・骨折）を手技で施術する専門家。',
         can: ['打撲・捻挫・挫傷の施術', '脱臼・骨折の応急手当', '接骨院・整骨院での施術'],
         cannot: ['病名の「診断」（レントゲン等による医学的診断）', '薬の「処方」・手術', '内科的な病気の治療'],
@@ -132,6 +154,7 @@ const roles: Role[] = [
         en: 'BODYWORK (NON-LICENSED)',
         color: '#E6DCEA',
         license: '民間資格',
+        note: '「整体師」という名称に法律上の定義はなく、資格がなくても名乗れます。民間のスクール認定は存在しますが、国家資格ではありません。施術者個人の技術の話ではなく、制度上の位置づけが違うということです。',
         summary: '体の歪みや姿勢へのアプローチを掲げる民間療法。国家資格ではない点に注意。',
         can: ['リラクゼーション・ボディケア（民間の範囲）', '姿勢・生活習慣に関する一般的なアドバイス'],
         cannot: ['病名の「診断」', '薬の「処方」', '医行為・国家資格者だけに許された施術（はり・きゅう・骨折治療など）'],
@@ -141,9 +164,9 @@ const roles: Role[] = [
 export default function MedicalRolesPage() {
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#CDEBE2' }}>
-            <img loading="lazy" decoding="async" src="/images/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
+            <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
                 style={{ top: '0', right: '-40px', width: '260px', transform: 'scaleY(-1)' }} />
-            <img loading="lazy" decoding="async" src="/images/24.png" alt="" className="absolute pointer-events-none"
+            <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none"
                 style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '医療者の役割とMitoflow40の立ち位置', description: '医療従事者それぞれの役割・できること・できないことを整理し、診断や治療は行わず「未病のうちに整える」を支えるMitoflow40の立ち位置を解説します。', path: '/medical-roles' })} />
@@ -180,9 +203,17 @@ export default function MedicalRolesPage() {
                     <p className="text-sm text-[#4A4A4A] mb-3 leading-relaxed">
                         主な医療職、そして東洋医学・手技療法の担い手まで、「担うこと」と「できること・できないこと」を整理しました。共通するのは、<strong>「診断」と「処方」は医師にしかできない</strong>という大原則です。
                     </p>
-                    <p className="text-xs text-[#4A4A4A] mb-5 leading-relaxed bg-white/60 border border-black/10 rounded-xl p-3">
-                        <strong className="text-[#2E9E89]">国家資格</strong>（鍼灸師・あん摩マッサージ指圧師・柔道整復師など）は法律で定められた施術ができますが、<strong className="text-[#C76B53]">民間資格</strong>（整体師・カイロプラクターなど）は国家資格ではなく、業務範囲も国によって定められていません。同じ「体を整える」でも、この線引きは知っておくと安心です。
-                    </p>
+                    <div className="text-xs text-[#4A4A4A] mb-5 leading-relaxed bg-white/60 border border-black/10 rounded-xl p-4 space-y-2">
+                        <p>
+                            各カードの名前の横に、<strong className="text-[#2E9E89]">国家資格</strong>か<strong className="text-[#C76B53]">民間資格</strong>かを表示しています。
+                        </p>
+                        <p>
+                            <strong className="text-[#2E9E89]">国家資格</strong>は、法律で養成課程と試験が定められ、国（または都道府県）が免許を交付するもの。ここに並ぶ医師・看護師・薬剤師・管理栄養士・保健師・PT/OT/ST・臨床検査技師・公認心理師・歯科医師、そして鍼灸師・あん摩マッサージ指圧師・柔道整復師は、<strong>すべて国家資格</strong>です。それぞれ「この行為はこの資格を持つ人だけ」という範囲が法律で決まっています。
+                        </p>
+                        <p>
+                            <strong className="text-[#C76B53]">民間資格</strong>は、民間の団体が独自に認定するもの。整体師・カイロプラクターなどがこれにあたり、<strong>名称にも業務範囲にも法律上の定めがありません</strong>。同じ「体を整える」でも、この線引きは知っておくと安心です。
+                        </p>
+                    </div>
                     <div className="space-y-4">
                         {roles.map((r) => (
                             <div key={r.en} className="rounded-2xl p-5 md:p-6 border border-black" style={{ background: r.color }}>
@@ -200,7 +231,12 @@ export default function MedicalRolesPage() {
                                         </span>
                                     )}
                                 </div>
-                                <p className="text-sm text-[#4A4A4A] leading-relaxed mb-4">{r.summary}</p>
+                                <p className="text-sm text-[#4A4A4A] leading-relaxed mb-3">{r.summary}</p>
+                                {r.note && (
+                                    <p className="text-xs text-[#4A4A4A] leading-relaxed mb-4 rounded-xl bg-white/50 border border-black/10 p-3">
+                                        <span className="font-bold text-[#1A1A1A]">資格のはなし：</span>{r.note}
+                                    </p>
+                                )}
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <div className="rounded-xl bg-white/70 border border-black/10 p-4">
                                         <div className="text-xs font-bold text-[#2E9E89] mb-2">できること</div>
@@ -248,6 +284,22 @@ export default function MedicalRolesPage() {
                     <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">「国家資格」という、守られた一線</h2>
                     <p className="text-[#4A4A4A] leading-loose whitespace-pre-line">
                         医師・看護師・薬剤師・管理栄養士——ここまで挙げてきた職種は、いずれも<strong>国家資格</strong>です。長い教育と試験を経て、法律によって「この行為はこの資格を持つ人だけ」と定められています。とりわけ「<strong>診断</strong>」と「<strong>処方・治療</strong>」は医師の独占業務で、資格のない人がこれを行えば<strong>法律に触れます</strong>。
+                        {'\n\n'}
+                        もう一段だけ細かく見ると、国家資格には<strong>2つのタイプ</strong>があります。これを知っておくと、資格まわりの説明がぐっと読み解きやすくなります。
+                    </p>
+                    <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {[
+                            { head: '業務独占', body: 'その資格がなければ、その行為自体をしてはいけないもの。医師の診断・処方、薬剤師の調剤、あん摩マッサージ指圧師のマッサージなど。無資格で行えば違法になる。', bg: '#F6DAD4' },
+                            { head: '名称独占', body: '行為自体は禁じられていないが、その名前を名乗れないもの。管理栄養士・保健師・公認心理師などが代表例。「栄養の話をすること」は誰でもできるが、「管理栄養士です」と名乗るには資格が要る。', bg: '#D7EAE2' },
+                        ].map((s) => (
+                            <div key={s.head} className="rounded-xl p-4 border border-black/15" style={{ background: s.bg }}>
+                                <div className="font-bold text-[#1A1A1A] mb-1">{s.head}</div>
+                                <p className="text-xs text-[#4A4A4A] leading-relaxed">{s.body}</p>
+                            </div>
+                        ))}
+                    </div>
+                    <p className="text-[#4A4A4A] leading-loose whitespace-pre-line mt-5">
+                        つまり「資格がないと何も言えない」わけではありません。<strong>一般的な健康・栄養の知識を伝えること自体は、資格がなくても行えます</strong>。線を越えるのは、<strong>特定の個人に対して病名をつけたり、治療を指示したりしたとき</strong>——そして、持っていない資格の名前を名乗ったときです。
                         {'\n\n'}
                         この線引きは、人の命と体を守るための<strong>大切な仕組み</strong>です。同時に、その境界の手前には「健康に関する情報発信・教育・生活サポート」という、<strong>資格がなくても担える広い領域</strong>も存在します。ここをめぐっては、「どこまでが教育で、どこからが医療行為か」が曖昧になりやすく、健康サービスと医療のあいだに<strong>緊張が生まれやすい</strong>のも事実です。
                         {'\n\n'}

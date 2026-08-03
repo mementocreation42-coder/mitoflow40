@@ -1,18 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import { updateWPPost, deleteWPPost } from '@/lib/wp';
-
-async function checkAuth() {
-  const cookieStore = await cookies();
-  return cookieStore.get('mito_admin_auth')?.value === 'true';
-}
+import { isAdminAuthenticated } from '@/lib/admin-auth';
 
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  if (!(await checkAuth())) {
+  if (!(await isAdminAuthenticated())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -47,7 +42,7 @@ export async function DELETE(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  if (!(await checkAuth())) {
+  if (!(await isAdminAuthenticated())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

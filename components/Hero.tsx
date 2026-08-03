@@ -6,7 +6,7 @@ export default function Hero() {
         <section id="hero" className="relative min-h-[90vh] flex items-center overflow-hidden">
             {/* Background Image */}
             <Image
-                src="/images/hero-bg-new.png"
+                src="/images/hero/hero-bg-new.png"
                 alt=""
                 fill
                 className="object-cover object-center z-0"
@@ -50,7 +50,7 @@ export default function Hero() {
             {/* Hero Illustration - Bottom Left */}
             <div className="absolute bottom-0 left-0 w-[400px] md:w-[600px] h-[400px] md:h-[600px] z-0 pointer-events-none">
                 <Image
-                    src="/images/hero-illustration-bl.png"
+                    src="/images/hero/hero-illustration-bl.png"
                     alt="Hero Illustration"
                     fill
                     className="object-contain object-bottom"

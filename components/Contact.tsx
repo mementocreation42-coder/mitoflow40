@@ -94,7 +94,7 @@ export default function Contact() {
                 <FadeOnScroll delay={0.1}>
                     <div className="bg-white rounded-2xl border border-[#1A1A1A] p-5 md:p-6 mb-8 flex flex-col md:flex-row items-center gap-5">
                         <div className="flex-shrink-0">
-                            <Image src="/images/profile.jpg" alt="小林大介" width={80} height={80}
+                            <Image src="/images/misc/profile.jpg" alt="小林大介" width={80} height={80}
                                 className="rounded-full object-cover border-2 border-[#1A1A1A]"
                                 style={{ width: 80, height: 80 }} />
                         </div>
@@ -206,14 +206,14 @@ export default function Contact() {
 
             {/* Illustrations */}
             <Image
-                src="/images/contact-illustration-left.png"
+                src="/images/contact/contact-illustration-left.png"
                 alt=""
                 width={300}
                 height={300}
                 className="absolute bottom-[-20px] left-[-50px] md:left-[20px] w-[180px] md:w-[260px] h-auto object-contain pointer-events-none opacity-80 z-0"
             />
             <Image
-                src="/images/contact-illustration-right.png"
+                src="/images/contact/contact-illustration-right.png"
                 alt=""
                 width={300}
                 height={300}

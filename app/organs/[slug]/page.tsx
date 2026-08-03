@@ -52,9 +52,9 @@ export default async function OrganPage({ params }: { params: Promise<{ slug: st
             <JsonLd data={medicalWebPage({ name: `${o.name}（${o.en}）`, description: o.tagline, path: `/organs/${slug}` })} />
             <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '内臓・臓器', path: '/organs' }, { name: o.name, path: `/organs/${slug}` }])} />
             {/* Decorative illustrations */}
-            <img loading="lazy" decoding="async" src="/images/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
+            <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
                 style={{ top: '0', right: '-40px', width: '260px', transform: 'scaleY(-1)' }} />
-            <img loading="lazy" decoding="async" src="/images/24.png" alt="" className="absolute pointer-events-none"
+            <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none"
                 style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
 
             <article className="max-w-[800px] mx-auto px-6 md:px-4 py-12 md:py-24 relative" style={{ zIndex: 1 }}>

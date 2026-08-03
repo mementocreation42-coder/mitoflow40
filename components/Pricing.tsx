@@ -84,7 +84,7 @@ export default function Pricing() {
                                 )}
                                 {plan.featured && (
                                     <Image
-                                        src="/images/pricing-plan-illustration.png"
+                                        src="/images/pricing/pricing-plan-illustration.png"
                                         alt=""
                                         width={150}
                                         height={150}
@@ -120,7 +120,7 @@ export default function Pricing() {
 
             {/* Background Illustration */}
             <Image
-                src="/images/pricing-illustration-bg.png"
+                src="/images/pricing/pricing-illustration-bg.png"
                 alt=""
                 width={350}
                 height={350}

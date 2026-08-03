@@ -58,10 +58,10 @@ export default function SamplePage() {
 
             {/* Decorative illustrations */}
             <div className="absolute top-10 right-0 w-[200px] md:w-[320px] pointer-events-none opacity-90">
-                <img loading="lazy" decoding="async" src="/images/for-you-illustration-bg.png" alt="" style={{ width: "100%", height: "auto" }} />
+                <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bg.png" alt="" style={{ width: "100%", height: "auto" }} />
             </div>
             <div className="absolute bottom-0 left-0 w-[240px] md:w-[380px] pointer-events-none opacity-90">
-                <img loading="lazy" decoding="async" src="/images/hero-illustration-bl.png" alt="" style={{ width: "100%", height: "auto" }} />
+                <img loading="lazy" decoding="async" src="/images/hero/hero-illustration-bl.png" alt="" style={{ width: "100%", height: "auto" }} />
             </div>
 
             <div style={{ maxWidth: "820px", margin: "0 auto", position: "relative", zIndex: 1 }}>

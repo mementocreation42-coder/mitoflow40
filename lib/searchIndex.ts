@@ -10,6 +10,7 @@ import { hormones } from './hormones';
 import { symptoms } from './symptoms';
 import { organs } from './organs';
 import { essays } from './essays';
+import { staticPages } from './pages';
 
 export interface SearchItem {
     title: string;       // 表示タイトル
@@ -22,58 +23,17 @@ export interface SearchItem {
 const norm = (...parts: (string | undefined)[]) =>
     parts.filter(Boolean).join(' ').toLowerCase();
 
-// 精密栄養学・しくみ・考え方などの固定ページ
-const conceptPages: Omit<SearchItem, 'keywords'>[] = [
-    { title: '健康とは', sub: 'Mitoflow40の健康哲学', href: '/health-philosophy', group: '考え方' },
-    { title: 'なぜ、未病予防か', sub: 'Our Mission', href: '/mission', group: '考え方' },
-    { title: '精密栄養学とは', sub: 'Precision Nutrition', href: '/precision-nutrition', group: '考え方' },
-    { title: '分子栄養学とは', sub: 'Molecular Nutrition', href: '/molecular-nutrition', group: '考え方' },
-    { title: '学ぶと、何が変わる？', sub: '生化学・栄養学を知る価値 / Nutrition Literacy', href: '/nutrition-literacy', group: '考え方' },
-    { title: 'エネルギーとは', sub: 'Energy / 疲れにくさの正体', href: '/energy', group: 'しくみ' },
-    { title: 'ミトコンドリア', sub: 'Mitochondria', href: '/mitochondria', group: 'しくみ' },
-    { title: 'ATP', sub: 'エネルギー通貨', href: '/atp', group: 'しくみ' },
-    { title: '解糖系', sub: 'Glycolysis', href: '/glycolysis', group: 'しくみ' },
-    { title: 'TCA回路（クエン酸回路）', sub: 'TCA Cycle', href: '/tca-cycle', group: 'しくみ' },
-    { title: '電子伝達系', sub: 'Electron Transport Chain', href: '/electron-transport-chain', group: 'しくみ' },
-    { title: 'ケトン体', sub: 'Ketones', href: '/ketones', group: 'しくみ' },
-    { title: 'オートファジー', sub: 'Autophagy', href: '/autophagy', group: 'しくみ' },
-    { title: '酸化ストレス（さびる）', sub: 'Oxidative Stress', href: '/oxidative-stress', group: 'しくみ' },
-    { title: '糖化（こげる）', sub: 'Glycation', href: '/glycation', group: 'しくみ' },
-    { title: '炎症', sub: 'Inflammation', href: '/inflammation', group: 'しくみ' },
-    { title: '血糖コントロール', sub: 'Blood Sugar', href: '/blood-sugar', group: 'しくみ' },
-    { title: 'メチレーション', sub: 'Methylation', href: '/methylation', group: 'しくみ' },
-    { title: 'デトックス（解毒）', sub: 'Detox', href: '/detox', group: 'しくみ' },
-    { title: '有害物質を減らす暮らし', sub: '農薬・水銀・マイクロプラスチック', href: '/reduce-toxins', group: 'しくみ' },
-    { title: 'カビ毒と食の安全', sub: 'マイコトキシン（アフラトキシン等）', href: '/mycotoxins', group: 'しくみ' },
-    { title: '食べ物の栄養価の変化', sub: '下がる野菜・上がるきのこ（希釈効果・UV照射）', href: '/nutrient-density', group: 'しくみ' },
-    { title: '酵素', sub: '触媒・消化酵素・代謝酵素・補酵素／酵素ドリンクの誤解', href: '/enzymes', group: 'しくみ' },
-    { title: '酸性・アルカリ性（pH）', sub: '血液pHの調節・アルカリ性食品の誤解', href: '/acid-alkaline', group: 'しくみ' },
-    { title: '食べてから、動くまで', sub: '消化・吸収・代謝・排出の全体像（インフォグラフィック）', href: '/food-journey', group: 'しくみ' },
-    { title: '脂肪肝（MASLD）', sub: '沈黙の現代病・お酒を飲まなくてもなる脂肪肝', href: '/fatty-liver', group: 'しくみ' },
-    { title: 'サルコペニア・フレイル', sub: '40代から始まる筋肉の減少・代謝と血糖', href: '/sarcopenia', group: 'しくみ' },
-    { title: '心の現代病', sub: 'うつ・不安・燃え尽きを体からとらえる', href: '/mental-health', group: 'しくみ' },
-    { title: '自律神経', sub: 'Autonomic Nervous System', href: '/autonomic-nervous-system', group: 'しくみ' },
-    { title: '概日リズム（体内時計）', sub: 'Circadian Rhythm', href: '/circadian-rhythm', group: 'しくみ' },
-    { title: '腸内環境（腸活）', sub: 'Gut Health / 腸内細菌・マイクロバイオーム', href: '/gut-health', group: 'しくみ' },
-    { title: '気になる腸のキーワード', sub: 'グルテン・カゼイン・リーキーガット・SIBO', href: '/gut-troubles', group: 'しくみ' },
-    { title: '腸脳相関', sub: 'Gut-Brain Axis', href: '/gut-brain', group: 'しくみ' },
-    { title: '消化・吸収', sub: 'Digestion & Absorption', href: '/digestion', group: 'しくみ' },
-    { title: 'ストレスとは', sub: 'Stress', href: '/stress', group: '心とからだ' },
-    { title: '気分と栄養', sub: 'Mood & Food', href: '/mood-nutrition', group: '心とからだ' },
-    { title: '不安と体', sub: 'Anxiety', href: '/anxiety', group: '心とからだ' },
-    { title: 'マインドフルネス・呼吸', sub: 'Breath / Mindfulness', href: '/mindfulness', group: '心とからだ' },
-    { title: 'スピリチュアリティと体', sub: '心身相関の科学 / 祈り・瞑想・つながり', href: '/spirituality', group: '心とからだ' },
-    { title: '睡眠', sub: 'Sleep', href: '/sleep', group: '生活習慣' },
-    { title: '運動', sub: 'Exercise', href: '/exercise', group: '生活習慣' },
-    { title: '嗜好品と体', sub: 'アルコール・タバコ・カフェイン', href: '/stimulants', group: '生活習慣' },
-    { title: 'サプリメント', sub: 'Supplements', href: '/supplements', group: '生活習慣' },
-    { title: 'ウェアラブル活用', sub: 'Wearables', href: '/wearables', group: '生活習慣' },
-    { title: '気をつけたい食品', sub: 'Caution Foods', href: '/caution-foods', group: '食べ物' },
-    { title: 'サイケデリック研究の潮流', sub: '海外の研究動向（中立解説）', href: '/psychedelics-research', group: '考え方' },
-    { title: '大麻をめぐる歴史と世界の動き', sub: '歴史・法政策（中立解説・日本では違法）', href: '/cannabis', group: '考え方' },
-    { title: 'おすすめ書籍', sub: 'Recommended Books / もっと深く知るための本', href: '/books', group: '考え方' },
-    { title: '参照文献・出典', sub: 'References', href: '/references', group: '考え方' },
-];
+// 精密栄養学・しくみ・考え方などの固定ページ。
+// 単一レジストリ lib/pages.ts のうち search を持つページから自動生成する
+// （sitemap.ts と共有。ページ追加は pages.ts に1行足すだけで両方へ反映）。
+const conceptPages: Omit<SearchItem, 'keywords'>[] = staticPages
+    .filter((p) => p.search)
+    .map((p) => ({
+        title: p.search!.title,
+        sub: p.search!.sub,
+        href: p.path,
+        group: p.search!.group,
+    }));
 
 export const searchIndex: SearchItem[] = [
     ...foods.map((f) => ({

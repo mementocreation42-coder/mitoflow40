@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export default function PostActions({ postId }: { postId: number }) {
+export default function PostActions({ postId, classes }: { postId: number; classes?: { actions: string; edit: string; delete: string } }) {
   const router = useRouter();
   const [deleting, setDeleting] = useState(false);
 
@@ -21,10 +21,11 @@ export default function PostActions({ postId }: { postId: number }) {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, flexShrink: 0 }}>
+    <div className={classes?.actions} style={classes ? undefined : { display: 'flex', flexDirection: 'column', gap: 6, flexShrink: 0 }}>
       <a
         href={`/admin/posts/${postId}/edit`}
-        style={{
+        className={classes?.edit}
+        style={classes ? undefined : {
           padding: '6px 12px', background: '#1e1e1e', border: '1px solid #2a2a2a',
           borderRadius: 6, color: '#aaa', textDecoration: 'none', fontSize: 12,
           textAlign: 'center', whiteSpace: 'nowrap',
@@ -35,7 +36,8 @@ export default function PostActions({ postId }: { postId: number }) {
       <button
         onClick={handleDelete}
         disabled={deleting}
-        style={{
+        className={classes?.delete}
+        style={classes ? undefined : {
           padding: '6px 12px', background: 'transparent', border: '1px solid #3a1a1a',
           borderRadius: 6, color: deleting ? '#444' : '#f87171', cursor: deleting ? 'not-allowed' : 'pointer',
           fontSize: 12, whiteSpace: 'nowrap',

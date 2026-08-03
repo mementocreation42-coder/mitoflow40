@@ -1,0 +1,131 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "いのちの仲間キャラクター",
+  "description": "ミトちゃんといのちの仲間たち — スケール前提のキャラクターデータ定義",
+  "type": "object",
+  "required": ["id", "no", "name", "category", "role", "lifestyle"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "安定スラッグ。媒体をまたいでキャラを指す背骨。一度決めたら変えない",
+      "pattern": "^[a-z0-9-]+$",
+      "examples": ["mitochan", "red-blood-cell"]
+    },
+    "no": {
+      "type": "integer",
+      "description": "図鑑ナンバー（遊び層）。No.001 から連番",
+      "minimum": 1
+    },
+    "name": {
+      "type": "object",
+      "description": "名前。愛称＝表向き、正体＝生化学的な本名",
+      "required": ["nickname", "identity"],
+      "properties": {
+        "nickname": { "type": "string", "examples": ["ミトちゃん"] },
+        "identity": { "type": "string", "examples": ["ミトコンドリア"] },
+        "title": {
+          "type": "string",
+          "description": "称号・二つ名（遊び層）。事実の言い換えで作り、誇張しない",
+          "examples": ["エネルギー工場長"]
+        }
+      }
+    },
+    "category": {
+      "type": "string",
+      "description": "系統タグ。系統別ビュー・からだマップ型への拡張用。20体では表示しなくても最初から付ける",
+      "enum": ["metabolism", "blood", "gut", "immune", "nerve", "food", "adversary"]
+    },
+    "location": {
+      "type": "string",
+      "description": "体内のどこに存在するか（ファクト層）",
+      "examples": ["ほぼ全ての細胞の中"]
+    },
+    "role": {
+      "type": "object",
+      "description": "生化学的機能（ファクト層）。深さの層を並列で持つ。表示側で年齢別に出し分ける",
+      "required": ["kids", "adult"],
+      "properties": {
+        "kids": {
+          "type": "string",
+          "description": "子ども向け1行。やさしいが嘘はない",
+          "examples": ["食べたものと酸素から、体を動かす力を作るよ"]
+        },
+        "adult": {
+          "type": "string",
+          "description": "大人向け。一段深い正確な記述",
+          "examples": ["酸素と栄養素からATP（アデノシン三リン酸）を産生する"]
+        }
+      }
+    },
+    "mechanism": {
+      "type": "object",
+      "description": "どう働くか、正確に（ファクト層・任意）。role より深い解説。動画/絵本の膨らませ元",
+      "properties": {
+        "kids": { "type": "string" },
+        "adult": { "type": "string", "examples": ["電子伝達系で電子を受け渡し、その勾配でATP合成酵素を回す"] }
+      }
+    },
+    "personality": {
+      "type": "object",
+      "description": "性格・口調（演出層）。柔らかくする担当。ここだけ演出を許す",
+      "properties": {
+        "trait": { "type": "string", "examples": ["働き者で世話好き、無理させられると弱音を吐く"] },
+        "tone": { "type": "string", "examples": ["やさしい・丁寧"] },
+        "catchphrase": { "type": "string", "examples": ["エネルギー、ちゃんと作っとくね！"] }
+      }
+    },
+    "lifestyle": {
+      "type": "array",
+      "description": "関わる生活習慣（ファクト層）。1体1メッセージが原則。健康学習の核",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "この子と仲良くする＝この習慣、を1行で",
+            "examples": ["よく動いて、よく眠ると元気に働く"]
+          },
+          "direction": {
+            "type": "string",
+            "enum": ["good", "bad"],
+            "description": "良い習慣か避けたい習慣か"
+          }
+        }
+      }
+    },
+    "relations": {
+      "type": "array",
+      "description": "他キャラとの相性（遊び＋ファクト）。必ず実際の相互作用に紐づける",
+      "items": {
+        "type": "object",
+        "required": ["targetId", "type"],
+        "properties": {
+          "targetId": { "type": "string", "description": "相手キャラの id" },
+          "type": { "type": "string", "enum": ["partner", "rival", "enemy"] },
+          "basis": { "type": "string", "description": "その相性の生化学的な裏付け", "examples": ["赤血球が運ぶ酸素を使ってATPを作る"] }
+        }
+      }
+    },
+    "art": {
+      "type": "object",
+      "description": "ビジュアル差し替えスロット。絵は別ライン。届き次第ハメる。無くてもカードは成立する",
+      "properties": {
+        "image": { "type": ["string", "null"], "description": "画像パス。未着なら null" },
+        "placeholder": { "type": "boolean", "default": true }
+      }
+    },
+    "i18n": {
+      "type": "object",
+      "description": "多言語の器（将来用）。初期は日本語のみ、フィールドは用意だけしておく",
+      "additionalProperties": { "type": "object" }
+    },
+    "sources": {
+      "type": "array",
+      "description": "出典・裏取りメモ（内部用・非表示）。生化学ベースを名乗る担保",
+      "items": { "type": "string" }
+    }
+  }
+}

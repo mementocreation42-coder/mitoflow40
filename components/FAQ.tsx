@@ -112,7 +112,7 @@ export default function FAQ() {
 
             {/* Illustration */}
             <Image
-                src="/images/faq-illustration.png"
+                src="/images/misc/faq-illustration.png"
                 alt=""
                 width={300}
                 height={300}

@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MitoFlow40 for Business｜企画書</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1A1A1A;
+  --border:#1A1A1A;
+  --muted:#4A4A4A;
+  --sky:#4AABDE;
+  --pink:#FFB6B6;
+  --apricot:#FFB37B;
+  --mint:#4AF6C3;
+  --cyan:#B2EBF2;
+  --lav:#E5D0E3;
+  --orange:#FF9855;
+  --dark-cyan:#4DD0E1;
+  --font-head:'Space Grotesk','Noto Sans JP',sans-serif;
+  --font-body:'Inter','Noto Sans JP',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:var(--font-body);color:var(--ink);background:#dedede;
+  line-height:1.8;font-size:10.5pt;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--font-head);font-weight:700;line-height:1.35}
+.jp{font-family:var(--font-body)}
+strong,b{font-weight:700}
+
+/* ---------- A4 PAGE ---------- */
+.page{
+  width:210mm;height:297mm;margin:12px auto;position:relative;overflow:hidden;
+  padding:16mm 15mm;display:flex;flex-direction:column;border:1.5px solid var(--border);
+}
+.page.sky{background:var(--sky)}
+.page.pink{background:var(--pink)}
+.page.apricot{background:var(--apricot)}
+.page.mint{background:var(--mint)}
+.page.cyan{background:var(--cyan)}
+.page.lav{background:var(--lav)}
+
+/* running head / foot */
+.rhead{display:flex;justify-content:space-between;align-items:center;font-family:var(--font-head);font-size:7.5pt;letter-spacing:.16em;text-transform:uppercase;color:rgba(26,26,26,.55);z-index:5}
+.rhead b{color:var(--ink)}
+.rfoot{margin-top:auto;display:flex;justify-content:space-between;font-family:var(--font-head);font-size:7.5pt;letter-spacing:.12em;color:rgba(26,26,26,.55);z-index:5;padding-top:10px}
+
+/* section header (English big + JP small, centered) */
+.sec-head{text-align:center;margin:14px 0 22px;z-index:5}
+.sec-head .en{font-family:var(--font-head);font-size:22pt;font-weight:700;letter-spacing:.02em}
+.sec-head .jp{font-size:9.5pt;color:var(--muted);margin-top:2px}
+.sec-head .no{font-family:var(--font-head);font-size:7.5pt;letter-spacing:.3em;color:rgba(26,26,26,.5);margin-bottom:6px}
+
+.body{flex:1;z-index:5;position:relative}
+/* consistent vertical rhythm between stacked blocks */
+.body > *{margin-bottom:16px!important}
+.body > *:last-child{margin-bottom:0!important}
+.body.tight > *{margin-bottom:9px!important}
+
+/* frosted card */
+.card{background:rgba(255,255,255,.62);backdrop-filter:blur(2px);border:1px solid var(--border);border-radius:16px;padding:20px 22px}
+.card.soft{border-color:rgba(26,26,26,.12)}
+.lead{font-size:11pt;line-height:1.9}
+.muted{color:var(--muted)}
+
+/* decorative illustration */
+.deco{position:absolute;pointer-events:none;opacity:.92;z-index:1}
+
+/* pill / tag */
+.pill{display:inline-block;font-family:var(--font-head);font-size:7.5pt;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--border);border-radius:20px;padding:3px 12px;font-weight:600;background:rgba(255,255,255,.5)}
+.btn{display:inline-block;font-family:var(--font-head);font-weight:700;font-size:9pt;border:1px solid var(--border);border-radius:30px;padding:9px 22px;background:var(--ink);color:#fff}
+.btn.ghost{background:var(--dark-cyan);color:var(--ink)}
+.btn.orange{background:var(--orange);color:var(--ink)}
+
+/* ---------- P1 COVER ---------- */
+.cover{background:#F4EFE7;justify-content:space-between;padding:20mm 18mm}
+.cover .brand{font-family:var(--font-head);font-size:8pt;letter-spacing:.32em;text-transform:uppercase;color:var(--muted)}
+.cover .title-wrap{text-align:right;margin-top:6mm}
+.cover h1{font-size:40pt;line-height:1.12;letter-spacing:-.01em}
+.cover h1 .sm{font-size:26pt;display:block}
+.cover .catch{font-size:12pt;font-weight:700;max-width:120mm;margin:16px 0 0 auto;line-height:1.9}
+.cover .plate{background:rgba(255,255,255,.9);position:relative;z-index:2;border:1.5px solid var(--border);border-radius:18px;padding:22px 26px;margin-top:2mm}
+.cover .plate .doc{font-family:var(--font-head);font-size:9pt;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:12px}
+.cover .plate h2{font-size:15pt;line-height:1.5}
+.cover .meta{border-top:1px solid rgba(26,26,26,.2);margin-top:16px;padding-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:8px 30px;font-size:9pt;color:var(--muted);font-family:var(--font-head)}
+.cover .meta b{color:var(--ink);font-family:var(--font-body);font-weight:700}
+
+/* summary highlights */
+.hgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.hbox{background:rgba(255,255,255,.62);border:1px solid var(--border);border-radius:16px;padding:16px 14px;text-align:center}
+.hbox .n{font-family:var(--font-head);font-size:26pt;font-weight:700;line-height:1}
+.hbox .n small{font-size:10pt}
+.hbox .l{font-size:8.4pt;color:var(--muted);margin-top:8px;line-height:1.55}
+
+.toc{list-style:none;margin-top:14px}
+.toc li{display:flex;align-items:baseline;gap:14px;padding:8.5px 4px;border-bottom:1px solid rgba(26,26,26,.15)}
+.toc .tn{font-family:var(--font-head);font-weight:700;font-size:10pt;width:26px}
+.toc .tt{font-family:var(--font-head);font-weight:500;font-size:10.5pt;flex:1}
+.toc .tp{font-family:var(--font-head);font-size:8pt;color:var(--muted)}
+
+/* problem cards */
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pcard{background:rgba(255,255,255,.62);border:1px solid var(--border);border-radius:16px;padding:16px 18px}
+.pcard h4{font-size:11.5pt;margin:8px 0 5px}
+.pcard p{font-size:9pt;color:var(--muted)}
+
+/* positioning bar */
+.posbar{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:stretch}
+.pos{background:rgba(255,255,255,.5);border:1px solid rgba(26,26,26,.3);border-radius:14px;padding:12px 14px;text-align:center}
+.pos .pl{font-family:var(--font-head);font-size:7pt;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:3px}
+.pos b{font-size:12pt;font-family:var(--font-head)}
+.pos p{font-size:8pt;color:var(--muted);margin-top:5px;line-height:1.5}
+.posmid{display:flex;flex-direction:column;justify-content:center;align-items:center;font-family:var(--font-head);font-weight:700;font-size:12pt;color:var(--ink);padding:0 4px;line-height:1.2}
+.posmid span{font-size:7.5pt;letter-spacing:.02em;color:var(--ink);background:var(--mint);border:1px solid var(--border);border-radius:20px;padding:3px 10px;margin-top:8px;white-space:nowrap}
+
+/* thesis */
+.quote{font-family:var(--font-head);font-size:19pt;font-weight:700;line-height:1.5;text-align:center;margin:6px 0 18px}
+.numlist{list-style:none}
+.numlist li{display:flex;gap:14px;padding:7px 0;border-top:1px solid rgba(26,26,26,.15);font-size:10pt;line-height:1.65}
+.numlist li:first-child{border-top:none}
+.numlist .k{font-family:var(--font-head);font-weight:700;white-space:nowrap}
+
+/* pillars */
+.pillar{display:grid;grid-template-columns:46px 1fr;gap:16px;align-items:start;padding:13px 0;border-top:1px solid rgba(26,26,26,.15)}
+.pillar:first-child{border-top:none}
+.pillar .num{font-family:var(--font-head);font-size:15pt;font-weight:700;color:#fff;width:42px;height:42px;border:1.5px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--ink)}
+.pillar h4{font-size:12pt;margin-bottom:3px}
+.pillar p{font-size:9.2pt;color:var(--muted)}
+.pillar .feat{margin-top:7px;display:flex;flex-wrap:wrap;gap:6px}
+.pillar .feat span{font-size:7.5pt;border:1px solid rgba(26,26,26,.3);border-radius:12px;padding:2px 9px}
+
+/* mechanism */
+.mech{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.msrc{background:rgba(255,255,255,.62);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center}
+.msrc .ic{font-family:var(--font-head);font-size:7.5pt;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:5px}
+.msrc b{font-size:11pt;font-family:var(--font-head)}
+.msrc p{font-size:8pt;color:var(--muted);margin-top:4px}
+.axes{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:6px}
+.axis{background:rgba(255,255,255,.55);border:1px solid rgba(26,26,26,.35);border-radius:10px;padding:8px 6px;text-align:center}
+.axis b{display:block;font-family:var(--font-head);font-size:9pt}
+.axis small{color:var(--muted);font-size:7pt}
+
+/* flow steps */
+.fstep{display:grid;grid-template-columns:60px 1fr;gap:14px;align-items:center;background:rgba(255,255,255,.6);border:1px solid rgba(26,26,26,.15);border-radius:16px;padding:12px 18px;margin-bottom:10px}
+.fstep .fn{font-family:var(--font-head);font-size:26pt;font-weight:700;color:rgba(26,26,26,.22);line-height:1;text-align:center}
+.fstep h4{font-size:11.5pt;margin-bottom:2px}
+.fstep p{font-size:9pt;color:var(--muted)}
+
+/* plans */
+.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:stretch}
+.plan{background:rgba(255,255,255,.62);border:1px solid var(--border);border-radius:16px;padding:18px 16px;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.plan.hot{border:2.5px solid var(--border);background:rgba(255,255,255,.85)}
+.plan .rb{position:absolute;top:12px;right:-30px;transform:rotate(38deg);background:var(--ink);color:#fff;font-family:var(--font-head);font-size:7pt;letter-spacing:.1em;padding:3px 34px}
+.plan .pn{font-family:var(--font-head);font-size:12pt;font-weight:700}
+.plan .pp{font-family:var(--font-head);font-size:16pt;font-weight:700;margin:7px 0 3px}
+.plan .pp small{font-size:8pt;color:var(--muted);font-weight:500}
+.plan .pd{font-size:8.3pt;color:var(--muted);margin-bottom:12px;min-height:40px}
+.plan ul{list-style:none;font-size:8.6pt}
+.plan li{padding:5px 0 5px 16px;position:relative;border-top:1px solid rgba(26,26,26,.12)}
+.plan li:first-child{border-top:none}
+.plan li::before{content:"→";position:absolute;left:0;font-weight:700}
+.freebar{margin-top:14px;border:2px dashed var(--border);border-radius:16px;background:rgba(255,255,255,.55);padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:14px}
+.freebar .fl b{display:block;font-size:10pt}
+.freebar .fl .k{font-family:var(--font-head);font-size:7.5pt;letter-spacing:.14em;color:var(--orange);font-weight:700;margin-bottom:2px}
+.freebar .fl p{font-size:8pt;color:var(--muted)}
+.p-note{margin-top:12px;font-size:8pt;color:var(--muted)}
+
+/* roadmap */
+.phase{display:grid;grid-template-columns:130px 1fr;gap:16px;background:rgba(255,255,255,.6);border:1px solid rgba(26,26,26,.18);border-radius:16px;padding:14px 20px;margin-bottom:11px}
+.phase .pl{font-family:var(--font-head);font-size:8pt;letter-spacing:.1em;color:var(--muted);font-weight:700}
+.phase .pl b{display:block;font-size:13pt;color:var(--ink);margin-top:2px}
+.phase h4{font-size:11pt;margin-bottom:3px}
+.phase p{font-size:9pt;color:var(--muted)}
+
+/* contact */
+.roi-list{list-style:none;margin-bottom:16px}
+.roi-list li{padding:10px 0;border-top:1px solid rgba(26,26,26,.15);font-size:9.6pt}
+.roi-list li:first-child{border-top:none}
+.roi-list .k{font-family:var(--font-head);font-weight:700}
+.cbox{background:rgba(255,255,255,.72);border:1.5px solid var(--border);border-radius:18px;padding:22px 26px;text-align:center}
+.cbox h3{font-size:15pt;margin-bottom:6px}
+.cbox p{color:var(--muted);font-size:9.5pt;margin-bottom:14px}
+.cbox .cinfo{border-top:1px solid rgba(26,26,26,.2);padding-top:14px;margin-top:6px;display:grid;grid-template-columns:1fr 1fr;gap:8px 30px;font-size:9pt;color:var(--muted);text-align:left}
+.cbox .cinfo b{color:var(--ink);font-family:var(--font-head)}
+
+/* ===== LINE ICONS ===== */
+.ii{width:26px;height:26px;fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;display:inline-block;vertical-align:middle}
+.p4 .ii,.proc .ii,.roiviz .ii,.mstrip .ii{width:22px;height:22px}
+.hub .core .ii{width:28px;height:28px;stroke:#fff;stroke-width:1.5}
+.roiviz .r.dark .ii{stroke:#fff}
+
+/* ===== INFOGRAPHIC PARTS ===== */
+/* mini 3-step strip (P2) */
+.mstrip{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:8px;align-items:center;margin:14px 0 4px}
+.mstrip .m{background:rgba(255,255,255,.6);border:1px solid var(--border);border-radius:14px;padding:12px 8px;text-align:center}
+.mstrip .m .ic{font-size:19pt;line-height:1}
+.mstrip .m b{display:block;font-family:var(--font-head);font-size:10pt;margin-top:4px}
+.mstrip .m p{font-size:7.5pt;color:var(--muted);margin-top:2px}
+.mstrip .ar{font-family:var(--font-head);font-weight:700;font-size:15pt;color:rgba(26,26,26,.5);text-align:center}
+
+/* 4本柱 hub (P4) */
+.hub{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.hub .core{width:66px;height:66px;border-radius:50%;background:var(--ink);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:700;font-size:8pt;text-align:center;flex-shrink:0;line-height:1.2}
+.hub .core span{font-size:15pt}
+.hub .arrow{font-size:13pt;color:rgba(26,26,26,.45);font-weight:700}
+.pillars4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.p4{background:rgba(255,255,255,.6);border:1px solid var(--border);border-radius:12px;padding:9px 6px;text-align:center}
+.p4 .ic{line-height:1}
+.p4 b{display:block;font-size:8.5pt;font-family:var(--font-head);margin-top:3px}
+/* ミトコンドリアとは */
+.defrow{display:grid;grid-template-columns:52px 1fr;gap:14px;align-items:center}
+.defrow .dot{width:48px;height:48px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center}
+.defrow .dot .ii{width:26px;height:26px;stroke:#fff}
+.defrow h4{font-size:11pt;margin-bottom:3px}
+.defrow p{font-size:8.8pt;color:var(--muted);line-height:1.6}
+.p4-label{font-family:var(--font-head);font-size:7.5pt;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:12px 0 6px}
+
+/* process strip (P5) */
+.proc{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+.proc .s{background:rgba(255,255,255,.55);border:1px solid rgba(26,26,26,.3);border-radius:12px;padding:9px 6px;text-align:center;position:relative}
+.proc .s .ic{font-size:15pt;line-height:1}
+.proc .s b{display:block;font-family:var(--font-head);font-size:8.5pt;margin-top:3px}
+.proc .s small{font-size:6.8pt;color:var(--muted)}
+
+/* score bars (P6) */
+.scorebars{display:grid;grid-template-columns:1fr 1fr;gap:6px 20px}
+.sbar{display:grid;grid-template-columns:74px 1fr 26px;gap:8px;align-items:center;font-size:8pt}
+.sbar .lab{font-family:var(--font-head);font-weight:600;text-align:right}
+.sbar .lab small{display:block;font-size:6.5pt;color:var(--muted);font-family:var(--font-body)}
+.sbar .track{height:9px;background:rgba(255,255,255,.6);border:1px solid rgba(26,26,26,.35);border-radius:6px;overflow:hidden}
+.sbar .fill{height:100%;background:var(--ink)}
+.sbar .val{font-family:var(--font-head);font-weight:700;font-size:8.5pt;text-align:right}
+
+/* horizontal timeline (P7 / P9) */
+.htl{display:grid;gap:10px}
+.htl.four{grid-template-columns:repeat(4,1fr)}
+.htl.three{grid-template-columns:repeat(3,1fr)}
+.htl .node{background:rgba(255,255,255,.62);border:1px solid var(--border);border-radius:16px;padding:14px 14px 16px;position:relative;text-align:center}
+.htl .node .dot{width:34px;height:34px;border-radius:50%;background:var(--ink);color:#fff;font-family:var(--font-head);font-weight:700;font-size:11pt;display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
+.htl .node .when{font-family:var(--font-head);font-size:7.5pt;letter-spacing:.08em;color:var(--muted);margin-bottom:4px}
+.htl .node h4{font-size:10pt;margin-bottom:4px}
+.htl .node p{font-size:8pt;color:var(--muted);line-height:1.5}
+
+/* chart caption */
+.chart-cap{font-size:7pt;color:var(--muted);text-align:center;margin-top:4px;font-family:var(--font-head);letter-spacing:.04em}
+/* horizontal bar chart (P10) */
+.hbars{display:grid;gap:9px;margin:6px 0 14px}
+.hb{display:grid;grid-template-columns:150px 1fr 38px;gap:10px;align-items:center;font-size:8.6pt}
+.hb .l{font-family:var(--font-head);font-weight:600;text-align:right;line-height:1.2}
+.hb .t{height:15px;background:rgba(255,255,255,.55);border:1px solid rgba(26,26,26,.3);border-radius:8px;overflow:hidden}
+.hb .f{height:100%;background:var(--ink)}
+.hb .f.lite{background:rgba(26,26,26,.35)}
+.hb .v{font-family:var(--font-head);font-weight:700;font-size:9pt}
+.roi-inline{font-size:9.2pt;line-height:2}
+.roi-inline b{font-family:var(--font-head)}
+
+/* embedded report thumbnails (P6) */
+.repshow{margin-top:12px;background:rgba(255,255,255,.5);border:1px solid var(--border);border-radius:16px;padding:12px 16px}
+.repshow .k{font-family:var(--font-head);font-size:7.5pt;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
+.repthumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.repthumbs figure{border:1px solid rgba(26,26,26,.28);border-radius:8px;overflow:hidden;background:#fff}
+.repthumbs img{width:100%;display:block}
+.repthumbs figcaption{font-size:6.6pt;color:var(--muted);text-align:center;padding:4px 3px;line-height:1.3}
+
+/* ROI infographic (P10) */
+.roiviz{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.roiviz .r{background:rgba(255,255,255,.6);border:1px solid var(--border);border-radius:14px;padding:12px 8px;text-align:center}
+.roiviz .r .ic{font-size:17pt;line-height:1}
+.roiviz .r b{display:block;font-family:var(--font-head);font-size:9pt;margin-top:5px}
+.roiviz .r p{font-size:7.2pt;color:var(--muted);margin-top:3px;line-height:1.4}
+
+@media print{
+  body{background:#fff}
+  .page{margin:0;page-break-after:always;border:none}
+  .page:last-child{page-break-after:auto}
+  @page{size:A4;margin:0}
+}
+@media screen{.page{box-shadow:0 3px 20px rgba(0,0,0,.14)}}
+</style>
+</head>
+<body>
+
+<!-- ========= P1 COVER ========= -->
+<div class="page cover">
+  <div class="brand">MitoFlow40 ── Strategy for your health after 40</div>
+  <div class="title-wrap">
+    <h1><span class="sm">STRATEGY FOR</span>YOUR HEALTH<br><span class="sm">— FOR YOUR TEAM</span></h1>
+    <p class="catch">40代からはじめる健康戦略を、会社の福利厚生に。<br>会社の健診データを、ミトコンドリアの視点で読み直す。</p>
+  </div>
+  <img class="deco" src="assets/hero-illustration-bl.png" style="width:180mm;left:-30mm;bottom:-30mm;opacity:.16">
+  <div class="plate">
+    <div class="doc">Corporate Wellness Program ／ 企画書</div>
+    <h2>MitoFlow40 for Business<br>— 眠っている健診データを、社員のエネルギーに変える。</h2>
+    <div class="meta">
+      <div>提案先<br><b>法人 人事・健康経営ご担当者様</b></div>
+      <div>サービス名<br><b>MitoFlow40 for Business</b></div>
+      <div>提案者<br><b>MitoFlow40 ／ 小林 大介</b></div>
+      <div>発行<br><b>2026年7月</b></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========= P2 SUMMARY ========= -->
+<div class="page mint">
+  <div class="rhead"><span><b>MitoFlow40</b> for Business</span><span>企画書</span></div>
+  <div class="sec-head"><div class="no">02</div><div class="en">SUMMARY</div><div class="jp">本企画の要点と構成</div></div>
+  <div class="body">
+    <div class="card soft" style="margin-bottom:14px"><p class="lead">「受けて終わり」の健康診断を、社員一人ひとりが行動を変えるきっかけに再設計する。<b>会社がすでに取っている健診データ</b>を使うから、新規採血なし・低コスト・低負荷で始められます。</p><p class="lead" style="margin-top:12px">社員一人ひとりの健康を正しく整えることは、コストではなく<b>投資</b>です。集中力・判断力・回復力といった日々のコンディションが底上げされるから、<b>社員個人の活力と、組織全体のパフォーマンスがともに向上します。</b></p></div>
+    <div class="mstrip">
+      <div class="m"><div class="ic"><svg class="ii" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 12h6M9 16h5"/></svg></div><b>眠るデータ</b><p>A/C判定で終わる健診結果</p></div>
+      <div class="ar">→</div>
+      <div class="m"><div class="ic"><svg class="ii" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></div><b>再解析</b><p>精密栄養学の視点で読み解く</p></div>
+      <div class="ar">→</div>
+      <div class="m"><div class="ic"><svg class="ii" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.2"/></svg></div><b>次の一手</b><p>自分ごとの行動に変わる</p></div>
+    </div>
+    <ol class="toc">
+      <li><span class="tn">03</span><span class="tt">PROBLEM ── 背景と課題</span><span class="tp">P.3</span></li>
+      <li><span class="tn">04</span><span class="tt">CONCEPT ── 企画の目的とコンセプト</span><span class="tp">P.4</span></li>
+      <li><span class="tn">05</span><span class="tt">SCIENCE ── なぜミトコンドリアなのか</span><span class="tp">P.5</span></li>
+      <li><span class="tn">06</span><span class="tt">SOCIETY ── 予防医学という、新しい立ち位置</span><span class="tp">P.6</span></li>
+      <li><span class="tn">07</span><span class="tt">SERVICE ── サービス全体像</span><span class="tp">P.7</span></li>
+      <li><span class="tn">08</span><span class="tt">MECHANISM ── 健診データ再解析の仕組み</span><span class="tp">P.8</span></li>
+      <li><span class="tn">09</span><span class="tt">INSIGHTS ── 解析でわかること</span><span class="tp">P.9</span></li>
+      <li><span class="tn">10</span><span class="tt">FLOW ── 導入フロー</span><span class="tp">P.10</span></li>
+      <li><span class="tn">11</span><span class="tt">PRICE ── 料金プラン</span><span class="tp">P.11</span></li>
+      <li><span class="tn">12</span><span class="tt">ROLLOUT ── 導入ロードマップ</span><span class="tp">P.12</span></li>
+      <li><span class="tn">13</span><span class="tt">CONTACT ── 導入効果とお問い合わせ</span><span class="tp">P.13</span></li>
+    </ol>
+  </div>
+  <div class="rfoot"><span>MitoFlow40 for Business</span><span>02 / 13</span></div>
+</div>
+
+<!-- ========= P3 PROBLEM ========= -->
+<div class="page pink">
+  <div class="rhead"><span><b>MitoFlow40</b> for Business</span><span>企画書</span></div>
+  <div class="sec-head"><div class="no">03</div><div class="en">PROBLEM</div><div class="jp">背景と課題</div></div>
+  <div class="body">
+    <div class="card" style="margin-bottom:14px;border-style:solid">
+      <p style="font-family:var(--font-head);font-weight:700;font-size:14pt;line-height:1.6;margin-bottom:8px">A判定なら、安堵する。<br>C判定なら、気をつける。<br><span style="color:var(--muted);font-size:11.5pt">──では、具体的に“何を”？</span></p>
+      <p class="lead" style="font-size:10pt">多くの人は、健診の総合判定だけを見て終わります。でも A / C という記号は「異常の有無」を粗くふるい分けるだけで、<b>次にどう動けばいいか</b>は何も教えてくれません。本来、血液データは読み解けば<b>もっと大きな健康価値へと昇華できる</b>情報です。同じ数値でも、精密栄養学の視点で読むと「今の自分に効く一手」が見えてきます。</p>
+    </div>
+    <div class="pgrid">
+      <div class="pcard"><span class="pill">宝の持ち腐れ</span><h4>健診データが眠っている</h4><p>健康診断には毎年、1人あたり1〜2万円前後のコストがかかっています。しかしそこで得られた血液データの大半は「異常なし／要再検査」の二値に還元され、翌年まで誰にも見返されません。実は基準値内の“ゆらぎ”にこそ、その人の代謝の癖や不調の兆しが表れます。<b>すでに支払ったコストから、まだ引き出せていない価値がある</b>——それが本企画の出発点です。</p></div>
+      <div class="pcard"><span class="pill">刺さらない</span><h4>一律の健康施策が続かない</h4><p>健康セミナー、ウォーキングイベント、eラーニング。多くの健康施策は「全員に同じもの」を配るため、参加率が伸びず、継続もしません。体質も生活リズムも異なる社員に“平均値の正解”を届けても、自分ごとにならないからです。<b>行動変容の起点は一般論ではなく、自分自身のデータ</b>です。</p></div>
+      <div class="pcard"><span class="pill">見えない</span><h4>日々の不調は数値化されない</h4><p>「朝からだるい」「午後に集中が切れない日がない」——生産性を最も削っているのはこうした日々の不調ですが、病気ではないため健診の枠組みでは拾えません。本人も「歳のせい」と諦めて相談先を持たないまま。<b>数値化されないこの不調こそ、日々の仕事の質を静かに削っています。</b></p></div>
+      <div class="pcard"><span class="pill">隠れコスト</span><h4>最大の損失はプレゼンティーズム</h4><p>健康関連コストの最大項目は、欠勤ではなく<b>出社しているのに本調子でない状態（プレゼンティーズム）</b>。目に見えず予算がつきにくい一方、<b>介入すれば最も改善余地の大きい領域</b>です。</p>
+        <div style="margin-top:9px;display:grid;gap:5px">
+          <div style="display:grid;grid-template-columns:82px 1fr 28px;gap:6px;align-items:center;font-size:7.4pt"><span style="font-family:var(--font-head);font-weight:600;text-align:right;line-height:1.15">プレゼン<br>ティーズム</span><span style="height:11px;background:rgba(255,255,255,.55);border:1px solid rgba(26,26,26,.3);border-radius:6px;overflow:hidden"><span style="display:block;height:100%;width:64%;background:var(--ink)"></span></span><span style="font-family:var(--font-head);font-weight:700;font-size:8pt">64%</span></div>
+          <div style="display:grid;grid-template-columns:82px 1fr 28px;gap:6px;align-items:center;font-size:7.4pt"><span style="font-family:var(--font-head);font-weight:600;text-align:right">アブセン<br>ティーズム</span><span style="height:11px;background:rgba(255,255,255,.55);border:1px solid rgba(26,26,26,.3);border-radius:6px;overflow:hidden"><span style="display:block;height:100%;width:21%;background:rgba(26,26,26,.35)"></span></span><span style="font-family:var(--font-head);font-weight:700;font-size:8pt">21%</span></div>
+          <div style="display:grid;grid-template-columns:82px 1fr 28px;gap:6px;align-items:center;font-size:7.4pt"><span style="font-family:var(--font-head);font-weight:600;text-align:right">直接医療費</span><span style="height:11px;background:rgba(255,255,255,.55);border:1px solid rgba(26,26,26,.3);border-radius:6px;overflow:hidden"><span style="display:block;height:100%;width:15%;background:rgba(26,26,26,.35)"></span></span><span style="font-family:var(--font-head);font-weight:700;font-size:8pt">15%</span></div>
+        </div>
+        <p style="font-size:6.6pt;color:var(--muted);margin-top:5px">健康関連コストの内訳（イメージ）</p></div>
+    </div>
+    <p style="font-size:8.4pt;color:var(--muted);line-height:1.65"><b style="font-family:var(--font-head);color:var(--ink)">※ 精密栄養学とは</b>　「みんなに良い食事」ではなく、<b>その人自身のデータ（血液・生活・体質）を起点に最適な栄養を考える</b>という新しい栄養学の潮流。同じ基準値内の数値でも、一人ひとりで意味は変わる——本企画はこの視点で健診データを読み直します。</p>
+  </div>
+  <div class="rfoot"><span>MitoFlow40 for Business</span><span>03 / 13</span></div>
+</div>
+
+<!-- ========= P4 CONCEPT ========= -->
+<div class="page sky">
+  <div class="rhead"><span><b>MitoFlow40</b> for Business</span><span>企画書</span></div>
+  <div class="sec-head"><div class="no">04</div><div class="en">CONCEPT</div><div class="jp">企画の目的とコンセプト</div></div>
+  <img class="deco" src="assets/about-illustration-bg.png" style="width:120mm;right:-30mm;bottom:-30mm;opacity:.5">
+  <div class="body tight">
+    <div class="quote" style="margin:0 0 8px">どれだけ ATP を作り、使えているか。</div>
+    <div class="card" style="margin-bottom:8px">
+      <p class="lead" style="font-size:10pt;line-height:1.7">そもそも健診の「基準値」は、<b>病気をふるい分けるために引かれた線</b>であって、一人ひとりの“最適”を測る物差しではありません。基準値内は「病気ではない」ことを意味しても、「本調子である」ことは保証しません。だからMitoFlow40が大切にするのは、基準値との比較だけでなく、<b>細胞がどれだけエネルギー（ATP）を作り、使えているか</b>という“もうひとつの視点”。健康をこの一つの数値で語り切れるわけではありませんが、40代以降の「なんとなく不調」を読み解くうえで<b>見るべき健康指標のひとつ</b>だと考えています。「病気になってから治す」のではなく、その手前の<b>“未病”のうちに整える</b>——これが本企画の一貫した立場です。</p>
+    </div>
+    <div class="card" style="margin-bottom:6px;border-style:solid">
+      <p style="font-family:var(--font-head);font-weight:700;font-size:10.5pt;margin-bottom:8px;text-align:center">MitoFlow40 が受け持つのは、この“間”です。</p>
+      <div class="posbar">
+        <div class="pos"><div class="pl">病気になったら</div><b>医療</b><p>診断・治療。<br>異常が出てから対応する領域。</p></div>
+        <div class="posmid"><span>← MitoFlow40 →</span></div>
+        <div class="pos"><div class="pl">日々の暮らし</div><b>セルフケア</b><p>食事・運動・習慣。<br>本人が続けていく領域。</p></div>
+      </div>
+      <p style="font-size:8.6pt;color:var(--muted);margin-top:8px;line-height:1.65">検査値はまだ基準内、でも本調子ではない——この手前の領域は、医療の役割の外にあり、本人任せのセルフケアでは何を選べばよいか分からず、これまで<b>実質的に誰の担当でもありませんでした</b>。MitoFlow40は医療に置き換わるのではなく、データを根拠に<b>その“間”を埋め、医療とセルフケアをつなぎます</b>。</p>
+    </div>
+    <div class="card soft">
+      <p style="font-family:var(--font-head);font-weight:700;font-size:11pt;margin-bottom:6px">本企画の目的</p>
+      <ul class="numlist">
+        <li><span class="k">① 資産化</span><span>眠っている健診データを、行動につながる“読めるレポート”に変える。毎年支払うコストから、まだ引き出せていない価値を取り出します。</span></li>
+        <li><span class="k">② 個別化</span><span>一律施策から、一人ひとりの体質・生活に合わせた“自分ごと”の健康支援へ。データが起点になってはじめて、行動が続きます。</span></li>
+        <li><span class="k">③ 習慣化</span><span>単発で終わらせず、学び（ライブラリ）と日々の一手で継続を支え、半年で生活に定着させます。</span></li>
+      </ul>
+    </div>
+    <p style="font-size:8.3pt;color:var(--muted);margin-top:5px">※ 本サービスは<b style="color:var(--ink)">医療行為（診断・治療）ではありません</b>。否定も盲信もしない中立の姿勢で健診データの読み解きと生活改善を支援するもので、判断の主役は社員一人ひとり本人です。必要な医療は遠ざけず、過度な商品も勧めません。</p>
+  </div>
+  <div class="rfoot"><span>MitoFlow40 for Business</span><span>04 / 13</span></div>
+</div>
+
+<!-- ========= P5 SCIENCE ========= -->
+<div class="page lav">
+  <div class="rhead"><span><b>MitoFlow40</b> for Business</span><span>企画書</span></div>
+  <div class="sec-head"><div class="no">05</div><div class="en">SCIENCE</div><div class="jp">なぜミトコンドリアなのか</div></div>
+  <div class="body">
+    <div class="card soft" style="margin-bottom:12px"><p class="lead" style="font-size:10pt">MitoFlow40は流行りの健康法ではなく、<b>生化学を土台に設計</b>されています。なぜ「ミトコンドリア」を起点に置くのか、その理由をご説明します。</p></div>
+    <div class="card" style="margin-bottom:12px">
+      <div style="display:grid;grid-template-columns:1.05fr 1fr;gap:20px;align-items:center">
+        <div>
+          <h4 style="font-size:11pt;margin-bottom:5px">ミトコンドリアとは？</h4>
+          <p style="font-size:8.8pt;color:var(--muted);line-height:1.7">私たちの細胞ひとつひとつに数百〜数千個存在する、<b>エネルギー（ATP）をつくる小さな器官</b>です。呼吸で取り込んだ酸素と、食事から得た栄養を材料に、体を動かし、考え、修復するためのエネルギーをここで生み出しています。心臓・脳・筋肉など、エネルギー需要の高い臓器ほどミトコンドリアを多く抱えています。ここが元気なら活力が湧き、<b>加齢とともにはたらきが落ちる</b>と、疲労感・集中力の低下・回復の遅れといった“なんとなく不調”の一因になります。</p>
+        </div>
+        <div>
+          <svg viewBox="0 0 300 150" style="width:100%;height:auto">
+            <line x1="30" y1="122" x2="288" y2="122" stroke="rgba(26,26,26,.35)" stroke-width="1"/>
+            <path d="M30 28 L94 36 L158 52 L221 74 L285 92 L285 122 L30 122 Z" fill="#4AF6C3" fill-opacity="0.5"/>
+            <path d="M30 28 L94 36 L158 52 L221 74 L285 92" fill="none" stroke="#1A1A1A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+            <line x1="158" y1="52" x2="158" y2="122" stroke="#1A1A1A" stroke-width="1" stroke-dasharray="3 3"/>
+            <circle cx="158" cy="52" r="4" fill="#1A1A1A"/>
+            <text x="162" y="44" font-family="'Space Grotesk',sans-serif" font-size="9" font-weight="700" fill="#1A1A1A">40代〜低下</text>
+            <text x="30" y="138" font-size="7.5" fill="#4A4A4A" text-anchor="middle">20代</text>
+            <text x="94" y="138" font-size="7.5" fill="#4A4A4A" text-anchor="middle">30代</text>
+            <text x="158" y="138" font-size="7.5" fill="#4A4A4A" text-anchor="middle">40代</text>
+            <text x="221" y="138" font-size="7.5" fill="#4A4A4A" text-anchor="middle">50代</text>
+            <text x="285" y="138" font-size="7.5" fill="#4A4A4A" text-anchor="middle">60代</text>
+          </svg>
+          <div class="chart-cap">年齢とともに低下するミトコンドリア機能（イメージ）</div>
+        </div>
+      </div>
+    </div>
+    <div class="card soft" style="margin-bottom:12px">
+      <p style="font-family:var(--font-head);font-weight:700;font-size:10pt;margin-bottom:6px">なぜ「40代」からなのか</p>
+      <p style="font-size:9pt;color:var(--muted);line-height:1.7">40代は、ミトコンドリアの量と質がゆるやかに低下しはじめる一方で、仕事の責任・役割が最も重くなる時期でもあります。「若い頃と同じようには回復しない」という体感が生まれ、生活習慣病の予備軍が数字に表れはじめるのもこの年代。<b>身体からのサインが最も出やすく、かつ手を打てば取り返しがつく</b>——だからこそ40代を起点に置いています。</p>
+    </div>
+    <div class="p4-label">整える4本柱</div>
+    <div class="pillars4">
+      <div class="p4"><div class="ic"><svg class="ii" viewBox="0 0 24 24"><path d="M6 3v7M9 3v7M7.5 10v11M17 3c-1.5 0-2.5 2-2.5 5s1 4 2.5 4v9"/></svg></div><b>食事</b></div>
+      <div class="p4"><div class="ic"><svg class="ii" viewBox="0 0 24 24"><path d="M3 12h4l3 7 4-14 3 7h4"/></svg></div><b>運動</b></div>
+      <div class="p4"><div class="ic"><svg class="ii" viewBox="0 0 24 24"><path d="M20 14a8 8 0 1 1-10-10 7 7 0 0 0 10 10z"/></svg></div><b>習慣</b></div>
+      <div class="p4"><div class="ic"><svg class="ii" viewBox="0 0 24 24"><rect x="2.5" y="9" width="19" height="6" rx="3" transform="rotate(45 12 12)"/><path d="M8 8l8 8"/></svg></div><b>サプリ</b></div>
+    </div>
+    <p style="font-size:8.5pt;color:var(--muted);margin-top:8px;line-height:1.7">MitoFlow40は、この<b>食事・運動・習慣・サプリの4本柱</b>でミトコンドリアのはたらきを底上げします。特別な機器や薬に頼るのではなく、日々の暮らしの中で調整できる要素だからこそ、続けられ、組織全体にも広げられます。</p>
+  </div>
+  <div class="rfoot"><span>MitoFlow40 for Business</span><span>05 / 13</span></div>
+</div>
+
+<!-- ========= P6 SOCIETY ========= -->
+<div class="page pink">
+  <div class="rhead"><span><b>MitoFlow40</b> for Business</span><span>企画書</span></div>
+  <div class="sec-head"><div class="no">06</div><div class="en">SOCIETY</div><div class="jp">予防医学という、新しい立ち位置</div></div>
+  <div class="body">
+    <div class="card soft" style="margin-bottom:12px"><p class="lead" style="font-size:10pt">本企画は、一企業の福利厚生にとどまらず、<b>日本社会が直面する課題への応答</b>でもあります。社員の健康に投資することが、なぜ「社会を考える企業」の意思表示になるのか——その背景をご説明します。</p></div>
+    <div class="card" style="margin-bottom:12px">
+      <h4 style="font-size:11pt;margin-bottom:5px">超高齢社会と、増え続ける医療費</h4>
+      <p style="font-size:9pt;color:var(--muted);line-height:1.75">日本は世界に先んじて超高齢社会に入り、国民医療費は年間45兆円を超えてなお増え続けています。支える側の現役世代は減り、「病気になってから治す」医療だけでこの社会を維持することは、構造的に難しくなりつつあります。医療そのものの価値は変わりません。変わるべきなのは、<b>病気になる人を減らす側——つまり“手前”への投資の比重</b>です。</p>
+    </div>
+    <div class="card" style="margin-bottom:12px">
+      <h4 style="font-size:11pt;margin-bottom:5px">「治す」から「防ぐ」へ——国も舵を切っている</h4>
+      <p style="font-size:9pt;color:var(--muted);line-height:1.75">健康日本21、データヘルス計画、健康経営優良法人認定——名前は違えど、国の健康政策は一貫して<b>「治療から予防へ」</b>という方向を指しています。中でも企業は、現役世代が1日の大半を過ごす場所として、予防の最前線に位置づけられています。健診データという材料はすでに毎年、企業の手元に届いている。あとは<b>それを予防に活かす仕組み</b>があるかどうかです。</p>
+    </div>
+    <div class="mstrip" style="margin:0 0 12px">
+      <div class="m"><div class="ic"><svg class="ii" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg></div><b>これまで</b><p>病気になってから、医療が治す</p></div>
+      <div class="ar">→</div>
+      <div class="m"><div class="ic"><svg class="ii" viewBox="0 0 24 24"><path d="M12 21C7 17 3 13.5 3 9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 9 2.5c0 4-4 7.5-9 11.5z"/></svg></div><b>これから</b><p>病気になる前に、暮らしで防ぐ</p></div>
+      <div class="ar">→</div>
+      <div class="m"><div class="ic"><svg class="ii" viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg></div><b>企業の役割</b><p>現役世代の予防の最前線に</p></div>
+    </div>
+    <div class="card" style="border-style:solid">
+      <h4 style="font-size:11pt;margin-bottom:5px">社員の“未病”への投資は、社会への投資</h4>
+      <p style="font-size:9pt;color:var(--muted);line-height:1.75">企業が社員の未病に投資することは、社員個人の活力のためであると同時に、<b>医療費という社会全体のコストを減らす社会貢献</b>でもあります。健康経営の取り組みは、統合報告書やサステナビリティ報告の「人的資本」の文脈でも語れる打ち手です。MitoFlow40の導入は福利厚生であると同時に、<b>社会を考える企業としての意思表示</b>になると考えています。</p>
+    </div>
+    <div class="card soft">
+      <h4 style="font-size:11pt;margin-bottom:5px">そして、「健康企業」というポジショニングになる</h4>
+      <p style="font-size:9pt;color:var(--muted);line-height:1.75">社員の健康に本気で向き合う企業は、採用市場でも取引先からも<b>「人を大切にする会社」</b>として選ばれます。制度の導入にとどまらず、健康を起点に世の中へ新しい価値や提案を届ける——<b>そうした理念を持った企業としての立ち位置</b>を確立することにもつながります。</p>
+    </div>
+  </div>
+  <div class="rfoot"><span>MitoFlow40 for Business</span><span>06 / 13</span></div>
+</div>
+
+<!-- ========= P7 SERVICE ========= -->
+<div class="page apricot">
+  <div class="rhead"><span><b>MitoFlow40</b> for Business</span><span>企画書</span></div>
+  <div class="sec-head"><div class="no">07</div><div class="en">SERVICE</div><div class="jp">サービス全体像</div></div>
+  <div class="body">
+    <div class="card soft" style="margin-bottom:10px"><p class="lead" style="font-size:9.6pt">MitoFlow40は単発の検査で終わらせず、<b>既存の健診データを起点に「知る→翻訳する→伴走する」という一連の流れ</b>として設計されています。各ステップは独立した機能ではなく、前の段階の結果を次に受け渡すことで、社員が“自分ごと”として行動に移し、半年をかけて習慣化するまでを支えます。</p></div>
+    <div class="card" style="border-style:solid;padding:12px 22px">
+      <div class="pillar" style="padding:8px 0"><div class="num">1</div><div><h4>健診データの再解析｜測り直さず知る</h4><p>会社の健診ですでに採取した血液データを、精密栄養学の理想値との距離で読み解き、複数の複合指標としてスコア化します。基準値の「内か外か」ではなく「最適からどれだけ離れているか」で捉えるため、“異常なし”の中に隠れた改善余地が見えてきます。<b>新規の採血は一切不要</b>で、社員の負担も追加コストもありません。解析の仕組みは次ページで詳説します。</p><div class="feat"><span>既存健診データ活用</span><span>複合指標スコア</span><span>理想値ベース</span></div></div></div>
+      <div class="pillar" style="padding:8px 0"><div class="num">2</div><div><h4>図解レポート＆カウンセリング｜自分ごとに翻訳</h4><p>解析結果は、本人向けに図解されたレポートにまとめ、個別URLでお届けします。専門用語は日常語に翻訳し、担当者が対話しながら「あなたの場合はここが起点」と読み解いていきます。あれもこれもと詰め込まず、<b>今の生活で無理なく始められる「次の一歩」を3つに絞って</b>提示するため、行動に移しやすいのが特徴です。</p><div class="feat"><span>本人向け図解レポート</span><span>次の一歩 3つ</span></div></div></div>
+      <div class="pillar" style="padding:8px 0"><div class="num">3</div><div><h4>毎月オンラインセッション｜半年間の伴走</h4><p>行動変容は一度の面談では定着しません。初回カウンセリングのあと、<b>毎月のオンラインセッション（計6回）</b>で「やってみてどうだったか」を振り返り、うまくいかなければ手を替え、うまくいけば次の一歩へ進めます。実践→フィードバック→調整のサイクルを半年間回すことで、施策が“行事”ではなく習慣として残ります。</p><div class="feat"><span>毎月×6回</span><span>実践フィードバック</span></div></div></div>
+    </div>
+  </div>
+  <div class="rfoot"><span>MitoFlow40 for Business</span><span>07 / 13</span></div>
+</div>
+
+<!-- ========= P8 MECHANISM ========= -->
+<div class="page mint">
+  <div class="rhead"><span><b>MitoFlow40</b> for Business</span><span>企画書</span></div>
+  <div class="sec-head"><div class="no">08</div><div class="en">MECHANISM</div><div class="jp">中核の仕組み ── 健診データ再解析</div></div>
+  <div class="body">
+    <div class="card soft" style="margin-bottom:12px"><p style="font-size:10pt">「基準値内か」ではなく「精密栄養学の理想値からどれだけ離れているか」で読む。3つのソースを統合し、暮らしの言葉につながる複合指標に翻訳します。</p></div>
+    <div class="mech">
+      <div class="msrc"><div class="ic">Source 1</div><b>健診の血液</b><p>客観・代謝。既存の健診結果をそのまま活用。</p></div>
+      <div class="msrc"><div class="ic">Source 2</div><b>問診シート</b><p>主観・生活。スマホフォームで回答。</p></div>
+      <div class="msrc"><div class="ic">Source 3</div><b>ウェアラブル</b><p>スマートウォッチ等。自律神経・睡眠・活動（任意）。</p></div>
+    </div>
+    <div class="card" style="margin:12px 0;border-style:solid"><p style="font-size:9.5pt"><b>3つのデータを照合：</b>3つ一致すれば確度の高い仮説、矛盾すれば「深掘り質問」へ。個別の異常リストではなく、<b>「何が起点で、何に波及しているか」というCore Pattern</b>を1つ抽出します。</p></div>
+    <div class="repshow" style="margin-top:12px">
+      <div class="k">Actual Report ── 個人向けサービスで提供中の解析レポート（全13ページ）より</div>
+      <div style="display:grid;grid-template-columns:1.15fr 1fr 1fr 1fr;gap:10px;align-items:start">
+        <p style="font-size:8.6pt;color:var(--muted);line-height:1.7">この解析は構想ではなく、<b style="color:var(--ink)">mitoflow40.com で個人向けにすでに提供中</b>のもの。同じ解析エンジンと図解レポートを法人向けに展開します。専門用語は日常語に翻訳し、断定せず「予測」として提示。<b style="color:var(--ink)">サンプル一式は別途お渡しします。</b></p>
+        <figure style="border:1px solid rgba(26,26,26,.28);border-radius:8px;overflow:hidden;background:#fff;margin:0"><img src="assets/report-cover.png" style="width:100%;display:block"><figcaption style="font-size:6.6pt;color:var(--muted);text-align:center;padding:4px 3px;line-height:1.3">表紙・総合サマリー</figcaption></figure>
+        <figure style="border:1px solid rgba(26,26,26,.28);border-radius:8px;overflow:hidden;background:#fff;margin:0"><img src="assets/report-snapshot.png" style="width:100%;display:block"><figcaption style="font-size:6.6pt;color:var(--muted);text-align:center;padding:4px 3px;line-height:1.3">血液スコア・スナップショット</figcaption></figure>
+        <figure style="border:1px solid rgba(26,26,26,.28);border-radius:8px;overflow:hidden;background:#fff;margin:0"><img src="assets/report-balance.png" style="width:100%;display:block"><figcaption style="font-size:6.6pt;color:var(--muted);text-align:center;padding:4px 3px;line-height:1.3">栄養バランス解析</figcaption></figure>
+      </div>
+    </div>
+  </div>
+  <div class="rfoot"><span>MitoFlow40 for Business</span><span>08 / 13</span></div>
+</div>
+
+<!-- ========= P9 INSIGHTS ========= -->
+<div class="page lav">
+  <div class="rhead"><span><b>MitoFlow40</b> for Business</span><span>企画書</span></div>
+  <div class="sec-head"><div class="no">09</div><div class="en">INSIGHTS</div><div class="jp">解析でわかること ── あなたの体からのサイン</div></div>
+  <div class="body">
+    <div class="card soft"><p class="lead" style="font-size:10pt">健診の数値は「異常の有無」だけでなく、<b>細胞が今どれだけ元気にエネルギー（ATP）を作れているか</b>のサインでもあります。同じ基準値内でも、精密栄養学の視点で重ねて読むと——たとえばこんな“兆し”が見えてきます。<span class="muted">（いずれも診断ではなく、データからの“予測・可能性”としてお示しします）</span></p></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+      <div class="pcard" style="padding:14px 15px"><div style="display:flex;gap:9px;align-items:center;margin-bottom:5px"><svg class="ii" viewBox="0 0 24 24" style="flex-shrink:0;width:22px;height:22px"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg><h4 style="font-size:10.5pt;margin:0">発電効率が落ちている</h4></div><p style="font-size:8.6pt">ミトコンドリアが<b>ATPを作る力の低下</b>。疲れやすさ・回復の遅れ・午後の失速の根っこにあることがあります。</p></div>
+      <div class="pcard" style="padding:14px 15px"><div style="display:flex;gap:9px;align-items:center;margin-bottom:5px"><svg class="ii" viewBox="0 0 24 24" style="flex-shrink:0;width:22px;height:22px"><path d="M12 3c1 3-1 4-1 6a3 3 0 0 0 6 0c0-1 0-2-1-3 2 1 4 4 4 8a8 8 0 0 1-16 0c0-4 3-7 5-9 0 1 1 2 2 2 1 0 2-2 2-4z"/></svg><h4 style="font-size:10.5pt;margin:0">くすぶる慢性炎症</h4></div><p style="font-size:8.6pt">糖質過多や内臓脂肪が続くと、体内で<b>静かな炎症</b>が起こりがち。老化・生活習慣病の“土台”になります。</p></div>
+      <div class="pcard" style="padding:14px 15px"><div style="display:flex;gap:9px;align-items:center;margin-bottom:5px"><svg class="ii" viewBox="0 0 24 24" style="flex-shrink:0;width:22px;height:22px"><path d="M4 18c3 0 3-3 6-3s3 3 6 3M4 13c3 0 3-3 6-3s3 3 6 3M14 4l4 4M18 4l-4 4"/></svg><h4 style="font-size:10.5pt;margin:0">体の“焦げつき”（糖化）</h4></div><p style="font-size:8.6pt">血糖の乱高下が続くと、<b>タンパク質が糖と結びつき劣化</b>（糖化）。肌・血管・組織の老化スピードに関わります。</p></div>
+      <div class="pcard" style="padding:14px 15px"><div style="display:flex;gap:9px;align-items:center;margin-bottom:5px"><svg class="ii" viewBox="0 0 24 24" style="flex-shrink:0;width:22px;height:22px"><path d="M12 4l7 3v5c0 4-3 7-7 8-4-1-7-4-7-8V7z"/><path d="M9 12l2 2 4-4"/></svg><h4 style="font-size:10.5pt;margin:0">抗酸化力が追いつかない</h4></div><p style="font-size:8.6pt">エネルギーを作る過程で生じる“サビ”に、<b>体の抗酸化力が負けている</b>状態。疲労感や不調の一因になります。</p></div>
+      <div class="pcard" style="padding:14px 15px"><div style="display:flex;gap:9px;align-items:center;margin-bottom:5px"><svg class="ii" viewBox="0 0 24 24" style="flex-shrink:0;width:22px;height:22px"><path d="M12 3c4 5 7 8 7 12a7 7 0 0 1-14 0c0-4 3-7 7-12z"/></svg><h4 style="font-size:10.5pt;margin:0">巡りと水分の不足</h4></div><p style="font-size:8.6pt">慢性的な水分・巡り不足は、<b>酸素と栄養の運搬効率を低下</b>。だるさ・冷え・集中力低下の隠れた背景に。</p></div>
+      <div class="pcard" style="padding:14px 15px"><div style="display:flex;gap:9px;align-items:center;margin-bottom:5px"><svg class="ii" viewBox="0 0 24 24" style="flex-shrink:0;width:22px;height:22px"><path d="M6 3h12l3 6-9 12L3 9z"/><path d="M3 9h18M9 3l3 6 3-6"/></svg><h4 style="font-size:10.5pt;margin:0">隠れ栄養不足</h4></div><p style="font-size:8.6pt">基準値内でも不足しがちな<b>鉄・マグネシウム・ビタミンD/B群</b>。睡眠・気力・ストレス耐性の質に効いてきます。</p></div>
+    </div>
+    <div class="card soft" style="display:flex;gap:16px;align-items:center">
+      <svg class="ii" viewBox="0 0 24 24" style="width:34px;height:34px;flex-shrink:0"><path d="M4 20h16"/><path d="M7 20v-5M12 20v-9M17 20v-4"/><path d="M6 11l4-5 4 3 5-6"/></svg>
+      <p style="font-size:9pt;color:var(--muted);line-height:1.7"><b style="color:var(--ink)">そして、これらが積み重なった“結果”が「代謝力の低下」。</b>食べたものをエネルギーに変え、余りを溜め込みにくくする力が落ちると、<b style="color:var(--ink)">太りやすさ・疲れやすさ・回復の遅さ</b>として日常に表れます。一つずつの兆しを整えることが、代謝力そのものを底上げする近道です。</p>
+    </div>
+    <div class="card" style="border-style:solid;display:flex;gap:16px;align-items:center">
+      <svg class="ii" viewBox="0 0 24 24" style="width:36px;height:36px;flex-shrink:0"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.2"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
+      <p style="font-size:9.6pt;line-height:1.75;margin:0">この6つの兆しを一枚に重ね合わせると、一般論の健康法ではなく<b>「今のあなたに必要な栄養素・手放すべき習慣」がわかります。</b>足りないものを補い、多すぎるものを整える——データに根ざした“自分ごとの一手”へ翻訳します。</p>
+    </div>
+  </div>
+  <div class="rfoot"><span>MitoFlow40 for Business</span><span>09 / 13</span></div>
+</div>
+
+<!-- ========= P10 FLOW ========= -->
+<div class="page apricot">
+  <div class="rhead"><span><b>MitoFlow40</b> for Business</span><span>企画書</span></div>
+  <div class="sec-head"><div class="no">10</div><div class="en">FLOW</div><div class="jp">導入フロー</div></div>
+  <img class="deco" src="assets/flow-illustration-feedback.png" style="width:70mm;right:-14mm;bottom:8mm;opacity:.55">
+  <div class="body">
+    <div class="card soft" style="margin-bottom:14px"><p style="font-size:10pt">導入にあたって<b>新しい採血や健診の追加は必要ありません</b>。すでに実施済みの健診データと、社員のスマートフォンだけで完結します。人事ご担当者の作業は「案内・同意取得・日程調整」の3点のみで、解析からレポート発行、カウンセリングまではすべてMitoFlow40が担います。以下が全体の流れです。</p></div>
+    <div class="htl four" style="margin-bottom:16px">
+      <div class="node"><div class="dot">1</div><div class="when">社員＋人事</div><h4>健診データを提出</h4><p>健診の血液項目を本人同意で連携。問診はスマホで回答。</p></div>
+      <div class="node"><div class="dot">2</div><div class="when">MitoFlow40</div><h4>統合・解析</h4><p>血液・問診・ウェアラブルを統合し理想値ベースで解析。</p></div>
+      <div class="node"><div class="dot">3</div><div class="when">MitoFlow40</div><h4>レポート発行</h4><p>本人向け図解レポートを個別URLで。専門用語なしで読める形に。</p></div>
+      <div class="node"><div class="dot">4</div><div class="when">MitoFlow40</div><h4>カウンセリング</h4><p>「次の一歩」を3つに絞り、継続を支える。</p></div>
+    </div>
+    <div class="card" style="border-style:solid"><p style="font-size:9.2pt;line-height:1.75"><b>人事ご担当者の実務について。</b>連携いただく健診データは、本人同意のうえで血液検査項目のみを対象とします。同意取得はスマホの同意フォームで完結するため、紙の回収は不要です。社員への案内文（周知メール・イントラ掲示用）はMitoFlow40側でテンプレートをご用意し、貴社の運用に合わせて調整します。開始から本人向けレポート発行までの目安は、データ連携後おおむね2〜3週間。健診の実施時期に合わせてスケジュールを組めば、通常業務への負荷はほとんど生じません。</p></div>
+    <div class="card soft" style="display:flex;gap:16px;align-items:center">
+      <svg class="ii" viewBox="0 0 24 24" style="width:34px;height:34px;flex-shrink:0"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V4M9 4h6"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/></svg>
+      <p style="font-size:9pt;color:var(--muted);line-height:1.7"><b style="color:var(--ink)">多角的に読むために、AIによる解析も活用します。</b>血液・問診・ウェアラブルのデータを、専門家の視点に加えてAIでも読み込み、一つの数値に偏らず複数の角度から評価します。なお、AIの処理に渡すデータには<b style="color:var(--ink)">氏名など個人を特定する情報は含みません</b>（匿名化して扱います）。</p>
+    </div>
+    <div class="card soft" style="display:flex;gap:16px;align-items:center">
+      <svg class="ii" viewBox="0 0 24 24" style="width:34px;height:34px;flex-shrink:0"><path d="M5 12a7 7 0 0 1 12-5l2 2M19 12a7 7 0 0 1-12 5l-2-2"/><path d="M18 4v5h-5M6 20v-5h5"/></svg>
+      <p style="font-size:9pt;color:var(--muted);line-height:1.7"><b style="color:var(--ink)">レポートを渡して終わり、にはしません。</b>一過性の健康アドバイスではなく、カウンセリングと日々の学び（ライブラリ）で<b style="color:var(--ink)">継続的に伴走</b>します。隣に伴走者がいることは、「やってみよう」を「続けられた」に変えます。そして<b style="color:var(--ink)">「続けられた」という小さな成功体験の積み重ね</b>が、次の一歩への自信とモチベーションになる。やがてその<b style="color:var(--ink)">「続けられた」ということ自体が、健康そのものにつながっていく</b>のです。</p>
+    </div>
+  </div>
+  <div class="rfoot"><span>MitoFlow40 for Business</span><span>10 / 13</span></div>
+</div>
+
+<!-- ========= P11 PRICE ========= -->
+<div class="page mint">
+  <div class="rhead"><span><b>MitoFlow40</b> for Business</span><span>企画書</span></div>
+  <div class="sec-head"><div class="no">11</div><div class="en">PRICE</div><div class="jp">料金プラン</div></div>
+  <img class="deco" src="assets/pricing-plan-illustration.png" style="width:44mm;right:2mm;bottom:24mm;opacity:.6">
+  <div class="body">
+    <div class="card soft" style="margin-bottom:12px">
+      <p style="font-size:10pt;margin-bottom:10px"><b>半年（6ヶ月）プログラム／毎月オンラインセッション込み</b>。サービス内容は全社共通で、導入人数の規模で3プランに分かれます。<span class="muted">（1名あたり・税別の目安）</span></p>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;border-top:1px solid rgba(26,26,26,.15);padding-top:10px">
+        <div style="display:flex;gap:8px;align-items:flex-start"><svg class="ii" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:1px"><path d="M5 12a7 7 0 0 1 12-5l2 2M19 12a7 7 0 0 1-12 5l-2-2"/><path d="M18 4v5h-5M6 20v-5h5"/></svg><div><b style="font-size:9pt;font-family:var(--font-head)">習慣が定着する</b><p style="font-size:7.8pt;color:var(--muted);line-height:1.5">毎月×6回で行動変容のサイクルが回る長さ</p></div></div>
+        <div style="display:flex;gap:8px;align-items:flex-start"><svg class="ii" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:1px"><path d="M4 20h16"/><path d="M7 20v-6M12 20V9M17 20V5"/></svg><div><b style="font-size:9pt;font-family:var(--font-head)">成果が見える</b><p style="font-size:7.8pt;color:var(--muted);line-height:1.5">開始時と6ヶ月時点の解析でビフォー/アフター</p></div></div>
+        <div style="display:flex;gap:8px;align-items:flex-start"><svg class="ii" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:1px"><path d="M12 3l2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2z"/></svg><div><b style="font-size:9pt;font-family:var(--font-head)">始めやすい</b><p style="font-size:7.8pt;color:var(--muted);line-height:1.5">年契約より総額が軽く、健診サイクルと連動</p></div></div>
+      </div>
+    </div>
+    <div class="plan-grid">
+      <div class="plan">
+        <div class="pn">〜10名</div>
+        <div class="pp">¥8,800<small> /月・名</small></div>
+        <div class="pd" style="min-height:auto">半年総額 <b>¥52,800</b>/名<br>スモールチーム・経営層から。</div>
+      </div>
+      <div class="plan">
+        <div class="pn">〜30名</div>
+        <div class="pp">¥7,800<small> /月・名</small></div>
+        <div class="pd" style="min-height:auto">半年総額 <b>¥46,800</b>/名<br>部署単位の導入に。1名あたり割安。</div>
+      </div>
+      <div class="plan">
+        <div class="pn">30名〜</div>
+        <div class="pp">¥6,800<small> /月・名</small></div>
+        <div class="pd" style="min-height:auto">半年総額 <b>¥40,800</b>/名<br>全社・大規模展開に。最優遇単価。</div>
+      </div>
+    </div>
+    <div class="card" style="border-style:solid;display:flex;gap:16px;align-items:center">
+      <svg class="ii" viewBox="0 0 24 24" style="width:34px;height:34px;flex-shrink:0"><path d="M4 19h16"/><path d="M4 19c3-1 5-11 8-11s5 6 8 6"/><circle cx="12" cy="8" r="1"/></svg>
+      <p style="font-size:9pt;color:var(--muted);line-height:1.7"><b style="color:var(--ink)">一度きりの出費ではなく、続けるほど価値が積み上がる“コンパウンド型”。</b>続けるほど健診・ウェアラブルのデータが時系列で蓄積され、解析はその人の変化を<b style="color:var(--ink)">「点」ではなく「連続した線」</b>として読めるようになります。単発の検査と違い、続けるほど精度とフィット感が高まる——資産運用でいう<b style="color:var(--ink)">クオンツ（積み上げ・複利）型</b>に近い設計です。<b style="color:var(--ink)">半年以降も</b>、継続プラン（更新割）や年2回解析などで伴走を続けられ、データはそのまま次の期へと積み上がっていきます。</p>
+    </div>
+    <p style="font-size:8pt;color:var(--muted);text-align:center;margin-top:8px">※ 開始時に健診データ再解析＋図解レポート → 毎月オンラインセッション×6 → 6ヶ月時点でフォロー解析。年間契約（2期）は更新割あり。大規模・年2回解析等は別途お見積り。</p>
+    <p class="p-note">※ 既存の健診データを使うため新規採血コストは不要。参考：同じ解析・カウンセリングを個人向けに「血液検査解析プラン ¥19,800/回」「ミトフロープラン ¥9,900/月」として mitoflow40.com で提供中。法人プランはボリューム前提の優遇単価です。</p>
+  </div>
+  <div class="rfoot"><span>MitoFlow40 for Business</span><span>11 / 13</span></div>
+</div>
+
+<!-- ========= P12 ROLLOUT ========= -->
+<div class="page cyan">
+  <div class="rhead"><span><b>MitoFlow40</b> for Business</span><span>企画書</span></div>
+  <div class="sec-head"><div class="no">12</div><div class="en">ROLLOUT</div><div class="jp">導入ロードマップ</div></div>
+  <div class="body">
+    <div class="card soft" style="margin-bottom:14px"><p style="font-size:10pt">いきなり全社に展開するのではなく、<b>希望する部署の小規模トライアルから始められる3フェーズ設計</b>です。まず一部で「社員の受け止め」と「運用のしやすさ」を確かめ、手応えを見ながら段階的に広げていく。人事にとっても稟議を通しやすく、リスクを抱えずに始められる進め方を前提にしています。</p></div>
+    <div class="htl three" style="margin-bottom:16px">
+      <div class="node"><div class="dot">1</div><div class="when">1期目（最初の半年）｜〜10名</div><h4>スモールスタート</h4><p>経営層や希望者ではじめの半年プログラムを一巡。社員の受け止め・運用負荷・変化の手応えを検証します。</p></div>
+      <div class="node"><div class="dot">2</div><div class="when">2期目（翌年度）｜〜30名</div><h4>健診に合わせて部署展開</h4><p>年次健診のタイミングに合わせて対象部署へ拡大。データ連携と同意取得のフローを社内の定番として定着させます。</p></div>
+      <div class="node"><div class="dot">3</div><div class="when">3期目〜｜30名以上</div><h4>全社の年次プログラムに</h4><p>健診とセットの定例プログラムとして全社化。匿名・集計レポートで組織全体の健康傾向を毎年定点観測します。</p></div>
+    </div>
+    <p style="font-size:9pt;color:var(--muted);margin:-6px 2px 14px;line-height:1.7">※ 上記はあくまで標準的な進め方の一例です。健診の時期・組織の規模・優先したい課題に応じて、<b style="color:var(--ink)">チームや会社に合わせたオーダーメイドのプランニングも可能</b>です。導入相談の際にご要望をお聞かせください。</p>
+    <div class="card" style="border-style:solid;margin-top:6px"><p style="font-size:9pt;line-height:1.75"><b>データの取り扱いについて。</b>健診データはすべて本人の同意を得たうえで連携し、目的外には利用しません。個別の解析レポートは<b>本人のみが個別URLで閲覧</b>でき、上司や人事が個人の結果を見ることはありません。会社に共有されるのは、部署単位などで<b>個人が特定されない匿名・集計形式のレポート</b>に限定します（規模プランのオプション）。退職された方のデータは本人の希望に応じて削除に対応します。健康情報という機微なデータだからこそ、「誰が・何を・どこまで見られるか」を最初に明確にしたうえで運用します。</p></div>
+  </div>
+  <div class="rfoot"><span>MitoFlow40 for Business</span><span>12 / 13</span></div>
+</div>
+
+<!-- ========= P13 CONTACT ========= -->
+<div class="page sky">
+  <div class="rhead"><span><b>MitoFlow40</b> for Business</span><span>企画書</span></div>
+  <div class="sec-head"><div class="no">13</div><div class="en">CONTACT</div><div class="jp">導入効果とお問い合わせ</div></div>
+  <img class="deco" src="assets/contact-illustration-right.png" style="width:60mm;right:-10mm;top:40mm;opacity:.5">
+  <div class="body">
+    <div class="card soft" style="margin-bottom:14px"><p class="lead" style="font-size:10pt">“福利厚生費”ではなく、生産性への投資として。社員一人ひとりのエネルギーの総和が、組織のパフォーマンスになります。</p></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="card soft" style="padding:12px 16px"><b style="font-family:var(--font-head);font-size:9.5pt">採用・定着</b><p style="font-size:8.6pt;color:var(--muted);margin-top:3px;line-height:1.55">健康に本気な会社という差別化</p></div>
+      <div class="card soft" style="padding:12px 16px"><b style="font-family:var(--font-head);font-size:9.5pt">健康経営</b><p style="font-size:8.6pt;color:var(--muted);margin-top:3px;line-height:1.55">認定申請で語れる打ち手</p></div>
+      <div class="card soft" style="padding:12px 16px"><b style="font-family:var(--font-head);font-size:9.5pt">低コスト</b><p style="font-size:8.6pt;color:var(--muted);margin-top:3px;line-height:1.55">既存データ活用で新規採血なし</p></div>
+      <div class="card soft" style="padding:12px 16px"><b style="font-family:var(--font-head);font-size:9.5pt">社会的意義</b><p style="font-size:8.6pt;color:var(--muted);margin-top:3px;line-height:1.55">医療費増大時代の予防投資という意思表示</p></div>
+    </div>
+    <div class="cbox">
+      <h3>まずは、無料の導入相談から。</h3>
+      <p>貴社の人数・健診スケジュール・課題に合わせて、最適なプランと概算をご提案します。</p>
+      <div class="cinfo">
+        <div>サービス<br><b>MitoFlow40 for Business</b></div>
+        <div>担当<br><b>小林 大介</b></div>
+        <div>Mail<br><b>info@mitoflow40.com</b></div>
+        <div>Web<br><b>mitoflow40.com</b></div>
+      </div>
+    </div>
+  </div>
+  <div class="rfoot"><span>MitoFlow40 for Business ／ 2026.07</span><span>13 / 13</span></div>
+</div>
+
+</body>
+</html>

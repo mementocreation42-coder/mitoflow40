@@ -4,22 +4,22 @@ import FadeOnScroll from './FadeOnScroll';
 
 const forYouItems = [
     {
-        image: '/images/for-you-recovery.png',
+        image: '/images/for-you/for-you-recovery.png',
         alt: 'Recovery',
         text: '40代に入ってから急に、以前のような回復力を感じられなくなった。',
     },
     {
-        image: '/images/for-you-wellness.png',
+        image: '/images/for-you/for-you-wellness.png',
         alt: 'Unexplained Discomfort',
         text: '健康診断では問題ないのに、なんとなく不調・違和感を日々感じている。',
     },
     {
-        image: '/images/for-you-business.png',
+        image: '/images/for-you/for-you-business.png',
         alt: 'Business Performance',
         text: '仕事のパフォーマンスを維持・向上させたいビジネスパーソン。',
     },
     {
-        image: '/images/for-you-science.png',
+        image: '/images/for-you/for-you-science.png',
         alt: 'Science Approach',
         text: '流行りのダイエットや健康法に振り回されず、本質的なアプローチを求めている。',
     },
@@ -81,7 +81,7 @@ export default function ForYou() {
 
             {/* Background Illustration - Bottom Left (New) */}
             <Image
-                src="/images/for-you-illustration-bl.png"
+                src="/images/for-you/for-you-illustration-bl.png"
                 alt=""
                 width={300}
                 height={300}

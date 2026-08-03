@@ -71,7 +71,7 @@ export default function About() {
 
             {/* Background Illustration */}
             <Image
-                src="/images/about-illustration-bg.png"
+                src="/images/about/about-illustration-bg.png"
                 alt=""
                 width={450}
                 height={450}

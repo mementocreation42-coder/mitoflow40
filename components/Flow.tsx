@@ -49,7 +49,7 @@ export default function Flow() {
         <section id="flow" className="relative py-24 bg-[#FFB37B] border-t border-[#1A1A1A] overflow-hidden">
             {/* Background Illustration - Middle Left (Session/Practice Step) */}
             <Image
-                src="/images/flow-illustration-practice.png"
+                src="/images/flow/flow-illustration-practice.png"
                 alt=""
                 width={300}
                 height={300}
@@ -58,7 +58,7 @@ export default function Flow() {
 
             {/* Background Illustration - Bottom Right (Feedback/2nd Session Step) */}
             <Image
-                src="/images/flow-illustration-feedback.png"
+                src="/images/flow/flow-illustration-feedback.png"
                 alt=""
                 width={300}
                 height={300}

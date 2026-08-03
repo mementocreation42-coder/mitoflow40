@@ -68,28 +68,6 @@ const labelStyle: React.CSSProperties = {
   textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600,
 };
 
-const toolbarBtnStyle: React.CSSProperties = {
-  padding: '5px 10px', background: '#1e1e1e', border: '1px solid #2a2a2a',
-  borderRadius: 6, color: '#aaa', cursor: 'pointer', fontSize: 12,
-  whiteSpace: 'nowrap', lineHeight: 1,
-};
-
-// プレビュー用CSS
-const PREVIEW_CSS = `
-  .preview-body { font-family: "Noto Sans JP", sans-serif; font-size: 15px; line-height: 1.9; color: #222; }
-  .preview-body h2 { font-size: 20px; font-weight: 700; margin: 36px 0 12px; padding-bottom: 8px; border-bottom: 2px solid #e5e5e5; color: #111; }
-  .preview-body h3 { font-size: 17px; font-weight: 700; margin: 28px 0 10px; color: #222; }
-  .preview-body p { margin: 0 0 18px; }
-  .preview-body ul, .preview-body ol { margin: 16px 0; padding-left: 24px; }
-  .preview-body ul { list-style: disc; }
-  .preview-body ol { list-style: decimal; }
-  .preview-body li { margin-bottom: 6px; line-height: 1.8; }
-  .preview-body blockquote { margin: 24px 0; padding: 14px 20px; border-left: 3px solid #ccc; background: #f8f8f8; color: #555; font-style: italic; border-radius: 0 6px 6px 0; }
-  .preview-body strong { font-weight: 700; }
-  .preview-body em { font-style: italic; }
-  .preview-body img { max-width: 100%; border-radius: 8px; margin: 16px 0; display: block; }
-`;
-
 export default function PostEditor({ categories, postId, defaultValues }: PostEditorProps) {
   const router = useRouter();
   const isEdit = !!postId;
@@ -105,15 +83,16 @@ export default function PostEditor({ categories, postId, defaultValues }: PostEd
     defaultValues?.featuredImage ?? null
   );
   const [uploadedImages, setUploadedImages] = useState<{ url: string; id: number }[]>([]);
-  const [uploading, setUploading] = useState(false);
+  const [, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [isDragging, setIsDragging] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
+  const showPreview = true;
   const [showProductModal, setShowProductModal] = useState(false);
   const [showLinkModal, setShowLinkModal] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
   const [mediaPicker, setMediaPicker] = useState<null | 'featured' | 'body'>(null);
+  const [slashQuery, setSlashQuery] = useState<string | null>(null);
 
   const featuredRef = useRef<HTMLInputElement>(null);
   const bodyImageRef = useRef<HTMLInputElement>(null);
@@ -201,20 +180,56 @@ export default function PostEditor({ categories, postId, defaultValues }: PostEd
     if (files.length) await uploadAndInsert(files);
   }
 
-  function wrapOrInsert(before: string, after: string = '') {
+  function handleBodyChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    const value = e.target.value;
+    const cursor = e.target.selectionStart;
+    const lineStart = value.lastIndexOf('\n', cursor - 1) + 1;
+    const currentLine = value.slice(lineStart, cursor);
+    setBody(value);
+    cursorPosRef.current = cursor;
+    setSlashQuery(currentLine.startsWith('/') ? currentLine.slice(1).toLowerCase() : null);
+  }
+
+  function insertSlashCommand(before: string, after = '') {
     const ta = textareaRef.current;
     if (!ta) return;
-    const start = ta.selectionStart;
-    const end = ta.selectionEnd;
-    const selected = body.slice(start, end);
-    const replacement = before + (selected || '') + after;
-    setBody(body.slice(0, start) + replacement + body.slice(end));
+    const cursor = ta.selectionStart;
+    const lineStart = body.lastIndexOf('\n', cursor - 1) + 1;
+    const replacement = before + after;
+    setBody(body.slice(0, lineStart) + replacement + body.slice(cursor));
+    setSlashQuery(null);
     setTimeout(() => {
-      const cur = selected ? start + replacement.length : start + before.length;
-      ta.selectionStart = ta.selectionEnd = cur;
+      const nextCursor = lineStart + before.length;
+      ta.selectionStart = ta.selectionEnd = nextCursor;
+      cursorPosRef.current = nextCursor;
       ta.focus();
     }, 0);
   }
+
+  function runSlashAction(action: () => void) {
+    const ta = textareaRef.current;
+    if (!ta) return;
+    const cursor = ta.selectionStart;
+    const lineStart = body.lastIndexOf('\n', cursor - 1) + 1;
+    setBody(body.slice(0, lineStart) + body.slice(cursor));
+    setSlashQuery(null);
+    cursorPosRef.current = lineStart;
+    setTimeout(action, 0);
+  }
+
+  const slashCommands = [
+    { label: '見出し H2', keywords: 'h2 見出し', action: () => insertSlashCommand('<h2>', '</h2>') },
+    { label: '小見出し H3', keywords: 'h3 小見出し', action: () => insertSlashCommand('<h3>', '</h3>') },
+    { label: '太字', keywords: 'bold strong 太字', action: () => insertSlashCommand('<strong>', '</strong>') },
+    { label: '斜体', keywords: 'italic em 斜体', action: () => insertSlashCommand('<em>', '</em>') },
+    { label: '箇条書きリスト', keywords: 'ul 箇条書き リスト', action: () => insertSlashCommand('<ul>\n<li>', '</li>\n</ul>') },
+    { label: '番号付きリスト', keywords: 'ol 番号 リスト', action: () => insertSlashCommand('<ol>\n<li>', '</li>\n</ol>') },
+    { label: '引用', keywords: 'blockquote 引用', action: () => insertSlashCommand('<blockquote>', '</blockquote>') },
+    { label: '画像をアップロード', keywords: 'image photo 画像 写真 アップロード', action: () => runSlashAction(() => bodyImageRef.current?.click()) },
+    { label: 'メディアから画像を選択', keywords: 'media image メディア 画像', action: () => runSlashAction(() => setMediaPicker('body')) },
+    { label: 'リンクを挿入', keywords: 'link url リンク', action: () => runSlashAction(() => { setLinkUrl(''); setShowLinkModal(true); }) },
+    { label: '商品カードを挿入', keywords: 'product shop 商品 カード', action: () => runSlashAction(() => setShowProductModal(true)) },
+  ].filter((command) => slashQuery === null || command.keywords.includes(slashQuery));
 
 
   function buildContent(): string {
@@ -297,102 +312,61 @@ export default function PostEditor({ categories, postId, defaultValues }: PostEd
         />
       </div>
 
-      {/* アイキャッチ */}
-      <div>
-        <label style={labelStyle}>アイキャッチ画像</label>
-        {featuredImage ? (
-          <div style={{ position: 'relative', display: 'inline-block' }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={featuredImage.url} alt="" style={{ width: 200, height: 120, objectFit: 'cover', borderRadius: 8 }} />
-            <button type="button" onClick={() => setFeaturedImage(null)} style={{
-              position: 'absolute', top: 6, right: 6, background: 'rgba(0,0,0,0.7)',
-              border: 'none', borderRadius: '50%', width: 24, height: 24,
-              color: '#fff', cursor: 'pointer', fontSize: 14, lineHeight: 1,
-            }}>×</button>
-          </div>
-        ) : (
-          <div style={{ display: 'flex', gap: 8, alignItems: 'stretch' }}>
-            <div onClick={() => featuredRef.current?.click()} style={{
-              width: 200, height: 120, background: '#1a1a1a', border: '2px dashed #2a2a2a',
-              borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer', color: '#555', fontSize: 13,
-            }}>
-              {uploading ? 'アップロード中...' : '+ 新規アップロード'}
-            </div>
-            <button type="button" onClick={() => setMediaPicker('featured')} style={{
-              padding: '0 18px', background: '#1a1a1a', border: '1px solid #2a2a2a',
-              borderRadius: 8, color: '#aaa', cursor: 'pointer', fontSize: 12, whiteSpace: 'nowrap',
-            }}>
-              🖼 メディアから選択
-            </button>
-          </div>
-        )}
-        <input ref={featuredRef} type="file" accept="image/*" onChange={handleFeaturedUpload} style={{ display: 'none' }} />
-      </div>
-
-      {/* カテゴリ */}
-      <div>
-        <label style={labelStyle}>カテゴリ</label>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          {categories.map((cat) => (
-            <button key={cat.id} type="button" onClick={() => toggleCat(cat.id)} style={{
-              padding: '6px 14px', borderRadius: 20, fontSize: 13, cursor: 'pointer',
-              border: selectedCats.includes(cat.id) ? '1px solid #22c55e' : '1px solid #2a2a2a',
-              background: selectedCats.includes(cat.id) ? '#22c55e20' : '#1a1a1a',
-              color: selectedCats.includes(cat.id) ? '#22c55e' : '#888',
-            }}>{cat.name}</button>
-          ))}
+      {/* 公開日時 / ステータス */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+        <div>
+          <label style={labelStyle}>公開日時</label>
+          <input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} style={inputStyle} />
+        </div>
+        <div>
+          <label style={labelStyle}>ステータス</label>
+          <select value={status} onChange={(e) => setStatus(e.target.value as 'publish' | 'draft')}
+            style={{ ...inputStyle, cursor: 'pointer' }}>
+            <option value="publish">公開</option>
+            <option value="draft">下書き</option>
+          </select>
         </div>
       </div>
 
       {/* 本文 */}
       <div>
-        {/* ツールバー */}
-        <div style={{
-          display: 'flex', gap: 6, flexWrap: 'wrap', padding: '8px 10px',
-          background: '#141414', border: '1px solid #2a2a2a', borderBottom: 'none',
-          borderRadius: '8px 8px 0 0', alignItems: 'center',
-        }}>
-          <span style={{ fontSize: 11, color: '#444', marginRight: 2 }}>見出し</span>
-          <button type="button" style={toolbarBtnStyle} onClick={() => wrapOrInsert('<h2>', '</h2>')}>H2</button>
-          <button type="button" style={toolbarBtnStyle} onClick={() => wrapOrInsert('<h3>', '</h3>')}>H3</button>
-          <span style={{ width: 1, height: 18, background: '#2a2a2a', margin: '0 4px' }} />
-          <span style={{ fontSize: 11, color: '#444', marginRight: 2 }}>書式</span>
-          <button type="button" style={{ ...toolbarBtnStyle, fontWeight: 700 }} onClick={() => wrapOrInsert('<strong>', '</strong>')}>B</button>
-          <button type="button" style={{ ...toolbarBtnStyle, fontStyle: 'italic' }} onClick={() => wrapOrInsert('<em>', '</em>')}>I</button>
-          <span style={{ width: 1, height: 18, background: '#2a2a2a', margin: '0 4px' }} />
-          <span style={{ fontSize: 11, color: '#444', marginRight: 2 }}>リスト</span>
-          <button type="button" style={toolbarBtnStyle} onClick={() => wrapOrInsert('<ul>\n<li>', '</li>\n</ul>')}>UL</button>
-          <button type="button" style={toolbarBtnStyle} onClick={() => wrapOrInsert('<ol>\n<li>', '</li>\n</ol>')}>OL</button>
-          <span style={{ width: 1, height: 18, background: '#2a2a2a', margin: '0 4px' }} />
-          <button type="button" style={toolbarBtnStyle} onClick={() => wrapOrInsert('<blockquote>', '</blockquote>')}>❝</button>
-          <span style={{ width: 1, height: 18, background: '#2a2a2a', margin: '0 4px' }} />
-          <button type="button" style={{ ...toolbarBtnStyle, color: uploading ? '#444' : '#aaa' }}
-            disabled={uploading} onClick={() => bodyImageRef.current?.click()} title="新規アップロード">
-            {uploading ? '⏳' : '📷'}
-          </button>
-          <button type="button" style={toolbarBtnStyle} onClick={() => setMediaPicker('body')} title="メディアライブラリから選択">
-            🖼
-          </button>
-          <button type="button" style={toolbarBtnStyle} onClick={() => { setLinkUrl(''); setShowLinkModal(true); }}>🔗</button>
-          <button type="button" style={toolbarBtnStyle} title="商品カードを挿入（画像アップロード対応）" onClick={() => setShowProductModal(true)}>🛒</button>
-        </div>
-
         {/* テキストエリア */}
         <div onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} style={{ position: 'relative' }}>
           <textarea
-            ref={textareaRef} value={body} onChange={(e) => setBody(e.target.value)}
+            ref={textareaRef} value={body} onChange={handleBodyChange}
+            onKeyDown={(e) => { if (e.key === 'Escape') setSlashQuery(null); }}
             placeholder={'本文を入力...\n\n段落は空行で区切ります。\n画像はドラッグ＆ドロップで挿入できます。'}
             rows={22}
             style={{
               ...inputStyle, resize: 'vertical', lineHeight: 1.8,
               fontFamily: '"Noto Sans JP", sans-serif',
-              borderRadius: '0 0 8px 8px',
+              borderRadius: 8,
               borderColor: isDragging ? '#22c55e' : '#2a2a2a',
               boxShadow: isDragging ? '0 0 0 2px #22c55e30' : 'none',
               transition: 'border-color 0.15s',
             }}
           />
+          {slashQuery !== null && (
+            <div style={{
+              position: 'absolute', zIndex: 20, top: 12, left: 12, width: 220,
+              padding: 6, background: '#fff', border: '1px solid #bfcac5', borderRadius: 10,
+              boxShadow: '0 12px 32px rgba(26,26,26,.16)',
+            }}>
+              <p style={{ margin: '3px 8px 6px', color: '#7a8580', fontSize: 10 }}>ブロックを選択</p>
+              {slashCommands.length > 0 ? slashCommands.map((command) => (
+                <button
+                  key={command.label}
+                  type="button"
+                  onClick={command.action}
+                  style={{
+                    display: 'block', width: '100%', padding: '8px 10px', textAlign: 'left',
+                    background: '#fff', border: 'none', borderRadius: 6, color: '#1a1a1a',
+                    fontSize: 12, cursor: 'pointer',
+                  }}
+                >{command.label}</button>
+              )) : <p style={{ margin: 8, color: '#888', fontSize: 11 }}>一致する項目がありません</p>}
+            </div>
+          )}
           {isDragging && (
             <div style={{
               position: 'absolute', inset: 0, background: 'rgba(34,197,94,0.08)',
@@ -476,23 +450,18 @@ export default function PostEditor({ categories, postId, defaultValues }: PostEd
         </div>
       )}
 
-      {/* 公開日時 / ステータス */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-        <div>
-          <label style={labelStyle}>公開日時</label>
-          <input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} style={inputStyle} />
-        </div>
-        <div>
-          <label style={labelStyle}>ステータス</label>
-          <select value={status} onChange={(e) => setStatus(e.target.value as 'publish' | 'draft')}
-            style={{ ...inputStyle, cursor: 'pointer' }}>
-            <option value="publish">公開</option>
-            <option value="draft">下書き</option>
-          </select>
-        </div>
-      </div>
     </div>
   );
+
+  // 現在の下書き（未保存含む）を localStorage に書き出し、新しいタブでプレビューを開く
+  const openPreviewTab = () => {
+    try {
+      localStorage.setItem('mito_post_preview', JSON.stringify({
+        title, date, body, excerpt, featuredImage, selectedCats, categories, uploadedImages,
+      }));
+    } catch { /* localStorage 不可でも開くだけ試みる */ }
+    window.open('/admin/preview', '_blank', 'noopener');
+  };
 
   // ===== プレビュー部分（右カラム） =====
   const previewPanel = (
@@ -505,43 +474,38 @@ export default function PostEditor({ categories, postId, defaultValues }: PostEd
       selectedCats={selectedCats}
       categories={categories}
       uploadedImages={uploadedImages}
+      onUploadFeatured={() => featuredRef.current?.click()}
+      onChooseFeatured={() => setMediaPicker('featured')}
+      onRemoveFeatured={() => setFeaturedImage(null)}
+      onToggleCategory={toggleCat}
     />
   );
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="admin-post-editor">
+      <input ref={featuredRef} type="file" accept="image/*" onChange={handleFeaturedUpload} style={{ display: 'none' }} />
       {/* ── トップバー（追従） ── */}
-      <div style={{
-        position: 'sticky', top: 56, zIndex: 40,
-        background: 'rgba(10,10,10,0.92)', backdropFilter: 'blur(12px)',
-        borderBottom: '1px solid #1e1e1e',
-        margin: '0 -32px 24px', padding: '10px 32px',
+      <div className="admin-editor-topbar" style={{
+        position: 'fixed', top: 0, right: 8, zIndex: 60, height: 56,
+        background: 'transparent',
+        margin: 0, padding: 0,
         display: 'flex', justifyContent: 'flex-end', alignItems: 'center',
         flexWrap: 'wrap', gap: 10,
       }}>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          {/* プレビュー切り替え */}
-          <button
-            type="button"
-            onClick={() => setShowPreview((v) => !v)}
-            style={{
-              padding: '9px 16px', borderRadius: 8, fontSize: 13, cursor: 'pointer',
-              border: showPreview ? '1px solid #22c55e' : '1px solid #2a2a2a',
-              background: showPreview ? '#22c55e15' : '#1a1a1a',
-              color: showPreview ? '#22c55e' : '#888',
-              display: 'flex', alignItems: 'center', gap: 6,
-            }}
-          >
-            <span style={{ fontSize: 14 }}>{showPreview ? '◧' : '▣'}</span>
-            {showPreview ? 'プレビューON' : 'プレビュー'}
-          </button>
-
           <a href="/admin" style={{
             padding: '9px 18px', background: 'transparent', border: '1px solid #2a2a2a',
             borderRadius: 8, color: '#555', textDecoration: 'none', fontSize: 13,
           }}>
             キャンセル
           </a>
+
+          <button type="button" onClick={openPreviewTab} style={{
+            padding: '9px 18px', background: 'transparent', border: '1px solid #2a2a2a',
+            borderRadius: 8, color: '#8ab4f8', fontSize: 13, cursor: 'pointer',
+          }}>
+            プレビュー ↗
+          </button>
 
           <button type="button" disabled={saving} onClick={() => savePost('draft')} style={{
             padding: '9px 18px', background: saving ? '#1a1a1a' : '#1e2a1e',
@@ -577,6 +541,7 @@ export default function PostEditor({ categories, postId, defaultValues }: PostEd
           style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}
         >
           <div
+            className="admin-editor-modal"
             onClick={(e) => e.stopPropagation()}
             style={{ background: '#141414', border: '1px solid #2a2a2a', borderRadius: 12, padding: 24, width: '100%', maxWidth: 440, color: '#e5e5e5' }}
           >
@@ -646,10 +611,10 @@ export default function PostEditor({ categories, postId, defaultValues }: PostEd
       />
 
       {/* ── メインレイアウト ── */}
-      <div style={{
+      <div className="admin-editor-grid" style={{
         display: 'grid',
-        gridTemplateColumns: showPreview ? '1fr 1fr' : '1fr',
-        gap: 24,
+        gridTemplateColumns: showPreview ? 'minmax(0, 1fr) minmax(0, 1fr)' : '1fr',
+        gap: 10,
         alignItems: 'start',
       }}>
         {editorPanel}

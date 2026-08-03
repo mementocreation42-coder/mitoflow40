@@ -8,6 +8,7 @@ import { organs } from '@/lib/organs';
 import { hormones } from '@/lib/hormones';
 import { symptoms } from '@/lib/symptoms';
 import { essays } from '@/lib/essays';
+import { staticPages } from '@/lib/pages';
 
 const BASE_URL = 'https://mitoflow40.com';
 
@@ -72,100 +73,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.6,
     }));
 
-    // 固定ページ（トップ・ハブ・コンセプト解説など）
-    const staticPages: { path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency'] }[] = [
-        { path: '', priority: 1, changeFrequency: 'daily' },
-        { path: '/journal', priority: 0.9, changeFrequency: 'daily' },
-        { path: '/check', priority: 0.9, changeFrequency: 'monthly' },
-        { path: '/sample', priority: 0.7, changeFrequency: 'monthly' },
-        { path: '/library', priority: 0.8, changeFrequency: 'weekly' },
-        { path: '/health-philosophy', priority: 0.8, changeFrequency: 'monthly' },
-        { path: '/medical-roles', priority: 0.7, changeFrequency: 'monthly' },
-        { path: '/mission', priority: 0.7, changeFrequency: 'monthly' },
-        { path: '/precision-nutrition', priority: 0.8, changeFrequency: 'monthly' },
-        { path: '/molecular-nutrition', priority: 0.8, changeFrequency: 'monthly' },
-        { path: '/nutrition-literacy', priority: 0.8, changeFrequency: 'monthly' },
-        { path: '/nutrition-history', priority: 0.7, changeFrequency: 'monthly' },
-        { path: '/thoughts', priority: 0.7, changeFrequency: 'monthly' },
-        { path: '/books', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/references', priority: 0.5, changeFrequency: 'monthly' },
-        // カタログ一覧
-        { path: '/genes', priority: 0.7, changeFrequency: 'monthly' },
-        { path: '/nutrients', priority: 0.7, changeFrequency: 'monthly' },
-        { path: '/biomarkers', priority: 0.7, changeFrequency: 'monthly' },
-        { path: '/foods', priority: 0.7, changeFrequency: 'monthly' },
-        { path: '/caution-foods', priority: 0.7, changeFrequency: 'monthly' },
-        { path: '/organs', priority: 0.7, changeFrequency: 'monthly' },
-        { path: '/hormones', priority: 0.7, changeFrequency: 'monthly' },
-        { path: '/symptoms', priority: 0.8, changeFrequency: 'monthly' },
-        { path: '/supplements', priority: 0.7, changeFrequency: 'monthly' },
-        // からだのしくみ
-        { path: '/energy', priority: 0.7, changeFrequency: 'monthly' },
-        { path: '/mitochondria', priority: 0.8, changeFrequency: 'monthly' },
-        { path: '/glycolysis', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/tca-cycle', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/electron-transport-chain', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/atp', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/ketones', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/digestion', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/gut-health', priority: 0.7, changeFrequency: 'monthly' },
-        { path: '/microbiome', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/gut-troubles', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/wheat', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/rice', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/fasting', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/cgm', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/diabetes', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/gut-brain', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/stress', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/mood-nutrition', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/anxiety', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/migraine', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/mindfulness', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/spirituality', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/sound', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/smell', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/modern-diseases', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/autophagy', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/methylation', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/blood-sugar', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/autonomic-nervous-system', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/circadian-rhythm', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/sleep', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/exercise', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/stimulants', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/caffeine', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/sunlight', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/water', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/detox', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/reduce-toxins', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/mycotoxins', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/nutrient-density', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/calories', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/enzymes', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/acid-alkaline', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/food-journey', priority: 0.7, changeFrequency: 'monthly' },
-        { path: '/fatty-liver', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/sarcopenia', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/mental-health', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/periodontal-disease', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/library/map', priority: 0.5, changeFrequency: 'monthly' },
-        { path: '/wearables', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/psychedelics-research', priority: 0.4, changeFrequency: 'monthly' },
-        { path: '/cannabis', priority: 0.4, changeFrequency: 'monthly' },
-        { path: '/counterculture', priority: 0.4, changeFrequency: 'monthly' },
-        { path: '/health-counterculture', priority: 0.6, changeFrequency: 'monthly' },
-        // 老化の3大ルート
-        { path: '/oxidative-stress', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/glycation', priority: 0.6, changeFrequency: 'monthly' },
-        { path: '/inflammation', priority: 0.6, changeFrequency: 'monthly' },
-        // その他
-        { path: '/author', priority: 0.5, changeFrequency: 'yearly' },
-        { path: '/newsletter', priority: 0.5, changeFrequency: 'monthly' },
-    ];
-
+    // 固定ページ（トップ・ハブ・コンセプト解説など）は単一レジストリ lib/pages.ts から。
+    // ページ追加は pages.ts に1行足すだけで、sitemap・横断検索の双方へ自動反映される。
     const staticUrls = staticPages.map((p) => ({
-        url: `${BASE_URL}${p.path}`,
+        url: p.path === '/' ? BASE_URL : `${BASE_URL}${p.path}`,
         lastModified: now,
         changeFrequency: p.changeFrequency,
         priority: p.priority,

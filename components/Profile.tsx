@@ -20,7 +20,7 @@ export default function Profile() {
                         <div className="flex flex-col items-center">
                             <div className="w-full aspect-square rounded-xl overflow-hidden">
                                 <Image
-                                    src="/images/profile.jpg"
+                                    src="/images/misc/profile.jpg"
                                     alt="Daisuke Kobayashi"
                                     width={300}
                                     height={300}

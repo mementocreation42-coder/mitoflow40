@@ -5,6 +5,7 @@ const footerLinks = [
     { href: '/sample', label: 'SAMPLE ANALYSIS' },
     { href: '/library', label: 'LIBRARY' },
     { href: '/journal', label: 'JOURNAL' },
+    { href: '/podcast', label: 'PODCAST' },
     { href: '/#contact', label: 'CONTACT' },
 ];
 
@@ -49,6 +50,11 @@ export default function Footer() {
                 {/* Copyright */}
                 <div className="text-white text-sm">
                     &copy; 2026 Mitoflow40. All Rights Reserved.
+                </div>
+
+                {/* 管理者用（ジャーナル・クライアントへ） */}
+                <div className="mt-4">
+                    <Link href="/admin" className="footer-link text-[11px] opacity-40 hover:opacity-80">ジャーナル・クライアント</Link>
                 </div>
             </div>
         </footer>
