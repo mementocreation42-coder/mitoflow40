@@ -1,14 +1,20 @@
 import { list, put, del } from '@vercel/blob';
 import { createHmac } from 'node:crypto';
+import { memo, invalidate, TTL } from './req-cache';
 
 // クライアントから届いた健康情報（/api/intake が保存したもの）を、
 // 管理画面から読み出すためのヘルパー。保存先は Vercel Blob の intake/<id>/… 。
+
+// 添付の種類。フォームの枠（血液検査／Apple Watch 等のウェアラブル）で決まる。旧データは undefined（= その他）
+export type IntakeFileKind = 'blood' | 'device' | 'other';
+export const FILE_KIND_LABEL: Record<IntakeFileKind, string> = { blood: '血液検査', device: 'Apple Watch・ウェアラブル', other: 'その他' };
 
 export interface IntakeFile {
     name: string;
     url: string;
     size: number;
     type: string;
+    kind?: IntakeFileKind;
 }
 
 export interface IntakeSubmission {
@@ -186,8 +192,11 @@ export async function listSubmissions(): Promise<{ submissionId: string; jsonUrl
     return records;
 }
 
-// 一覧＋本文を読み込む（カード表示用に氏名などが必要なため）
-export async function listSubmissionsWithMeta(): Promise<IntakeSubmission[]> {
+// 一覧＋本文を読み込む（カード表示用に氏名などが必要なため）。短期キャッシュ（書き込み時に invalidate）
+export function listSubmissionsWithMeta(): Promise<IntakeSubmission[]> {
+    return memo('intake:submissions', TTL.list, listSubmissionsWithMetaUncached);
+}
+async function listSubmissionsWithMetaUncached(): Promise<IntakeSubmission[]> {
     const rows = await listSubmissions();
     const out = await Promise.all(
         rows.map(async (r) => {
@@ -297,9 +306,12 @@ export async function getClient(clientId: string): Promise<IntakeClient | null> 
     return clients.find((c) => c.clientId === clientId) || null;
 }
 
-// ===== 解析レポートの紐付け =====
-// クライアント（clientId）に、既存のレポート基盤 /r/<token> のトークンを結びつける。
+// ===== 解析レポートの紐付け（履歴つき）=====
+// クライアント（clientId）に、レポート基盤 /r/<token> のトークンを結びつける。
+// 継続の顧客は解析が積み上がるので、最新1つではなく履歴として持つ。
 // 保存先: intake/_reports/<clientId>.json（固定パス）
+//   { token, updatedAt,            … 最新（旧フォーマット互換）
+//     history: [{ token, addedAt, label?, analystToken? }, …] }   … 新しい順
 
 const REPORTS_PREFIX = 'intake/_reports/';
 
@@ -308,42 +320,126 @@ export interface ClientReport {
     updatedAt: string;
 }
 
+export interface ClientReportEntry {
+    token: string;          // お客様用 /r/<token>
+    addedAt: string;
+    label?: string;         // 例: 2026-08-24 の解析
+    analystToken?: string;  // 解析者用 /r/<analystToken>/analyst（お客様には見せない）
+}
+
+export interface ClientReports {
+    latest: ClientReport | null;
+    history: ClientReportEntry[];
+}
+
+interface ReportRecord extends ClientReport {
+    history?: ClientReportEntry[];
+}
+
 // URL・/r/xxxx・素のトークンのいずれからでもトークンだけを取り出す
 export function extractReportToken(input: string): string | null {
     const last = input.trim().split('?')[0].split('/').filter(Boolean).pop() || '';
     return /^[a-zA-Z0-9_-]{8,64}$/.test(last) ? last : null;
 }
 
-export async function getClientReport(clientId: string): Promise<ClientReport | null> {
+async function readReportRecord(clientId: string): Promise<{ record: ReportRecord; url: string } | null> {
     const t = token();
-    if (!t) return null;
-    if (!/^[a-f0-9]{24}$/.test(clientId)) return null;
+    if (!t || !/^[a-f0-9]{24}$/.test(clientId)) return null;
     const { blobs } = await list({ prefix: `${REPORTS_PREFIX}${clientId}`, token: t });
     const b = blobs.find((x) => x.pathname.endsWith(`${clientId}.json`));
     if (!b) return null;
     try {
         const res = await fetch(b.url, { cache: 'no-store' });
         if (!res.ok) return null;
-        return (await res.json()) as ClientReport;
+        return { record: (await res.json()) as ReportRecord, url: b.url };
     } catch {
         return null;
     }
 }
 
-export async function setClientReport(clientId: string, reportToken: string): Promise<void> {
+function historyOf(record: ReportRecord | null): ClientReportEntry[] {
+    if (!record) return [];
+    const h = record.history ?? (record.token ? [{ token: record.token, addedAt: record.updatedAt }] : []);
+    return [...h].sort((a, b) => b.addedAt.localeCompare(a.addedAt));
+}
+
+async function writeReportRecord(clientId: string, history: ClientReportEntry[]): Promise<void> {
+    const t = token();
+    if (!t) throw new Error('storage not configured');
+    invalidate('intake');
+    const latest = history[0];
+    const record: ReportRecord = { token: latest?.token ?? '', updatedAt: latest?.addedAt ?? new Date().toISOString(), history };
+    await put(`${REPORTS_PREFIX}${clientId}.json`, JSON.stringify(record), {
+        access: 'public', token: t, addRandomSuffix: false, contentType: 'application/json', allowOverwrite: true,
+    });
+}
+
+// 全クライアントのレポート履歴を1回の list で読む（顧客詳細・一覧の共通ソース。memo）
+export function listAllClientReports(): Promise<Map<string, ClientReports>> {
+    return memo('intake:reports', TTL.list, async () => {
+        const t = token();
+        const out = new Map<string, ClientReports>();
+        if (!t) return out;
+        const { blobs } = await list({ prefix: REPORTS_PREFIX, token: t });
+        await Promise.all(blobs.map(async (b) => {
+            const m = b.pathname.match(/([a-f0-9]{24})\.json$/);
+            if (!m) return;
+            try {
+                const res = await fetch(b.url, { cache: 'no-store' });
+                if (!res.ok) return;
+                const history = historyOf((await res.json()) as ReportRecord);
+                out.set(m[1], { latest: history[0] ? { token: history[0].token, updatedAt: history[0].addedAt } : null, history });
+            } catch { /* skip */ }
+        }));
+        return out;
+    });
+}
+
+// 最新のレポート（互換 API）
+export async function getClientReport(clientId: string): Promise<ClientReport | null> {
+    const r = await readReportRecord(clientId);
+    const latest = historyOf(r?.record ?? null)[0];
+    return latest ? { token: latest.token, updatedAt: latest.addedAt } : null;
+}
+
+// 履歴つき
+export async function getClientReports(clientId: string): Promise<ClientReports> {
+    const r = await readReportRecord(clientId);
+    const history = historyOf(r?.record ?? null);
+    return { latest: history[0] ? { token: history[0].token, updatedAt: history[0].addedAt } : null, history };
+}
+
+// 追加（同じトークンがあれば先頭へ移してラベル等を更新）
+export async function setClientReport(clientId: string, reportToken: string, opts: { label?: string; analystToken?: string } = {}): Promise<void> {
+    if (!/^[a-f0-9]{24}$/.test(clientId)) throw new Error('invalid clientId');
+    const tok = extractReportToken(reportToken);
+    if (!tok) throw new Error('invalid report token');
+    const analystToken = opts.analystToken ? extractReportToken(opts.analystToken) ?? undefined : undefined;
+    const r = await readReportRecord(clientId);
+    const rest = historyOf(r?.record ?? null).filter((e) => e.token !== tok);
+    const prev = historyOf(r?.record ?? null).find((e) => e.token === tok);
+    const entry: ClientReportEntry = {
+        token: tok,
+        addedAt: prev?.addedAt ?? new Date().toISOString(),
+        label: (opts.label ?? prev?.label)?.trim().slice(0, 80) || undefined,
+        analystToken: analystToken ?? prev?.analystToken,
+    };
+    await writeReportRecord(clientId, [entry, ...rest].sort((a, b) => b.addedAt.localeCompare(a.addedAt)));
+}
+
+// 履歴から外す（貼り間違いなど）。空になればファイルごと消す
+export async function removeClientReport(clientId: string, reportToken: string): Promise<void> {
     const t = token();
     if (!t) throw new Error('storage not configured');
     if (!/^[a-f0-9]{24}$/.test(clientId)) throw new Error('invalid clientId');
     const tok = extractReportToken(reportToken);
     if (!tok) throw new Error('invalid report token');
-    const record: ClientReport = { token: tok, updatedAt: new Date().toISOString() };
-    await put(`${REPORTS_PREFIX}${clientId}.json`, JSON.stringify(record), {
-        access: 'public',
-        token: t,
-        addRandomSuffix: false,
-        contentType: 'application/json',
-        allowOverwrite: true,
-    });
+    const r = await readReportRecord(clientId);
+    if (!r) return;
+    const rest = historyOf(r.record).filter((e) => e.token !== tok);
+    invalidate('intake');
+    if (rest.length === 0) { await del(r.url, { token: t }); return; }
+    await writeReportRecord(clientId, rest);
 }
 
 // ===== 対応ステータス＋担当メモ（CRM）=====
@@ -358,6 +454,25 @@ export interface ClientMeta {
     status: ClientStatus;
     memo: string;
     updatedAt: string;
+}
+
+// 全クライアントの対応ステータスを1回の list で読む（一覧ページ用。N 回の list を避ける）
+export function listAllClientMetas(): Promise<Map<string, ClientMeta>> {
+    return memo('intake:metas', TTL.list, async () => {
+        const t = token();
+        const out = new Map<string, ClientMeta>();
+        if (!t) return out;
+        const { blobs } = await list({ prefix: META_PREFIX, token: t });
+        await Promise.all(blobs.map(async (b) => {
+            const m = b.pathname.match(/([a-f0-9]{24})\.json$/);
+            if (!m) return;
+            try {
+                const res = await fetch(b.url, { cache: 'no-store' });
+                if (res.ok) out.set(m[1], (await res.json()) as ClientMeta);
+            } catch { /* skip */ }
+        }));
+        return out;
+    });
 }
 
 export async function getClientMeta(clientId: string): Promise<ClientMeta | null> {
@@ -382,10 +497,12 @@ export async function setClientMeta(clientId: string, status: string, memo: stri
     if (!/^[a-f0-9]{24}$/.test(clientId)) throw new Error('invalid clientId');
     const safeStatus = (CLIENT_STATUSES as readonly string[]).includes(status) ? (status as ClientStatus) : '未対応';
     const record: ClientMeta = { status: safeStatus, memo: memo.slice(0, 4000), updatedAt: new Date().toISOString() };
+    invalidate('intake');
     await put(`${META_PREFIX}${clientId}.json`, JSON.stringify(record), {
         access: 'public', token: t, addRandomSuffix: false, contentType: 'application/json', allowOverwrite: true,
     });
 }
+
 
 // ===== 削除（本人の削除要求・重複整理に対応）=====
 
@@ -396,6 +513,7 @@ export async function deleteSubmission(submissionId: string): Promise<number> {
     if (!/^[a-z0-9-]{8,80}$/i.test(submissionId)) throw new Error('invalid submissionId');
     const { blobs } = await list({ prefix: `intake/${submissionId}/`, token: t });
     for (const b of blobs) await del(b.url, { token: t });
+    invalidate('intake');
     return blobs.length;
 }
 
@@ -427,6 +545,10 @@ export async function deleteClient(clientId: string): Promise<{ submissions: num
             deletedBlobs++;
         }
     }
+    // セルフチェックの結果（/check でメール入力時に保存）も本人のデータなので一緒に消す
+    const checks = await list({ prefix: `check/${clientId}/`, token: t });
+    for (const b of checks.blobs) { await del(b.url, { token: t }); deletedBlobs++; }
+    invalidate('intake'); invalidate('check');
     return { submissions: submissionIds.size, blobs: deletedBlobs };
 }
 

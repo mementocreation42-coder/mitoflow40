@@ -1146,6 +1146,30 @@ export default function LibraryIndex() {
                     </Link>
                 </div>
 
+                {/* 不調・現代病（病態から読む） */}
+                <div id="conditions" className="mt-10 md:mt-12 scroll-mt-24">
+                    <Link href="/conditions"
+                        className="group block rounded-2xl border border-black p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#FCE3D4' }}>
+                        <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            CONDITIONS
+                        </div>
+                        <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-2">不調・現代病を読み解く</div>
+                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3">症状の裏にある<strong>病態</strong>の側から。鉄欠乏（隠れ貧血）・インスリン抵抗性・脂肪肝・更年期……定義・歴史・細胞レベルのしくみ・確認したい血液検査・受診の目安まで、1枚ずつ丁寧に。</p>
+                        <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            見る <span className="group-hover:translate-x-1 transition-transform">→</span>
+                        </span>
+                    </Link>
+                    <Link href="/biomarkers/reader"
+                        className="group mt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all bg-white/70">
+                        <div>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>TOOL · 検査値リーダー</div>
+                            <div className="text-base md:text-lg font-bold text-[#1A1A1A]">健康診断の数値を入れて、基準値・理想値との位置を確かめる</div>
+                            <p className="text-xs text-[#1A1A1A]/70 mt-1">52項目対応・登録不要。結果は端末内にだけ保存されます。</p>
+                        </div>
+                        <span className="shrink-0 inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold text-white bg-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>使う →</span>
+                    </Link>
+                </div>
+
                 {/* 思索（〇〇とは？） */}
                 <div id="thoughts" className="mt-20 md:mt-24 scroll-mt-24">
                     <div className="mb-5 flex items-stretch gap-3">

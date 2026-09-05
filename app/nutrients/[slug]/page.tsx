@@ -5,6 +5,8 @@ import { getGeneBySlug } from '@/lib/genes';
 import { getFoodsByNutrient } from '@/lib/foods';
 import JsonLd, { medicalWebPage, breadcrumb } from '@/components/JsonLd';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import RelatedBlock from '@/components/RelatedBlock';
+import { relatedForNutrient } from '@/lib/related';
 
 export function generateStaticParams() {
     return nutrients.map((n) => ({ slug: n.slug }));
@@ -216,6 +218,9 @@ export default async function NutrientPage({ params }: { params: Promise<{ slug:
                         ))}
                     </div>
                 </section>
+
+                {/* 自動関連（食材は上で列挙済みなので除外） */}
+                <RelatedBlock groups={relatedForNutrient(n.slug).filter((g) => g.key !== 'foods')} />
 
                 {/* Disclaimer */}
                 <p className="text-xs text-[#4A4A4A]/60 leading-relaxed mb-12 p-4 bg-white/60 rounded-lg">

@@ -1,31 +1,23 @@
-import Link from "next/link";
+import NewsletterForm from "./NewsletterForm";
 
+// ジャーナル記事末尾の登録ボックス（Mitoflow40 独自配信）
 export default function JournalNewsletter() {
     return (
         <div className="my-16 rounded-2xl bg-[#1A1A1A] px-6 py-10 text-center">
-            <p className="text-xs tracking-widest text-[#41C9B4] mb-2">NEWSLETTER</p>
+            <p className="text-xs tracking-widest text-[#41C9B4] mb-2">MITOFLOW40 LETTER</p>
             <h3 className="text-xl md:text-2xl font-bold text-white mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                40代からの健康実践を、<br className="md:hidden" />メールで受け取る。
+                数値の奥にある、<br className="md:hidden" />細胞の話をメールで。
             </h3>
             <p className="text-sm text-white/60 mb-6 leading-relaxed">
-                精密栄養学・睡眠・ミトコンドリア最適化など日々の気づきと実践レポートを、<br className="hidden md:block" />
-                健康に限らずAI・Web・クリエイティブなど領域を横断した視点でお届けします。
+                血液検査の読み方・ミトコンドリア・精密栄養学の実践と、ライブラリの新着を<br className="hidden md:block" />
+                不定期でお届けします。登録無料、いつでも解除できます。
             </p>
-
             <div className="flex flex-wrap justify-center gap-4 mb-8 text-xs text-white/50">
-                <span className="flex items-center gap-1.5"><span className="text-[#41C9B4]">✦</span> 健康・栄養の実践記録</span>
-                <span className="flex items-center gap-1.5"><span className="text-[#41C9B4]">✦</span> AI・Webの活用情報</span>
-                <span className="flex items-center gap-1.5"><span className="text-[#41C9B4]">✦</span> クリエイターの裏側</span>
+                <span className="flex items-center gap-1.5"><span className="text-[#41C9B4]">✦</span> 血液検査の読み方</span>
+                <span className="flex items-center gap-1.5"><span className="text-[#41C9B4]">✦</span> 40代からの栄養・睡眠・運動</span>
+                <span className="flex items-center gap-1.5"><span className="text-[#41C9B4]">✦</span> ライブラリの新着1枚</span>
             </div>
-
-            <Link
-                href="https://www.shinealight.jp/newsletter"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block px-16 py-4 bg-[#41C9B4] text-[#1A1A1A] text-sm font-bold rounded-full hover:bg-white transition-colors"
-            >
-                ニュースレターを登録
-            </Link>
+            <NewsletterForm source="journal" dark />
         </div>
     );
 }

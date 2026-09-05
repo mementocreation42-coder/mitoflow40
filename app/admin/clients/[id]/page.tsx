@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { logout } from '@/app/login/actions';
+import AdminHeader from '@/components/admin/AdminHeader';
 import { getSubmission, formatDateTime, questionnaireEntries } from '@/lib/intake';
 import styles from '../../admin.module.css';
 
@@ -18,19 +18,7 @@ export default async function AdminIntakeDetailPage({ params }: { params: Promis
 
     return (
         <div className={styles.shell}>
-            <header className={styles.header}>
-                <Link href="/admin/clients" className={styles.brand} aria-label="クライアント一覧へ">
-                    <span className={styles.brandMark}>M</span>
-                    <span>
-                        <span className={styles.brandName}>Mitoflow40 Admin</span>
-                        <span className={styles.brandMeta}>Intake</span>
-                    </span>
-                </Link>
-                <div className={styles.headerActions}>
-                    <Link href="/admin/clients" className={styles.logout}>← クライアント一覧</Link>
-                    <form action={logout}><button type="submit" className={styles.logout}>ログアウト</button></form>
-                </div>
-            </header>
+            <AdminHeader active="clients" back={{ href: '/admin/clients', label: 'クライアント一覧' }} />
 
             <main className={styles.main} style={{ maxWidth: 820 }}>
                 <p className={styles.eyebrow}>Client Intake</p>

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
+import { isAdminAuthenticated } from '@/lib/admin-auth';
 import { backupAllToBlob } from '@/lib/intake';
 
 // 全カウンセリング票データを1つのJSONにスナップショットして Blob(intake/_backups/) に保存。
@@ -16,8 +16,7 @@ async function authorized(req: NextRequest): Promise<boolean> {
     // ローカル開発はバイパス
     if (process.env.NODE_ENV !== 'production') return true;
     // 管理者ログイン
-    const c = await cookies();
-    return c.get('mito_admin_auth')?.value === 'true';
+    return isAdminAuthenticated();
 }
 
 export async function GET(req: NextRequest) {

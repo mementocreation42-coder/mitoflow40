@@ -2,7 +2,8 @@
 """Apple Health export.xml から直近N日の主要指標サマリを抽出する。
 
 使い方:
-  python3 summarize_apple_health.py <export.xml path> [days=30]
+  python3 summarize_apple_health.py <export.xml path> [days=30] [end=YYYY-MM-DD]
+  end を指定すると「その日までの days 日間」を集計する（過去の検査日に合わせた窓を切るため）。省略時は今日まで。
 
 出力: stdout に Markdown でサマリを出力。これをそのままClaudeに渡せる。
 """
@@ -40,8 +41,10 @@ def parse_dt(s):
     return datetime.strptime(s[:19], "%Y-%m-%d %H:%M:%S")
 
 
-def summarize(path, days):
-    cutoff = datetime.now() - timedelta(days=days)
+def summarize(path, days, end=None):
+    # 窓の終端。ループ内でレコードの endDate を end に入れるため、窓側は win_end に分けて持つ
+    win_end = end or datetime.now()
+    cutoff = win_end - timedelta(days=days)
     numeric = defaultdict(list)
     daily_steps = defaultdict(float)
     daily_active = defaultdict(float)
@@ -60,7 +63,7 @@ def summarize(path, days):
         except Exception:
             elem.clear()
             continue
-        if start < cutoff:
+        if start < cutoff or start > win_end:
             elem.clear()
             continue
 
@@ -130,4 +133,5 @@ def summarize(path, days):
 if __name__ == "__main__":
     path = sys.argv[1] if len(sys.argv) > 1 else "/Users/enigamid/Desktop/apple_health_export/export.xml"
     days = int(sys.argv[2]) if len(sys.argv) > 2 else 30
-    summarize(path, days)
+    end = datetime.strptime(sys.argv[3], "%Y-%m-%d").replace(hour=23, minute=59, second=59) if len(sys.argv) > 3 else None
+    summarize(path, days, end)

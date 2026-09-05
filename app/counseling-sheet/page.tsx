@@ -22,7 +22,8 @@ export default function IntakePage() {
     const [gender, setGender] = useState<Gender>('');
     const [complaint, setComplaint] = useState('');
     const [notes, setNotes] = useState('');
-    const [files, setFiles] = useState<File[]>([]);
+    const [bloodFiles, setBloodFiles] = useState<File[]>([]);   // 血液検査の結果（PDF/写真）
+    const [deviceFiles, setDeviceFiles] = useState<File[]>([]); // Apple Watch 等のウェアラブルの記録
     const [consent, setConsent] = useState(false);
 
     // 問診回答（key→値）と症状チェック（symptom→頻度）
@@ -55,15 +56,45 @@ export default function IntakePage() {
 
     const canSubmit = name.trim() && email.trim() && consent && !submitting;
 
-    function addFiles(list: FileList | null) {
+    type FileKind = 'blood' | 'device';
+    const setterFor = (kind: FileKind) => (kind === 'blood' ? setBloodFiles : setDeviceFiles);
+    function addFiles(list: FileList | null, kind: FileKind) {
         if (!list) return;
         const incoming = Array.from(list);
         const tooBig = incoming.find((f) => f.size > MAX_FILE_MB * 1024 * 1024);
         if (tooBig) { setError(`「${tooBig.name}」が大きすぎます（1ファイル${MAX_FILE_MB}MBまで）`); return; }
+        const total = bloodFiles.length + deviceFiles.length + incoming.length;
+        if (total > MAX_FILES) { setError(`添付は合計 ${MAX_FILES} 件までです`); return; }
         setError(null);
-        setFiles((prev) => [...prev, ...incoming].slice(0, MAX_FILES));
+        setterFor(kind)((prev) => [...prev, ...incoming]);
     }
-    function removeFile(idx: number) { setFiles((prev) => prev.filter((_, i) => i !== idx)); }
+    function removeFile(kind: FileKind, idx: number) { setterFor(kind)((prev) => prev.filter((_, i) => i !== idx)); }
+
+    // 添付の1枠（血液検査／ウェアラブル）。選ぶ→一覧→削除
+    function FileBlock({ kind, label, help, files }: { kind: FileKind; label: string; help: string; files: File[] }) {
+        return (
+            <div>
+                <Label>{label}</Label>
+                <p className="text-xs text-[#4A4A4A] mb-3 leading-relaxed">{help}</p>
+                <label className="flex items-center justify-center gap-2 w-full py-5 rounded-xl border-2 border-dashed border-[#41C9B4] bg-white/60 cursor-pointer hover:bg-white transition text-sm font-bold text-[#1A1A1A]">
+                    <span>＋ {kind === 'blood' ? '検査結果' : '記録'}を選ぶ</span>
+                    <input type="file" multiple accept=".pdf,image/png,image/jpeg,image/webp,image/heic,image/heif"
+                        className="hidden" onChange={(e) => { addFiles(e.target.files, kind); e.target.value = ''; }} />
+                </label>
+                {files.length > 0 && (
+                    <ul className="mt-3 space-y-2">
+                        {files.map((f, i) => (
+                            <li key={i} className="flex items-center justify-between gap-3 text-xs bg-white rounded-lg border border-[#D5D5D5] px-3 py-2">
+                                <span className="truncate flex-1 text-[#1A1A1A]">{f.name}</span>
+                                <span className="text-[#4A4A4A] shrink-0">{(f.size / 1024 / 1024).toFixed(1)}MB</span>
+                                <button type="button" onClick={() => removeFile(kind, i)} className="text-[#E54848] font-bold shrink-0">削除</button>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
+        );
+    }
 
     // 症状チェックを1本の文字列にまとめる（例: 頭痛（時々）・便秘（いつも））
     function symptomsToString(): string {
@@ -88,7 +119,8 @@ export default function IntakePage() {
             Object.entries(q).forEach(([k, v]) => { if (v) fd.set(k, v); });
             const symStr = symptomsToString();
             if (symStr) fd.set('symptoms', symStr);
-            files.forEach((f) => fd.append('files', f));
+            bloodFiles.forEach((f) => fd.append('bloodFiles', f));
+            deviceFiles.forEach((f) => fd.append('deviceFiles', f));
 
             const res = await fetch('/api/intake', { method: 'POST', body: fd });
             const json = await res.json();
@@ -184,26 +216,10 @@ export default function IntakePage() {
                     {/* ファイル・確認 */}
                     {title === 'ファイル・確認' && (
                         <div className="space-y-6">
-                            <div>
-                                <Label>血液検査の結果 ・ Apple Watch の記録</Label>
-                                <p className="text-xs text-[#4A4A4A] mb-3 leading-relaxed">PDF または 写真（PNG/JPG/HEIC）。最大 {MAX_FILES} 件・1ファイル {MAX_FILE_MB}MB まで。</p>
-                                <label className="flex items-center justify-center gap-2 w-full py-6 rounded-xl border-2 border-dashed border-[#41C9B4] bg-white/60 cursor-pointer hover:bg-white transition text-sm font-bold text-[#1A1A1A]">
-                                    <span>＋ ファイルを選ぶ</span>
-                                    <input type="file" multiple accept=".pdf,image/png,image/jpeg,image/webp,image/heic,image/heif"
-                                        className="hidden" onChange={(e) => { addFiles(e.target.files); e.target.value = ''; }} />
-                                </label>
-                                {files.length > 0 && (
-                                    <ul className="mt-3 space-y-2">
-                                        {files.map((f, i) => (
-                                            <li key={i} className="flex items-center justify-between gap-3 text-xs bg-white rounded-lg border border-[#D5D5D5] px-3 py-2">
-                                                <span className="truncate flex-1 text-[#1A1A1A]">{f.name}</span>
-                                                <span className="text-[#4A4A4A] shrink-0">{(f.size / 1024 / 1024).toFixed(1)}MB</span>
-                                                <button type="button" onClick={() => removeFile(i)} className="text-[#E54848] font-bold shrink-0">削除</button>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
-                            </div>
+                            <FileBlock kind="blood" label="血液検査の結果" files={bloodFiles}
+                                help={`健康診断・人間ドック・クリニックの検査結果票。PDF または写真（PNG/JPG/HEIC）。複数枚・複数回分でも構いません。`} />
+                            <FileBlock kind="device" label="Apple Watch・ウェアラブルの記録（任意）" files={deviceFiles}
+                                help={`睡眠・心拍変動（HRV）・安静時心拍・VO2max などのスクリーンショット。Oura / Garmin / Fitbit / 血圧計 / 体組成計 / リブレ等も可。合計 ${MAX_FILES} 件・1ファイル ${MAX_FILE_MB}MB まで。`} />
                             <div><Label>その他、伝えておきたいこと（自由記述）</Label><Textarea value={notes} onChange={setNotes} rows={4} placeholder="気になる症状、生活の背景、検査で特に見てほしい点など" /></div>
 
                             <label className="flex items-start gap-3 text-sm text-[#1A1A1A] cursor-pointer bg-white/60 rounded-xl border border-[#D5D5D5] p-4">

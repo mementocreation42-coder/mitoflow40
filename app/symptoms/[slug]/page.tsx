@@ -5,6 +5,9 @@ import { getBiomarkerBySlug } from '@/lib/biomarkers';
 import { getNutrientBySlug } from '@/lib/nutrients';
 import JsonLd, { medicalWebPage, breadcrumb } from '@/components/JsonLd';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import RelatedBlock from '@/components/RelatedBlock';
+import AnalysisCta from '@/components/AnalysisCta';
+import { relatedForSymptom } from '@/lib/related';
 
 export function generateStaticParams() {
     return symptoms.map((s) => ({ slug: s.slug }));
@@ -137,6 +140,10 @@ export default async function SymptomPage({ params }: { params: Promise<{ slug: 
                         ))}
                     </ul>
                 </section>
+
+                <RelatedBlock groups={relatedForSymptom(s.slug)} />
+
+                <AnalysisCta variant="symptom" />
 
                 <p className="text-xs text-[#4A4A4A]/60 leading-relaxed mb-12 p-4 bg-white/60 rounded-lg">
                     ※ 本記事は一般的な情報提供を目的としており、診断・治療・医療行為を構成するものではありません。症状が続く・強い・急に現れた場合は、自己判断せず医療機関を受診してください。

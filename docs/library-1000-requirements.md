@@ -187,3 +187,26 @@ sitemap / searchIndex / 一覧 / library map / 関連リンクを、手書きリ
 - 最初に立ち上げる新設コレクションの選定（glossary から始めるか、conditions からか）
 - glossary の粒度（用語1つ=1ページ か、まとめページか）
 - conditions / supplements の出典方針
+
+---
+
+## 11. 進捗メモ（2026-08-21）
+
+**土台→1枚目→型化 の「1枚目」と「型」ができた。**
+
+- **conditions コレクション新設**：`lib/conditions.ts`（型＋ビルド時バリデーション：本文3節・uniqueAngle・出典1件・関連2件・リンク切れを `import` 時に検出して落とす）→ `/conditions`・`/conditions/[slug]`・OG画像・横断検索・sitemap・ライブラリ索引/マップに自動反映。**1枚追加 = データ1件**になった。
+- **最初の1枚**：`/conditions/iron-deficiency`（鉄欠乏・隠れ貧血）。セクション構成＝定義 → サイン → EVIDENCE/HISTORY/CORE/NEUTRAL バッジ付き本文 → 血液検査 → 栄養素・食材 → 症状逆引き → 打ち手 → 受診の目安 → 解析導線 → 出典。これを品質基準にする。
+- **直書きの病態ページ（15本）**は `/conditions` 一覧に「未移行」として載せてある（`LEGACY_CONDITION_PATHS`）。1枚ずつ conditions に巻き取ったらリストから外す。
+- **自動関連ブロック**：`lib/related.ts` が全コレクションを逆引きし、`RelatedBlock` で biomarkers / nutrients / symptoms / foods の各ページ末尾に「次に読む」を描画（1グループ最大8件）。conditions を1枚足すと、参照先の検査項目・症状・栄養素・食材ページに自動で被リンクが生える。
+- **/check → ライブラリ誘導**：結果画面の弱い軸ごとに5ページを提示（`AXIS_PAGES`）。
+- **検査値リーダー** `/biomarkers/reader`：52項目の基準値・理想値文字列を `lib/biomarker-ranges.ts` が数値化（全項目・男女でパース成功を確認済み）。入力は localStorage のみ、送信なし。解析プランへの導線つき。
+- **ライブラリ → 決済の導線**：`AnalysisCta` を conditions / biomarkers / symptoms ページに設置（→ /biomarkers/reader と /plans）。
+
+### 次の1枚の足し方
+1. `lib/conditions.ts` の配列に1件追加（`updatedAt` を忘れずに）
+2. `npm run build` または `npx tsc` でバリデーション通過を確認（落ちたらメッセージの通りに直す）
+3. 既存の直書きページを巻き取る場合は、`app/<topic>/page.tsx` を `redirect('/conditions/<slug>')` に差し替え、`lib/pages.ts` の該当行と `LEGACY_CONDITION_PATHS` から外す
+4. 公開後、Search Console でインデックスを確認してから次へ（NFR-4）
+
+### 候補（検索需要と既存データの接続から）
+甲状腺機能低下（TSH/FT3/FT4・冷え・抜け毛）／ビタミンD不足／インスリン抵抗性（直書きの巻き取り）／脂肪肝（巻き取り）／隠れ炎症（hs-CRP）／亜鉛欠乏（味覚・肌・免疫）

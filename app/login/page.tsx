@@ -1,13 +1,10 @@
 'use client';
 
 import { useActionState } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { login } from './actions';
-import { Suspense } from 'react';
 
-function LoginForm() {
-  const searchParams = useSearchParams();
-  const from = searchParams.get('from') || '/admin/journal';
+// ログイン後は常にダッシュボード（/admin）から始める
+export default function LoginPage() {
   const [state, formAction, isPending] = useActionState(login, { error: '' });
 
   return (
@@ -30,7 +27,6 @@ function LoginForm() {
         </div>
 
         <form action={formAction}>
-          <input type="hidden" name="from" value={from} />
 
           <div style={{ marginBottom: 20 }}>
             <label style={{ display: 'block', fontSize: 12, color: '#888', marginBottom: 8 }}>
@@ -69,13 +65,5 @@ function LoginForm() {
         </form>
       </div>
     </div>
-  );
-}
-
-export default function LoginPage() {
-  return (
-    <Suspense>
-      <LoginForm />
-    </Suspense>
   );
 }

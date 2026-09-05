@@ -34,6 +34,39 @@ export const AXIS_META: Record<Axis, { label: string; en: string; color: string;
     flex: { label: '代謝の柔軟性', en: 'METABOLIC FLEXIBILITY', color: '#E8C547', description: '糖と脂質を切り替えて使える能力。鍛えられたミトコンドリアの証。' },
 };
 
+// ===== 軸ごとの「次に読む」ライブラリページ =====
+// 結果画面で弱い軸に対応するページへ誘導する。URL は app/ 配下の実ページ。
+export const AXIS_PAGES: Record<Axis, { href: string; label: string; sub: string }[]> = {
+    energy: [
+        { href: '/energy', label: 'エネルギーとは', sub: '疲れにくさの正体を、ATPから考える' },
+        { href: '/mitochondria', label: 'ミトコンドリア', sub: 'エネルギー工場のしくみと増やし方' },
+        { href: '/conditions/iron-deficiency', label: '鉄欠乏（隠れ貧血）', sub: '貧血と言われる前に、工場が止まる理由' },
+        { href: '/biomarkers/ferritin', label: 'フェリチン', sub: '貯蔵鉄の「残量」を示す最重要指標' },
+        { href: '/symptoms/fatigue', label: '疲れやすい', sub: '症状から背景を逆引き' },
+    ],
+    mental: [
+        { href: '/symptoms/brain-fog', label: 'ブレインフォグ', sub: '頭がぼんやりする背景を逆引き' },
+        { href: '/gut-brain', label: '腸脳相関', sub: '腸の状態が思考の冴えに効く理由' },
+        { href: '/sleep', label: '睡眠', sub: '脳の掃除と記憶の定着' },
+        { href: '/mood-nutrition', label: '気分と栄養', sub: '神経伝達物質の材料から考える' },
+        { href: '/biomarkers/vitamin-b12-serum', label: 'ビタミンB12', sub: '神経と集中力に関わる検査項目' },
+    ],
+    recovery: [
+        { href: '/sleep', label: '睡眠', sub: '回復の土台。深い眠りをどう作るか' },
+        { href: '/oxidative-stress', label: '酸化ストレス', sub: '「さびる」を抑える抗酸化の本体' },
+        { href: '/inflammation', label: '炎症', sub: '回復を邪魔する慢性炎症のしくみ' },
+        { href: '/biomarkers/hscrp', label: 'hs-CRP', sub: '隠れた炎症を映す検査項目' },
+        { href: '/autophagy', label: 'オートファジー', sub: '細胞の修復スイッチ' },
+    ],
+    flex: [
+        { href: '/blood-sugar', label: '血糖コントロール', sub: '糖と脂質を切り替える土台' },
+        { href: '/insulin-resistance', label: 'インスリン抵抗性', sub: '血糖が上がる前に起きていること' },
+        { href: '/fasting', label: '食べない時間の力', sub: '代謝の柔軟性を鍛える' },
+        { href: '/ketones', label: 'ケトン体', sub: '脂質をエネルギーに変える回路' },
+        { href: '/biomarkers/fasting-insulin', label: '空腹時インスリン', sub: '血糖より早く動く指標' },
+    ],
+};
+
 // ===== コンポーネント =====
 type Profile = { age: string; gender: 'male' | 'female' | 'other' | ''; height: string; weight: string };
 
@@ -526,8 +559,8 @@ function EmailResultCard({ archetypeName, archetypeCatch, total, axisScores, per
                     <input type="checkbox" checked={newsletter} onChange={(e) => setNewsletter(e.target.checked)}
                         className="mt-0.5 w-4 h-4 accent-[#FF9855] flex-shrink-0" />
                     <span>
-                        <strong>SAL Letter（不定期ニュースレター）も登録する</strong>
-                        <span className="block text-[11px] text-[#4A4A4A]">40代からの健康実践・AI・クリエイティブを横断するレター。いつでも解除可。</span>
+                        <strong>Mitoflow40 レター（不定期ニュースレター）も登録する</strong>
+                        <span className="block text-[11px] text-[#4A4A4A]">血液検査の読み方・ミトコンドリア・40代からの栄養実践。確認メールのリンクで登録完了、いつでも解除可。</span>
                     </span>
                 </label>
 
@@ -802,6 +835,31 @@ export function Result({ scores, onReset }: { scores: { axisScores: Record<Axis,
                         <div className="text-base font-bold mb-2">{AXIS_META[weakest].label}（{axisScores[weakest]}）</div>
                         <p className="text-xs text-[#4A4A4A] leading-relaxed">{AXIS_META[weakest].description}</p>
                     </div>
+                </div>
+
+                {/* 弱い軸 → ライブラリで深掘り */}
+                <div className="bg-white rounded-2xl border border-[#E5E5E5] p-5 md:p-6 mb-8">
+                    <div className="text-xs font-bold tracking-wider mb-1" style={{ color: '#FF9855', fontFamily: "'Space Grotesk', sans-serif" }}>
+                        READ NEXT · ライブラリで深掘り
+                    </div>
+                    <p className="text-sm font-bold text-[#1A1A1A] mb-3">「{AXIS_META[weakest].label}」を底上げするために、まず読むページ</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {AXIS_PAGES[weakest].map((p) => (
+                            <Link key={p.href} href={p.href}
+                                className="flex flex-col p-3 rounded-xl border border-[#1A1A1A]/15 hover:border-[#1A1A1A] hover:-translate-y-0.5 hover:shadow-sm transition-all bg-[#FAFAF7]">
+                                <span className="text-sm font-bold text-[#1A1A1A]">{p.label} →</span>
+                                <span className="text-[11px] text-[#4A4A4A] leading-snug">{p.sub}</span>
+                            </Link>
+                        ))}
+                    </div>
+                    {sortedAxes[1] !== weakest && (
+                        <p className="text-[11px] text-[#4A4A4A] mt-3">
+                            次に気になる「{AXIS_META[sortedAxes[1]].label}」は：
+                            {AXIS_PAGES[sortedAxes[1]].slice(0, 3).map((p, i) => (
+                                <span key={p.href}>{i > 0 ? ' ・ ' : ' '}<Link href={p.href} className="underline hover:text-[#1A1A1A]">{p.label}</Link></span>
+                            ))}
+                        </p>
+                    )}
                 </div>
 
                 {/* AI個別解析 */}

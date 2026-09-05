@@ -46,7 +46,14 @@ next-env.d.ts
 /blood-analysis/*.pdf
 /blood-analysis/**/*.pdf
 /blood-analysis/血液検査データ理想値_*.pdf
+# DaVinci24: 個人健康情報の保護
+.claude/skills/davinci24/inputs/
+.claude/skills/davinci24/outputs/
+
 /public/reports/*.html
 /public/reports/_published_tokens.log
 
 .claude/worktrees/
+
+# davinci24: 別gitリポジトリ（Dropbox bare repo で同期）
+/davinci24/

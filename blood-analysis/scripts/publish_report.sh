@@ -22,8 +22,10 @@ if [ ! -f "$SRC_HTML" ]; then
   exit 1
 fi
 
-# トークン生成（24文字・英数）
+# トークン生成（24文字・英数）。クライアント用と解析者用は別トークン：
+# 同一だと、クライアントが自分のURLに /analyst を足すだけで解析者用詳細を読めてしまう。
 TOKEN=$(openssl rand -base64 18 | tr -d '=+/' | cut -c1-24)
+ANALYST_TOKEN=$(openssl rand -base64 18 | tr -d '=+/' | cut -c1-24)
 mkdir -p "$PUBLIC_REPORTS"
 
 # HTMLコピー（asset参照を /reports/assets/ に書き換え）
@@ -41,20 +43,24 @@ SRC_ANALYST_MD="$ROOT/outputs/$SUBJECT/analyst.md"
 if [ -n "$BLOB_READ_WRITE_TOKEN" ]; then
   BLOB_URL=$(cd "$MITOFLOW_ROOT" && BLOB_READ_WRITE_TOKEN="$BLOB_READ_WRITE_TOKEN" node "$ROOT/scripts/upload_to_blob.mjs" "$PUBLIC_REPORTS/${TOKEN}.html" "$TOKEN" 2>/dev/null || true)
   if [ -f "$SRC_ANALYST_MD" ]; then
-    ANALYST_BLOB_URL=$(cd "$MITOFLOW_ROOT" && BLOB_READ_WRITE_TOKEN="$BLOB_READ_WRITE_TOKEN" node "$ROOT/scripts/upload_analyst_to_blob.mjs" "$SRC_ANALYST_MD" "$TOKEN" 2>/dev/null || true)
+    ANALYST_BLOB_URL=$(cd "$MITOFLOW_ROOT" && BLOB_READ_WRITE_TOKEN="$BLOB_READ_WRITE_TOKEN" node "$ROOT/scripts/upload_analyst_to_blob.mjs" "$SRC_ANALYST_MD" "$ANALYST_TOKEN" 2>/dev/null || true)
   fi
 fi
 
 # トークン記録（Notionに紐付け用）
-echo "$(date +%Y-%m-%d) | $SUBJECT | $TOKEN${BLOB_URL:+ | $BLOB_URL}" >> "$ROOT/outputs/_published_tokens.log"
+echo "$(date +%Y-%m-%d) | $SUBJECT | client=$TOKEN analyst=$ANALYST_TOKEN${BLOB_URL:+ | $BLOB_URL}" >> "$ROOT/outputs/_published_tokens.log"
+
+# 顧客管理へ自動紐付け（inputs/<subject>/meta.txt の「メール:」から clientId を算出）
+# .env.local に INTAKE_LINK_SECRET が無い場合はスキップし、手動で貼る案内を出す
+node "$ROOT/scripts/link_report_to_client.mjs" "$SUBJECT" "$TOKEN" "$ANALYST_TOKEN" || true
 
 # URL表示
 PUB_DATE=$(date +%Y-%m-%d)
 echo ""
 echo "✅ 公開完了"
 echo ""
-echo "  お客様用:    https://mitoflow40.com/r/$TOKEN"
-echo "  解析者用:    https://mitoflow40.com/r/$TOKEN/analyst"
+echo "  クライアント用:    https://mitoflow40.com/r/$TOKEN"
+echo "  解析者用:    https://mitoflow40.com/r/$ANALYST_TOKEN/analyst  （クライアント用とは別トークン・クライアントには送らない）"
 echo "  ローカル:    http://localhost:3000/r/$TOKEN"
 if [ -n "$BLOB_URL" ]; then
   echo "  Blob (client):  $BLOB_URL"
@@ -71,10 +77,10 @@ echo ""
 echo "📝 Notion書き戻し（Claudeに実行させる）:"
 echo "  顧客ID「$SUBJECT」のページを検索し、以下を更新:"
 echo "    公開URL    = https://mitoflow40.com/r/$TOKEN"
-echo "    解析者URL  = https://mitoflow40.com/r/$TOKEN/analyst"
+echo "    解析者URL  = https://mitoflow40.com/r/$ANALYST_TOKEN/analyst"
 echo "    公開日     = $PUB_DATE"
 echo ""
-echo "📋 お客様に送るメール文案:"
+echo "📋 クライアントに送るメール文案:"
 echo "----------------------------------------"
 echo "${SUBJECT%%_*} 様"
 echo ""

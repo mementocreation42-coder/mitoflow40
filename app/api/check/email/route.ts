@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { requestSubscription } from '@/lib/newsletter';
+import { saveSelfCheck } from '@/lib/selfcheck';
 
 export const runtime = 'nodejs';
 
@@ -35,15 +37,23 @@ export async function POST(req: Request) {
             html,
         });
 
-        // ニュースレター登録が選択されていれば、管理者宛に通知（後でリスト管理）
-        if (body.newsletter) {
-            await resend.emails.send({
-                from: 'Mitoflow40 <info@mitoflow40.com>',
-                to: process.env.CONTACT_EMAIL || 'info@mitoflow40.com',
-                subject: `【SAL Letter登録】${body.email}`,
-                html: `<p>セルフチェック経由でニュースレター登録希望:</p><p><strong>${body.email}</strong></p><p>Archetype: ${body.archetypeName} / Total: ${body.total}</p>`,
-                replyTo: body.email,
+        // 結果を顧客レコードに紐付けて保存（管理画面のクライアント詳細に出る）。失敗しても本人へのメールは成立させる
+        try {
+            await saveSelfCheck({
+                email: body.email, archetypeName: body.archetypeName, archetypeCatch: body.archetypeCatch, total: body.total,
+                axisScores: body.axisScores, personalAnalysis: body.personalAnalysis, personalActions: body.personalActions, newsletterOptIn: Boolean(body.newsletter),
             });
+        } catch (e) {
+            console.error('[api/check/email] save self-check failed:', e);
+        }
+
+        // ニュースレター登録が選択されていれば、確認メール（ダブルオプトイン）を送る
+        if (body.newsletter) {
+            try {
+                await requestSubscription(body.email, 'check');
+            } catch (e) {
+                console.error('[api/check/email] newsletter request failed:', e);
+            }
         }
 
         return NextResponse.json({ ok: true });

@@ -4,15 +4,32 @@
     {
       "name": "Next.js Dev",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
       "port": 3000,
       "autoPort": true
     },
     {
       "name": "Proposal Static",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8791", "--directory", "proposal"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8791",
+        "--directory",
+        "proposal"
+      ],
       "port": 8791
+    },
+    {
+      "name": "DaVinci24 Inbox",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        ".claude/skills/davinci24/scripts/inbox.mjs"
+      ],
+      "port": 2424
     }
   ]
 }

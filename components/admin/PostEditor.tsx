@@ -275,7 +275,7 @@ export default function PostEditor({ categories, postId, defaultValues }: PostEd
       const url = isEdit ? `/api/admin/posts/${postId}` : '/api/admin/posts';
       const res = await fetch(url, { method: isEdit ? 'PUT' : 'POST', body: fd });
       if (!res.ok) { const d = await res.json(); throw new Error(d.error || 'Save failed'); }
-      router.push('/admin/journal'); router.refresh();
+      router.push('/admin/posts'); router.refresh();
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : '保存に失敗しました');
       setSaving(false);
@@ -493,7 +493,7 @@ export default function PostEditor({ categories, postId, defaultValues }: PostEd
         flexWrap: 'wrap', gap: 10,
       }}>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <a href="/admin/journal" style={{
+          <a href="/admin/posts" style={{
             padding: '9px 18px', background: 'transparent', border: '1px solid #2a2a2a',
             borderRadius: 8, color: '#555', textDecoration: 'none', fontSize: 13,
           }}>

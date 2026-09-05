@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { put, del } from '@vercel/blob';
 import { Resend } from 'resend';
 import { clientIdFromEmail, ALL_QUESTIONNAIRE_KEYS } from '@/lib/intake';
+import { invalidate } from '@/lib/req-cache';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://mitoflow40.com';
 
@@ -80,7 +81,11 @@ export async function POST(req: NextRequest) {
         submittedAt: new Date().toISOString(),
     };
 
-    const files = form.getAll('files').filter((f): f is File => f instanceof File && f.size > 0);
+    // 添付は枠ごとに受ける：血液検査（bloodFiles）／Apple Watch 等（deviceFiles）／旧フォーム互換（files）
+    const groups: [string, 'blood' | 'device' | 'other'][] = [['bloodFiles', 'blood'], ['deviceFiles', 'device'], ['files', 'other']];
+    const tagged = groups.flatMap(([field, kind]) =>
+        form.getAll(field).filter((f): f is File => f instanceof File && f.size > 0).map((file) => ({ file, kind })));
+    const files = tagged.map((t) => t.file);
     if (files.length > MAX_FILES) {
         return NextResponse.json({ ok: false, error: `ファイルは最大${MAX_FILES}件までです` }, { status: 400 });
     }
@@ -97,22 +102,23 @@ export async function POST(req: NextRequest) {
     const basePath = `intake/${submissionId}`;
 
     // 整合性：ファイル保存後に submission.json が失敗したら、孤立ファイルを消す
-    const stored: { name: string; url: string; size: number; type: string }[] = [];
+    const stored: { name: string; url: string; size: number; type: string; kind: 'blood' | 'device' | 'other' }[] = [];
     try {
-        // ファイルを保存（addRandomSuffix で URL をさらに推測困難にする）
-        for (let i = 0; i < files.length; i++) {
-            const f = files[i];
-            const blob = await put(`${basePath}/file-${i + 1}.${safeExt(f.name)}`, f, {
+        // ファイルを保存（addRandomSuffix で URL をさらに推測困難にする）。ファイル名に種類を含める
+        for (let i = 0; i < tagged.length; i++) {
+            const { file: f, kind } = tagged[i];
+            const blob = await put(`${basePath}/${kind}-${i + 1}.${safeExt(f.name)}`, f, {
                 access: 'public',
                 token,
                 addRandomSuffix: true,
                 contentType: f.type || 'application/octet-stream',
             });
-            stored.push({ name: f.name, url: blob.url, size: f.size, type: f.type });
+            stored.push({ name: f.name, url: blob.url, size: f.size, type: f.type, kind });
         }
 
         // 問診・メタ情報を submission.json として保存（健康データ本体はここに集約）
         const record = { submissionId, ...meta, files: stored };
+        invalidate('intake');
         await put(`${basePath}/submission.json`, JSON.stringify(record, null, 2), {
             access: 'public',
             token,
@@ -133,7 +139,7 @@ export async function POST(req: NextRequest) {
                         <h2>カウンセリング票が届きました</h2>
                         <p><strong>お名前:</strong> ${name}</p>
                         <p><strong>連絡先:</strong> ${email}</p>
-                        <p><strong>添付ファイル:</strong> ${stored.length} 件</p>
+                        <p><strong>添付ファイル:</strong> ${stored.length} 件（血液検査 ${stored.filter((x) => x.kind === 'blood').length}・ウェアラブル ${stored.filter((x) => x.kind === 'device').length}）</p>
                         <p><strong>受付日時:</strong> ${new Date(meta.submittedAt).toLocaleString('ja-JP')}</p>
                         <p><strong>受付ID:</strong> ${submissionId}</p>
                         <hr>

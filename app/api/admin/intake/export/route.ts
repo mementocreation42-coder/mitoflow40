@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
+import { isAdminAuthenticated } from '@/lib/admin-auth';
 import { listClients, getClientReport } from '@/lib/intake';
 
 // 全クライアント（カウンセリング票・問診・ファイルURL・解析レポート紐付け）を
@@ -9,8 +9,7 @@ export const dynamic = 'force-dynamic';
 
 async function isAdmin(): Promise<boolean> {
     if (process.env.NODE_ENV !== 'production') return true; // ローカルはバイパス（admin layout と同じ）
-    const c = await cookies();
-    return c.get('mito_admin_auth')?.value === 'true';
+    return isAdminAuthenticated();
 }
 
 export async function GET() {

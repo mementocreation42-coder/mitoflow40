@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
+import { isAdminAuthenticated } from '@/lib/admin-auth';
 import {
     listSubmissionsWithMeta,
     getClientReport,
@@ -15,8 +15,7 @@ export const dynamic = 'force-dynamic';
 
 async function isAdmin(): Promise<boolean> {
     if (process.env.NODE_ENV !== 'production') return true;
-    const c = await cookies();
-    return c.get('mito_admin_auth')?.value === 'true';
+    return isAdminAuthenticated();
 }
 
 // CSVセルのエスケープ（カンマ・引用符・改行を含むと "" で囲む）

@@ -4,6 +4,8 @@ import { foods, getFoodBySlug } from '@/lib/foods';
 import { getNutrientBySlug } from '@/lib/nutrients';
 import JsonLd, { medicalWebPage, breadcrumb } from '@/components/JsonLd';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import RelatedBlock from '@/components/RelatedBlock';
+import { relatedForFood } from '@/lib/related';
 
 export function generateStaticParams() {
     return foods.map((f) => ({ slug: f.slug }));
@@ -133,6 +135,8 @@ export default async function FoodPage({ params }: { params: Promise<{ slug: str
                         ))}
                     </div>
                 </section>
+
+                <RelatedBlock groups={relatedForFood(f.slug)} />
 
                 {/* Disclaimer */}
                 <p className="text-xs text-[#4A4A4A]/60 leading-relaxed mb-12 p-4 bg-white/60 rounded-lg">

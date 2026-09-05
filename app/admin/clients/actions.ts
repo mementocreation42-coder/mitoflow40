@@ -1,15 +1,16 @@
 'use server';
 
-import { cookies } from 'next/headers';
+import { isAdminAuthenticated } from '@/lib/admin-auth';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
-import { setClientReport, setClientMeta, deleteClient, deleteSubmission } from '@/lib/intake';
+import { setClientReport, removeClientReport, setClientMeta, deleteClient, deleteSubmission } from '@/lib/intake';
+import { relinkOrder } from '@/lib/orders';
+import { unsubscribeEmail } from '@/lib/newsletter';
 
 async function assertAdmin() {
     // admin layout と同じ判定：本番はログイン必須、ローカルはバイパス
-    if (process.env.NODE_ENV === 'production') {
-        const c = await cookies();
-        if (c.get('mito_admin_auth')?.value !== 'true') throw new Error('unauthorized');
+    if (process.env.NODE_ENV === 'production' && !(await isAdminAuthenticated())) {
+        throw new Error('unauthorized');
     }
 }
 
@@ -18,8 +19,37 @@ export async function saveClientReport(formData: FormData) {
     await assertAdmin();
     const clientId = String(formData.get('clientId') || '');
     const token = String(formData.get('token') || '');
-    await setClientReport(clientId, token);
+    const label = String(formData.get('label') || '').trim();
+    const analystToken = String(formData.get('analystToken') || '').trim();
+    await setClientReport(clientId, token, { label: label || undefined, analystToken: analystToken || undefined });
     revalidatePath(`/admin/clients/client/${clientId}`);
+    revalidatePath(`/counseling-sheet/my/${clientId}`);
+}
+
+// レポート履歴から1件外す（貼り間違いなど。/r/<token> 自体は消えない）
+export async function removeClientReportAction(formData: FormData) {
+    await assertAdmin();
+    const clientId = String(formData.get('clientId') || '');
+    const token = String(formData.get('token') || '');
+    await removeClientReport(clientId, token);
+    revalidatePath(`/admin/clients/client/${clientId}`);
+    revalidatePath(`/counseling-sheet/my/${clientId}`);
+}
+
+// 注文を別の顧客へ付け替える（決済のメールとシートのメールが違って別人になったとき）
+export async function relinkOrderAction(formData: FormData) {
+    await assertAdmin();
+    const fromClientId = String(formData.get('fromClientId') || '');
+    const toClientId = String(formData.get('toClientId') || '');
+    const orderIds = formData.getAll('orderId').map(String).filter(Boolean);
+    if (!toClientId || orderIds.length === 0) throw new Error('付け替え先と注文を選んでください');
+    for (const orderId of orderIds) await relinkOrder(fromClientId, orderId, toClientId);
+    revalidatePath(`/admin/clients/client/${fromClientId}`);
+    revalidatePath(`/admin/clients/client/${toClientId}`);
+    revalidatePath('/admin/clients');
+    revalidatePath('/admin/orders');
+    revalidatePath(`/counseling-sheet/my/${toClientId}`);
+    redirect(`/admin/clients/client/${toClientId}`);
 }
 
 // 対応ステータス＋担当メモを保存
@@ -50,4 +80,14 @@ export async function deleteSubmissionAction(formData: FormData) {
     await deleteSubmission(submissionId);
     revalidatePath(`/admin/clients/client/${clientId}`);
     revalidatePath('/admin/clients');
+}
+
+// 顧客詳細からニュースレターを解除（本人の要望など）
+export async function unsubscribeNewsletterForClient(formData: FormData) {
+    await assertAdmin();
+    const clientId = String(formData.get('clientId') || '');
+    const email = String(formData.get('email') || '');
+    if (email) await unsubscribeEmail(email);
+    revalidatePath(`/admin/clients/client/${clientId}`);
+    revalidatePath('/admin/newsletter/subscribers');
 }

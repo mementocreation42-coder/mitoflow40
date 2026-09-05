@@ -5,6 +5,9 @@ import { getNutrientBySlug } from '@/lib/nutrients';
 import { getGeneBySlug } from '@/lib/genes';
 import JsonLd, { medicalWebPage, breadcrumb } from '@/components/JsonLd';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import RelatedBlock from '@/components/RelatedBlock';
+import AnalysisCta from '@/components/AnalysisCta';
+import { relatedForBiomarker } from '@/lib/related';
 import MemberGate from '@/components/MemberGate';
 import { isMember, isBiomarkerGated } from '@/lib/auth';
 
@@ -202,6 +205,10 @@ export default async function BiomarkerPage({ params }: { params: Promise<{ slug
                 </section>
                 </MemberGate>
                 {/* ── 会員限定ここまで ───────────────────────── */}
+
+                <AnalysisCta variant="biomarker" />
+
+                <RelatedBlock groups={relatedForBiomarker(b.slug)} />
 
                 {/* Disclaimer */}
                 <p className="text-xs text-[#4A4A4A]/60 leading-relaxed mb-12 p-4 bg-white/60 rounded-lg">

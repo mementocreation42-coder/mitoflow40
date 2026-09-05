@@ -37,6 +37,7 @@ const sections: Sec[] = [
             { href: '/nutrition-history', label: '栄養学の歴史' },
             { href: '/food-journey', label: '食べてから動くまで' },
             { href: '/health-check-guide', label: '健康診断の読み方' },
+            { href: '/biomarkers/reader', label: '検査値リーダー' },
         ],
     },
     {
@@ -131,10 +132,12 @@ const sections: Sec[] = [
         ],
     },
     {
-        n: 10, en: 'FROM SYMPTOMS', ja: '症状から引く', anchor: '#symptoms', color: '#FDEAD0',
-        desc: '「この不調はなぜ？」から逆引きする入口。体感から仕組みへたどる。',
+        n: 10, en: 'FROM SYMPTOMS', ja: '症状から引く・病態を読む', anchor: '#symptoms', color: '#FDEAD0',
+        desc: '「この不調はなぜ？」から逆引きする入口。体感（症状）からも、病態（不調・現代病）からも仕組みへたどる。',
         pages: [
             { href: '/symptoms', label: '症状から引く' },
+            { href: '/conditions', label: '不調・現代病を読み解く' },
+            { href: '/conditions/iron-deficiency', label: '鉄欠乏（隠れ貧血）' },
         ],
     },
     {

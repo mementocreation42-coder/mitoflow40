@@ -10,6 +10,7 @@ import { hormones } from './hormones';
 import { symptoms } from './symptoms';
 import { organs } from './organs';
 import { essays } from './essays';
+import { conditions } from './conditions';
 import { staticPages } from './pages';
 
 export interface SearchItem {
@@ -77,6 +78,13 @@ export const searchIndex: SearchItem[] = [
         href: `/symptoms/${s.slug}`,
         group: '症状',
         keywords: norm(s.name, s.en, s.tagline),
+    })),
+    ...conditions.map((c) => ({
+        title: c.name,
+        sub: c.en,
+        href: `/conditions/${c.slug}`,
+        group: '不調・現代病',
+        keywords: norm(c.name, c.en, c.reading, c.tagline, c.category),
     })),
     ...organs.map((o) => ({
         title: o.name,
