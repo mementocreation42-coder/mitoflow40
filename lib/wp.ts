@@ -196,6 +196,7 @@ export type WPPost = {
     date: string;
     slug: string;
     status?: 'publish' | 'draft' | 'pending' | 'private';
+    featured_media?: number; // アイキャッチのメディア ID（0 = 無し）
     title: {
         rendered: string;
     };
@@ -209,6 +210,11 @@ export type WPPost = {
         'wp:featuredmedia'?: Array<{
             source_url: string;
             alt_text: string;
+            media_details?: {
+                width?: number;
+                height?: number;
+                sizes?: Record<string, { source_url: string; width: number; height: number }>;
+            };
         }>;
         'wp:term'?: Array<Array<{
             id: number;
@@ -217,6 +223,22 @@ export type WPPost = {
         }>>;
     };
 };
+
+// 一覧のサムネイル用に、WordPress が生成した縮小版（medium=300px 幅など）の URL を返す。
+// 原寸（1200〜1920px・100〜400KB）をそのまま <img> に流すと、一覧 1 ページで数 MB の転送と
+// デコードが発生して重い。縮小版が無い古いメディアは原寸にフォールバックする。
+export function featuredImageUrl(post: WPPost, prefer: string[] = ['medium', 'medium_large', 'thumbnail']): string | undefined {
+    const media = post._embedded?.['wp:featuredmedia']?.[0];
+    if (!media) return undefined;
+    const sizes = media.media_details?.sizes;
+    if (sizes) {
+        for (const key of prefer) {
+            const hit = sizes[key]?.source_url;
+            if (hit) return hit;
+        }
+    }
+    return media.source_url;
+}
 
 export async function getAllPosts(): Promise<WPPost[]> {
     const res = await fetch(wpUrl('/posts', { _embed: '1', per_page: 100 }), {
@@ -340,38 +362,42 @@ export async function getPostsPaginated(page = 1, perPage = 20, search?: string,
     if (categoryId) base.categories = categoryId;
 
     // 公開済み（認証不要、デフォルトで publish のみ返る）
-    const pubRes = await fetch(wpUrl('/posts', base), { cache: 'no-store' });
-    if (!pubRes.ok) {
-        const body = await pubRes.text().catch(() => '');
-        throw new Error(`Failed to fetch posts (${pubRes.status}): ${body.slice(0, 200)}`);
-    }
-    const totalPages = parseInt(pubRes.headers.get('X-WP-TotalPages') || '1', 10);
-    const pubPosts: WPPost[] = await pubRes.json();
+    const fetchPublished = async (): Promise<{ posts: WPPost[]; totalPages: number }> => {
+        const res = await fetch(wpUrl('/posts', base), { cache: 'no-store' });
+        if (!res.ok) {
+            const body = await res.text().catch(() => '');
+            throw new Error(`Failed to fetch posts (${res.status}): ${body.slice(0, 200)}`);
+        }
+        return { posts: await res.json(), totalPages: parseInt(res.headers.get('X-WP-TotalPages') || '1', 10) };
+    };
 
-    // 下書き（認証あり、1ページ目のみ全件）
-    let draftPosts: WPPost[] = [];
-    try {
-        const draftUrl = new URL(writeUrl('/posts'));
-        const draftParams: Record<string, string | number> = { ...base, status: 'draft', per_page: 100, page: 1 };
-        for (const [k, v] of Object.entries(draftParams)) draftUrl.searchParams.set(k, String(v));
-        const draftRes = await fetch(draftUrl.toString(), {
-            cache: 'no-store',
-            headers: { Authorization: getAuthHeader() },
-        });
-        if (draftRes.ok) {
-            draftPosts = await draftRes.json();
-        } else {
+    // 下書き（認証あり）。1ページ目の先頭にだけ並べるので、2ページ目以降は取りに行かない
+    const fetchDrafts = async (): Promise<WPPost[]> => {
+        if (page !== 1) return [];
+        try {
+            const draftUrl = new URL(writeUrl('/posts'));
+            const draftParams: Record<string, string | number> = { ...base, status: 'draft', per_page: 100, page: 1 };
+            for (const [k, v] of Object.entries(draftParams)) draftUrl.searchParams.set(k, String(v));
+            const draftRes = await fetch(draftUrl.toString(), {
+                cache: 'no-store',
+                headers: { Authorization: getAuthHeader() },
+            });
+            if (draftRes.ok) return draftRes.json();
             const body = await draftRes.text().catch(() => '');
             console.warn(`[wp] Draft fetch failed (${draftRes.status}): ${body.slice(0, 300)}`);
+        } catch (e) {
+            console.warn('[wp] Draft fetch error:', e);
         }
-    } catch (e) {
-        console.warn('[wp] Draft fetch error:', e);
-    }
+        return [];
+    };
+
+    // 公開済みと下書きは互いに依存しないので同時に取りに行く（直列だと WordPress 往復 2 回ぶん待つ）
+    const [published, draftPosts] = await Promise.all([fetchPublished(), fetchDrafts()]);
 
     // 下書きを先頭に、公開済みをその後に並べる
-    const posts = page === 1 ? [...draftPosts, ...pubPosts] : pubPosts;
+    const posts = [...draftPosts, ...published.posts];
 
-    return { posts, totalPages, currentPage: page };
+    return { posts, totalPages: published.totalPages, currentPage: page };
 }
 
 export type WPCategory = {

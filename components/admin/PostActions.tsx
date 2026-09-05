@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -22,8 +23,11 @@ export default function PostActions({ postId, classes }: { postId: number; class
 
   return (
     <div className={classes?.actions} style={classes ? undefined : { display: 'flex', flexDirection: 'column', gap: 6, flexShrink: 0 }}>
-      <a
+      {/* クライアント遷移にして、編集画面の読み込み中も loading スケルトンが出るようにする。
+          先読みは切る（20 記事ぶんの編集画面＝WordPress 問い合わせが走ってしまう） */}
+      <Link
         href={`/admin/posts/${postId}/edit`}
+        prefetch={false}
         className={classes?.edit}
         style={classes ? undefined : {
           padding: '6px 12px', background: '#1e1e1e', border: '1px solid #2a2a2a',
@@ -32,7 +36,7 @@ export default function PostActions({ postId, classes }: { postId: number; class
         }}
       >
         編集
-      </a>
+      </Link>
       <button
         onClick={handleDelete}
         disabled={deleting}

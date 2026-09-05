@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getPostsPaginated } from '@/lib/wp';
+import { getPostsPaginated, featuredImageUrl } from '@/lib/wp';
 import AdminHeader from '@/components/admin/AdminHeader';
 import PostActions from '@/components/admin/PostActions';
 import styles from '../admin.module.css';
@@ -67,15 +67,15 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
         {posts.length > 0 ? (
           <div className={styles.list}>
             {posts.map((post) => {
-              const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url;
+              const featuredImage = featuredImageUrl(post);
               const categories = post._embedded?.['wp:term']?.[0] ?? [];
               const date = new Date(post.date).toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' });
               return (
                 <article key={post.id} className={styles.post}>
                   {featuredImage ? (
-                    // WordPress側の任意ドメイン画像を管理画面でそのまま表示する
+                    // WordPress側の任意ドメイン画像を管理画面でそのまま表示する（縮小版・遅延読み込み）
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={featuredImage} alt="" className={styles.thumb} />
+                    <img src={featuredImage} alt="" className={styles.thumb} width={92} height={88} loading="lazy" decoding="async" />
                   ) : (
                     <div className={styles.thumbPlaceholder} aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m4 17 5-4 3 2 3-3 5 5"/></svg></div>
                   )}
@@ -93,7 +93,8 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                         </span>
                       ))}
                     </div>
-                    <h2 className={styles.postTitle}><Link href={`/journal/${post.id}`} target="_blank">{cleanText(post.title.rendered)}</Link></h2>
+                    {/* 別タブで開くリンクは先読み（prefetch）しても使われない。一覧 20 記事ぶんの RSC 取得を止める */}
+                    <h2 className={styles.postTitle}><Link href={`/journal/${post.id}`} target="_blank" prefetch={false}>{cleanText(post.title.rendered)}</Link></h2>
                     <div className={styles.excerpt}>{cleanText(post.excerpt?.rendered ?? '') || '抜粋はまだ設定されていません。'}</div>
                   </div>
                   <PostActions postId={post.id} classes={{ actions: styles.actions, edit: styles.edit, delete: styles.delete }} />

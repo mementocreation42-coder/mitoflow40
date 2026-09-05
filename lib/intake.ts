@@ -180,7 +180,15 @@ function token(): string | undefined {
 export async function listSubmissions(): Promise<{ submissionId: string; jsonUrl: string; uploadedAt: string }[]> {
     const t = token();
     if (!t) return [];
-    const { blobs } = await list({ prefix: 'intake/', token: t });
+    // intake/ 配下には添付ファイルや日次バックアップも同居するため、1 回の list（最大 1000 件）に収まらなくなる。
+    // cursor で最後まで辿らないと、古い提出が黙って一覧から消える。
+    const blobs: { pathname: string; url: string; uploadedAt: Date | string }[] = [];
+    let cursor: string | undefined;
+    do {
+        const page = await list({ prefix: 'intake/', token: t, cursor, limit: 1000 });
+        blobs.push(...page.blobs);
+        cursor = page.hasMore ? page.cursor : undefined;
+    } while (cursor);
     const records = blobs
         .filter((b) => /\/submission[-.].*\.json$/.test(b.pathname))
         .map((b) => ({

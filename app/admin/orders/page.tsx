@@ -26,8 +26,11 @@ export default async function AdminOrdersPage() {
     const stripeOk = isStripeConfigured();
     const webhookOk = isWebhookConfigured();
     const testMode = isStripeTestMode();
-    const orders = blobOk ? await listAllOrders().catch(() => []) : [];
-    const products = stripeOk ? await checkStripeProducts().catch(() => []) : [];
+    // 注文一覧（Blob）と Stripe の照会は独立なので同時に待つ（直列だと両方の往復を足した時間になる）
+    const [orders, products] = await Promise.all([
+        blobOk ? listAllOrders().catch(() => []) : Promise.resolve([]),
+        stripeOk ? checkStripeProducts().catch(() => []) : Promise.resolve([]),
+    ]);
     const needsSync = products.some((p) => p.state === 'missing');
     const dashboardBase = testMode ? 'https://dashboard.stripe.com/test' : 'https://dashboard.stripe.com';
 

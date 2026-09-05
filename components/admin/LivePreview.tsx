@@ -1,401 +1,226 @@
 'use client';
 
-import { useEffect, useState, memo } from 'react';
+import { memo, useEffect, useState } from 'react';
+import Image from 'next/image';
+import {
+  parseBlocks, CATEGORY_COLORS, DEFAULT_CATEGORY_COLOR, AMAZON_RE,
+  type ContentBlock, type ProductData, type UploadedImage,
+} from './postBody';
+import styles from './PostEditor.module.css';
 
-// ===== OGPカード（本番と同じ /api/ogp を使用） =====
+// 公開ページ（/journal/[id]）と同じ並びで記事を描く、エディタ用のリアルタイムプレビュー。
+// 1 カラムのエディタの下に全幅で置かれる（以前は右カラムの固定ペインだった）。
+// 編集用のボタンは持たない。入力はすべてフォーム側で行い、ここは「いま公開したらこう見える」だけを映す。
+
+// ===== OGP カード（本番と同じ /api/ogp を使用）=====
 interface OgpData { url: string; title: string; description: string | null; image: string | null; siteName: string; favicon: string }
+
+// URL ごとの取得結果をモジュール内で使い回す。段落を足して並びが変わってもカードを取り直さない
+const ogpCache = new Map<string, Promise<OgpData | null>>();
+function loadOgp(url: string): Promise<OgpData | null> {
+  let p = ogpCache.get(url);
+  if (!p) {
+    p = fetch(`/api/ogp?url=${encodeURIComponent(url)}`)
+      .then((r) => r.json())
+      .then((d) => (d.error ? null : (d as OgpData)))
+      .catch(() => null)
+      .then((d) => { if (!d) ogpCache.delete(url); return d; }); // 失敗は覚えない（次の表示で再試行）
+    ogpCache.set(url, p);
+  }
+  return p;
+}
 
 function OgpCardPreview({ url }: { url: string }) {
   const [data, setData] = useState<OgpData | null>(null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    fetch(`/api/ogp?url=${encodeURIComponent(url)}`)
-      .then((r) => r.json())
-      .then((d) => { if (d.error) setError(true); else setData(d); })
-      .catch(() => setError(true));
+    let alive = true;
+    loadOgp(url).then((d) => { if (!alive) return; if (d) setData(d); else setError(true); });
+    return () => { alive = false; };
   }, [url]);
 
-  if (error) return (
-    <a href={url} target="_blank" rel="noopener noreferrer" style={{
-      display: 'block', padding: '12px 16px', border: '1px solid #e5e5e5', borderRadius: 12,
-      color: '#41C9B4', fontSize: 13, wordBreak: 'break-all', margin: '16px 0',
-    }}>{url}</a>
-  );
-
-  if (!data) return (
-    <div style={{
-      height: 96, border: '1px solid #e5e5e5', borderRadius: 12, margin: '16px 0',
-      background: '#f9f9f9', animation: 'pulse 1.5s ease-in-out infinite',
-    }} />
-  );
+  if (error) return <a href={url} target="_blank" rel="noopener noreferrer" className={styles.cardFallback}>{url}</a>;
+  if (!data) return <div className={styles.cardLoading} />;
 
   const hostname = new URL(url).hostname;
-
   return (
-    <a href={url} target="_blank" rel="noopener noreferrer" style={{
-      display: 'grid',
-      gridTemplateColumns: data.image ? '140px 1fr' : '1fr',
-      border: '1px solid #e5e5e5', borderRadius: 12, overflow: 'hidden',
-      textDecoration: 'none', margin: '-16px 0 20px', background: '#fff',
-      transition: 'border-color 0.2s', minHeight: 110,
-    }}
-      onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#41C9B4')}
-      onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#e5e5e5')}
-    >
+    <a href={url} target="_blank" rel="noopener noreferrer" className={`${styles.linkCard} ${data.image ? '' : styles.linkCardNoImg}`}>
       {data.image && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={data.image}
-          alt={data.title}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', margin: 0, borderRadius: 0 }}
-        />
+        <img src={data.image} alt={data.title} />
       )}
-      <div style={{ padding: '14px 16px', minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 4 }}>
-        <p style={{ fontSize: 14, fontWeight: 700, color: '#1A1A1A', margin: 0, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-          {data.title}
-        </p>
-        {data.description && (
-          <p style={{ fontSize: 12, color: 'rgba(74,74,74,0.65)', margin: 0, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-            {data.description}
-          </p>
-        )}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 2 }}>
+      <div className={styles.linkBody}>
+        <p className={styles.linkTitle}>{data.title}</p>
+        {data.description && <p className={styles.linkDesc}>{data.description}</p>}
+        <div className={styles.linkMeta}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={data.favicon} alt="" width={13} height={13} style={{ opacity: 0.5, flexShrink: 0 }} />
-          <span style={{ fontSize: 11, color: 'rgba(74,74,74,0.55)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{hostname}</span>
+          <img src={data.favicon} alt="" />
+          <span>{hostname}</span>
         </div>
       </div>
     </a>
   );
 }
 
-// ===== AuthorCard =====
-function AuthorCard() {
-  return (
-    <div style={{
-      display: 'flex', alignItems: 'center', gap: 16,
-      padding: '20px', borderRadius: 16, background: '#b8f0e0', marginBottom: 32,
-    }}>
-      <div style={{ width: 56, height: 56, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, border: '2px solid #41C9B4' }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/images/misc/profile.jpg" alt="Daisuke Kobayashi" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} />
-      </div>
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <p style={{ fontSize: 11, letterSpacing: '0.1em', color: 'rgba(74,74,74,0.6)', marginBottom: 2 }}>DAISUKE KOBAYASHI</p>
-        <p style={{ fontSize: 14, fontWeight: 700, color: '#1A1A1A', marginBottom: 4 }}>小林大介</p>
-        <p style={{ fontSize: 12, color: 'rgba(74,74,74,0.7)', lineHeight: 1.6 }}>
-          ビデオグラファー / フォトグラファー / Webサービス構築。<br />40代からの健康戦略をパーソナルヘルスケアとして実践・発信中。
-        </p>
-      </div>
-    </div>
-  );
+// ===== 商品カード（Amazon／楽天）=====
+type ProductMeta = { title: string; image: string; price: string; brand: string };
+const productCache = new Map<string, Promise<ProductMeta | null>>();
+function loadProduct(url: string): Promise<ProductMeta | null> {
+  let p = productCache.get(url);
+  if (!p) {
+    p = fetch(`/api/product-metadata?url=${encodeURIComponent(url)}`)
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((d): ProductMeta => ({ title: d.title || '', image: d.image || '', price: d.price || '', brand: d.brand || '' }))
+      .catch(() => null)
+      .then((d) => { if (!d) productCache.delete(url); return d; });
+    productCache.set(url, p);
+  }
+  return p;
 }
 
-// ===== 商品カードプレビュー（Amazon/楽天） =====
-const AMAZON_RE = /amazon\.co\.jp|amzn\.to|amzn\.asia/i;
-const RAKUTEN_RE = /rakuten\.co\.jp|item\.rakuten/i;
-
-function ProductCardPreview({ url }: { url: string }) {
-  const [data, setData] = useState<{ title: string; image: string; price: string; brand: string } | null>(null);
-  const [failed, setFailed] = useState(false);
+function ProductCardView({ p, url }: { p: ProductData; url: string }) {
   const isAmazon = AMAZON_RE.test(url);
-
-  useEffect(() => {
-    fetch(`/api/product-metadata?url=${encodeURIComponent(url)}`)
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((d) => setData({ title: d.title || '', image: d.image || '', price: d.price || '', brand: d.brand || '' }))
-      .catch(() => setFailed(true));
-  }, [url]);
-
-  if (failed) return (
-    <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'block', padding: '12px 16px', border: '1px solid #e5e5e5', borderRadius: 12, color: '#41C9B4', fontSize: 13, wordBreak: 'break-all', margin: '16px 0' }}>{url}</a>
-  );
-  if (!data) return (
-    <div style={{ height: 140, border: '1px solid #e5e5e5', borderRadius: 16, margin: '20px 0', background: '#f9f9f9', animation: 'pulse 1.5s ease-in-out infinite' }} />
-  );
-
   return (
-    <div style={{ margin: '20px 0', border: '1px solid #e5e5e5', borderRadius: 16, overflow: 'hidden', background: '#fff', display: 'flex' }}>
-      <div style={{ width: 140, flexShrink: 0, padding: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fafafa' }}>
-        {data.image ? (
+    <div className={styles.productCard}>
+      <div className={styles.productImg}>
+        {p.image ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={data.image} alt={data.title} style={{ maxWidth: '100%', maxHeight: 110, objectFit: 'contain' }} />
-        ) : (
-          <span style={{ color: '#ccc', fontSize: 12 }}>No Image</span>
-        )}
+          <img src={p.image} alt={p.title || ''} />
+        ) : <span className={styles.productNoImg}>No Image</span>}
       </div>
-      <div style={{ flex: 1, padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0 }}>
-        {data.brand && <span style={{ fontSize: 10, color: '#41C9B4', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase' }}>{data.brand}</span>}
-        <p style={{ fontSize: 14, fontWeight: 700, color: '#1A1A1A', margin: 0, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-          {data.title || url}
-        </p>
-        <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
-          {data.price && <span style={{ fontSize: 16, fontWeight: 700, color: '#1A1A1A' }}>{data.price}</span>}
-          <span style={{
-            padding: '5px 12px', borderRadius: 5, fontSize: 11, fontWeight: 700,
-            background: isAmazon ? '#ff9900' : '#bf0000', color: isAmazon ? '#000' : '#fff',
-          }}>
-            {isAmazon ? 'Amazonで探す' : '楽天で探す'}
-          </span>
+      <div className={styles.productBody}>
+        {p.brand && <span className={styles.productBrand}>{p.brand}</span>}
+        <p className={styles.productTitle}>{p.title || url}</p>
+        <div className={styles.productFoot}>
+          {p.price && <span className={styles.productPrice}>{p.price}</span>}
+          <span className={`${styles.productBtn} ${isAmazon ? styles.productBtnAmazon : styles.productBtnRakuten}`}>{isAmazon ? 'Amazonで探す' : '楽天で探す'}</span>
         </div>
       </div>
     </div>
   );
 }
 
-// ===== 本文レンダラー（URLをカードに変換） =====
-const STANDALONE_URL = /^https?:\/\/[^\s<>"]+$/;
+function ProductCardPreview({ url }: { url: string }) {
+  const [data, setData] = useState<ProductMeta | null>(null);
+  const [failed, setFailed] = useState(false);
 
-interface ProductData {
-  amazonUrl?: string; rakutenUrl?: string;
-  title?: string; image?: string; price?: string; brand?: string;
+  useEffect(() => {
+    let alive = true;
+    loadProduct(url).then((d) => { if (!alive) return; if (d) setData(d); else setFailed(true); });
+    return () => { alive = false; };
+  }, [url]);
+
+  if (failed) return <a href={url} target="_blank" rel="noopener noreferrer" className={styles.cardFallback}>{url}</a>;
+  if (!data) return <div className={styles.cardLoading} style={{ height: 140 }} />;
+  return <ProductCardView p={data} url={url} />;
 }
 
-interface ContentBlock {
-  type: 'html' | 'url' | 'product' | 'productCustom' | 'image';
-  content: string;
-  imageUrl?: string;
-  product?: ProductData;
+function AuthorCard() {
+  return (
+    <div className={styles.author}>
+      <div className={styles.authorAvatar}>
+        <Image src="/images/misc/profile.jpg" alt="Daisuke Kobayashi" width={56} height={56} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} />
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <p className={styles.authorEn}>DAISUKE KOBAYASHI</p>
+        <p className={styles.authorName}>小林大介</p>
+        <p className={styles.authorBio}>ビデオグラファー / フォトグラファー / Webサービス構築。<br />40代からの健康戦略をパーソナルヘルスケアとして実践・発信中。</p>
+      </div>
+    </div>
+  );
 }
 
-function parseProductDiv(html: string): ProductData | null {
-  if (!/mf-product-card/.test(html)) return null;
-  const get = (attr: string) => {
-    const m = html.match(new RegExp(`data-${attr}="([^"]*)"`, 'i'));
-    return m ? decodeAttr(m[1]) : undefined;
-  };
-  const amazonUrl = get('amazon-url');
-  const rakutenUrl = get('rakuten-url');
-  if (!amazonUrl && !rakutenUrl) return null;
-  return {
-    amazonUrl, rakutenUrl,
-    title: get('title'), image: get('image'), price: get('price'), brand: get('brand'),
-  };
+function formatDate(date: string): string {
+  const d = new Date(date);
+  if (Number.isNaN(d.getTime())) return '----.--.--';
+  return d.toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '.');
 }
 
-function decodeAttr(s: string) {
-  return s.replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
-}
-
-function parseBlocks(body: string, uploadedImages: { url: string; id: number }[]): ContentBlock[] {
-  const paras = body.split(/\n{2,}/);
-  const blocks: ContentBlock[] = [];
-
-  for (const para of paras) {
-    const t = para.trim();
-    if (!t) continue;
-
-    // [image:N]
-    if (/^\[image:(\d+)\]$/.test(t)) {
-      const n = parseInt(t.match(/\d+/)![0], 10);
-      const img = uploadedImages[n];
-      if (img) blocks.push({ type: 'image', content: t, imageUrl: img.url });
-      continue;
-    }
-
-    // standalone URL
-    if (STANDALONE_URL.test(t)) {
-      if (AMAZON_RE.test(t) || RAKUTEN_RE.test(t)) {
-        blocks.push({ type: 'product', content: t });
-      } else {
-        blocks.push({ type: 'url', content: t });
-      }
-      continue;
-    }
-
-    // 商品カードHTML
-    if (/^<div[^>]+class="mf-product-card"/i.test(t)) {
-      const pd = parseProductDiv(t);
-      if (pd) { blocks.push({ type: 'productCustom', content: t, product: pd }); continue; }
-    }
-
-    // HTML block
-    if (/^<(h[2-6]|ul|ol|blockquote|figure|table|div)/i.test(t)) {
-      blocks.push({ type: 'html', content: t });
-      continue;
-    }
-
-    // paragraph
-    blocks.push({ type: 'html', content: `<p>${t.replace(/\n/g, '<br>')}</p>` });
-  }
-
-  return blocks;
-}
-
-// ===== prose CSS（本番と同様） =====
-const PROSE_CSS = `
-  .preview-prose { font-family: "Noto Sans JP", "Hiragino Sans", sans-serif; color: #4A4A4A; font-size: 16px; line-height: 1.9; }
-  .preview-prose h2 { font-size: 22px; font-weight: 700; color: #1A1A1A; margin: 40px 0 14px; padding-bottom: 10px; border-bottom: 2px solid #e5e5e5; font-family: "Space Grotesk", "Noto Sans JP", sans-serif; }
-  .preview-prose h3 { font-size: 18px; font-weight: 700; color: #1A1A1A; margin: 32px 0 10px; }
-  .preview-prose p { margin: 0 0 20px; }
-  .preview-prose ul { list-style: disc; padding-left: 24px; margin: 16px 0; }
-  .preview-prose ol { list-style: decimal; padding-left: 24px; margin: 16px 0; }
-  .preview-prose li { margin-bottom: 8px; line-height: 1.8; }
-  .preview-prose blockquote { border-left: 3px solid #41C9B4; padding: 12px 20px; margin: 24px 0; background: #f0fdf9; color: #4A4A4A; border-radius: 0 8px 8px 0; font-style: italic; }
-  .preview-prose strong { font-weight: 700; color: #1A1A1A; }
-  .preview-prose em { font-style: italic; }
-  .preview-prose a { color: #41C9B4; text-decoration: underline; }
-  .preview-prose img { border-radius: 12px; max-width: 100%; display: block; margin: 20px 0; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
-`;
-
-// ===== メインプレビューコンポーネント =====
-interface LivePreviewProps {
+export interface LivePreviewProps {
   title: string;
   date: string;
   body: string;
-  excerpt: string;
-  featuredImage: { url: string; id: number } | null;
+  featuredImage: UploadedImage | null;
   selectedCats: number[];
   categories: { id: number; name: string }[];
-  uploadedImages: { url: string; id: number }[];
-  onUploadFeatured: () => void;
-  onChooseFeatured: () => void;
-  onRemoveFeatured: () => void;
-  onToggleCategory: (id: number) => void;
+  uploadedImages: UploadedImage[];
 }
 
-export default memo(function LivePreview({
-  title, date, body, featuredImage, selectedCats, categories, uploadedImages,
-  onUploadFeatured, onChooseFeatured, onRemoveFeatured, onToggleCategory,
-}: LivePreviewProps) {
+export default memo(function LivePreview({ title, date, body, featuredImage, selectedCats, categories, uploadedImages }: LivePreviewProps) {
   const blocks = parseBlocks(body, uploadedImages);
+  const cats = categories.filter((c) => selectedCats.includes(c.id));
+
+  // 外部取得を伴うカードは URL を key にして、並び順が変わっても作り直さない（同じ URL は連番で区別）
+  const seen = new Map<string, number>();
+  const keyFor = (block: ContentBlock, i: number): string => {
+    if (block.type !== 'url' && block.type !== 'product') return String(i);
+    const base = `${block.type}:${block.url}`;
+    const n = (seen.get(base) ?? 0) + 1;
+    seen.set(base, n);
+    return n === 1 ? base : `${base}#${n}`;
+  };
+
+  const render = (block: ContentBlock, key: string) => {
+    switch (block.type) {
+      case 'paragraph': return <p key={key} dangerouslySetInnerHTML={{ __html: block.html }} />;
+      case 'heading': {
+        const Tag = `h${block.level}` as 'h2' | 'h3' | 'h4';
+        return <Tag key={key} dangerouslySetInnerHTML={{ __html: block.html }} />;
+      }
+      case 'list': {
+        const Tag = block.ordered ? 'ol' : 'ul';
+        return <Tag key={key}>{block.items.map((it, j) => <li key={j} dangerouslySetInnerHTML={{ __html: it }} />)}</Tag>;
+      }
+      case 'quote': return <blockquote key={key} dangerouslySetInnerHTML={{ __html: block.html }} />;
+      case 'html': return <div key={key} dangerouslySetInnerHTML={{ __html: block.html }} />;
+      case 'image':
+        return block.image
+          // eslint-disable-next-line @next/next/no-img-element
+          ? <img key={key} src={block.image.url} alt="" />
+          : <div key={key} className={styles.missing}>[image:{block.index}] に対応する画像がありません（ドロップまたは「メディアから画像」で追加すると番号が付きます）</div>;
+      case 'url': return <OgpCardPreview key={key} url={block.url} />;
+      case 'product': return <ProductCardPreview key={key} url={block.url} />;
+      case 'productCustom': return <ProductCardView key={key} p={block.product} url={block.product.amazonUrl || block.product.rakutenUrl || ''} />;
+    }
+  };
 
   return (
-    <div className="admin-live-preview" style={{
-      background: '#fff', borderRadius: 10, overflow: 'hidden',
-      border: '1px solid #d5ddda', position: 'sticky', top: 60,
-      height: 'calc(100vh - 64px)', display: 'flex', flexDirection: 'column',
-    }}>
-      {/* ブラウザバー */}
-      <div style={{
-        padding: '10px 16px', background: '#f8f8f8', borderBottom: '1px solid #e5e5e5',
-        display: 'flex', alignItems: 'center', gap: 6,
-      }}>
-        <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#ff5f57', display: 'inline-block' }} />
-        <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#febc2e', display: 'inline-block' }} />
-        <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#28c840', display: 'inline-block' }} />
-        <span style={{ fontSize: 11, color: '#bbb', marginLeft: 8 }}>mitoflow40.com/journal/…</span>
-        <span style={{ marginLeft: 'auto', fontSize: 11, color: '#41C9B4', fontWeight: 600 }}>● LIVE</span>
+    <div className={styles.frame}>
+      <div className={styles.bar}>
+        <span className={styles.dot} style={{ background: '#ff5f57' }} />
+        <span className={styles.dot} style={{ background: '#febc2e' }} />
+        <span className={styles.dot} style={{ background: '#28c840' }} />
+        <span className={styles.barUrl}>mitoflow40.com/journal/…</span>
+        <span className={styles.barLive}>● LIVE</span>
       </div>
 
-      {/* スクロールエリア */}
-      <div className="admin-live-preview-scroll" style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '0 0 24px' }}>
-        <style>{PROSE_CSS}</style>
-
-        <article style={{ maxWidth: 660, margin: '0 auto', padding: '28px 24px' }}>
-          {/* アイキャッチ */}
-          {featuredImage && (
-            <div style={{ aspectRatio: '16/9', position: 'relative', width: '100%', overflow: 'hidden', borderRadius: 16, marginBottom: 12 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={featuredImage.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              <div style={{ position: 'absolute', right: 8, bottom: 8, display: 'flex', gap: 6 }}>
-                <button className="admin-preview-control" type="button" onClick={onUploadFeatured} style={{ padding: '6px 10px', border: '1px solid rgba(0,0,0,.2)', borderRadius: 999, fontSize: 10, cursor: 'pointer' }}>画像を変更</button>
-                <button className="admin-preview-control" type="button" onClick={onChooseFeatured} style={{ padding: '6px 10px', border: '1px solid rgba(0,0,0,.2)', borderRadius: 999, fontSize: 10, cursor: 'pointer' }}>メディア</button>
-                <button className="admin-preview-control admin-preview-remove" type="button" onClick={onRemoveFeatured} aria-label="アイキャッチを削除" style={{ width: 28, border: '1px solid rgba(0,0,0,.2)', borderRadius: '50%', fontSize: 13, cursor: 'pointer' }}>×</button>
-              </div>
-            </div>
-          )}
-
-          {!featuredImage && (
-            <div style={{ padding: '24px 12px', marginBottom: 16, border: '2px dashed #9dcbbb', borderRadius: 16, background: '#effbf7', textAlign: 'center' }}>
-              <p style={{ margin: '0 0 10px', color: '#547068', fontSize: 11 }}>アイキャッチ画像</p>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: 8, flexWrap: 'wrap' }}>
-                <button className="admin-preview-control admin-preview-primary" type="button" onClick={onUploadFeatured} style={{ padding: '7px 12px', border: '1px solid #1a1a1a', borderRadius: 999, fontSize: 10, fontWeight: 700, cursor: 'pointer' }}>アップロード</button>
-                <button className="admin-preview-control" type="button" onClick={onChooseFeatured} style={{ padding: '7px 12px', border: '1px solid #a9b8b3', borderRadius: 999, fontSize: 10, cursor: 'pointer' }}>メディアから選択</button>
-              </div>
-            </div>
-          )}
-
-          {/* 日付 */}
-          <div style={{ fontSize: 13, color: 'rgba(74,74,74,0.7)', marginBottom: 16, fontFamily: 'monospace' }}>
-            {new Date(date).toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '.')}
+      <article className={styles.article}>
+        {featuredImage ? (
+          <div className={styles.hero}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={featuredImage.url} alt="" />
           </div>
+        ) : (
+          <div className={styles.heroEmpty}>アイキャッチ画像（未設定）</div>
+        )}
 
-          {/* タイトル */}
-          <h1 style={{
-            fontSize: 28, fontWeight: 700, color: '#1A1A1A', lineHeight: 1.4,
-            marginBottom: 32, fontFamily: '"Noto Sans JP", sans-serif',
-          }}>
-            {title || <span style={{ color: '#ccc' }}>タイトル未入力</span>}
-          </h1>
+        <div className={styles.date}>{formatDate(date)}</div>
+        <h1 className={`${styles.title} ${title ? '' : styles.titleEmpty}`}>{title || 'タイトル未入力'}</h1>
 
-          {/* カテゴリ */}
-          <div style={{ marginBottom: 24 }}>
-            <p style={{ margin: '0 0 7px', color: '#79827f', fontSize: 10 }}>カテゴリーを選択</p>
-            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-              {categories.map((cat) => {
-                const selected = selectedCats.includes(cat.id);
-                return (
-                  <button key={cat.id} className="admin-preview-control" data-selected={selected} type="button" onClick={() => onToggleCategory(cat.id)} style={{
-                    fontSize: 10, padding: '4px 10px', cursor: 'pointer',
-                    background: selected ? '#4AF6C3' : '#fff',
-                    border: selected ? '1px solid #1a1a1a' : '1px solid #cbd5d1',
-                    borderRadius: 20, color: '#1a1a1a', fontWeight: selected ? 700 : 400,
-                  }}>{selected ? '✓ ' : ''}{cat.name}</button>
-                );
-              })}
-            </div>
+        {cats.length > 0 && (
+          <div className={styles.cats}>
+            {cats.map((c) => <span key={c.id} className={styles.cat} style={CATEGORY_COLORS[c.id] ?? DEFAULT_CATEGORY_COLOR}>{c.name}</span>)}
           </div>
+        )}
 
-          {/* 著者カード */}
-          <AuthorCard />
+        <AuthorCard />
 
-          {/* 本文ブロック */}
-          <div className="preview-prose">
-            {blocks.length === 0 && (
-              <p style={{ color: '#ccc' }}>本文を入力するとここに表示されます</p>
-            )}
-            {blocks.map((block, i) => {
-              if (block.type === 'image') {
-                return (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img key={i} src={block.imageUrl} alt="" style={{ borderRadius: 12, maxWidth: '100%', display: 'block', margin: '20px 0' }} />
-                );
-              }
-              if (block.type === 'url') {
-                return <OgpCardPreview key={i} url={block.content} />;
-              }
-              if (block.type === 'product') {
-                return <ProductCardPreview key={i} url={block.content} />;
-              }
-              if (block.type === 'productCustom' && block.product) {
-                const p = block.product;
-                const isAmazon = !!p.amazonUrl;
-                return (
-                  <div key={i} style={{ margin: '20px 0', border: '1px solid #e5e5e5', borderRadius: 16, overflow: 'hidden', background: '#fff', display: 'flex' }}>
-                    <div style={{ width: 140, flexShrink: 0, padding: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fafafa' }}>
-                      {p.image ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={p.image} alt={p.title || ''} style={{ maxWidth: '100%', maxHeight: 110, objectFit: 'contain' }} />
-                      ) : (
-                        <span style={{ color: '#ccc', fontSize: 12 }}>No Image</span>
-                      )}
-                    </div>
-                    <div style={{ flex: 1, padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0 }}>
-                      {p.brand && <span style={{ fontSize: 10, color: '#41C9B4', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase' }}>{p.brand}</span>}
-                      <p style={{ fontSize: 14, fontWeight: 700, color: '#1A1A1A', margin: 0, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                        {p.title || (p.amazonUrl || p.rakutenUrl)}
-                      </p>
-                      <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
-                        {p.price && <span style={{ fontSize: 16, fontWeight: 700, color: '#1A1A1A' }}>{p.price}</span>}
-                        <span style={{
-                          padding: '5px 12px', borderRadius: 5, fontSize: 11, fontWeight: 700,
-                          background: isAmazon ? '#ff9900' : '#bf0000', color: isAmazon ? '#000' : '#fff',
-                        }}>
-                          {isAmazon ? 'Amazonで探す' : '楽天で探す'}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                );
-              }
-              return <div key={i} dangerouslySetInnerHTML={{ __html: block.content }} />;
-            })}
-          </div>
-        </article>
-      </div>
+        <div className={styles.prose}>
+          {blocks.length === 0 && <p className={styles.empty}>本文を入力するとここに表示されます</p>}
+          {blocks.map((b, i) => render(b, keyFor(b, i)))}
+        </div>
+      </article>
     </div>
   );
 });

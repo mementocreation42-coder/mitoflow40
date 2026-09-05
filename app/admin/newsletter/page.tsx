@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import Link from 'next/link';
 import AdminHeader from '@/components/admin/AdminHeader';
 import { listIssues, listSubscribers, isNewsletterConfigured, getDeliveryStatus, NEWSLETTER_NAME } from '@/lib/newsletter';
@@ -10,12 +11,14 @@ export const dynamic = 'force-dynamic';
 
 export default async function AdminNewsletterPage() {
     const cfg = isNewsletterConfigured();
-    const issues = cfg.blob ? await listIssues().catch(() => []) : [];
-    const subs = cfg.blob ? await listSubscribers().catch(() => []) : [];
+    // 号と購読者は別々の Blob 一覧なので同時に読む。Resend への照会（配信接続の状態）は下の DeliveryStatus に分離
+    const [issues, subs] = await Promise.all([
+        cfg.blob ? listIssues().catch(() => []) : Promise.resolve([]),
+        cfg.blob ? listSubscribers().catch(() => []) : Promise.resolve([]),
+    ]);
     const active = subs.filter((s) => s.status === 'active').length;
     const pending = subs.filter((s) => s.status === 'pending').length;
     const unsub = subs.filter((s) => s.status === 'unsubscribed').length;
-    const delivery = await getDeliveryStatus().catch((e) => ({ resend: false, segment: 'error' as const, detail: String(e) }));
     const drafts = issues.filter((i) => i.status === 'draft');
     const sent = issues.filter((i) => i.status === 'sent');
 
@@ -39,13 +42,11 @@ export default async function AdminNewsletterPage() {
                 <div style={{ ...panel, marginTop: 16, display: 'grid', gap: 8, fontSize: 13 }}>
                     <StatusRow ok={cfg.blob} label="リスト収集" detail={cfg.blob ? '稼働中（登録フォーム → 台帳に記録）' : 'BLOB_READ_WRITE_TOKEN が未設定。登録を保存できません'} />
                     <StatusRow ok={cfg.resend} label="確認メール（ダブルオプトイン）" detail={cfg.resend ? '稼働中' : 'RESEND_API_KEY 未設定。いまは登録フォーム送信で即時登録（シングルオプトイン）'} warn={!cfg.resend} />
-                    <StatusRow ok={delivery.segment === 'ok'} label="配信接続（Resend Segment / Broadcast）" detail={delivery.detail} warn={delivery.segment !== 'ok'} />
                     {!cfg.secret && <StatusRow ok={false} label="リンク署名鍵" detail="NEWSLETTER_SECRET（または INTAKE_LINK_SECRET）が未設定。確認・解除リンクが第三者に偽造されうる" />}
-                    {delivery.segment !== 'ok' && (
-                        <p style={{ margin: '4px 0 0', fontSize: 12, color: '#666' }}>
-                            配信接続がつながったら、<Link href="/admin/newsletter/subscribers" style={link}>購読者</Link>の「Resend に一括同期」で、集めたリストをそのまま配信対象にできます。
-                        </p>
-                    )}
+                    {/* Resend への往復はページ本体を止めずに、結果が出しだい流し込む */}
+                    <Suspense fallback={<StatusRow ok={false} warn label="配信接続（Resend Segment / Broadcast）" detail="Resend に確認中…" />}>
+                        <DeliveryStatus />
+                    </Suspense>
                 </div>
 
                 <section style={{ marginTop: 28 }}>
@@ -85,6 +86,21 @@ export default async function AdminNewsletterPage() {
                 </section>
             </main>
         </div>
+    );
+}
+
+// 配信接続（Resend の Segment）の状態。外部 API への往復を伴うので、Suspense で本文と切り離して待つ
+async function DeliveryStatus() {
+    const delivery = await getDeliveryStatus().catch((e) => ({ resend: false, segment: 'error' as const, detail: String(e) }));
+    return (
+        <>
+            <StatusRow ok={delivery.segment === 'ok'} label="配信接続（Resend Segment / Broadcast）" detail={delivery.detail} warn={delivery.segment !== 'ok'} />
+            {delivery.segment !== 'ok' && (
+                <p style={{ margin: '4px 0 0', fontSize: 12, color: '#666' }}>
+                    配信接続がつながったら、<Link href="/admin/newsletter/subscribers" style={link}>購読者</Link>の「Resend に一括同期」で、集めたリストをそのまま配信対象にできます。
+                </p>
+            )}
+        </>
     );
 }
 

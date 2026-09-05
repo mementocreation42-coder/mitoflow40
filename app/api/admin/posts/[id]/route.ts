@@ -21,12 +21,14 @@ export async function PUT(
     const date = formData.get('date') as string;
     const postStatus = (formData.get('postStatus') as string) === 'draft' ? 'draft' : 'publish';
     const categoryIds = formData.getAll('categoryIds').map((v) => parseInt(v as string, 10)).filter(Boolean);
-    const featuredImageId = parseInt(formData.get('featuredImageId') as string || '0', 10);
+    // featuredImageId が送られてきたときだけ更新する。'0' はアイキャッチを外す指示。
+    // 送られてこなければ（既存のアイキャッチを触っていない）WordPress 側の設定をそのまま残す。
+    const rawFeatured = formData.get('featuredImageId');
 
     const updateData: Parameters<typeof updateWPPost>[1] = {
       title, content, excerpt, date, status: postStatus, categories: categoryIds,
     };
-    if (featuredImageId) updateData.featured_media = featuredImageId;
+    if (typeof rawFeatured === 'string') updateData.featured_media = parseInt(rawFeatured, 10) || 0;
 
     const post = await updateWPPost(parseInt(id, 10), updateData);
 

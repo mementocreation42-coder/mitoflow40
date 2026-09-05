@@ -1,25 +1,37 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import LivePreview from './LivePreview';
 import ProductInsertModal from './ProductInsertModal';
 import MediaPickerModal from './MediaPickerModal';
+import { bodyToWpContent, getCaretCoordinates, nowInTokyo, type UploadedImage } from './postBody';
+import styles from './PostEditor.module.css';
+
+// ── 記事エディタ（1 カラム＋リアルタイムプレビュー）──────────────────────
+// HL Fishing の CMS と同じ作り：上から順にフォーム（タイトル → 日時・状態 → カテゴリー → アイキャッチ →
+// 本文 → 抜粋）を縦に並べ、その下に公開ページと同じ見た目の PREVIEW を全幅で置く。入力するたびに更新される。
+// 本文は行頭「/」でメニュー（見出し・箇条書き・画像・リンク・商品カード）。書式の解釈は postBody.ts に集約。
 
 interface Category { id: number; name: string; slug: string; count: number }
 
+export interface PostEditorDefaults {
+  title: string;
+  excerpt: string;
+  body: string;
+  date: string;               // YYYY-MM-DDTHH:mm（日本時間）
+  categoryIds: number[];
+  status: 'publish' | 'draft';
+  featuredImage?: UploadedImage | null;
+  uploadedImages?: UploadedImage[];
+}
+
 interface PostEditorProps {
+  heading: string;
   categories: Category[];
   postId?: number;
-  defaultValues?: {
-    title: string;
-    excerpt: string;
-    body: string;
-    date: string;
-    categoryIds: number[];
-    status: 'publish' | 'draft';
-    featuredImage?: { url: string; id: number } | null;
-  };
+  defaultValues?: PostEditorDefaults;
 }
 
 // ===== 画像圧縮（目標 200KB） =====
@@ -57,77 +69,102 @@ async function compressImage(file: File): Promise<File> {
   });
 }
 
-const inputStyle: React.CSSProperties = {
-  width: '100%', padding: '11px 14px', background: '#1a1a1a',
-  border: '1px solid #2a2a2a', borderRadius: 8, color: '#e5e5e5',
-  fontSize: 14, outline: 'none', boxSizing: 'border-box',
-};
+// ===== スラッシュメニュー =====
+type SlashItem = { label: string; hint: string; keywords: string } & (
+  | { kind: 'insert'; text: string }
+  | { kind: 'wrap'; before: string; after: string }
+  | { kind: 'action'; action: 'uploadImage' | 'pickImage' | 'link' | 'product' }
+);
 
-const labelStyle: React.CSSProperties = {
-  display: 'block', fontSize: 11, color: '#555', marginBottom: 6,
-  textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600,
-};
+const SLASH_ITEMS: SlashItem[] = [
+  { label: '大見出し', hint: '## ', keywords: 'h2 midashi 見出し', kind: 'insert', text: '## ' },
+  { label: '小見出し', hint: '### ', keywords: 'h3 komidashi 小見出し', kind: 'insert', text: '### ' },
+  { label: '箇条書き', hint: '- ', keywords: 'ul list kajou 箇条書き リスト', kind: 'insert', text: '- ' },
+  { label: '番号付きリスト', hint: '1. ', keywords: 'ol number bangou 番号 リスト', kind: 'insert', text: '1. ' },
+  { label: '引用', hint: '> ', keywords: 'quote inyou 引用', kind: 'insert', text: '> ' },
+  { label: '太字', hint: '<strong>', keywords: 'bold strong futoji 太字', kind: 'wrap', before: '<strong>', after: '</strong>' },
+  { label: '画像をアップロード', hint: 'ファイル', keywords: 'image photo gazou 画像 写真 アップロード', kind: 'action', action: 'uploadImage' },
+  { label: 'メディアから画像', hint: 'WordPress', keywords: 'media gazou メディア 画像', kind: 'action', action: 'pickImage' },
+  { label: 'リンクカード', hint: 'URL', keywords: 'link url ogp リンク', kind: 'action', action: 'link' },
+  { label: '商品カード', hint: 'Amazon / 楽天', keywords: 'product shop amazon rakuten 商品 カード', kind: 'action', action: 'product' },
+];
 
-export default function PostEditor({ categories, postId, defaultValues }: PostEditorProps) {
+type SlashState = { open: boolean; top: number; left: number; lineStart: number; query: string; index: number };
+const SLASH_CLOSED: SlashState = { open: false, top: 0, left: 0, lineStart: 0, query: '', index: 0 };
+
+function counterTone(len: number, min: number, max: number): string {
+  if (len === 0) return '';
+  if (len < min) return styles.counterWarn;
+  if (len <= max) return styles.counterOk;
+  return styles.counterBad;
+}
+
+export default function PostEditor({ heading, categories, postId, defaultValues }: PostEditorProps) {
   const router = useRouter();
   const isEdit = !!postId;
 
   const [title, setTitle] = useState(defaultValues?.title ?? '');
   const [excerpt, setExcerpt] = useState(defaultValues?.excerpt ?? '');
   const [body, setBody] = useState(defaultValues?.body ?? '');
-  const [date, setDate] = useState(defaultValues?.date ?? new Date().toISOString().slice(0, 16));
+  const [date, setDate] = useState(() => defaultValues?.date ?? nowInTokyo());
   const [selectedCats, setSelectedCats] = useState<number[]>(defaultValues?.categoryIds ?? []);
   const [status, setStatus] = useState<'publish' | 'draft'>(defaultValues?.status ?? 'publish');
-
-  const [featuredImage, setFeaturedImage] = useState<{ url: string; id: number } | null>(
-    defaultValues?.featuredImage ?? null
-  );
-  const [uploadedImages, setUploadedImages] = useState<{ url: string; id: number }[]>([]);
-  const [, setUploading] = useState(false);
+  const [featuredImage, setFeaturedImage] = useState<UploadedImage | null>(defaultValues?.featuredImage ?? null);
+  const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>(defaultValues?.uploadedImages ?? []);
+  const [uploading, setUploading] = useState(0);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
-  const [isDragging, setIsDragging] = useState(false);
-  const showPreview = true;
+  const [dragBody, setDragBody] = useState(false);
+  const [dragFeatured, setDragFeatured] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
-  const [showLinkModal, setShowLinkModal] = useState(false);
-  const [linkUrl, setLinkUrl] = useState('');
+  const [linkModal, setLinkModal] = useState<{ open: boolean; url: string }>({ open: false, url: '' });
   const [mediaPicker, setMediaPicker] = useState<null | 'featured' | 'body'>(null);
-  const [slashQuery, setSlashQuery] = useState<string | null>(null);
+  const [slash, setSlash] = useState<SlashState>(SLASH_CLOSED);
 
   const featuredRef = useRef<HTMLInputElement>(null);
   const bodyImageRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const cursorPosRef = useRef<number>(0);
+  const previewRef = useRef<HTMLDivElement>(null);
+  const cursorRef = useRef(0);                 // 本文のキャレット位置（フォーカスが外れても覚えておく）
+  const imagesRef = useRef(uploadedImages);    // 連続アップロードで番号がぶつからないよう、追加はこの ref を正とする
+  const pendingCaret = useRef<number | null>(null);
 
+  // 本文欄は内容に合わせて伸びる（内側にスクロールを作らず、ページをそのまま下へ辿るとプレビューに着く）
   useEffect(() => {
     const ta = textareaRef.current;
     if (!ta) return;
-    const save = () => { cursorPosRef.current = ta.selectionStart; };
-    ta.addEventListener('mouseup', save);
-    ta.addEventListener('keyup', save);
-    return () => { ta.removeEventListener('mouseup', save); ta.removeEventListener('keyup', save); };
+    ta.style.height = 'auto';
+    ta.style.height = `${Math.max(ta.scrollHeight, 360)}px`;
+  }, [body]);
+
+  // 挿入のあとにキャレットを置き直す
+  useEffect(() => {
+    const ta = textareaRef.current;
+    const pos = pendingCaret.current;
+    if (!ta || pos === null) return;
+    pendingCaret.current = null;
+    ta.focus();
+    ta.setSelectionRange(pos, pos);
+    cursorRef.current = pos;
+  }, [body]);
+
+  const rememberCaret = (e: React.SyntheticEvent<HTMLTextAreaElement>) => { cursorRef.current = e.currentTarget.selectionStart; };
+
+  // キャレット位置にブロック（画像タグ・URL・商品カード）を、前後を空行で区切って差し込む
+  const insertBlock = useCallback((text: string) => {
+    setBody((b) => {
+      const pos = Math.min(cursorRef.current, b.length);
+      const before = b.slice(0, pos);
+      const after = b.slice(pos);
+      const pad1 = before.length === 0 || /\n\n$/.test(before) ? '' : /\n$/.test(before) ? '\n' : '\n\n';
+      const pad2 = after.length === 0 || /^\n\n/.test(after) ? '' : /^\n/.test(after) ? '\n' : '\n\n';
+      pendingCaret.current = (before + pad1 + text + pad2).length;
+      return before + pad1 + text + pad2 + after;
+    });
   }, []);
 
-  function generateExcerpt() {
-    const plain = body
-      .replace(/\[image:\d+\]/g, '')         // 画像タグ除去
-      .replace(/^#{1,6}\s+/gm, '')           // 見出し記号除去
-      .replace(/\*\*(.+?)\*\*/g, '$1')       // bold
-      .replace(/\*(.+?)\*/g, '$1')           // italic
-      .replace(/`(.+?)`/g, '$1')             // code
-      .replace(/^[-*>\s]+/gm, '')            // リスト・引用記号
-      .replace(/\n{2,}/g, '\n')              // 連続改行を1つに
-      .replace(/\n/g, ' ')                   // 改行をスペースに
-      .trim();
-    // 文末句点で切る（80〜160字）
-    let result = plain.slice(0, 160);
-    const cutPoint = result.search(/[。．!?！？]/g);
-    if (cutPoint >= 60) result = plain.slice(0, cutPoint + 1);
-    else result = plain.slice(0, 120);
-    setExcerpt(result.trim());
-  }
-
-  const uploadFile = useCallback(async (file: File): Promise<{ url: string; id: number }> => {
+  // ===== 画像 =====
+  const uploadFile = useCallback(async (file: File): Promise<UploadedImage> => {
     const compressed = await compressImage(file);
     const fd = new FormData();
     fd.append('image', compressed, compressed.name);
@@ -139,441 +176,387 @@ export default function PostEditor({ categories, postId, defaultValues }: PostEd
     return res.json();
   }, []);
 
-  const uploadAndInsert = useCallback(async (files: File[]) => {
-    if (!files.length) return;
-    setUploading(true);
-    try {
-      const results = await Promise.all(files.map(uploadFile));
-      setUploadedImages((prev) => {
-        const startIdx = prev.length;
-        const tag = results.map((_, i) => `[image:${startIdx + i}]`).join('\n');
-        const pos = cursorPosRef.current;
-        setBody((b) => b.slice(0, pos) + '\n' + tag + '\n' + b.slice(pos));
-        return [...prev, ...results];
-      });
-    } catch (e) {
-      setError(`画像のアップロードに失敗しました: ${e instanceof Error ? e.message : String(e)}`);
-    } finally {
-      setUploading(false);
-    }
-  }, [uploadFile]);
+  const addBodyImages = useCallback((items: UploadedImage[]) => {
+    const start = imagesRef.current.length;
+    imagesRef.current = [...imagesRef.current, ...items];
+    setUploadedImages(imagesRef.current);
+    insertBlock(items.map((_, i) => `[image:${start + i}]`).join('\n\n'));
+  }, [insertBlock]);
 
-  async function handleFeaturedUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setUploading(true);
+  async function uploadToBody(files: File[]) {
+    const imgs = files.filter((f) => f.type.startsWith('image/'));
+    if (!imgs.length) return;
+    setUploading((n) => n + 1); setError('');
+    try { addBodyImages(await Promise.all(imgs.map(uploadFile))); }
+    catch (e) { setError(`画像のアップロードに失敗しました: ${e instanceof Error ? e.message : String(e)}`); }
+    finally { setUploading((n) => n - 1); }
+  }
+
+  async function uploadFeatured(file: File | undefined) {
+    if (!file || !file.type.startsWith('image/')) return;
+    setUploading((n) => n + 1); setError('');
     try { setFeaturedImage(await uploadFile(file)); }
-    catch (err) { setError(`アイキャッチ画像のアップロードに失敗しました: ${err instanceof Error ? err.message : String(err)}`); }
-    finally { setUploading(false); }
+    catch (e) { setError(`アイキャッチ画像のアップロードに失敗しました: ${e instanceof Error ? e.message : String(e)}`); }
+    finally { setUploading((n) => n - 1); }
   }
 
-  async function handleBodyImageInput(e: React.ChangeEvent<HTMLInputElement>) {
-    await uploadAndInsert(Array.from(e.target.files || []));
-    e.target.value = '';
-  }
-
-  function handleDragOver(e: React.DragEvent) { e.preventDefault(); setIsDragging(true); }
-  function handleDragLeave(e: React.DragEvent) { e.preventDefault(); setIsDragging(false); }
-  async function handleDrop(e: React.DragEvent) {
-    e.preventDefault(); setIsDragging(false);
-    const files = Array.from(e.dataTransfer.files).filter((f) => f.type.startsWith('image/'));
-    if (files.length) await uploadAndInsert(files);
-  }
+  // ===== 本文の入力とスラッシュメニュー =====
+  const slashItems = SLASH_ITEMS.filter((it) => !slash.query || it.label.includes(slash.query) || it.keywords.includes(slash.query));
 
   function handleBodyChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     const value = e.target.value;
-    const cursor = e.target.selectionStart;
-    const lineStart = value.lastIndexOf('\n', cursor - 1) + 1;
-    const currentLine = value.slice(lineStart, cursor);
+    const caret = e.target.selectionStart;
     setBody(value);
-    cursorPosRef.current = cursor;
-    setSlashQuery(currentLine.startsWith('/') ? currentLine.slice(1).toLowerCase() : null);
+    cursorRef.current = caret;
+    const lineStart = value.lastIndexOf('\n', caret - 1) + 1;
+    const line = value.slice(lineStart, caret);
+    if (line.startsWith('/') && !/\s/.test(line)) {
+      const query = line.slice(1).toLowerCase();
+      if (!slash.open) {
+        const c = getCaretCoordinates(e.target, lineStart);
+        const lh = parseFloat(getComputedStyle(e.target).lineHeight) || 28;
+        setSlash({ open: true, top: c.top + lh + 6, left: Math.max(0, Math.min(c.left, e.target.clientWidth - 280)), lineStart, query, index: 0 });
+      } else {
+        setSlash((s) => ({ ...s, lineStart, query, index: 0 }));
+      }
+    } else if (slash.open) {
+      setSlash(SLASH_CLOSED);
+    }
   }
 
-  function insertSlashCommand(before: string, after = '') {
+  function applySlash(item: SlashItem) {
     const ta = textareaRef.current;
-    if (!ta) return;
-    const cursor = ta.selectionStart;
-    const lineStart = body.lastIndexOf('\n', cursor - 1) + 1;
-    const replacement = before + after;
-    setBody(body.slice(0, lineStart) + replacement + body.slice(cursor));
-    setSlashQuery(null);
+    const caret = ta ? ta.selectionStart : cursorRef.current;
+    const { lineStart } = slash;
+    const base = body.slice(0, lineStart) + body.slice(caret); // 「/クエリ」を消す
+    setSlash(SLASH_CLOSED);
+    if (item.kind === 'insert') {
+      setBody(base.slice(0, lineStart) + item.text + base.slice(lineStart));
+      pendingCaret.current = lineStart + item.text.length;
+      return;
+    }
+    if (item.kind === 'wrap') {
+      setBody(base.slice(0, lineStart) + item.before + item.after + base.slice(lineStart));
+      pendingCaret.current = lineStart + item.before.length;
+      return;
+    }
+    setBody(base);
+    cursorRef.current = lineStart;
+    pendingCaret.current = lineStart;
     setTimeout(() => {
-      const nextCursor = lineStart + before.length;
-      ta.selectionStart = ta.selectionEnd = nextCursor;
-      cursorPosRef.current = nextCursor;
-      ta.focus();
+      if (item.action === 'uploadImage') bodyImageRef.current?.click();
+      else if (item.action === 'pickImage') setMediaPicker('body');
+      else if (item.action === 'link') setLinkModal({ open: true, url: '' });
+      else setShowProductModal(true);
     }, 0);
   }
 
-  function runSlashAction(action: () => void) {
-    const ta = textareaRef.current;
-    if (!ta) return;
-    const cursor = ta.selectionStart;
-    const lineStart = body.lastIndexOf('\n', cursor - 1) + 1;
-    setBody(body.slice(0, lineStart) + body.slice(cursor));
-    setSlashQuery(null);
-    cursorPosRef.current = lineStart;
-    setTimeout(action, 0);
+  function handleBodyKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (!slash.open) return;
+    const n = slashItems.length;
+    if (e.key === 'ArrowDown') { e.preventDefault(); setSlash((s) => ({ ...s, index: n ? (s.index + 1) % n : 0 })); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setSlash((s) => ({ ...s, index: n ? (s.index - 1 + n) % n : 0 })); }
+    else if ((e.key === 'Enter' || e.key === 'Tab') && slashItems[slash.index]) { e.preventDefault(); applySlash(slashItems[slash.index]); }
+    else if (e.key === 'Escape') { e.preventDefault(); setSlash(SLASH_CLOSED); }
   }
 
-  const slashCommands = [
-    { label: '見出し H2', keywords: 'h2 見出し', action: () => insertSlashCommand('<h2>', '</h2>') },
-    { label: '小見出し H3', keywords: 'h3 小見出し', action: () => insertSlashCommand('<h3>', '</h3>') },
-    { label: '太字', keywords: 'bold strong 太字', action: () => insertSlashCommand('<strong>', '</strong>') },
-    { label: '斜体', keywords: 'italic em 斜体', action: () => insertSlashCommand('<em>', '</em>') },
-    { label: '箇条書きリスト', keywords: 'ul 箇条書き リスト', action: () => insertSlashCommand('<ul>\n<li>', '</li>\n</ul>') },
-    { label: '番号付きリスト', keywords: 'ol 番号 リスト', action: () => insertSlashCommand('<ol>\n<li>', '</li>\n</ol>') },
-    { label: '引用', keywords: 'blockquote 引用', action: () => insertSlashCommand('<blockquote>', '</blockquote>') },
-    { label: '画像をアップロード', keywords: 'image photo 画像 写真 アップロード', action: () => runSlashAction(() => bodyImageRef.current?.click()) },
-    { label: 'メディアから画像を選択', keywords: 'media image メディア 画像', action: () => runSlashAction(() => setMediaPicker('body')) },
-    { label: 'リンクを挿入', keywords: 'link url リンク', action: () => runSlashAction(() => { setLinkUrl(''); setShowLinkModal(true); }) },
-    { label: '商品カードを挿入', keywords: 'product shop 商品 カード', action: () => runSlashAction(() => setShowProductModal(true)) },
-  ].filter((command) => slashQuery === null || command.keywords.includes(slashQuery));
-
-
-  function buildContent(): string {
-    const blocks: string[] = [];
-    for (const para of body.split('\n\n')) {
-      const t = para.trim();
-      if (!t) continue;
-      const parts = t.split(/(\[image:\d+\])/);
-      for (const part of parts) {
-        const m = part.match(/^\[image:(\d+)\]$/);
-        if (m) {
-          const img = uploadedImages[parseInt(m[1], 10)];
-          if (img) blocks.push(`<!-- wp:image {"id":${img.id}} -->\n<figure class="wp-block-image"><img src="${img.url}" class="wp-image-${img.id}" /></figure>\n<!-- /wp:image -->`);
-        } else if (part.trim()) {
-          const pt = part.trim();
-          if (/^<(h[2-6]|ul|ol|blockquote|div|figure|table)/i.test(pt)) {
-            blocks.push(`<!-- wp:html -->\n${pt}\n<!-- /wp:html -->`);
-          } else {
-            blocks.push(`<!-- wp:paragraph -->\n<p>${pt.replace(/\n/g, '<br>')}</p>\n<!-- /wp:paragraph -->`);
-          }
-        }
-      }
-    }
-    return blocks.join('\n');
+  // ===== 抜粋 =====
+  function generateExcerpt() {
+    const plain = body
+      .replace(/\[image:\d+\]/g, '')
+      .replace(/<div[^>]*mf-product-card[^>]*><\/div>/g, '')
+      .replace(/^https?:\/\/\S+$/gm, '')
+      .replace(/<[^>]+>/g, '')
+      .replace(/^#{1,6}\s+/gm, '')
+      .replace(/\*\*(.+?)\*\*/g, '$1')
+      .replace(/^[-*>\d.)\s]+/gm, '')
+      .replace(/\n{2,}/g, '\n')
+      .replace(/\n/g, ' ')
+      .trim();
+    let result = plain.slice(0, 160);
+    const cutPoint = result.search(/[。．!?！？]/);
+    if (cutPoint >= 60) result = plain.slice(0, cutPoint + 1);
+    else result = plain.slice(0, 120);
+    setExcerpt(result.trim());
   }
 
-  async function savePost(forcedStatus?: 'publish' | 'draft') {
+  // ===== 保存 =====
+  async function savePost(forced?: 'publish' | 'draft') {
     if (!title.trim()) { setError('タイトルを入力してください'); return; }
+    if (uploading > 0) { setError('画像のアップロードが終わるまでお待ちください'); return; }
     setSaving(true); setError('');
     const fd = new FormData();
     fd.append('title', title);
     fd.append('excerpt', excerpt);
-    fd.append('body', body);
-    fd.append('content', buildContent());
-    fd.append('date', new Date(date).toISOString());
-    fd.append('postStatus', forcedStatus ?? status);
+    fd.append('content', bodyToWpContent(body, uploadedImages));
+    // WordPress はタイムゾーン無しの日時をサイトの時刻（JST）として受け取る。UTC に変換して送らない
+    fd.append('date', date.length === 16 ? `${date}:00` : date);
+    fd.append('postStatus', forced ?? status);
     selectedCats.forEach((id) => fd.append('categoryIds', String(id)));
     if (featuredImage) {
-      fd.append('featuredImageUrl', featuredImage.url);
-      fd.append('featuredImageId', String(featuredImage.id));
+      if (featuredImage.id) fd.append('featuredImageId', String(featuredImage.id));
+    } else if (isEdit) {
+      fd.append('featuredImageId', '0'); // 編集で外した
     }
     try {
-      const url = isEdit ? `/api/admin/posts/${postId}` : '/api/admin/posts';
-      const res = await fetch(url, { method: isEdit ? 'PUT' : 'POST', body: fd });
-      if (!res.ok) { const d = await res.json(); throw new Error(d.error || 'Save failed'); }
-      router.push('/admin/posts'); router.refresh();
-    } catch (err: unknown) {
+      const res = await fetch(isEdit ? `/api/admin/posts/${postId}` : '/api/admin/posts', { method: isEdit ? 'PUT' : 'POST', body: fd });
+      if (!res.ok) { const d = await res.json().catch(() => ({})); throw new Error(d.error || 'Save failed'); }
+      router.push('/admin/posts');
+      router.refresh();
+    } catch (err) {
       setError(err instanceof Error ? err.message : '保存に失敗しました');
       setSaving(false);
     }
   }
 
-  async function handleSubmit(e: React.FormEvent) { e.preventDefault(); await savePost(); }
   function toggleCat(id: number) {
-    setSelectedCats((prev) => prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]);
+    setSelectedCats((prev) => (prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]));
   }
 
-  // ===== エディター部分（左カラム） =====
-  const editorPanel = (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-      {/* タイトル */}
-      <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
-          <label style={{ ...labelStyle, marginBottom: 0 }}>タイトル *</label>
-          <span style={{
-            fontSize: 11,
-            color: title.length === 0 ? '#444'
-              : title.length < 20 ? '#f59e0b'      // 短すぎ
-              : title.length <= 35 ? '#22c55e'     // SEO最適 (検索結果に収まる)
-              : title.length <= 60 ? '#22c55e'     // 上限内
-              : '#ef4444',                          // 長すぎ
-          }}>
-            {title.length} 文字 {title.length > 60 ? '⚠ 長すぎ' : title.length >= 20 && title.length <= 60 ? '✓ SEO最適' : ''}
-          </span>
+  // 現在の下書き（未保存含む）を localStorage に書き出し、別タブでプレビューを開く
+  function openPreviewTab() {
+    try {
+      localStorage.setItem('mito_post_preview', JSON.stringify({ title, date, body, excerpt, featuredImage, selectedCats, categories, uploadedImages }));
+    } catch { /* localStorage 不可でも開くだけ試みる */ }
+    window.open('/admin/preview', '_blank', 'noopener');
+  }
+
+  const scrollToPreview = () => previewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const publishLabel = saving ? '保存中…' : isEdit ? '更新して公開' : '公開する';
+
+  return (
+    <div className={styles.page}>
+      <form onSubmit={(e) => { e.preventDefault(); savePost(); }}>
+        {/* ── 追従ヘッダー ── */}
+        <header className={styles.topbar}>
+          <div className={styles.topbarLeft}>
+            <Link href="/admin/posts" className={styles.back}>← 記事一覧</Link>
+            <h1 className={styles.heading}>{heading}</h1>
+            <span className={`${styles.statusPill} ${status === 'draft' ? styles.statusPillDraft : ''}`}>{status === 'draft' ? '下書き' : '公開'}</span>
+          </div>
+          <div className={styles.topbarActions}>
+            <button type="button" className={`${styles.btn} ${styles.btnGhost}`} onClick={scrollToPreview}>プレビューへ ↓</button>
+            <button type="button" className={`${styles.btn} ${styles.btnGhost}`} onClick={openPreviewTab}>別タブ ↗</button>
+            <button type="button" className={styles.btn} disabled={saving} onClick={() => savePost('draft')}>下書き保存</button>
+            <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`} disabled={saving}>{publishLabel}</button>
+          </div>
+        </header>
+
+        <div className={styles.container}>
+          <div className={styles.panel}>
+            {/* タイトル */}
+            <div className={styles.field}>
+              <div className={styles.labelRow}>
+                <label className={styles.label} htmlFor="post-title">タイトル<span className={styles.required}>*</span></label>
+                <span className={`${styles.counter} ${counterTone(title.length, 20, 60)}`}>
+                  {title.length} 文字{title.length > 60 ? ' ⚠ 長すぎ' : title.length >= 20 ? ' ✓ SEO最適' : ''}
+                </span>
+              </div>
+              <input id="post-title" className={`${styles.input} ${styles.titleInput}`} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="記事タイトルを入力（20〜35文字程度がSEOに最適）" required />
+            </div>
+
+            {/* 公開日時 / ステータス */}
+            <div className={styles.row}>
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="post-date">公開日時</label>
+                <input id="post-date" type="datetime-local" className={styles.input} value={date} onChange={(e) => setDate(e.target.value)} />
+              </div>
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="post-status">ステータス</label>
+                <select id="post-status" className={styles.select} value={status} onChange={(e) => setStatus(e.target.value as 'publish' | 'draft')}>
+                  <option value="publish">公開</option>
+                  <option value="draft">下書き</option>
+                </select>
+              </div>
+            </div>
+
+            {/* カテゴリー */}
+            <div className={styles.field}>
+              <span className={styles.label}>カテゴリー</span>
+              <div className={styles.chips}>
+                {categories.map((cat) => {
+                  const selected = selectedCats.includes(cat.id);
+                  return (
+                    <button key={cat.id} type="button" className={`${styles.chip} ${selected ? styles.chipActive : ''}`} aria-pressed={selected} onClick={() => toggleCat(cat.id)}>
+                      {selected ? '✓ ' : ''}{cat.name}
+                    </button>
+                  );
+                })}
+              </div>
+              <span className={styles.hint}>複数選べます。公開ページの上部と記事一覧のバッジに出ます</span>
+            </div>
+
+            {/* アイキャッチ */}
+            <div className={styles.field}>
+              <span className={styles.label}>アイキャッチ画像</span>
+              <div
+                className={`${styles.dropZone} ${dragFeatured ? styles.dropZoneOver : ''}`}
+                role="button" tabIndex={0}
+                onClick={() => featuredRef.current?.click()}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); featuredRef.current?.click(); } }}
+                onDragOver={(e) => { e.preventDefault(); setDragFeatured(true); }}
+                onDragLeave={() => setDragFeatured(false)}
+                onDrop={(e) => { e.preventDefault(); setDragFeatured(false); uploadFeatured(e.dataTransfer.files?.[0]); }}
+              >
+                {featuredImage ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={featuredImage.url} alt="" className={styles.thumb} />
+                ) : (
+                  <div className={styles.thumbEmpty}>No Image</div>
+                )}
+                <div className={styles.dropText}>
+                  {uploading > 0 ? 'アップロード中…' : (
+                    <>
+                      <strong>{featuredImage ? '差し替える：ここにドラッグ&ドロップ' : 'ここにドラッグ&ドロップ'}</strong>
+                      <span className={styles.dropSub}>またはクリックして選択（自動で約200KBに圧縮）</span>
+                    </>
+                  )}
+                </div>
+                <div className={styles.dropActions} onClick={(e) => e.stopPropagation()}>
+                  <button type="button" className={styles.miniBtn} onClick={() => setMediaPicker('featured')}>メディアから選択</button>
+                  {featuredImage && <button type="button" className={`${styles.miniBtn} ${styles.miniBtnDanger}`} onClick={() => setFeaturedImage(null)}>外す</button>}
+                </div>
+              </div>
+              <input ref={featuredRef} type="file" accept="image/*" hidden onChange={(e) => { uploadFeatured(e.target.files?.[0]); e.target.value = ''; }} />
+            </div>
+
+            {/* 本文 */}
+            <div className={styles.field}>
+              <div className={styles.labelRow}>
+                <label className={styles.label} htmlFor="post-body">本文</label>
+                <span className={styles.counter}>{body.length} 文字</span>
+              </div>
+              <div
+                className={styles.bodyWrap}
+                onDragOver={(e) => { e.preventDefault(); setDragBody(true); }}
+                onDragLeave={() => setDragBody(false)}
+                onDrop={(e) => { e.preventDefault(); setDragBody(false); uploadToBody(Array.from(e.dataTransfer.files)); }}
+              >
+                <textarea
+                  id="post-body"
+                  ref={textareaRef}
+                  className={`${styles.textarea} ${styles.bodyArea} ${dragBody ? styles.bodyAreaDrag : ''}`}
+                  value={body}
+                  onChange={handleBodyChange}
+                  onKeyDown={handleBodyKeyDown}
+                  onKeyUp={rememberCaret}
+                  onClick={rememberCaret}
+                  onSelect={rememberCaret}
+                  onBlur={() => setTimeout(() => setSlash((s) => (s.open ? SLASH_CLOSED : s)), 150)}
+                  onPaste={(e) => { const files = Array.from(e.clipboardData.files); if (files.length) { e.preventDefault(); uploadToBody(files); } }}
+                  placeholder={'本文を入力...\n\n空行で段落が分かれます。行頭で「/」を入力するとメニューが出ます。\n画像はドラッグ＆ドロップ／貼り付けで挿入できます。'}
+                />
+                {slash.open && (
+                  <ul className={styles.slashMenu} style={{ top: slash.top, left: slash.left }}>
+                    <li className={styles.slashTitle}>ブロックを選択（↑↓ で移動・Enter で決定）</li>
+                    {slashItems.length > 0 ? slashItems.map((it, i) => (
+                      <li
+                        key={it.label}
+                        className={`${styles.slashItem} ${i === slash.index ? styles.slashItemActive : ''}`}
+                        onMouseDown={(e) => { e.preventDefault(); applySlash(it); }}
+                        onMouseEnter={() => setSlash((s) => ({ ...s, index: i }))}
+                      >
+                        <span>{it.label}</span>
+                        <span className={styles.slashHint}>{it.hint}</span>
+                      </li>
+                    )) : <li className={styles.slashEmpty}>一致する項目がありません</li>}
+                  </ul>
+                )}
+                {dragBody && <div className={styles.dropHint}>📷 ここにドロップして挿入</div>}
+              </div>
+              <input ref={bodyImageRef} type="file" accept="image/*" multiple hidden onChange={(e) => { uploadToBody(Array.from(e.target.files || [])); e.target.value = ''; }} />
+
+              {uploadedImages.length > 0 && (
+                <div className={styles.imageStrip}>
+                  {uploadedImages.map((img, i) => (
+                    <div key={`${img.url}-${i}`} className={styles.imageChip} title={`[image:${i}]`}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={img.url} alt="" />
+                      <span>[{i}]</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <span className={styles.hint}>「/」でメニュー。直接書いても可：## 大見出し、### 小見出し、- 箇条書き、&gt; 引用、URL だけの行 → リンクカード</span>
+            </div>
+
+            {/* 抜粋・メタディスクリプション */}
+            <div className={styles.field}>
+              <div className={styles.labelRow}>
+                <label className={styles.label} htmlFor="post-excerpt">抜粋 / メタディスクリプション</label>
+                <span style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
+                  <button type="button" className={styles.miniBtn} onClick={generateExcerpt}>本文から自動抽出</button>
+                  <span className={`${styles.counter} ${counterTone(excerpt.length, 80, 160)}`}>
+                    {excerpt.length} 文字{excerpt.length > 160 ? ' ⚠ 長すぎ' : excerpt.length >= 80 ? ' ✓ SEO最適' : ''}
+                  </span>
+                </span>
+              </div>
+              <textarea id="post-excerpt" className={styles.textarea} rows={3} value={excerpt} onChange={(e) => setExcerpt(e.target.value)} placeholder="検索結果に表示される説明文（80〜160文字推奨）。空欄の場合は本文先頭が使われます。" />
+            </div>
+
+            {(title || excerpt) && (
+              <div className={styles.field}>
+                <span className={styles.label}>Google 検索結果プレビュー</span>
+                <div className={styles.serp}>
+                  <div className={styles.serpUrl}>mitoflow40.com › journal › ...</div>
+                  <div className={styles.serpTitle}>{(title || '記事タイトル').slice(0, 60)}{title.length > 60 ? '...' : ''} | Mitoflow40</div>
+                  <div className={styles.serpDesc}>{(excerpt || '抜粋を入力するとここに表示されます').slice(0, 160)}{excerpt.length > 160 && '...'}</div>
+                </div>
+              </div>
+            )}
+
+            {error && <p className={styles.error} role="alert">{error}</p>}
+
+            <div className={styles.footer}>
+              {uploading > 0 && <span className={styles.uploadingNote}>画像をアップロード中…</span>}
+              <button type="button" className={styles.btn} disabled={saving} onClick={() => savePost('draft')}>下書き保存</button>
+              <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`} disabled={saving}>{publishLabel}</button>
+            </div>
+          </div>
         </div>
-        <input
-          value={title} onChange={(e) => setTitle(e.target.value)}
-          placeholder="記事タイトルを入力... (20〜35文字程度がSEOに最適)"
-          style={{ ...inputStyle, fontSize: 18, fontWeight: 600 }} required
+      </form>
+
+      {/* ── リアルタイムプレビュー（フォームの下・全幅）── */}
+      <div ref={previewRef} className={`${styles.container} ${styles.previewSection}`}>
+        <div className={styles.previewHead}>
+          <span className={styles.previewLabel}>Preview<small>入力するたびに更新されます</small></span>
+          <button type="button" className={`${styles.btn} ${styles.btnGhost}`} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>↑ 編集に戻る</button>
+        </div>
+        <LivePreview
+          title={title}
+          date={date}
+          body={body}
+          featuredImage={featuredImage}
+          selectedCats={selectedCats}
+          categories={categories}
+          uploadedImages={uploadedImages}
         />
       </div>
 
-      {/* 公開日時 / ステータス */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-        <div>
-          <label style={labelStyle}>公開日時</label>
-          <input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} style={inputStyle} />
-        </div>
-        <div>
-          <label style={labelStyle}>ステータス</label>
-          <select value={status} onChange={(e) => setStatus(e.target.value as 'publish' | 'draft')}
-            style={{ ...inputStyle, cursor: 'pointer' }}>
-            <option value="publish">公開</option>
-            <option value="draft">下書き</option>
-          </select>
-        </div>
-      </div>
-
-      {/* 本文 */}
-      <div>
-        {/* テキストエリア */}
-        <div onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} style={{ position: 'relative' }}>
-          <textarea
-            ref={textareaRef} value={body} onChange={handleBodyChange}
-            onKeyDown={(e) => { if (e.key === 'Escape') setSlashQuery(null); }}
-            placeholder={'本文を入力...\n\n段落は空行で区切ります。\n画像はドラッグ＆ドロップで挿入できます。'}
-            rows={22}
-            style={{
-              ...inputStyle, resize: 'vertical', lineHeight: 1.8,
-              fontFamily: '"Noto Sans JP", sans-serif',
-              borderRadius: 8,
-              borderColor: isDragging ? '#22c55e' : '#2a2a2a',
-              boxShadow: isDragging ? '0 0 0 2px #22c55e30' : 'none',
-              transition: 'border-color 0.15s',
-            }}
-          />
-          {slashQuery !== null && (
-            <div style={{
-              position: 'absolute', zIndex: 20, top: 12, left: 12, width: 220,
-              padding: 6, background: '#fff', border: '1px solid #bfcac5', borderRadius: 10,
-              boxShadow: '0 12px 32px rgba(26,26,26,.16)',
-            }}>
-              <p style={{ margin: '3px 8px 6px', color: '#7a8580', fontSize: 10 }}>ブロックを選択</p>
-              {slashCommands.length > 0 ? slashCommands.map((command) => (
-                <button
-                  key={command.label}
-                  type="button"
-                  onClick={command.action}
-                  style={{
-                    display: 'block', width: '100%', padding: '8px 10px', textAlign: 'left',
-                    background: '#fff', border: 'none', borderRadius: 6, color: '#1a1a1a',
-                    fontSize: 12, cursor: 'pointer',
-                  }}
-                >{command.label}</button>
-              )) : <p style={{ margin: 8, color: '#888', fontSize: 11 }}>一致する項目がありません</p>}
-            </div>
-          )}
-          {isDragging && (
-            <div style={{
-              position: 'absolute', inset: 0, background: 'rgba(34,197,94,0.08)',
-              border: '2px dashed #22c55e', borderRadius: '0 0 8px 8px',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none',
-            }}>
-              <span style={{ color: '#22c55e', fontSize: 15, fontWeight: 600 }}>📷 ここにドロップして挿入</span>
-            </div>
-          )}
-        </div>
-        <input ref={bodyImageRef} type="file" accept="image/*" multiple onChange={handleBodyImageInput} style={{ display: 'none' }} />
-
-        {uploadedImages.length > 0 && (
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 8 }}>
-            {uploadedImages.map((img, i) => (
-              <div key={i} style={{ position: 'relative' }} title={`[image:${i}]`}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={img.url} alt="" style={{ width: 52, height: 52, objectFit: 'cover', borderRadius: 6, border: '1px solid #2a2a2a' }} />
-                <span style={{
-                  position: 'absolute', bottom: 2, right: 2, background: 'rgba(0,0,0,0.85)',
-                  color: '#fff', fontSize: 9, padding: '1px 4px', borderRadius: 3,
-                }}>[{i}]</span>
-              </div>
-            ))}
-          </div>
-        )}
-        <p style={{ fontSize: 11, color: '#333', marginTop: 6 }}>
-          💡 ドラッグ＆ドロップで挿入 ／ 画像は自動で約200KBに圧縮
-        </p>
-      </div>
-
-      {/* 抜粋・メタディスクリプション */}
-      <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
-          <label style={{ ...labelStyle, marginBottom: 0 }}>抜粋 / メタディスクリプション</label>
-          <button type="button" onClick={generateExcerpt}
-            style={{ fontSize: 11, padding: '3px 8px', background: '#1e1e1e', border: '1px solid #2a2a2a', borderRadius: 5, color: '#888', cursor: 'pointer' }}>
-            自動抽出
-          </button>
-          <span style={{
-            fontSize: 11,
-            color: excerpt.length === 0 ? '#444'
-              : excerpt.length < 80 ? '#f59e0b'
-              : excerpt.length <= 160 ? '#22c55e'
-              : '#ef4444',
-          }}>
-            {excerpt.length} 文字 {excerpt.length > 160 ? '⚠ 長すぎ' : excerpt.length >= 80 && excerpt.length <= 160 ? '✓ SEO最適' : ''}
-          </span>
-        </div>
-        <textarea value={excerpt} onChange={(e) => setExcerpt(e.target.value)}
-          placeholder="検索結果に表示される説明文 (80〜160文字推奨)。空欄の場合は本文先頭が使われます。"
-          rows={3}
-          style={{ ...inputStyle, resize: 'vertical' }} />
-        <p style={{ fontSize: 11, color: '#3a3a3a', marginTop: 6 }}>
-          💡 検索結果に表示される説明文です。本文の要約と「読みたくなるフック」を盛り込みましょう。
-        </p>
-      </div>
-
-      {/* 検索結果プレビュー */}
-      {(title || excerpt) && (
-        <div>
-          <label style={labelStyle}>Google検索結果プレビュー</label>
-          <div style={{
-            background: '#fff', padding: '14px 18px', borderRadius: 8,
-            border: '1px solid #2a2a2a', fontFamily: 'arial, sans-serif',
-          }}>
-            <div style={{ fontSize: 12, color: '#202124', marginBottom: 2 }}>
-              mitoflow40.com › journal › ...
-            </div>
-            <div style={{
-              fontSize: 20, color: '#1a0dab', fontWeight: 400, lineHeight: 1.3, marginBottom: 3,
-              fontFamily: 'arial, sans-serif',
-            }}>
-              {(title || '記事タイトル').slice(0, 60)}{title.length > 60 ? '...' : ''} | Mitoflow40
-            </div>
-            <div style={{ fontSize: 14, color: '#4d5156', lineHeight: 1.58, fontFamily: 'arial, sans-serif' }}>
-              {(excerpt || '抜粋を入力するとここに表示されます').slice(0, 160)}
-              {(excerpt.length > 160) && '...'}
-            </div>
-          </div>
-        </div>
-      )}
-
-    </div>
-  );
-
-  // 現在の下書き（未保存含む）を localStorage に書き出し、新しいタブでプレビューを開く
-  const openPreviewTab = () => {
-    try {
-      localStorage.setItem('mito_post_preview', JSON.stringify({
-        title, date, body, excerpt, featuredImage, selectedCats, categories, uploadedImages,
-      }));
-    } catch { /* localStorage 不可でも開くだけ試みる */ }
-    window.open('/admin/preview', '_blank', 'noopener');
-  };
-
-  // ===== プレビュー部分（右カラム） =====
-  const previewPanel = (
-    <LivePreview
-      title={title}
-      date={date}
-      body={body}
-      excerpt={excerpt}
-      featuredImage={featuredImage}
-      selectedCats={selectedCats}
-      categories={categories}
-      uploadedImages={uploadedImages}
-      onUploadFeatured={() => featuredRef.current?.click()}
-      onChooseFeatured={() => setMediaPicker('featured')}
-      onRemoveFeatured={() => setFeaturedImage(null)}
-      onToggleCategory={toggleCat}
-    />
-  );
-
-  return (
-    <form onSubmit={handleSubmit} className="admin-post-editor">
-      <input ref={featuredRef} type="file" accept="image/*" onChange={handleFeaturedUpload} style={{ display: 'none' }} />
-      {/* ── トップバー（追従） ── */}
-      <div className="admin-editor-topbar" style={{
-        position: 'fixed', top: 0, right: 8, zIndex: 60, height: 56,
-        background: 'transparent',
-        margin: 0, padding: 0,
-        display: 'flex', justifyContent: 'flex-end', alignItems: 'center',
-        flexWrap: 'wrap', gap: 10,
-      }}>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <a href="/admin/posts" style={{
-            padding: '9px 18px', background: 'transparent', border: '1px solid #2a2a2a',
-            borderRadius: 8, color: '#555', textDecoration: 'none', fontSize: 13,
-          }}>
-            キャンセル
-          </a>
-
-          <button type="button" onClick={openPreviewTab} style={{
-            padding: '9px 18px', background: 'transparent', border: '1px solid #2a2a2a',
-            borderRadius: 8, color: '#8ab4f8', fontSize: 13, cursor: 'pointer',
-          }}>
-            プレビュー ↗
-          </button>
-
-          <button type="button" disabled={saving} onClick={() => savePost('draft')} style={{
-            padding: '9px 18px', background: saving ? '#1a1a1a' : '#1e2a1e',
-            border: '1px solid #2a4a2a', borderRadius: 8,
-            color: saving ? '#444' : '#4ade80', fontSize: 13, fontWeight: 600, cursor: saving ? 'not-allowed' : 'pointer',
-          }}>
-            下書き保存
-          </button>
-
-          <button type="submit" disabled={saving} style={{
-            padding: '9px 22px', background: saving ? '#333' : '#22c55e',
-            color: saving ? '#666' : '#000', border: 'none', borderRadius: 8,
-            fontSize: 13, fontWeight: 700, cursor: saving ? 'not-allowed' : 'pointer',
-          }}>
-            {saving ? '保存中...' : isEdit ? '更新して公開' : '公開する'}
-          </button>
-        </div>
-      </div>
-
-      {/* エラー */}
-      {error && (
-        <div style={{
-          marginBottom: 16, padding: '10px 16px', background: '#1a0000',
-          border: '1px solid #3a1a1a', borderRadius: 8, color: '#f87171', fontSize: 13,
-        }}>
-          {error}
-        </div>
-      )}
-
-      {showLinkModal && (
-        <div
-          onClick={() => setShowLinkModal(false)}
-          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}
-        >
-          <div
-            className="admin-editor-modal"
-            onClick={(e) => e.stopPropagation()}
-            style={{ background: '#141414', border: '1px solid #2a2a2a', borderRadius: 12, padding: 24, width: '100%', maxWidth: 440, color: '#e5e5e5' }}
-          >
-            <h2 style={{ fontSize: 15, fontWeight: 700, color: '#fff', margin: '0 0 16px' }}>🔗 リンクを挿入</h2>
-            <p style={{ fontSize: 12, color: '#666', marginBottom: 12 }}>
-              URLを単独行で挿入します。記事公開時にOGPカードに自動変換されます。
-            </p>
+      {/* ── モーダル（フォームの外に置く：中のボタンで誤って送信されないように）── */}
+      {linkModal.open && (
+        <div className={styles.modalBackdrop} onClick={() => setLinkModal({ open: false, url: '' })}>
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <h2>🔗 リンクカードを挿入</h2>
+            <p>URL を 1 行だけの段落として挿入します。公開時に OGP カード（Amazon／楽天は商品カード）になります。</p>
             <input
               autoFocus
-              value={linkUrl}
-              onChange={(e) => setLinkUrl(e.target.value)}
+              className={styles.input}
+              value={linkModal.url}
+              onChange={(e) => setLinkModal({ open: true, url: e.target.value })}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && linkUrl.startsWith('http')) {
-                  const pos = cursorPosRef.current;
-                  setBody((b) => b.slice(0, pos) + '\n\n' + linkUrl.trim() + '\n\n' + b.slice(pos));
-                  setShowLinkModal(false);
-                }
+                if (e.key === 'Enter' && /^https?:\/\//.test(linkModal.url.trim())) { insertBlock(linkModal.url.trim()); setLinkModal({ open: false, url: '' }); }
+                if (e.key === 'Escape') setLinkModal({ open: false, url: '' });
               }}
               placeholder="https://..."
-              style={{ width: '100%', padding: '10px 12px', background: '#1a1a1a', border: '1px solid #2a2a2a', borderRadius: 8, color: '#e5e5e5', fontSize: 13, outline: 'none', boxSizing: 'border-box' }}
             />
-            <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 16 }}>
-              <button type="button" onClick={() => setShowLinkModal(false)} style={{ padding: '8px 16px', background: '#1e1e1e', border: '1px solid #2a2a2a', borderRadius: 6, color: '#aaa', cursor: 'pointer', fontSize: 12 }}>キャンセル</button>
+            <div className={styles.modalActions}>
+              <button type="button" className={styles.btn} onClick={() => setLinkModal({ open: false, url: '' })}>キャンセル</button>
               <button
                 type="button"
-                disabled={!linkUrl.startsWith('http')}
-                onClick={() => {
-                  const pos = cursorPosRef.current;
-                  setBody((b) => b.slice(0, pos) + '\n\n' + linkUrl.trim() + '\n\n' + b.slice(pos));
-                  setShowLinkModal(false);
-                }}
-                style={{ padding: '8px 20px', background: linkUrl.startsWith('http') ? '#22c55e' : '#333', color: '#000', border: 'none', borderRadius: 6, fontSize: 13, fontWeight: 700, cursor: linkUrl.startsWith('http') ? 'pointer' : 'not-allowed' }}
+                className={`${styles.btn} ${styles.btnPrimary}`}
+                disabled={!/^https?:\/\//.test(linkModal.url.trim())}
+                onClick={() => { insertBlock(linkModal.url.trim()); setLinkModal({ open: false, url: '' }); }}
               >
                 挿入
               </button>
@@ -587,39 +570,16 @@ export default function PostEditor({ categories, postId, defaultValues }: PostEd
         onClose={() => setMediaPicker(null)}
         title={mediaPicker === 'featured' ? 'アイキャッチ画像を選択' : '本文に挿入する画像を選択'}
         onSelect={(item) => {
-          if (mediaPicker === 'featured') {
-            setFeaturedImage(item);
-          } else if (mediaPicker === 'body') {
-            setUploadedImages((prev) => {
-              const idx = prev.length;
-              const pos = cursorPosRef.current;
-              setBody((b) => b.slice(0, pos) + '\n[image:' + idx + ']\n' + b.slice(pos));
-              return [...prev, item];
-            });
-          }
+          if (mediaPicker === 'featured') setFeaturedImage(item);
+          else addBodyImages([item]);
         }}
       />
 
       <ProductInsertModal
         open={showProductModal}
         onClose={() => setShowProductModal(false)}
-        onInsert={(html) => {
-          const ta = textareaRef.current;
-          const pos = ta ? cursorPosRef.current : body.length;
-          setBody((b) => b.slice(0, pos) + '\n\n' + html + '\n\n' + b.slice(pos));
-        }}
+        onInsert={(html) => insertBlock(html)}
       />
-
-      {/* ── メインレイアウト ── */}
-      <div className="admin-editor-grid" style={{
-        display: 'grid',
-        gridTemplateColumns: showPreview ? 'minmax(0, 1fr) minmax(0, 1fr)' : '1fr',
-        gap: 10,
-        alignItems: 'start',
-      }}>
-        {editorPanel}
-        {showPreview && previewPanel}
-      </div>
-    </form>
+    </div>
   );
 }
