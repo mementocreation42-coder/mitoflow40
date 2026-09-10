@@ -40,10 +40,10 @@ export default async function PodcastPage() {
                 author: { '@type': 'Person', name: '小林大介', url: 'https://mitoflow40.com/author' },
                 publisher: { '@type': 'Organization', name: 'Mitoflow40', url: 'https://mitoflow40.com' },
             }} />
-            <JsonLd data={breadcrumb([{ name: 'Mitoflow40', path: '/' }, { name: 'ポッドキャスト', path: '/podcast' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Mitoflow40', path: '/' }, { name: 'ジャーナル', path: '/journal' }, { name: 'ポッドキャスト', path: '/podcast' }])} />
 
             <div className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'HOME', href: '/' }, { name: 'PODCAST' }]} />
+                <Breadcrumbs items={[{ name: 'HOME', href: '/' }, { name: 'JOURNAL', href: '/journal' }, { name: 'PODCAST' }]} />
 
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>PODCAST</p>

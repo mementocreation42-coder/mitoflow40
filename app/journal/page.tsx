@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import JournalSearch from "@/components/JournalSearch";
 import JournalList from "@/components/JournalList";
 import JournalCategoryFilter from "@/components/JournalCategoryFilter";
+import JournalPodcast from "@/components/JournalPodcast";
 import { Suspense } from "react";
 import { getCategories } from "@/lib/wp";
 
@@ -86,6 +87,9 @@ export default async function JournalIndex({ searchParams }: { searchParams: Pro
             <Suspense fallback={<div className="h-10 mb-10" />}>
                 <JournalCategoryFilter categories={categories} />
             </Suspense>
+
+            {/* Podcast（ヘルスケア回の最新 3 本。読むと聴くを同じ場所に） */}
+            <JournalPodcast />
 
             {/* Post List (Client Side) */}
             <Suspense fallback={<div className="h-96" />}>

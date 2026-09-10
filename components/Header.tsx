@@ -8,7 +8,6 @@ const navItems = [
     { href: '/library', label: 'LIBRARY', ja: 'ライブラリ' },
     { href: '/textbook', label: 'LEARN', ja: '学び' },
     { href: '/journal', label: 'JOURNAL', ja: 'ジャーナル' },
-    { href: '/podcast', label: 'PODCAST', ja: 'ポッドキャスト' },
     { href: '/#contact', label: 'CONTACT', ja: 'お問い合わせ' },
 ];
 
