@@ -57,3 +57,6 @@ next-env.d.ts
 
 # davinci24: 別gitリポジトリ（Dropbox bare repo で同期）
 /davinci24/
+
+# n=1 ジャーナルの個人データ出力
+.claude/skills/n1-journal/outputs/
