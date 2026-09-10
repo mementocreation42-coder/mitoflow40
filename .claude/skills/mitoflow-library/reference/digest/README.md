@@ -293,7 +293,7 @@ build.mjs で作った knowledge/ を Claude が 1 枚ずつ読み、要点を d
 - [x] essays/recognition.md（2KB）
 - [x] essays/tuning.md（2KB）
 
-### ジャーナル（58 枚・505KB）→ digest/journal.md
+### ジャーナル（58 枚 → 公開中 30 枚）→ digest/journal.md ※ 2026-09-11 ヘルスラーニングジャーナル 23 本をゴミ箱へ
 - [x] journal/11895-自分に合った食事を探すためのFreeStyleリブレ.md（4KB）
 - [x] journal/11988-フリースタイルリブレを二週間モニタリングしてみて.md（5KB）
 - [x] journal/16441-ケトン体-Bullet-Ploof社のMCTオイルを3ヶ月飲んだ感想.md（7KB）
