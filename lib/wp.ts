@@ -367,8 +367,10 @@ export async function getPostsPaginated(page = 1, perPage = 20, search?: string,
     if (categoryId) base.categories = categoryId;
 
     // 公開済み（認証不要、デフォルトで publish のみ返る）
+    // WordPress 側（ホストのページキャッシュ）が REST の応答を数分保持することがあり、削除直後に古い一覧が返る。
+    // 管理画面の一覧は毎回ユニークなパラメータを付けてキャッシュをすり抜ける
     const fetchPublished = async (): Promise<{ posts: WPPost[]; totalPages: number }> => {
-        const res = await fetch(wpUrl('/posts', base), { cache: 'no-store' });
+        const res = await fetch(wpUrl('/posts', { ...base, _cb: Date.now() }), { cache: 'no-store' });
         if (!res.ok) {
             const body = await res.text().catch(() => '');
             throw new Error(`Failed to fetch posts (${res.status}): ${body.slice(0, 200)}`);

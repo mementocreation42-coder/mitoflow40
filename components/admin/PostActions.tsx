@@ -2,11 +2,12 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 export default function PostActions({ postId, classes }: { postId: number; classes?: { actions: string; edit: string; delete: string } }) {
   const router = useRouter();
   const [deleting, setDeleting] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   async function handleDelete() {
     if (!confirm('この投稿を削除しますか？')) return;
@@ -20,6 +21,9 @@ export default function PostActions({ postId, classes }: { postId: number; class
       }
       const data = await res.json().catch(() => ({}));
       if (data.how === 'trash') alert('完全削除は WordPress 側で拒否されたため、ゴミ箱へ移動しました。');
+      // WordPress 側のキャッシュで一覧の再取得に古い結果が返ることがあるので、まず画面から消す
+      rootRef.current?.closest('article')?.remove();
+      setDeleting(false);
       router.refresh();
     } catch (e) {
       // 失敗の理由をそのまま見せる（WordPress 側の応答を含む）
@@ -29,7 +33,7 @@ export default function PostActions({ postId, classes }: { postId: number; class
   }
 
   return (
-    <div className={classes?.actions} style={classes ? undefined : { display: 'flex', flexDirection: 'column', gap: 6, flexShrink: 0 }}>
+    <div ref={rootRef} className={classes?.actions} style={classes ? undefined : { display: 'flex', flexDirection: 'column', gap: 6, flexShrink: 0 }}>
       {/* クライアント遷移にして、編集画面の読み込み中も loading スケルトンが出るようにする。
           先読みは切る（20 記事ぶんの編集画面＝WordPress 問い合わせが走ってしまう） */}
       <Link
