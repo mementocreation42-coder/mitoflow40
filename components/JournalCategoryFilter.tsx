@@ -39,7 +39,7 @@ function CapsuleButton({
                 height: "clamp(28px, 7vw, 36px)",
                 fontSize: "clamp(9px, 2.2vw, 12px)",
                 padding: "0 clamp(10px, 3vw, 20px)",
-                border: "1.5px solid #1A1A1A",
+                border: "1px solid #1A1A1A",
                 transition: "border-color 0.2s",
             }}
         >
