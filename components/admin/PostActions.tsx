@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
-// 削除は 2 段階（「削除」→「本当に削除」）。ブラウザの confirm / alert は使わない。
+// 削除は同じボタンの 2 回押し（「削除」→「本当に削除」）。ブラウザの confirm / alert は使わない。
 // アプリ内ブラウザや一部の環境ではネイティブのダイアログが出ず、押しても何も起きないように見えるため。
 export default function PostActions({ postId, classes }: { postId: number; classes?: { actions: string; edit: string; delete: string } }) {
   const router = useRouter();
@@ -12,10 +12,10 @@ export default function PostActions({ postId, classes }: { postId: number; class
   const [message, setMessage] = useState<string | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
 
-  // 「本当に削除」を 6 秒放置したら元に戻す
+  // 「本当に削除」を 5 秒放置したら元に戻す
   useEffect(() => {
     if (phase !== 'armed') return;
-    const t = window.setTimeout(() => setPhase('idle'), 6000);
+    const t = window.setTimeout(() => setPhase('idle'), 5000);
     return () => window.clearTimeout(t);
   }, [phase]);
 
@@ -61,26 +61,21 @@ export default function PostActions({ postId, classes }: { postId: number; class
       >
         編集
       </Link>
-      {phase === 'armed' ? (
-        <>
-          <button type="button" onClick={doDelete} className={classes?.delete} style={{ ...(btnStyle ?? {}), background: '#b34b4b', color: '#fff', borderColor: '#b34b4b' }}>
-            本当に削除
-          </button>
-          <button type="button" onClick={() => setPhase('idle')} className={classes?.edit} style={classes ? undefined : { ...btnStyle, color: '#aaa', borderColor: '#2a2a2a' }}>
-            やめる
-          </button>
-        </>
-      ) : (
-        <button
-          type="button"
-          onClick={() => setPhase('armed')}
-          disabled={phase !== 'idle'}
-          className={classes?.delete}
-          style={btnStyle}
-        >
-          {phase === 'deleting' ? '削除中…' : phase === 'done' ? '削除済み' : '削除'}
-        </button>
-      )}
+      {/* 同じボタンが「削除」→「本当に削除」に変わるだけ。外をクリック／Esc／5 秒放置で元に戻る */}
+      <button
+        type="button"
+        onClick={() => (phase === 'armed' ? doDelete() : setPhase('armed'))}
+        onBlur={() => phase === 'armed' && setPhase('idle')}
+        onKeyDown={(e) => e.key === 'Escape' && setPhase('idle')}
+        disabled={phase === 'deleting' || phase === 'done'}
+        className={classes?.delete}
+        style={phase === 'armed'
+          ? { ...(btnStyle ?? {}), background: '#b34b4b', color: '#fff', borderColor: '#b34b4b', transition: 'background .15s, color .15s' }
+          : { ...(btnStyle ?? {}), transition: 'background .15s, color .15s' }}
+        aria-live="polite"
+      >
+        {phase === 'armed' ? '本当に削除' : phase === 'deleting' ? '削除中…' : phase === 'done' ? '削除済み' : '削除'}
+      </button>
       {message && <p style={{ margin: 0, fontSize: 11, color: '#b34b4b', maxWidth: 220, lineHeight: 1.4 }}>{message}</p>}
     </div>
   );
