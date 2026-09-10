@@ -18,7 +18,7 @@ export default function Profile() {
                 <FadeOnScroll delay={0.2}>
                     <div className="grid md:grid-cols-[300px_1fr] gap-12 items-start">
                         <div className="flex flex-col items-center">
-                            <div className="w-full aspect-square rounded-xl overflow-hidden">
+                            <div className="w-full aspect-square rounded-2xl border border-[#1A1A1A] overflow-hidden">
                                 <Image
                                     src="/images/misc/profile.jpg"
                                     alt="Daisuke Kobayashi"
