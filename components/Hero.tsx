@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import FadeOnScroll from './FadeOnScroll';
+import HeroMotion from './HeroMotion';
 
 export default function Hero() {
     return (
@@ -47,15 +48,8 @@ export default function Hero() {
                 </div>
             </div>
 
-            {/* Hero Illustration - Bottom Left */}
-            <div className="absolute bottom-0 left-0 w-[400px] md:w-[600px] h-[400px] md:h-[600px] z-0 pointer-events-none">
-                <Image
-                    src="/images/hero/hero-illustration-bl.png"
-                    alt="Hero Illustration"
-                    fill
-                    className="object-contain object-bottom"
-                />
-            </div>
+            {/* Hero Illustration - Bottom Left（部品ごとに漂う透過動画。静止画は poster と fallback） */}
+            <HeroMotion />
         </section>
     );
 }
