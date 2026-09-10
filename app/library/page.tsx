@@ -1,5 +1,7 @@
 import Link from 'next/link';
+import type { CSSProperties } from 'react';
 import LibrarySearch from '@/components/LibrarySearch';
+import TextbookResume from '@/components/TextbookResume';
 import { genes } from '@/lib/genes';
 import { nutrients } from '@/lib/nutrients';
 import { biomarkers } from '@/lib/biomarkers';
@@ -126,7 +128,7 @@ export default function LibraryIndex() {
                 <div className="my-12 flex flex-col sm:flex-row items-center justify-center gap-3 [&>div]:!my-0 [&>div]:!mx-0 [&>div]:w-full sm:[&>div]:w-auto">
                     <LibrarySearch />
                     <Link href="/library/map"
-                        className="shrink-0 inline-flex items-center justify-center gap-2 px-5 py-4 rounded-full bg-white border border-black text-sm font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white transition-colors whitespace-nowrap">
+                        className="shrink-0 inline-flex items-center justify-center gap-2 px-5 py-4 rounded-full bg-white border border-black text-sm font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white hover:border-[#41C9B4] transition-colors whitespace-nowrap">
                         🗺️ ライブラリマップ
                     </Link>
                     <Link href="/textbook"
@@ -140,14 +142,17 @@ export default function LibraryIndex() {
                     <div className="flex flex-wrap justify-center gap-2 md:gap-2.5">
                         {TOC.map((t) => (
                             <a key={t.href} href={t.href}
-                                className="inline-flex items-center gap-1.5 md:gap-2 px-3.5 md:px-4 py-1.5 md:py-2 rounded-full border text-sm md:text-[15px] font-bold text-[#1A1A1A] whitespace-nowrap shadow-sm hover:-translate-y-0.5 hover:shadow transition-all"
-                                style={{ background: t.bg, borderColor: t.accent }}>
-                                {t.n && <span style={{ fontFamily: "'Space Grotesk', sans-serif", color: t.accent }}>{t.n}</span>}
+                                className="group inline-flex items-center gap-1.5 md:gap-2 px-3.5 md:px-4 py-1.5 md:py-2 rounded-full border text-sm md:text-[15px] font-bold text-[#1A1A1A] whitespace-nowrap shadow-sm bg-[var(--chip-bg)] hover:bg-[var(--chip)] hover:text-white transition-colors"
+                                style={{ borderColor: t.accent, ['--chip-bg' as string]: t.bg, ['--chip' as string]: t.accent } as CSSProperties}>
+                                {t.n && <span className="text-[var(--chip)] group-hover:text-white transition-colors" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{t.n}</span>}
                                 {t.label}
                             </a>
                         ))}
                     </div>
                 </nav>
+
+                {/* 教科書の続き（読み進みがある人だけ） */}
+                <TextbookResume />
 
                 {/* はじめに */}
                 <div className="mt-12 mb-5 flex items-stretch gap-3">
@@ -226,7 +231,7 @@ export default function LibraryIndex() {
                             style={{ background: s.color }}
                         >
                             <div className="flex-shrink-0 flex items-center justify-center p-4 md:w-[190px] relative overflow-hidden">
-                                <img loading="lazy" decoding="async" src={s.illustration} alt="" className="pointer-events-none w-[120px] md:w-[140px] opacity-90 group-hover:scale-105 transition-transform" />
+                                <img loading="lazy" decoding="async" src={s.illustration} alt="" className="pointer-events-none w-[120px] md:w-[140px] opacity-90 transition-transform" />
                             </div>
                             <div className="flex-1 p-6 md:py-6 md:pr-8">
                                 <div className="flex items-baseline gap-3 mb-2">
@@ -269,7 +274,7 @@ export default function LibraryIndex() {
                             style={{ background: s.color }}
                         >
                             <div className="flex-shrink-0 flex items-center justify-center p-4 md:w-[190px] relative overflow-hidden">
-                                <img loading="lazy" decoding="async" src={s.illustration} alt="" className="pointer-events-none w-[120px] md:w-[140px] opacity-90 group-hover:scale-105 transition-transform" />
+                                <img loading="lazy" decoding="async" src={s.illustration} alt="" className="pointer-events-none w-[120px] md:w-[140px] opacity-90 transition-transform" />
                             </div>
                             <div className="flex-1 p-6 md:py-6 md:pr-8">
                                 <div className="flex items-baseline gap-3 mb-2">
@@ -467,7 +472,7 @@ export default function LibraryIndex() {
                             style={{ background: s.color }}
                         >
                             <div className="flex-shrink-0 flex items-center justify-center p-4 md:w-[190px] relative overflow-hidden">
-                                <img loading="lazy" decoding="async" src={s.illustration} alt="" className="pointer-events-none w-[120px] md:w-[140px] opacity-90 group-hover:scale-105 transition-transform" />
+                                <img loading="lazy" decoding="async" src={s.illustration} alt="" className="pointer-events-none w-[120px] md:w-[140px] opacity-90 transition-transform" />
                             </div>
                             <div className="flex-1 p-6 md:py-6 md:pr-8">
                                 <div className="flex items-baseline gap-3 mb-2">
@@ -506,7 +511,7 @@ export default function LibraryIndex() {
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <Link href="/molecular-nutrition#biochemistry"
-                            className="group block rounded-2xl border border-dashed border-[#1A1A1A]/40 p-5 hover:border-[#1A1A1A] hover:bg-white/40 transition-all">
+                            className="group block rounded-2xl border border-dashed border-[#1A1A1A]/40 p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all">
                             <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/45 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                 FOUNDATION ／ すべての土台
                             </div>
@@ -516,7 +521,7 @@ export default function LibraryIndex() {
                             </p>
                         </Link>
                         <Link href="/food-journey"
-                            className="group block rounded-2xl border border-dashed border-[#1A1A1A]/40 p-5 hover:border-[#1A1A1A] hover:bg-white/40 transition-all">
+                            className="group block rounded-2xl border border-dashed border-[#1A1A1A]/40 p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all">
                             <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/45 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                 THE BIG PICTURE ／ 全体の地図
                             </div>
@@ -533,7 +538,7 @@ export default function LibraryIndex() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <Link href="/mitochondria"
                             className="group relative block overflow-hidden rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#CFEAEC' }}>
-                            <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="pointer-events-none absolute bottom-0 right-0 w-[120px] md:w-[140px] opacity-90 group-hover:scale-105 transition-transform hidden sm:block" />
+                            <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="pointer-events-none absolute bottom-0 right-0 w-[120px] md:w-[140px] opacity-90 transition-transform hidden sm:block" />
                             <div className="relative" style={{ zIndex: 1 }}>
                                 <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                     START HERE ／ THE POWERHOUSE
@@ -673,7 +678,7 @@ export default function LibraryIndex() {
                             </span>
                         </Link>
                         <Link href="/insulin-resistance"
-                            className="group rounded-2xl border border-black p-5 hover:shadow-md hover:-translate-y-0.5 transition-all" style={{ background: '#F6E6CF' }}>
+                            className="group rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F6E6CF' }}>
                             <div className="text-[10px] font-bold tracking-widest text-[#D67845] mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>INSULIN RESISTANCE</div>
                             <div className="text-lg font-bold text-[#1A1A1A] mb-1">インスリン抵抗性</div>
                             <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">血糖が上がる前から始まる代謝の変化。筋肉・脂肪・肝臓と膵臓の負担をつなげて理解する。</p>
@@ -1256,12 +1261,12 @@ export default function LibraryIndex() {
                 <div className="mt-20 md:mt-24 text-center">
                     <div className="flex flex-wrap justify-center gap-3">
                         <Link href="/references"
-                            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FF9855] text-sm font-bold text-[#1A1A1A] hover:opacity-90 transition">
+                            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FF9855] border border-[#FF9855] text-sm font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:border-[#41C9B4] hover:text-white transition-colors">
                             解説の参照文献・出典を見る
                             <span>→</span>
                         </Link>
                         <Link href="/books"
-                            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white border border-black text-sm font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white transition">
+                            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white border border-black text-sm font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white hover:border-[#41C9B4] transition-colors">
                             おすすめ書籍を見る
                             <span>→</span>
                         </Link>
@@ -1289,8 +1294,8 @@ export default function LibraryIndex() {
                     <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5 max-w-[480px] mx-auto">
                         12問・約2分のセルフチェックで、あなたのミトコンドリア活性度を可視化できます。無料・登録不要。
                     </p>
-                    <Link href="/check" className="inline-block px-8 py-3 rounded-full text-sm font-bold hover:opacity-90 transition"
-                        style={{ fontFamily: "'Space Grotesk', sans-serif", background: '#1A1A1A', color: '#FFFFFF' }}>
+                    <Link href="/check" className="inline-block px-8 py-3 rounded-full text-sm font-bold bg-[#1A1A1A] border border-[#1A1A1A] text-white hover:bg-[#41C9B4] hover:border-[#41C9B4] hover:text-white transition-colors"
+                        style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         無料セルフチェックを試す →
                     </Link>
                 </div>
