@@ -26,17 +26,32 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <form action={formAction}>
+        <form action={formAction} method="post">
+          {/* パスワードマネージャー（Safari キーチェーン・Chrome）が「保存しますか？」を出し、次回から自動入力できるように、
+              ユーザー名の欄を目に見えない形で置いておく（値は固定） */}
+          <input
+            type="text"
+            name="username"
+            id="admin-username"
+            value="admin"
+            readOnly
+            autoComplete="username"
+            aria-hidden
+            tabIndex={-1}
+            style={{ position: 'absolute', width: 1, height: 1, opacity: 0, pointerEvents: 'none' }}
+          />
 
           <div style={{ marginBottom: 20 }}>
-            <label style={{ display: 'block', fontSize: 12, color: '#888', marginBottom: 8 }}>
+            <label htmlFor="admin-password" style={{ display: 'block', fontSize: 12, color: '#888', marginBottom: 8 }}>
               パスワード
             </label>
             <input
+              id="admin-password"
               name="password"
               type="password"
               required
               autoFocus
+              autoComplete="current-password"
               placeholder="••••••••"
               style={{
                 width: '100%', padding: '12px 14px', background: '#1e1e1e',
