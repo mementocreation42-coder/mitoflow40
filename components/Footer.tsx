@@ -1,12 +1,11 @@
 import Link from 'next/link';
 
+// ヘッダーと同じ並び（ANALYSIS / LIBRARY / LEARN / JOURNAL / CONTACT）
 const footerLinks = [
-    { href: '/check', label: 'FREE CHECK' },
-    { href: '/sample', label: 'SAMPLE ANALYSIS' },
+    { href: '/sample', label: 'ANALYSIS' },
     { href: '/library', label: 'LIBRARY' },
-    { href: '/journal', label: 'JOURNAL' },
     { href: '/textbook', label: 'LEARN' },
-    { href: '/podcast', label: 'PODCAST' },
+    { href: '/journal', label: 'JOURNAL' },
     { href: '/#contact', label: 'CONTACT' },
 ];
 
@@ -40,6 +39,8 @@ export default function Footer() {
                 {/* Legal */}
                 <nav className="mb-6">
                     <ul className="flex flex-wrap justify-center gap-3 md:gap-6 text-xs opacity-70">
+                        <li><Link href="/check" className="footer-link">無料セルフチェック</Link></li>
+                        <li><Link href="/podcast" className="footer-link">ポッドキャスト</Link></li>
                         <li><Link href="/author" className="footer-link">著者・監修</Link></li>
                         <li><Link href="/references" className="footer-link">参照文献・出典</Link></li>
                         <li><Link href="/terms" className="footer-link">利用規約</Link></li>
