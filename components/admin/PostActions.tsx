@@ -2,35 +2,48 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
+// 削除は 2 段階（「削除」→「本当に削除」）。ブラウザの confirm / alert は使わない。
+// アプリ内ブラウザや一部の環境ではネイティブのダイアログが出ず、押しても何も起きないように見えるため。
 export default function PostActions({ postId, classes }: { postId: number; classes?: { actions: string; edit: string; delete: string } }) {
   const router = useRouter();
-  const [deleting, setDeleting] = useState(false);
+  const [phase, setPhase] = useState<'idle' | 'armed' | 'deleting' | 'done'>('idle');
+  const [message, setMessage] = useState<string | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
 
-  async function handleDelete() {
-    if (!confirm('この投稿を削除しますか？')) return;
-    setDeleting(true);
+  // 「本当に削除」を 6 秒放置したら元に戻す
+  useEffect(() => {
+    if (phase !== 'armed') return;
+    const t = window.setTimeout(() => setPhase('idle'), 6000);
+    return () => window.clearTimeout(t);
+  }, [phase]);
+
+  async function doDelete() {
+    setPhase('deleting'); setMessage(null);
     try {
       const res = await fetch(`/api/admin/posts/${postId}`, { method: 'DELETE' });
       if (!res.ok) {
-        let message = '';
-        try { message = (await res.json()).error ?? ''; } catch { /* 本文なし */ }
-        throw new Error(`${res.status}${message ? ` – ${message}` : ''}`);
+        let detail = '';
+        try { detail = (await res.json()).error ?? ''; } catch { /* 本文なし */ }
+        throw new Error(`${res.status}${detail ? ` – ${detail}` : ''}`);
       }
       const data = await res.json().catch(() => ({}));
-      if (data.how === 'trash') alert('完全削除は WordPress 側で拒否されたため、ゴミ箱へ移動しました。');
+      if (data.how === 'trash') setMessage('完全削除は拒否されたため、ゴミ箱へ移動しました');
+      setPhase('done');
       // WordPress 側のキャッシュで一覧の再取得に古い結果が返ることがあるので、まず画面から消す
       rootRef.current?.closest('article')?.remove();
-      setDeleting(false);
       router.refresh();
     } catch (e) {
-      // 失敗の理由をそのまま見せる（WordPress 側の応答を含む）
-      alert(`削除に失敗しました（${e instanceof Error ? e.message : String(e)}）`);
-      setDeleting(false);
+      setMessage(`削除に失敗（${e instanceof Error ? e.message : String(e)}）`);
+      setPhase('idle');
     }
   }
+
+  const btnStyle = classes ? undefined : {
+    padding: '6px 12px', background: 'transparent', border: '1px solid #3a1a1a',
+    borderRadius: 6, color: '#f87171', cursor: 'pointer', fontSize: 12, whiteSpace: 'nowrap' as const,
+  };
 
   return (
     <div ref={rootRef} className={classes?.actions} style={classes ? undefined : { display: 'flex', flexDirection: 'column', gap: 6, flexShrink: 0 }}>
@@ -48,18 +61,27 @@ export default function PostActions({ postId, classes }: { postId: number; class
       >
         編集
       </Link>
-      <button
-        onClick={handleDelete}
-        disabled={deleting}
-        className={classes?.delete}
-        style={classes ? undefined : {
-          padding: '6px 12px', background: 'transparent', border: '1px solid #3a1a1a',
-          borderRadius: 6, color: deleting ? '#444' : '#f87171', cursor: deleting ? 'not-allowed' : 'pointer',
-          fontSize: 12, whiteSpace: 'nowrap',
-        }}
-      >
-        {deleting ? '削除中...' : '削除'}
-      </button>
+      {phase === 'armed' ? (
+        <>
+          <button type="button" onClick={doDelete} className={classes?.delete} style={{ ...(btnStyle ?? {}), background: '#b34b4b', color: '#fff', borderColor: '#b34b4b' }}>
+            本当に削除
+          </button>
+          <button type="button" onClick={() => setPhase('idle')} className={classes?.edit} style={classes ? undefined : { ...btnStyle, color: '#aaa', borderColor: '#2a2a2a' }}>
+            やめる
+          </button>
+        </>
+      ) : (
+        <button
+          type="button"
+          onClick={() => setPhase('armed')}
+          disabled={phase !== 'idle'}
+          className={classes?.delete}
+          style={btnStyle}
+        >
+          {phase === 'deleting' ? '削除中…' : phase === 'done' ? '削除済み' : '削除'}
+        </button>
+      )}
+      {message && <p style={{ margin: 0, fontSize: 11, color: '#b34b4b', maxWidth: 220, lineHeight: 1.4 }}>{message}</p>}
     </div>
   );
 }
