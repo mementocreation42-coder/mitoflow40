@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { getPostsPaginated, featuredImageUrl } from '@/lib/wp';
 import AdminHeader from '@/components/admin/AdminHeader';
 import PostActions from '@/components/admin/PostActions';
+import PostRow from '@/components/admin/PostRow';
 import styles from '../admin.module.css';
 
 export const metadata = { title: { absolute: 'ダッシュボード | Mitoflow40 Admin' }, robots: { index: false, follow: false } };
@@ -71,7 +72,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
               const categories = post._embedded?.['wp:term']?.[0] ?? [];
               const date = new Date(post.date).toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' });
               return (
-                <article key={post.id} className={styles.post}>
+                <PostRow key={post.id} className={styles.post}>
                   {featuredImage ? (
                     // WordPress側の任意ドメイン画像を管理画面でそのまま表示する（縮小版・遅延読み込み）
                     // eslint-disable-next-line @next/next/no-img-element
@@ -98,7 +99,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                     <div className={styles.excerpt}>{cleanText(post.excerpt?.rendered ?? '') || '抜粋はまだ設定されていません。'}</div>
                   </div>
                   <PostActions postId={post.id} classes={{ actions: styles.actions, edit: styles.edit, delete: styles.delete }} />
-                </article>
+                </PostRow>
               );
             })}
           </div>

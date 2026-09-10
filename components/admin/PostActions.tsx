@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useMarkDeleted } from './PostRow';
 
 // 削除は同じボタンの 2 回押し（「削除」→「本当に削除」）。ブラウザの confirm / alert は使わない。
 // アプリ内ブラウザや一部の環境ではネイティブのダイアログが出ず、押しても何も起きないように見えるため。
@@ -10,7 +11,7 @@ export default function PostActions({ postId, classes }: { postId: number; class
   const router = useRouter();
   const [phase, setPhase] = useState<'idle' | 'armed' | 'deleting' | 'done'>('idle');
   const [message, setMessage] = useState<string | null>(null);
-  const rootRef = useRef<HTMLDivElement>(null);
+  const markDeleted = useMarkDeleted();
 
   // 「本当に削除」を 5 秒放置したら元に戻す
   useEffect(() => {
@@ -31,8 +32,8 @@ export default function PostActions({ postId, classes }: { postId: number; class
       const data = await res.json().catch(() => ({}));
       if (data.how === 'trash') setMessage('完全削除は拒否されたため、ゴミ箱へ移動しました');
       setPhase('done');
-      // WordPress 側のキャッシュで一覧の再取得に古い結果が返ることがあるので、まず画面から消す
-      rootRef.current?.closest('article')?.remove();
+      // WordPress 側のキャッシュで一覧の再取得に古い結果が返ることがあるので、まず行を非表示にする（React の state で）
+      markDeleted();
       router.refresh();
     } catch (e) {
       setMessage(`削除に失敗（${e instanceof Error ? e.message : String(e)}）`);
@@ -46,7 +47,7 @@ export default function PostActions({ postId, classes }: { postId: number; class
   };
 
   return (
-    <div ref={rootRef} className={classes?.actions} style={classes ? undefined : { display: 'flex', flexDirection: 'column', gap: 6, flexShrink: 0 }}>
+    <div className={classes?.actions} style={classes ? undefined : { display: 'flex', flexDirection: 'column', gap: 6, flexShrink: 0 }}>
       {/* クライアント遷移にして、編集画面の読み込み中も loading スケルトンが出るようにする。
           先読みは切る（20 記事ぶんの編集画面＝WordPress 問い合わせが走ってしまう） */}
       <Link
