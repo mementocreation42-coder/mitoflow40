@@ -24,7 +24,7 @@ export default function HeroMotion() {
     }, []);
 
     return (
-        <div className="absolute bottom-0 left-0 w-[400px] md:w-[600px] h-[400px] md:h-[600px] z-0 pointer-events-none">
+        <div className="absolute -bottom-2 left-0 w-[400px] md:w-[600px] h-[400px] md:h-[600px] z-0 pointer-events-none">
             {src ? (
                 <video
                     key={src}

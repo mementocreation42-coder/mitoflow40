@@ -29,7 +29,7 @@ M = {
     'blue_man':      dict(ax=5,  ay=12, rot=1.4, ph=0.20, n2=1),
     'purple_woman':  dict(ax=5,  ay=12, rot=1.2, ph=0.24, n2=1),   # 男性と手が触れているので位相をそろえる
     'green_person':  dict(ax=6,  ay=13, rot=1.6, ph=0.28, n2=1),
-    'yellow_man':    dict(ax=4,  ay=10, rot=1.0, ph=0.90, n2=1),
+    'yellow_man':    dict(ax=4,  ay=0,  rot=0.0, ph=0.90, n2=1),   # 下端で切れている人物：上下や回転で切れ目が見えないよう横にだけ漂う
 }
 def motion(m, t):
     u = t / T

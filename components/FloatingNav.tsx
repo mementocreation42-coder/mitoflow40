@@ -5,6 +5,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const navItems = [
+    { href: '/sample', label: 'Analysis' },
+    { href: '/library', label: 'Library' },
+    { href: '/textbook', label: 'Learn' },
     { href: '/journal', label: 'Journal' },
 ];
 
@@ -48,7 +51,7 @@ export default function FloatingNav() {
                 }}
             >
                 <div
-                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full"
+                    className="flex items-center gap-0.5 sm:gap-1.5 px-1.5 sm:px-2.5 py-1.5 rounded-full max-w-[calc(100vw-1.5rem)]"
                     style={{
                         background: 'rgba(180,240,228,0.90)',
                         backdropFilter: 'blur(20px)',
@@ -60,7 +63,7 @@ export default function FloatingNav() {
                     {/* Author avatar */}
                     <Link
                         href="/#profile"
-                        className="flex items-center gap-1.5 px-2 py-1 rounded-full hover:bg-black/5 transition-colors"
+                        className="flex items-center gap-1.5 px-1.5 sm:px-2 py-1 rounded-full hover:bg-black/5 transition-colors"
                     >
                         <div className="w-6 h-6 rounded-full overflow-hidden ring-2 ring-[#41C9B4]/60">
                             <Image
@@ -81,7 +84,7 @@ export default function FloatingNav() {
                         <Link
                             key={item.href}
                             href={item.href}
-                            className="px-2.5 py-1 rounded-full text-xs font-semibold text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-black/5 transition-all whitespace-nowrap"
+                            className="px-1.5 sm:px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-semibold text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-black/5 transition-all whitespace-nowrap"
                         >
                             {item.label}
                         </Link>
@@ -92,7 +95,7 @@ export default function FloatingNav() {
                     {/* CTA */}
                     <Link
                         href="/#contact"
-                        className="px-3 py-1 rounded-full text-xs font-bold text-[#1A1A1A] transition-all whitespace-nowrap"
+                        className="px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold text-[#1A1A1A] transition-all whitespace-nowrap"
                         style={{
                             background: 'linear-gradient(135deg, #4AF6C3 0%, #3AE6B3 100%)',
                             boxShadow: '0 2px 8px rgba(74,246,195,0.4)',
