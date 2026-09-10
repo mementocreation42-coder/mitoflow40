@@ -37,7 +37,6 @@ const sections: Sec[] = [
             { href: '/nutrition-history', label: '栄養学の歴史' },
             { href: '/food-journey', label: '食べてから動くまで' },
             { href: '/health-check-guide', label: '健康診断の読み方' },
-            { href: '/biomarkers/reader', label: '検査値リーダー' },
         ],
     },
     {
@@ -147,7 +146,6 @@ const sections: Sec[] = [
             { href: '/health-philosophy', label: '健康哲学' },
             { href: '/spirituality', label: 'スピリチュアリティ' },
             { href: '/counterculture', label: 'カウンターカルチャー' },
-            { href: '/black-jack', label: 'ブラック・ジャック' },
         ],
     },
 ];

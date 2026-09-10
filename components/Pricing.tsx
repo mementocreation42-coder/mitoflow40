@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import FadeOnScroll from './FadeOnScroll';
 import CheckoutButton from './CheckoutButton';
+import SampleReportModal from './SampleReportModal';
 import { PLANS, formatJpy, intervalLabel, isPlanPurchasable } from '@/lib/products';
 import { isStripeConfigured } from '@/lib/stripe';
 
@@ -65,13 +66,12 @@ export default function Pricing({ compact = false }: { compact?: boolean }) {
                                             style={{ background: '#1A1A1A', color: '#FFFFFF', fontFamily: "'Space Grotesk', sans-serif" }}
                                         />
                                         {plan.sampleUrl && (
-                                            <Link
+                                            <SampleReportModal
                                                 href={plan.sampleUrl}
-                                                target="_blank"
-                                                className="inline-block px-6 py-2.5 bg-[#4DD0E1] text-[#1A1A1A] border border-[#1A1A1A] rounded-full text-xs font-semibold hover:bg-[#26C6DA] hover:text-white transition-colors"
+                                                className="inline-block px-6 py-2.5 bg-[#4DD0E1] text-[#1A1A1A] border border-[#1A1A1A] rounded-full text-xs font-semibold hover:bg-[#26C6DA] hover:text-white transition-colors cursor-pointer"
                                             >
                                                 解析サンプルを見る
-                                            </Link>
+                                            </SampleReportModal>
                                         )}
                                     </div>
 

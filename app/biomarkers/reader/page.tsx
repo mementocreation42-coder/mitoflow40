@@ -7,7 +7,7 @@ export const metadata = {
     title: '検査値リーダー｜血液検査の数値を基準値・理想値と照らす | Mitoflow40',
     description: '健康診断・血液検査の数値を入力すると、基準値と「理想値」の両方と照らして位置を確認できる無料ツール。フェリチン・HbA1c・LDL・ALT・TSH など52項目対応。結果はブラウザ内にだけ保存され、送信されません。',
     alternates: { canonical: 'https://mitoflow40.com/biomarkers/reader' },
-    robots: { index: true, follow: true },
+    robots: { index: false, follow: true }, // 2026-09-10 導線から外した（ページは残す）
     openGraph: {
         siteName: 'Mitoflow40',
         locale: 'ja_JP',

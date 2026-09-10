@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import Image from 'next/image';
 import FadeOnScroll from './FadeOnScroll';
+import SampleReportModal, { SAMPLE_REPORT_PATH } from './SampleReportModal';
 
 const steps = [
     {
@@ -22,7 +22,7 @@ const steps = [
             'カウンセリングシートや血液検査を解析した結果から、考えられる健康対策アドバイスをお伝えしていきます。合わせて解析サンプルもお渡しいたします。',
         hasButton: true,
         buttonText: '解析サンプル',
-        buttonLink: 'https://mitoflow40.com/r/SbCtC5JII0uqihoUR4Bf44l',
+        buttonLink: SAMPLE_REPORT_PATH,
     },
     {
         number: '04',
@@ -88,13 +88,12 @@ export default function Flow() {
                                     <h3 className="text-xl font-bold text-[#1A1A1A] mb-2">{step.title}</h3>
                                     <p className="text-[#4A4A4A]">{step.description}</p>
                                     {step.hasButton && (
-                                        <Link
-                                            href={step.buttonLink || '#'}
-                                            target="_blank"
-                                            className="inline-block mt-4 px-6 py-3 bg-[#FF9855] text-[#1A1A1A] border border-[#1A1A1A] rounded-full text-sm font-semibold hover:bg-[#FF8030] hover:text-white transition-colors"
+                                        <SampleReportModal
+                                            href={step.buttonLink}
+                                            className="inline-block mt-4 px-6 py-3 bg-[#FF9855] text-[#1A1A1A] border border-[#1A1A1A] rounded-full text-sm font-semibold hover:bg-[#FF8030] hover:text-white transition-colors cursor-pointer"
                                         >
                                             {step.buttonText}
-                                        </Link>
+                                        </SampleReportModal>
                                     )}
                                 </div>
                             </div>

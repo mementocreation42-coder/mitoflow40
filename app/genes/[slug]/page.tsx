@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { genes, getGeneBySlug } from '@/lib/genes';
+import { getSymptomBySlug } from '@/lib/symptoms';
 import JsonLd, { medicalWebPage, breadcrumb } from '@/components/JsonLd';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
@@ -127,6 +128,19 @@ export default async function GenePage({ params }: { params: Promise<{ slug: str
                         </span>
                     ))}
                 </div>
+                {(gene.relatedSymptomSlugs?.length ?? 0) > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-4">
+                        {gene.relatedSymptomSlugs!.map((slug) => {
+                            const sym = getSymptomBySlug(slug);
+                            if (!sym) return null;
+                            return (
+                                <Link key={slug} href={`/symptoms/${slug}`} className="px-3 py-1.5 bg-white border border-[#1A1A1A] rounded-full text-sm font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white transition-colors">
+                                    {sym.name} →
+                                </Link>
+                            );
+                        })}
+                    </div>
+                )}
             </section>
 
             {/* もっと学ぶ（しくみ・生活習慣への導線） */}

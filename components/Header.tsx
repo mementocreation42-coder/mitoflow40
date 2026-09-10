@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 const navItems = [
-    { href: '/sample', label: 'SAMPLE ANALYSIS', ja: '解析サンプル' },
+    { href: '/sample', label: 'ANALYSIS', ja: '解析' },
     { href: '/library', label: 'LIBRARY', ja: 'ライブラリ' },
     { href: '/journal', label: 'JOURNAL', ja: 'ジャーナル' },
     { href: '/podcast', label: 'PODCAST', ja: 'ポッドキャスト' },

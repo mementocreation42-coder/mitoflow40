@@ -217,7 +217,7 @@ export default function IntakePage() {
                     {title === 'ファイル・確認' && (
                         <div className="space-y-6">
                             <FileBlock kind="blood" label="血液検査の結果" files={bloodFiles}
-                                help={`健康診断・人間ドック・クリニックの検査結果票。PDF または写真（PNG/JPG/HEIC）。複数枚・複数回分でも構いません。`} />
+                                help={`健康診断・人間ドック・クリニックの検査結果票。PDF または写真（PNG/JPG/HEIC）。複数枚・複数回分でも構いません。HbA1c に加えてグリコアルブミン（GA）・空腹時インスリン・フェリチン・高感度CRP があれば、読み解きが立体になります（任意）。`} />
                             <FileBlock kind="device" label="Apple Watch・ウェアラブルの記録（任意）" files={deviceFiles}
                                 help={`睡眠・心拍変動（HRV）・安静時心拍・VO2max などのスクリーンショット。Oura / Garmin / Fitbit / 血圧計 / 体組成計 / リブレ等も可。合計 ${MAX_FILES} 件・1ファイル ${MAX_FILE_MB}MB まで。`} />
                             <div><Label>その他、伝えておきたいこと（自由記述）</Label><Textarea value={notes} onChange={setNotes} rows={4} placeholder="気になる症状、生活の背景、検査で特に見てほしい点など" /></div>

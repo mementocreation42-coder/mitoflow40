@@ -14,7 +14,8 @@ export type Gene = {
         description: string;
     }[];
     nutrients: string[];
-    relatedSymptoms: string[];
+    relatedSymptoms: string[]; // 表示用のラベル
+    relatedSymptomSlugs?: string[]; // symptoms.ts の slug（症状ページへのリンク）
     references?: string[];
 };
 
@@ -42,6 +43,7 @@ export const genes: Gene[] = [
         ],
         nutrients: ['葉酸 (5-MTHF)', 'ビタミンB12 (メチルコバラミン)', 'ビタミンB6', 'コリン', 'リボフラビン'],
         relatedSymptoms: ['疲労', '気分の落ち込み', '高ホモシステイン', '頭痛'],
+        relatedSymptomSlugs: ['fatigue', 'low-mood'],
     },
     {
         slug: 'comt',
@@ -66,6 +68,7 @@ export const genes: Gene[] = [
         ],
         nutrients: ['マグネシウム', 'SAMe', 'ビタミンB群'],
         relatedSymptoms: ['不安', '不眠', 'イライラ', 'PMS', '更年期障害'],
+        relatedSymptomSlugs: ['poor-sleep', 'low-mood', 'hot-flashes'],
     },
     {
         slug: 'dao',
@@ -90,6 +93,7 @@ export const genes: Gene[] = [
         ],
         nutrients: ['ビタミンC', 'ビタミンB6', '銅', 'ケルセチン'],
         relatedSymptoms: ['頭痛', '蕁麻疹', '腹部膨満', '鼻炎', '皮膚のかゆみ'],
+        relatedSymptomSlugs: ['allergy', 'gut-issues', 'skin-hair'],
     },
     {
         slug: 'maoa',
@@ -114,6 +118,7 @@ export const genes: Gene[] = [
         ],
         nutrients: ['リボフラビン (B2)', 'トリプトファン', '鉄', 'ビタミンB6'],
         relatedSymptoms: ['気分変動', '不眠', '砂糖渇望', '不安', '攻撃性'],
+        relatedSymptomSlugs: ['low-mood', 'poor-sleep'],
     },
     {
         slug: 'gst-gpx',
@@ -138,6 +143,7 @@ export const genes: Gene[] = [
         ],
         nutrients: ['NAC (Nアセチルシステイン)', 'グルタチオン', 'セレン', 'スルフォラファン', 'ビタミンC'],
         relatedSymptoms: ['化学物質過敏', '慢性疲労', '二日酔い', '炎症'],
+        relatedSymptomSlugs: ['fatigue', 'allergy'],
     },
     {
         slug: 'nos3',
@@ -162,6 +168,7 @@ export const genes: Gene[] = [
         ],
         nutrients: ['L-アルギニン', 'L-シトルリン', '硝酸塩 (ビーツ等)', '葉酸', 'CoQ10'],
         relatedSymptoms: ['高血圧', '冷え', '勃起不全', '運動耐容能低下'],
+        relatedSymptomSlugs: ['cold', 'low-libido', 'fatigue'],
     },
     {
         slug: 'pemt',
@@ -186,6 +193,7 @@ export const genes: Gene[] = [
         ],
         nutrients: ['コリン', 'ホスファチジルコリン', 'ベタイン (TMG)', '葉酸', 'B12'],
         relatedSymptoms: ['脂肪肝', '筋肉痛', '記憶力低下', '胆嚢の不調'],
+        relatedSymptomSlugs: ['brain-fog', 'indigestion'],
     },
 ];
 

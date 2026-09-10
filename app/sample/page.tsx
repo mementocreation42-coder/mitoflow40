@@ -1,6 +1,5 @@
 import Link from "next/link";
-
-const SAMPLE_REPORT_URL = "https://mitoflow40.com/r/SbCtC5JII0uqihoUR4Bf44l";
+import SampleReportModal from "@/components/SampleReportModal";
 
 export const metadata = {
     title: "解析サンプル | Mitoflow40",
@@ -88,17 +87,14 @@ export default function SamplePage() {
 
                 {/* Primary CTA */}
                 <div className="mb-16">
-                    <Link
-                        href={SAMPLE_REPORT_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-block px-8 py-4 rounded-full font-bold text-base hover:opacity-90 transition"
+                    <SampleReportModal
+                        className="inline-block px-8 py-4 rounded-full font-bold text-base hover:opacity-90 transition cursor-pointer"
                         style={{ background: "#1A1A1A", color: "#FFFFFF", fontFamily: "'Space Grotesk', sans-serif", letterSpacing: "0.05em" }}
                     >
                         実物のサンプルを見る →
-                    </Link>
+                    </SampleReportModal>
                     <p className="text-xs text-[#4A4A4A] mt-3" style={{ letterSpacing: "0.04em" }}>
-                        ※ 新しいタブで開きます。実際のお客様を想定した解析サンプルです。
+                        ※ この画面上にポップアップで開きます。実際にお届けする解析レポートと同じ形式のサンプルです。
                     </p>
                 </div>
 
@@ -169,15 +165,12 @@ export default function SamplePage() {
                         あなただけのレポートをお届けします。
                     </p>
                     <div className="flex flex-col md:flex-row gap-3 justify-center">
-                        <Link
-                            href={SAMPLE_REPORT_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-block px-6 py-3 rounded-full font-bold text-sm hover:opacity-90 transition"
+                        <SampleReportModal
+                            className="inline-block px-6 py-3 rounded-full font-bold text-sm hover:opacity-90 transition cursor-pointer"
                             style={{ background: "#FF9855", color: "#FFFFFF", fontFamily: "'Space Grotesk', sans-serif" }}
                         >
                             サンプルを見る
-                        </Link>
+                        </SampleReportModal>
                         <Link
                             href="/#pricing"
                             className="inline-block px-6 py-3 rounded-full font-bold text-sm hover:opacity-90 transition"

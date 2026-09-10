@@ -163,10 +163,12 @@ export default async function NutrientPage({ params }: { params: Promise<{ slug:
                 {relatedNutrients.length > 0 && (
                     <section className="mb-12">
                         <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">
-                            {n.name} を構成するアミノ酸
+                            {n.slug === 'protein' ? `${n.name} を構成するアミノ酸` : `${n.name} と一緒に考えたい栄養素`}
                         </h2>
                         <p className="text-sm text-[#4A4A4A] leading-relaxed mb-4">
-                            タンパク質は、これらのアミノ酸に分解されて体内で働きます。それぞれが神経伝達物質・抗酸化・筋肉づくりなど別々の役割を担います。
+                            {n.slug === 'protein'
+                                ? 'タンパク質は、これらのアミノ酸に分解されて体内で働きます。それぞれが神経伝達物質・抗酸化・筋肉づくりなど別々の役割を担います。'
+                                : '栄養素は単独ではなくチームで働きます。不足や過剰を考えるときは、これらと合わせて見るのが読み解きの基本です。'}
                         </p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             {relatedNutrients.map((x) => (

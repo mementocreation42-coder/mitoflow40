@@ -68,10 +68,14 @@ h6 {
   letter-spacing: 0em;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
-  transition: color 0.3s ease;
+/* @layer base に入れることで Tailwind のユーティリティ（text-white など）がこの指定に勝てるようにする。
+   層の外に置くと、a 要素の text-white が inherit に負けて白文字が消える */
+@layer base {
+  a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.3s ease;
+  }
 }
 
 /* =========================================
@@ -310,3 +314,6 @@ a {
 .link-card-button:hover {
   background-color: #1e293b;
 }
+/* 教科書：読了の演出 */
+@keyframes mf-tb-pop { 0% { transform: scale(.85); opacity: 0; } 60% { transform: scale(1.06); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+@keyframes mf-burst { 0% { transform: translateY(0) scale(.6); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(-160px) rotate(25deg) scale(1.2); opacity: 0; } }

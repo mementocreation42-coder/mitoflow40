@@ -57,6 +57,7 @@ Apple Watch生XML（`~/Desktop/apple_health_export/export.xml`）は**絶対にR
 
 1. **画像から数値抽出** — 検査項目名・数値・単位を読み取る。読み取り信頼度が低い項目は明示。
 2. **理想値テーブル参照** — 性別に応じて `reference/optimal_ranges_female.md` または `optimal_ranges_male.md` を `Read` で取得。
+   - **ライブラリ引用（mitoflow-library スキル）** — 赤/黄の項目は `.claude/skills/mitoflow-library/knowledge/biomarkers/<slug>.md` を読み、理想値の根拠・高い/低いときのサイン・関連栄養素・「このページへのリンク元」のしくみページを解析に使う。analyst.md と client.html には該当ページの公開 URL（https://mitoflow40.com/biomarkers/<slug> と、しくみページ 1〜2 本）を添える。ページに無いことは補わない。
 3. **項目ごとに信号判定** — 上記ルールに従う。
 4. **カウンセリング・Apple Watchと突き合わせ** — `reference/interpretation_rules.md` の三角測量ロジックを適用。
 4.5. **解析開始前の確認（初回のみ）**:

@@ -3,6 +3,7 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import JsonLd from "@/components/JsonLd";
 import { Space_Grotesk, Inter, Noto_Sans_JP, MuseoModerno, Special_Elite, Bebas_Neue } from "next/font/google";
 import "./globals.css";
+import TextbookNav from '@/components/TextbookNav';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -120,6 +121,7 @@ export default function RootLayout({
           ],
         }} />
         {children}
+        <TextbookNav />
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
       </body>
     </html>

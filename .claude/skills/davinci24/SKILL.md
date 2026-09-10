@@ -57,7 +57,7 @@ Inbox は `node scripts/inbox.mjs` → http://localhost:2424（launch.json の "
   ```
   - 数値でないもの（(-)、±、コメント）は `nonNumeric` へ。「487 万/μL」は value 487・unit "万/μL" のまま（桁補正はスクリプト側）
   - 票の基準範囲は印字されたものだけ。無ければ null。推測しない
-  - slug はカタログから最一致の 1 つ、該当なしは null（GOT=ast / GPT=alt / γ-GT=ggt / 血糖=fasting-glucose。随時血糖でも slug は fasting-glucose にし、name に「随時」を残す）。迷ったときだけ `node --no-warnings scripts/judge.ts --catalog`
+  - slug はカタログから最一致の 1 つ、該当なしは null（GOT=ast / GPT=alt / γ-GT=ggt / 血糖=fasting-glucose / GA・グリコアルブミン=glycoalbumin。随時血糖でも slug は fasting-glucose にし、name に「随時」を残す）。迷ったときだけ `node --no-warnings scripts/judge.ts --catalog`
   - 経年表は最新列を `items`、前回列を `previous.items`（票の表記→値）に。finish が「前回」列を表に足す
   - 読めない数値は入れず、最終報告で「読めなかった項目」として挙げる
 
@@ -65,7 +65,7 @@ Inbox は `node scripts/inbox.mjs` → http://localhost:2424（launch.json の "
 - `judge.ts` → `report.md` / `blood_data.txt` / `judged.json`。性別は meta.txt → `--sex` の順（無ければ止まって聞く）
 - `device/apple_health_index.json` があれば `device_data.txt` を自動生成：**検査日の −30〜+14 日**と**書き出し最新 30 日**の 2 窓（睡眠・HRV・安静時心拍・呼吸・SpO2・VO2max・歩数・体重…）。索引に無い device ファイル（スクショ/CSV）は Claude が Read し、`reference/device_format.md` の形式で `device_data.txt` に追記する
 - `counseling.txt` があれば intake.md に原文が入る。Claude は `reference/counseling_format.md` で `counseling_data.txt` に正規化し、intake.md の「## カウンセリング」を特徴的な回答の抜粋に置き換える。読めた項目だけ、推測で埋めない
-- `intake.md` の空欄を Edit で埋める：「🔴🟡 の要約」（各 1〜2 行）と「三角測量の種」（一致／矛盾／次に足す項目）。**感覚メモの仮説を、データが支持するか矛盾するかに必ず対応させる**。感覚メモは要約で削らない
+- `intake.md` の空欄を Edit で埋める：「🔴🟡 の要約」（各 1〜2 行）と「三角測量の種」（一致／矛盾／次に足す項目）。各 🔴🟡 項目には mitoflow-library スキルの `knowledge/biomarkers/<slug>.md` を読んで、ライブラリの公開 URL（/biomarkers/<slug> と関連するしくみページ）を 1 行添える。**感覚メモの仮説を、データが支持するか矛盾するかに必ず対応させる**。感覚メモは要約で削らない
 - 報告（1 回）：🔴🟡 と三角測量の種を先に、次に読めなかった項目。「AI 読み取りなので原票と照合を」を添える
 
 ### 4. blood-analysis への引き継ぎ（「解析して」「そのまま解析まで」と言われたとき）
