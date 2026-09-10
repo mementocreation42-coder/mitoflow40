@@ -26,7 +26,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <form action={formAction} method="post">
+        <form action={formAction}>
           {/* パスワードマネージャー（Safari キーチェーン・Chrome）が「保存しますか？」を出し、次回から自動入力できるように、
               ユーザー名の欄を目に見えない形で置いておく（値は固定） */}
           <input
