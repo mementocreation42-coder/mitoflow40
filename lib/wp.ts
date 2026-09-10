@@ -156,7 +156,8 @@ export async function deleteWPPost(id: number): Promise<{ how: string }> {
   const attempts: Array<{ how: string; run: () => Promise<Response> }> = [
     { how: 'override', run: () => fetch(`${writeUrl(`/posts/${id}`)}&force=true&_method=DELETE`, { method: 'POST', headers: { ...base, 'X-HTTP-Method-Override': 'DELETE' } }) },
     { how: 'delete', run: () => fetch(`${writeUrl(`/posts/${id}`)}&force=true`, { method: 'DELETE', headers: base }) },
-    { how: 'trash', run: () => fetch(writeUrl(`/posts/${id}`), { method: 'POST', headers: { ...base, 'Content-Type': 'application/json' }, body: JSON.stringify({ status: 'trash' }) }) },
+    // WordPress は status:'trash' の更新を受け付けない（無効なパラメータ）。force なしの DELETE がゴミ箱移動
+    { how: 'trash', run: () => fetch(`${writeUrl(`/posts/${id}`)}&_method=DELETE`, { method: 'POST', headers: { ...base, 'X-HTTP-Method-Override': 'DELETE' } }) },
   ];
   const errors: string[] = [];
   for (const a of attempts) {
