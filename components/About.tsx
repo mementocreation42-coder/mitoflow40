@@ -25,7 +25,7 @@ export default function About() {
                             無視できなくなる年齢。
                         </h3>
 
-                        <div className="space-y-6 text-[#1A1A1A] bg-white/30 backdrop-blur-sm p-6 rounded-xl">
+                        <div className="space-y-6 text-[#1A1A1A] bg-white/30 backdrop-blur-sm p-6 rounded-2xl border border-[#1A1A1A]">
                             <p>
                                 私たちの体には、エネルギーを生み出す「ミトコンドリア」が存在します。しかし、40代を境にその機能は低下し、疲労や活力不足の原因となります。
                             </p>
@@ -48,7 +48,7 @@ export default function About() {
                             ミトコンドリア・ラブ
                         </h3>
 
-                        <div className="space-y-6 text-[#1A1A1A] bg-white/30 backdrop-blur-sm p-6 rounded-xl">
+                        <div className="space-y-6 text-[#1A1A1A] bg-white/30 backdrop-blur-sm p-6 rounded-2xl border border-[#1A1A1A]">
                             <p>
                                 栄養学を学んでいくうちに、私がいちばん心を動かされたのが「ミトコンドリア」という存在でした。エネルギーを生む小さな器官——そう習っただけでは、この感動は伝わりません。
                             </p>
