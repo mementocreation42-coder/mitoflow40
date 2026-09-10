@@ -149,19 +149,24 @@ export async function updateWPPost(id: number, input: Partial<CreatePostInput>):
   return { id: post.id, slug: post.slug };
 }
 
-export async function deleteWPPost(id: number): Promise<void> {
-  // WAF (SiteGuard等) が DELETE メソッドを弾くため、POST + ?_method=DELETE で代替
-  const res = await fetch(`${writeUrl(`/posts/${id}`)}&force=true&_method=DELETE`, {
-    method: 'POST',
-    headers: {
-      Authorization: getAuthHeader(),
-      'X-HTTP-Method-Override': 'DELETE',
-    },
-  });
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`Delete post failed: ${res.status} – ${err}`);
+export async function deleteWPPost(id: number): Promise<{ how: string }> {
+  // WAF (SiteGuard等) が DELETE メソッドを弾くことがあるため、順に試す：
+  // 1) POST + _method=DELETE（メソッド上書き） 2) 本物の DELETE 3) ゴミ箱へ移動（WordPress 管理画面の「ゴミ箱へ」と同じ）
+  const base = { Authorization: getAuthHeader(), 'User-Agent': 'Mozilla/5.0 (compatible; Mitoflow40-Admin/1.0)' };
+  const attempts: Array<{ how: string; run: () => Promise<Response> }> = [
+    { how: 'override', run: () => fetch(`${writeUrl(`/posts/${id}`)}&force=true&_method=DELETE`, { method: 'POST', headers: { ...base, 'X-HTTP-Method-Override': 'DELETE' } }) },
+    { how: 'delete', run: () => fetch(`${writeUrl(`/posts/${id}`)}&force=true`, { method: 'DELETE', headers: base }) },
+    { how: 'trash', run: () => fetch(writeUrl(`/posts/${id}`), { method: 'POST', headers: { ...base, 'Content-Type': 'application/json' }, body: JSON.stringify({ status: 'trash' }) }) },
+  ];
+  const errors: string[] = [];
+  for (const a of attempts) {
+    const res = await a.run();
+    if (res.ok) return { how: a.how };
+    const body = (await res.text()).replace(/\s+/g, ' ').slice(0, 200);
+    errors.push(`${a.how}: ${res.status} ${body}`);
+    if (res.status === 401) break; // 認証そのものが通っていない（アプリケーションパスワードを確認）
   }
+  throw new Error(`Delete post failed – ${errors.join(' / ')}`);
 }
 
 // 記事内のWordPress内部リンクをフロントエンドURLに書き換える

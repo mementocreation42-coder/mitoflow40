@@ -51,9 +51,9 @@ export async function DELETE(
   const { id } = await params;
 
   try {
-    await deleteWPPost(parseInt(id, 10));
+    const result = await deleteWPPost(parseInt(id, 10));
     revalidatePath('/', 'layout');
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, how: result.how });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown error';
     return NextResponse.json({ error: message }, { status: 500 });

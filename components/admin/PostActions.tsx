@@ -13,10 +13,17 @@ export default function PostActions({ postId, classes }: { postId: number; class
     setDeleting(true);
     try {
       const res = await fetch(`/api/admin/posts/${postId}`, { method: 'DELETE' });
-      if (!res.ok) throw new Error('Delete failed');
+      if (!res.ok) {
+        let message = '';
+        try { message = (await res.json()).error ?? ''; } catch { /* 本文なし */ }
+        throw new Error(`${res.status}${message ? ` – ${message}` : ''}`);
+      }
+      const data = await res.json().catch(() => ({}));
+      if (data.how === 'trash') alert('完全削除は WordPress 側で拒否されたため、ゴミ箱へ移動しました。');
       router.refresh();
-    } catch {
-      alert('削除に失敗しました');
+    } catch (e) {
+      // 失敗の理由をそのまま見せる（WordPress 側の応答を含む）
+      alert(`削除に失敗しました（${e instanceof Error ? e.message : String(e)}）`);
       setDeleting(false);
     }
   }
