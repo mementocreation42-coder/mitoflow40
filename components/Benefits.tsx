@@ -37,7 +37,7 @@ export default function Benefits() {
                         {benefits.map((benefit, index) => (
                             <div
                                 key={index}
-                                className="bg-white/30 border border-[#555555] rounded-xl overflow-hidden transition-transform hover:-translate-y-1"
+                                className="bg-white/30 border border-[#1A1A1A] rounded-2xl overflow-hidden transition-transform hover:-translate-y-1"
                             >
                                 <div className="w-full h-60 overflow-hidden bg-transparent border-b border-[#555555]">
                                     <Image

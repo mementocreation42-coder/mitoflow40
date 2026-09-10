@@ -43,7 +43,7 @@ export default function ForYou() {
                         {forYouItems.map((item, index) => (
                             <div
                                 key={index}
-                                className="bg-[#FFF9C4] border border-[#555555] rounded-xl overflow-hidden flex flex-col"
+                                className="bg-[#FFF9C4] border border-[#1A1A1A] rounded-2xl overflow-hidden flex flex-col"
                             >
                                 <div className="w-full h-[200px] overflow-hidden border-b border-[#555555]">
                                     <Image
@@ -63,7 +63,7 @@ export default function ForYou() {
                 </FadeOnScroll>
 
                 <FadeOnScroll delay={0.3}>
-                    <div className="mt-12 bg-[#FFF9C4] border border-[#1A1A1A] rounded-xl p-6 md:p-8 text-center">
+                    <div className="mt-12 bg-[#FFF9C4] border border-[#1A1A1A] rounded-2xl p-6 md:p-8 text-center">
                         <p className="text-sm md:text-base text-[#1A1A1A] leading-relaxed mb-5 max-w-[520px] mx-auto">
                             まずは「自分の体のしくみ」を知ることから。<br className="hidden md:block" />
                             遺伝子・血液検査・栄養素をつなげて学べる知識ライブラリを用意しました。

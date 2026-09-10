@@ -3,33 +3,33 @@ import math, sys
 from pathlib import Path
 from PIL import Image
 import numpy as np
-S = Path(sys.argv[1]); W, H = 1024, 752; FPS = 24; T = 9.0; N = int(FPS * T)
+S = Path(sys.argv[1]); SW, SH = 1024, 752; OFFY = 48; W, H = SW, SH + OFFY; FPS = 24; T = 9.0; N = int(FPS * T)
 
 def load(name):
     im = Image.open(S / f'{name}.png').convert('RGBA'); return im
 layers = {n: np.array(load(n)) for n in ['mito_tl','mito_ml','mito_tr','mito_br','falling_woman','blue_man','green_person','purple_woman','yellow_man']}
 # 緑の人物に付いた女性の黒いブーツ（x 690-750, y 255-325 の暗い画素）を女性へ戻す
 g = layers['green_person']; w = layers['purple_woman']
-ys, xs = np.mgrid[0:H, 0:W]
+ys, xs = np.mgrid[0:SH, 0:SW]
 dark = (g[:,:,3] > 0) & (xs >= 690) & (xs <= 750) & (ys >= 255) & (ys <= 325) & (g[:,:,:3].max(2) < 90)
 w[dark] = g[dark]; g[dark] = 0
 # 各レイヤーを bbox で切り出し
 parts = {}
 for n, arr in layers.items():
     a = arr[:,:,3]; yy, xx = np.where(a > 0); x0, y0, x1, y1 = xx.min(), yy.min(), xx.max()+1, yy.max()+1
-    pad = 12; x0p, y0p = max(0, x0-pad), max(0, y0-pad); x1p, y1p = min(W, x1+pad), min(H, y1+pad)
-    parts[n] = dict(img=Image.fromarray(arr[y0p:y1p, x0p:x1p]), pos=(x0p, y0p))
+    pad = 12; x0p, y0p = max(0, x0-pad), max(0, y0-pad); x1p, y1p = min(SW, x1+pad), min(SH, y1+pad)
+    parts[n] = dict(img=Image.fromarray(arr[y0p:y1p, x0p:x1p]), pos=(x0p, y0p + OFFY))
 # 動き：振幅（px）・回転（度）・位相。周期は 9 秒で整数回ループ（つなぎ目なし）
 M = {
-    'mito_tl':       dict(ax=10, ay=18, rot=10, ph=0.10, n2=2),
-    'mito_ml':       dict(ax=8,  ay=16, rot=-9, ph=0.55, n2=2),
-    'mito_tr':       dict(ax=9,  ay=20, rot=12, ph=0.30, n2=2),
-    'mito_br':       dict(ax=12, ay=22, rot=-8, ph=0.80, n2=2),
-    'falling_woman': dict(ax=6,  ay=14, rot=2.2, ph=0.65, n2=1),
-    'blue_man':      dict(ax=5,  ay=12, rot=1.4, ph=0.20, n2=1),
-    'purple_woman':  dict(ax=5,  ay=12, rot=1.2, ph=0.24, n2=1),   # 男性と手が触れているので位相をそろえる
-    'green_person':  dict(ax=6,  ay=13, rot=1.6, ph=0.28, n2=1),
-    'yellow_man':    dict(ax=4,  ay=0,  rot=0.0, ph=0.90, n2=1),   # 下端で切れている人物：上下や回転で切れ目が見えないよう横にだけ漂う
+    'mito_tl':       dict(ax=18, ay=30, rot=16, ph=0.10, n2=2),
+    'mito_ml':       dict(ax=14, ay=28, rot=-14, ph=0.55, n2=2),
+    'mito_tr':       dict(ax=16, ay=32, rot=18, ph=0.30, n2=2),
+    'mito_br':       dict(ax=20, ay=34, rot=-13, ph=0.80, n2=2),
+    'falling_woman': dict(ax=10, ay=24, rot=3.5, ph=0.65, n2=1),
+    'blue_man':      dict(ax=9,  ay=20, rot=2.4, ph=0.20, n2=1),
+    'purple_woman':  dict(ax=9,  ay=20, rot=2.0, ph=0.24, n2=1),   # 男性と手が触れているので位相をそろえる
+    'green_person':  dict(ax=10, ay=22, rot=2.8, ph=0.28, n2=1),
+    'yellow_man':    dict(ax=7,  ay=0,  rot=0.0, ph=0.90, n2=1),   # 下端で切れている人物：上下や回転で切れ目が見えないよう横にだけ漂う
 }
 def motion(m, t):
     u = t / T

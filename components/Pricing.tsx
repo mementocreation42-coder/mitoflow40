@@ -104,7 +104,7 @@ export default function Pricing({ compact = false }: { compact?: boolean }) {
 
                 {!compact && (
                     <FadeOnScroll delay={0.3}>
-                        <div className="mt-10 p-5 md:p-6 rounded-2xl border-2 border-dashed border-[#1A1A1A] bg-white/60 backdrop-blur-[2px] flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+                        <div className="mt-10 p-5 md:p-6 rounded-2xl border border-[#1A1A1A] bg-white/60 backdrop-blur-[2px] flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
                             <div>
                                 <p className="text-xs font-bold tracking-widest mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                                     FREE · まず試したい方へ

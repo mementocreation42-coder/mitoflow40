@@ -79,7 +79,7 @@ export default function Flow() {
                     {steps.map((step, index) => (
                         <FadeOnScroll key={index} delay={index * 0.1}>
                             <div
-                                className="flex gap-6 py-6 px-6 items-start bg-white/60 backdrop-blur-[2px] rounded-2xl border border-[#1A1A1A]/5"
+                                className="flex gap-6 py-6 px-6 items-start bg-white/60 backdrop-blur-[2px] rounded-2xl border border-[#1A1A1A]"
                             >
                                 <div className="font-[family-name:var(--font-main)] text-5xl font-bold text-black/20 flex-shrink-0">
                                     {step.number}

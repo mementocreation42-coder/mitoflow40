@@ -10,7 +10,7 @@ export default function Hero() {
                 src="/images/hero/hero-bg-new.png"
                 alt=""
                 fill
-                className="object-cover object-center z-0"
+                className="object-cover object-center z-0 mf-hero-bg"
                 priority
                 unoptimized
             />

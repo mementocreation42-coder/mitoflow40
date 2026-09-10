@@ -38,7 +38,7 @@ reference/digest/{pages,collections,journal}.md ← ページごとの読書メ�
 5. 書き終えたら `node .claude/skills/mitoflow-library/scripts/build.mjs --no-journal` で知識を作り直す（新しいページも索引に載る）。
 
 ## 使い方 D：教科書（読む順）を育てる
-- `/textbook` は既存ページを並べ替えた薄い層。新しいページを書いたら、どの章の何番目に入るかを `lib/paths.ts` に足す（書き換えではなく追加）。章は 4 本（はじめての 7 枚／血液検査 11 枚／40 代の疲れ 10 枚／食事を整える 9 枚）。順番の下敷きはジャーナルの連載 #00〜#28（体験は `journal` 欄に n=1 として添えるだけ）。読み進みは端末内（localStorage `mf:textbook:v1`）に記録され、章を読み切るとバッジ・称号（読者→見習い→読み手→読み解き手→整える人）・連続日数が `/textbook` に出る（`lib/textbook-progress.ts`）。送信はしない。
+- `/textbook` は既存ページを並べ替えた薄い層。新しいページを書いたら、どの章の何番目に入るかを `lib/paths.ts` に足す（書き換えではなく追加）。章は 4 本（はじめての 7 枚／血液検査 11 枚／40 代の疲れ 10 枚／食事を整える 9 枚）。順番の下敷きはジャーナルの連載 #00〜#28（本人の判断で、ジャーナルへのリンク枠は教科書ページに出さない）。読み進みは端末内（localStorage `mf:textbook:v1`）に記録され、章を読み切るとバッジ・称号（読者→見習い→読み手→読み解き手→整える人）・連続日数が `/textbook` に出る（`lib/textbook-progress.ts`）。送信はしない。
 
 ## 使い方 C：穴を探す（1000 ページ化）
 - まず `reference/digest/synthesis.md` §5（穴と食い違い）。

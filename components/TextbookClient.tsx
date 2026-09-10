@@ -123,17 +123,6 @@ export default function TextbookClient() {
                             })}
                         </ol>
 
-                        {p.journal && p.journal.length > 0 && (
-                            <div className="mt-3 rounded-xl border border-[#1A1A1A]/15 bg-white/50 px-4 py-3">
-                                <p className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1.5" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>本人の記録（ジャーナル・n=1）</p>
-                                <p className="text-xs text-[#4A4A4A] leading-relaxed mb-2">この章の順番の下敷きにした、小林大介自身の学びと実践の記録。事実の根拠はライブラリ本体に、体験はこちらに。</p>
-                                <div className="flex flex-wrap gap-2">
-                                    {p.journal.map((j) => (
-                                        <Link key={j.href} href={j.href} className="text-xs px-3 py-1 rounded-full bg-white border border-[#1A1A1A]/20 font-bold text-[#1A1A1A] hover:border-[#1A1A1A] transition-colors">{j.label}</Link>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
                     </section>
                 );
             })}

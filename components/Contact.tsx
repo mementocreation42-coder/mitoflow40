@@ -95,7 +95,7 @@ export default function Contact() {
                     <div className="bg-white rounded-2xl border border-[#1A1A1A] p-5 md:p-6 mb-8 flex flex-col md:flex-row items-center gap-5">
                         <div className="flex-shrink-0">
                             <Image src="/images/misc/profile.jpg" alt="小林大介" width={80} height={80}
-                                className="rounded-full object-cover border-2 border-[#1A1A1A]"
+                                className="rounded-full object-cover border border-[#1A1A1A]"
                                 style={{ width: 80, height: 80 }} />
                         </div>
                         <div className="text-center md:text-left">
@@ -149,7 +149,7 @@ export default function Contact() {
                             {/* フォーム */}
                             <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-[#1A1A1A] p-5 md:p-6 space-y-5">
                                 {status === 'error' && (
-                                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg text-sm">
+                                    <div className="bg-red-100 border border-[#1A1A1A] text-red-700 px-4 py-3 rounded-xl text-sm">
                                         {errorMessage}
                                     </div>
                                 )}
@@ -159,7 +159,7 @@ export default function Contact() {
                                         NAME ／ お名前 <span className="text-[#E54848]">*</span>
                                     </label>
                                     <input type="text" id="name" required disabled={status === 'loading'}
-                                        className="w-full px-4 py-2.5 border border-[#D5D5D5] rounded-lg bg-white focus:outline-none focus:border-[#FF9855] text-sm disabled:opacity-50"
+                                        className="w-full px-4 py-2.5 border border-[#1A1A1A]/40 rounded-xl bg-white focus:outline-none focus:border-[#1A1A1A] text-sm disabled:opacity-50"
                                         value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
                                 </div>
 
@@ -168,7 +168,7 @@ export default function Contact() {
                                         EMAIL ／ メールアドレス <span className="text-[#E54848]">*</span>
                                     </label>
                                     <input type="email" id="email" required disabled={status === 'loading'}
-                                        className="w-full px-4 py-2.5 border border-[#D5D5D5] rounded-lg bg-white focus:outline-none focus:border-[#FF9855] text-sm disabled:opacity-50"
+                                        className="w-full px-4 py-2.5 border border-[#1A1A1A]/40 rounded-xl bg-white focus:outline-none focus:border-[#1A1A1A] text-sm disabled:opacity-50"
                                         value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
                                 </div>
 
@@ -178,7 +178,7 @@ export default function Contact() {
                                     </label>
                                     <textarea id="contact-message" rows={7} required disabled={status === 'loading'}
                                         placeholder="気になっていること、ご質問、ご相談内容を自由にお書きください。"
-                                        className="w-full px-4 py-2.5 border border-[#D5D5D5] rounded-lg bg-white focus:outline-none focus:border-[#FF9855] text-sm resize-y disabled:opacity-50"
+                                        className="w-full px-4 py-2.5 border border-[#1A1A1A]/40 rounded-xl bg-white focus:outline-none focus:border-[#1A1A1A] text-sm resize-y disabled:opacity-50"
                                         value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} />
                                 </div>
 

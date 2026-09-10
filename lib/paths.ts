@@ -1,5 +1,5 @@
 // 教科書（読む順）。既存ページを書き換えず、上に「順番」だけを載せる薄い層。
-// 事実はライブラリ本体、体験はジャーナル（n=1）。ここではライブラリの順番を決め、ジャーナルは「本人の記録」として添えるだけ。
+// 事実はライブラリ本体、体験はジャーナル（n=1）。ここではライブラリの順番だけを決める。
 
 export interface PathStep {
     href: string;   // 既存ページのパス
@@ -16,7 +16,6 @@ export interface ReadingPath {
     accent: string;  // 濃い差し色
     lead: string;    // この章で身につくこと
     steps: PathStep[];
-    journal?: { href: string; label: string }[]; // 下敷きにした本人の記録（n=1）
 }
 
 export const readingPaths: ReadingPath[] = [
@@ -31,12 +30,6 @@ export const readingPaths: ReadingPath[] = [
             { href: '/blood-sugar', title: '血糖コントロール', why: '毎日の体調を最も大きく揺らす変数。ミトコンドリアと血糖はひと続きの話。' },
             { href: '/fasting', title: '食べない時間の力', why: '足す前に引く。栄養を「足す」発想から、いらないものを「引く」発想へ。' },
             { href: '/balance', title: 'バランス（中庸）', why: '引きすぎもまた不調のもと。揺れながら調整し続ける、という着地点。' },
-        ],
-        journal: [
-            { href: '/journal/17923', label: '#00 健康とは何か？本気で学び始めた 40 代の記録' },
-            { href: '/journal/17939', label: '#01 従来の栄養学から精密栄養学へ' },
-            { href: '/journal/17975', label: '#03 健康の鍵「ミトコンドリア」' },
-            { href: '/journal/18128', label: '#08 その健康知識、偏ってない？（中庸）' },
         ],
     },
     {
@@ -55,10 +48,6 @@ export const readingPaths: ReadingPath[] = [
             { href: '/biomarkers/ggt', title: 'γ-GT', why: '酒だけではない。酸化ストレスと解毒の負担を映す。' },
             { href: '/biomarkers/vitamin-d-serum', title: 'ビタミン D（25-OH）', why: '「一般基準」と「理想値」の差が最も大きい項目のひとつ。' },
         ],
-        journal: [
-            { href: '/journal/19845', label: '#28 体調不良の原因は胃酸不足？（MCV・ペプシノーゲン）' },
-            { href: '/journal/18939', label: '#17 悪者じゃない！コレステロールの役割' },
-        ],
     },
     {
         slug: 'fatigue', n: 3, title: '40 代の疲れを解く 10 枚', en: 'WHY SO TIRED', color: '#FDEAD0', accent: '#EE9A3C',
@@ -75,11 +64,6 @@ export const readingPaths: ReadingPath[] = [
             { href: '/exercise', title: '運動', why: '5 分でよい。細胞に酸素を届けるイメージで。' },
             { href: '/stress', title: 'ストレスとは', why: 'ストレスはマグネシウムを使い、睡眠を削り、血糖を上げる。最後に全体を束ねる。' },
         ],
-        journal: [
-            { href: '/journal/18006', label: '#04 元気の秘訣！ミトコンドリア' },
-            { href: '/journal/20073', label: '30 歳と 45 歳の自分、体調はどう変わった？' },
-            { href: '/journal/20055', label: 'Apple Watch の HRV が証明した「朝ピーク」' },
-        ],
     },
     {
         slug: 'fix-your-plate', n: 4, title: '食事を整える 9 枚', en: 'LESS, THEN MORE', color: '#FBE9D0', accent: '#E39A2E',
@@ -94,11 +78,6 @@ export const readingPaths: ReadingPath[] = [
             { href: '/foods', title: '食べ物', why: 'ここから足す。卵・魚・納豆・葉物、身近な食材で何が摂れるか。' },
             { href: '/spices', title: 'スパイスの歴史と現在', why: '塩と砂糖を減らす代わりに香りを足す。効能の言いすぎに注意しながら。' },
             { href: '/supplements', title: 'サプリメント', why: '最後に、足りない分だけ。マルチではなく単体で、体に聞きながら減らす。' },
-        ],
-        journal: [
-            { href: '/journal/18059', label: '#06 そもそも糖質って悪なの？' },
-            { href: '/journal/20039', label: '15 年続けた玄米食をやめて…' },
-            { href: '/journal/20080', label: '食事と運動：健康になるためのシンプルなアプローチ' },
         ],
     },
 ];

@@ -6,7 +6,7 @@ CSS アニメーションではなく、動画ファイルそのものを差し�
 
 ```
 python3 scripts/hero-motion/split.py  /tmp/hero        # 9 枚のレイヤー PNG
-python3 scripts/hero-motion/render.py /tmp/hero        # frames/f_0000.png … 216 枚（24fps × 9 秒）＋ _sheet.png
+python3 scripts/hero-motion/render.py /tmp/hero        # frames/f_0000.png … 216 枚（24fps × 9 秒、1024×800：上に 48px の余白）＋ _sheet.png
 cd /tmp/hero
 ffmpeg -framerate 24 -i frames/f_%04d.png -c:v libvpx-vp9 -pix_fmt yuva420p -b:v 0 -crf 40 -deadline good -cpu-used 2 -row-mt 1 -auto-alt-ref 0 hero.webm
 ffmpeg -framerate 24 -i frames/f_%04d.png -vf format=bgra -c:v hevc_videotoolbox -alpha_quality 0.6 -q:v 42 -tag:v hvc1 hero.mp4
@@ -14,6 +14,7 @@ cp hero.webm public/videos/hero-illustration.webm   # Chrome / Firefox（VP9 ア
 cp hero.mp4  public/videos/hero-illustration.mp4    # Safari（HEVC アルファ）
 ```
 
-- 動きの強さ・位相は `render.py` の `M` を編集する（人物は小さく、ミトコンドリアは大きく。手が触れている青い男性と紫の女性は位相をそろえる）
+- 動きの強さ・位相は `render.py` の `M` を編集する（人物は小さく、ミトコンドリアは大きく。手が触れている青い男性と紫の女性は位相をそろえる。下端で切れている黄色い男性は横にだけ動かす）
+- 背景のゆっくりしたズームは動画ではなく CSS（`app/globals.css` の `.mf-hero-bg`、26 秒で往復）
 - 必要: Python 3 + Pillow + numpy + scipy、ffmpeg（libvpx-vp9、macOS の hevc_videotoolbox）
 - `HeroMotion.tsx` は Safari には mp4、それ以外には webm を出し、動きを減らす設定の人には静止画を出す

@@ -85,7 +85,7 @@ export default function FAQ() {
                         {faqItems.map((item, index) => (
                             <div
                                 key={index}
-                                className="border border-[#1A1A1A] rounded-lg overflow-hidden bg-white"
+                                className="border border-[#1A1A1A] rounded-2xl overflow-hidden bg-white"
                             >
                                 <button
                                     className="w-full flex justify-between items-center p-4 text-left font-semibold text-[#1A1A1A] hover:bg-gray-50 transition-colors"
