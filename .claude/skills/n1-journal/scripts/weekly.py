@@ -100,19 +100,7 @@ def fmt(v, digits):
     return f"{v:,.{digits}f}" if digits else f"{round(v):,}"
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--export", help="Apple Health の export.xml")
-    ap.add_argument("--week", help="この日を含む週（YYYY-MM-DD）。省略時は直近の終わった週")
-    ap.add_argument("--out", help="出力ディレクトリ（既定: skills/n1-journal/outputs）")
-    a = ap.parse_args()
-
-    index = load_index(a.export)
-    today = date.today()
-    if a.week:
-        start, end = week_of(datetime.strptime(a.week, "%Y-%m-%d").date())
-    else:
-        start, end = week_of(today - timedelta(days=7))  # 先週（月〜日）
+def build_week(index: dict, start: date, end: date) -> tuple[dict, list[str]]:
     prev_s, prev_e = start - timedelta(days=7), end - timedelta(days=7)
     base_s, base_e = start - timedelta(days=28), start - timedelta(days=1)  # 直前 4 週
 
@@ -148,15 +136,6 @@ def main():
         "baseline_4w": {"start": base_s.isoformat(), "end": base_e.isoformat(), "metrics": base},
         "generatedAt": datetime.now().isoformat(timespec="seconds"),
     }
-    if not metrics:
-        last = index.get("range", [None, None])[1]
-        sys.exit(f"{start}〜{end} のデータがありません（索引は {last} まで）。Apple Health を書き出し直すか、--week {last} のように指定してください")
-    out_dir = Path(a.out).expanduser() if a.out else HERE.parent / "outputs"
-    out_dir.mkdir(parents=True, exist_ok=True)
-    jp = out_dir / f"week_{start.isoformat()}.json"
-    jp.write_text(json.dumps(result, ensure_ascii=False, indent=1), encoding="utf-8")
-
-    # 貼れる表（Markdown）
     lines = [f"## 今週の数字（{start.strftime('%-m/%-d')}〜{end.strftime('%-m/%-d')}）", "",
              "| 指標 | 今週 | 前週比 | 4 週平均比 | データ日数 |", "|---|---|---|---|---|"]
     for key, label, unit, digits, _ in METRICS:
@@ -171,10 +150,72 @@ def main():
     if not covered:
         lines += ["", f"※ export の日付は {export_date}。この週の後半はまだ書き出されていない可能性があります。"]
     lines += ["", f"出典：Apple Health（{export_date} 書き出し）。数値はあるものだけ。無い日は数えていません。"]
-    mp = out_dir / f"week_{start.isoformat()}.md"
-    mp.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    print(f"week {start}〜{end}  metrics {len(metrics)}  notable {len(notable)}  covered={covered}")
-    print(f"→ {jp}\n→ {mp}")
+    return result, lines
+
+
+SALOS_FILE = Path.home() / "Desktop" / "ScondBrain" / "SAL Studio" / "SAL OS" / "data" / "n1" / "weeks.json"
+DAY_KEYS = ("hrv", "rhr", "asleep_total", "deep", "rem", "steps", "exercise_min", "active_kcal", "vo2max", "weight")
+
+
+def write_salos(results: list[dict]) -> Path:
+    """SAL OS の data/n1/weeks.json に週を追記（同じ週は置き換え）。日別は主要指標だけに絞る"""
+    SALOS_FILE.parent.mkdir(parents=True, exist_ok=True)
+    data = {"source": "Apple Health", "weeks": []}
+    if SALOS_FILE.exists():
+        try:
+            data = json.loads(SALOS_FILE.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+    by = {w["week"]["start"]: w for w in data.get("weeks", [])}
+    for r in results:
+        by[r["week"]["start"]] = {
+            "week": r["week"], "exportDate": r["exportDate"],
+            "metrics": {k: {kk: v[kk] for kk in ("label", "unit", "mean", "min", "max", "days", "vs_prev", "vs_4w", "higher_is_better") if kk in v} for k, v in r["metrics"].items()},
+            "days": {d: {k: row[k] for k in DAY_KEYS if k in row} for d, row in r["days"].items()},
+            "notable": r["notable"],
+        }
+    data["weeks"] = [by[k] for k in sorted(by)]
+    data["updatedAt"] = datetime.now().isoformat(timespec="seconds")
+    data["exportDate"] = max((w.get("exportDate") or "" for w in data["weeks"]), default=None) or None
+    SALOS_FILE.write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    return SALOS_FILE
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--export", help="Apple Health の export.xml")
+    ap.add_argument("--week", help="この日を含む週（YYYY-MM-DD）。省略時は直近の終わった週")
+    ap.add_argument("--out", help="出力ディレクトリ（既定: skills/n1-journal/outputs）")
+    ap.add_argument("--to-salos", action="store_true", help="SAL OS の data/n1/weeks.json にも書く（ダッシュボードの「からだ（n=1）」）")
+    ap.add_argument("--backfill", type=int, default=0, help="その週から遡って N 週ぶんまとめて処理（SAL OS の推移グラフ用）")
+    a = ap.parse_args()
+
+    index = load_index(a.export)
+    today = date.today()
+    if a.week:
+        start, end = week_of(datetime.strptime(a.week, "%Y-%m-%d").date())
+    else:
+        start, end = week_of(today - timedelta(days=7))  # 先週（月〜日）
+    weeks = [(start - timedelta(days=7 * i), end - timedelta(days=7 * i)) for i in range(max(a.backfill, 1))]
+    out_dir = Path(a.out).expanduser() if a.out else HERE.parent / "outputs"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    results = []
+    for ws, we in sorted(weeks):
+        result, lines = build_week(index, ws, we)
+        if not result["metrics"]:
+            last = index.get("range", [None, None])[1]
+            msg = f"{ws}〜{we} のデータがありません（索引は {last} まで）。Apple Health を書き出し直すか、--week {last} のように指定してください"
+            if len(weeks) == 1:
+                sys.exit(msg)
+            print("※ " + msg, file=sys.stderr)
+            continue
+        results.append(result)
+        (out_dir / f"week_{ws.isoformat()}.json").write_text(json.dumps(result, ensure_ascii=False, indent=1), encoding="utf-8")
+        (out_dir / f"week_{ws.isoformat()}.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+        print(f"week {ws}〜{we}  metrics {len(result['metrics'])}  notable {len(result['notable'])}  covered={result['week']['covered_by_export']}")
+    print(f"→ {out_dir}")
+    if a.to_salos and results:
+        print(f"→ SAL OS: {write_salos(results)}（{len(results)} 週）")
 
 
 if __name__ == "__main__":
