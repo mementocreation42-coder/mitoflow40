@@ -48,9 +48,9 @@ export default function NutritionLiteracyPage() {
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#EAF1E0' }}>
             <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block mf-deco-flip"
-                style={{ top: '0', right: '-40px', width: '260px' }} />
+                style={{ top: '-48px', right: '0', width: '260px' }} />
             <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none mf-deco mf-deco-delay"
-                style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
+                style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '学ぶと、何が変わる？｜生化学・栄養学を知る価値', description: '体の仕組みを知ると、健康情報に振り回されず、自分の体を読み解ける。生化学・栄養学を学ぶ意味を解説。', path: '/nutrition-literacy' })} />
             <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '学ぶと、何が変わる？', path: '/nutrition-literacy' }])} />

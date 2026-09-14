@@ -50,9 +50,9 @@ export default function CaloriesPage() {
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#FBEBD5' }}>
             <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block mf-deco-flip"
-                style={{ top: '0', right: '-40px', width: '260px' }} />
+                style={{ top: '-48px', right: '0', width: '260px' }} />
             <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none mf-deco mf-deco-delay"
-                style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
+                style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: 'カロリーの誤解', description: '「1kcalは1kcal」は本当？ カロリーをめぐる5つの誤解を解き、便利な目安の正しい使い方を中立に整理。', path: '/calories' })} />
             <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '食べ物', path: '/library#food' }, { name: 'カロリーの誤解', path: '/calories' }])} />

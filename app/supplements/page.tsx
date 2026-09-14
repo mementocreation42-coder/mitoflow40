@@ -57,9 +57,9 @@ export default function SupplementsPage() {
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#EDE6D3' }}>
             <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block mf-deco-flip"
-                style={{ top: '0', right: '-40px', width: '260px' }} />
+                style={{ top: '-48px', right: '0', width: '260px' }} />
             <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none mf-deco mf-deco-delay"
-                style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
+                style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: 'サプリメントの選び方（形態・吸収・タイミング）', description: '形態・吸収・タイミングで効きが変わる。主要サプリの選び方とコツ、注意点を解説。', path: '/supplements' })} />
             <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '生活習慣', path: '/library#lifestyle' }, { name: 'サプリメントの選び方', path: '/supplements' }])} />

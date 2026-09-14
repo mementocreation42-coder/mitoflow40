@@ -27,9 +27,9 @@ export default function HealthPhilosophyPage() {
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#CDEBE2' }}>
             <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block mf-deco-flip"
-                style={{ top: '0', right: '-40px', width: '260px' }} />
+                style={{ top: '-48px', right: '0', width: '260px' }} />
             <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none mf-deco mf-deco-delay"
-                style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
+                style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '健康とは', description: '病気でない状態がゴールではなく、自分本来の力を発揮できる状態へ。Mitoflow40が考える「健康とは何か」。', path: '/health-philosophy' })} />
             <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '健康とは', path: '/health-philosophy' }])} />

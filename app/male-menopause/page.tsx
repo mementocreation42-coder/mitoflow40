@@ -25,8 +25,8 @@ const steps = [
 export default function MaleMenopausePage() {
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#E2EAF2' }}>
-            <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block mf-deco-flip" style={{ top: 0, right: '-40px', width: '260px' }} />
-            <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none mf-deco mf-deco-delay" style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
+            <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block mf-deco-flip" style={{ top: '-48px', right: '0', width: '260px' }} />
+            <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none mf-deco mf-deco-delay" style={{ bottom: '8px', left: '8px', width: '260px' }} />
             <JsonLd data={medicalWebPage({ name: '男性更年期（LOH症候群）とは', description: 'テストステロンの変化と40代以降の心身を、症状・検査・治療から理解する。', path: '/male-menopause' })} />
             <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: 'ホルモン', path: '/library#hormones' }, { name: '男性更年期', path: '/male-menopause' }])} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>

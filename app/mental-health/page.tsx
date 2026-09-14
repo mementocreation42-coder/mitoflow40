@@ -29,9 +29,9 @@ export default function MentalHealthPage() {
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#E6E0F2' }}>
             <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block mf-deco-flip"
-                style={{ top: '0', right: '-40px', width: '260px' }} />
+                style={{ top: '-48px', right: '0', width: '260px' }} />
             <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none mf-deco mf-deco-delay"
-                style={{ bottom: '-40px', left: '-40px', width: '260px' }} />
+                style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '心の現代病とは｜うつ・不安・燃え尽きを「体から」とらえる', description: '心の不調は気合いの問題ではない。ストレス・睡眠・腸・栄養・炎症から心をとらえ、医療につなぐ視点を解説。', path: '/mental-health' })} />
             <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '老化と不調の土台', path: '/library#aging' }, { name: '心の現代病', path: '/mental-health' }])} />
