@@ -133,11 +133,11 @@ const TOC = [
     { href: '#lifestyle', n: '03', label: '生活習慣', bg: '#E7EFD8', accent: '#7DAE4A' },
     { href: '#organs', n: '04', label: '内臓・臓器', bg: '#F0E2D8', accent: '#C98A5E' },
     { href: '#mechanism', n: '05', label: '身体の仕組み', bg: '#D7F0E8', accent: '#2FB59F' },
-    { href: '#aging', n: '06', label: '老化と不調', bg: '#F7E2DC', accent: '#E07A6A' },
-    { href: '#hormones', n: '07', label: 'ホルモン', bg: '#F3E0EC', accent: '#C96BA3' },
+    { href: '#hormones', n: '06', label: 'ホルモン', bg: '#F3E0EC', accent: '#C96BA3' },
+    { href: '#aging', n: '07', label: '老化と不調', bg: '#F7E2DC', accent: '#E07A6A' },
     { href: '#mind', n: '08', label: '心とからだ', bg: '#E6E0F2', accent: '#8B78C9' },
-    { href: '#frontier', n: '09', label: 'フロンティア', bg: '#E2EAF2', accent: '#5B86B8' },
-    { href: '#symptoms', n: '10', label: '症状から引く', bg: '#FDEAD0', accent: '#EE9A3C' },
+    { href: '#symptoms', n: '09', label: '症状から引く', bg: '#FDEAD0', accent: '#EE9A3C' },
+    { href: '#frontier', n: '10', label: 'フロンティア', bg: '#E2EAF2', accent: '#5B86B8' },
     { href: '#thoughts', n: '11', label: '思索', bg: '#ECE6DA', accent: '#A08F6A' },
     { href: '#approach', n: '', label: '考え方と立ち位置', bg: '#F1EDE4', accent: '#7A7A7A' },
 ];
@@ -458,12 +458,51 @@ export default function LibraryIndex() {
                     </div>
                 </div>
 
+                {/* ホルモン */}
+                <div id="hormones" className="mt-20 md:mt-24 scroll-mt-24 md:scroll-mt-60">
+                    <div className="mb-5 flex items-stretch gap-3">
+                        <span className="w-1.5 rounded-full" style={{ background: '#C96BA3' }} />
+                        <div className="py-0.5">
+                            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#C96BA3' }}>06</span>ホルモン</h2>
+                            <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#C96BA3', opacity: 0.7 }}>HORMONES</p>
+                        </div>
+                    </div>
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
+                        体じゅうに指令を届ける化学メッセンジャー。40代以降の変化と、血液検査とのつながり。
+                    </p>
+                    <Link href="/hormones"
+                        className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#ECDCE6' }}>
+                        <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            HORMONES
+                        </div>
+                        <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-1">ホルモンの種類（9種）</div>
+                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">テストステロン・エストロゲン・コルチゾール・インスリン・甲状腺ホルモンなど、主なホルモンを個別ページで解説。</p>
+                        <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            見る <span className="group-hover:translate-x-1 transition-transform">→</span>
+                        </span>
+                    </Link>
+                    <Link href="/menopause"
+                        className="group block rounded-2xl border border-black p-5 mt-4 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F3E0EC' }}>
+                        <div className="text-[10px] font-bold tracking-widest text-[#A65D92] mb-1">MENOPAUSAL TRANSITION</div>
+                        <div className="text-lg font-bold text-[#1A1A1A] mb-1">更年期・更年期移行期</div>
+                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">ほてりだけでなく、睡眠・気分・骨・筋肉・血管まで。新しいホルモン環境へ移る時間を知る。</p>
+                        <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]">見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                    </Link>
+                    <Link href="/male-menopause"
+                        className="group block rounded-2xl border border-black p-5 mt-4 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E2EAF2' }}>
+                        <div className="text-[10px] font-bold tracking-widest text-[#557A9D] mb-1">MALE MENOPAUSE</div>
+                        <div className="text-lg font-bold text-[#1A1A1A] mb-1">男性更年期（LOH症候群）</div>
+                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">疲れ・意欲・睡眠・筋力・性機能の変化を、テストステロンと全身の両面から読む。</p>
+                        <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]">見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                    </Link>
+                </div>
+
                 {/* 老化と不調の土台（酸化・糖化・炎症） */}
                 <div id="aging" className="mt-20 md:mt-24 scroll-mt-24 md:scroll-mt-60">
                     <div className="mb-5 flex items-stretch gap-3">
                         <span className="w-1.5 rounded-full" style={{ background: '#E07A6A' }} />
                         <div className="py-0.5">
-                            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#E07A6A' }}>06</span>老化と不調の土台</h2>
+                            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#E07A6A' }}>07</span>老化と不調の土台</h2>
                             <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#E07A6A', opacity: 0.7 }}>AGING &amp; DISEASE</p>
                         </div>
                     </div>
@@ -516,45 +555,6 @@ export default function LibraryIndex() {
                     }} />
                 </div>
 
-                {/* ホルモン */}
-                <div id="hormones" className="mt-20 md:mt-24 scroll-mt-24 md:scroll-mt-60">
-                    <div className="mb-5 flex items-stretch gap-3">
-                        <span className="w-1.5 rounded-full" style={{ background: '#C96BA3' }} />
-                        <div className="py-0.5">
-                            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#C96BA3' }}>07</span>ホルモン</h2>
-                            <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#C96BA3', opacity: 0.7 }}>HORMONES</p>
-                        </div>
-                    </div>
-                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
-                        体じゅうに指令を届ける化学メッセンジャー。40代以降の変化と、血液検査とのつながり。
-                    </p>
-                    <Link href="/hormones"
-                        className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#ECDCE6' }}>
-                        <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                            HORMONES
-                        </div>
-                        <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-1">ホルモンの種類（9種）</div>
-                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">テストステロン・エストロゲン・コルチゾール・インスリン・甲状腺ホルモンなど、主なホルモンを個別ページで解説。</p>
-                        <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                            見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                        </span>
-                    </Link>
-                    <Link href="/menopause"
-                        className="group block rounded-2xl border border-black p-5 mt-4 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F3E0EC' }}>
-                        <div className="text-[10px] font-bold tracking-widest text-[#A65D92] mb-1">MENOPAUSAL TRANSITION</div>
-                        <div className="text-lg font-bold text-[#1A1A1A] mb-1">更年期・更年期移行期</div>
-                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">ほてりだけでなく、睡眠・気分・骨・筋肉・血管まで。新しいホルモン環境へ移る時間を知る。</p>
-                        <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]">見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                    </Link>
-                    <Link href="/male-menopause"
-                        className="group block rounded-2xl border border-black p-5 mt-4 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E2EAF2' }}>
-                        <div className="text-[10px] font-bold tracking-widest text-[#557A9D] mb-1">MALE MENOPAUSE</div>
-                        <div className="text-lg font-bold text-[#1A1A1A] mb-1">男性更年期（LOH症候群）</div>
-                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">疲れ・意欲・睡眠・筋力・性機能の変化を、テストステロンと全身の両面から読む。</p>
-                        <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]">見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                    </Link>
-                </div>
-
                 {/* 心とからだ */}
                 <div id="mind" className="mt-20 md:mt-24 scroll-mt-24 md:scroll-mt-60">
                     <div className="mb-5 flex items-stretch gap-3">
@@ -587,49 +587,12 @@ export default function LibraryIndex() {
                     </div>
                 </div>
 
-                {/* 研究と社会のフロンティア */}
-                <div id="frontier" className="mt-20 md:mt-24 scroll-mt-24 md:scroll-mt-60">
-                    <div className="mb-5 flex items-stretch gap-3">
-                        <span className="w-1.5 rounded-full" style={{ background: '#5B86B8' }} />
-                        <div className="py-0.5">
-                            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#5B86B8' }}>09</span>研究と社会のフロンティア</h2>
-                            <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#5B86B8', opacity: 0.7 }}>FRONTIER</p>
-                        </div>
-                    </div>
-                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
-                        賛否や法律が国によって大きく異なり、いま世界で研究・議論が進んでいるテーマです。<strong>すすめるためでも、否定するためでもなく</strong>、何が分かっていて何が分かっていないかを中立に整理します。<strong className="text-[#E8896B]">いずれも日本では法律で規制されています。</strong>
-                    </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <Link href="/psychedelics-research"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7E0F2' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>RESEARCH FRONTIER</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">サイケデリック研究の潮流</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">うつ・PTSDなどへの治療応用をめぐり、海外で進む研究の潮流を中立に。<span className="font-bold text-[#E8896B]">日本では違法。</span></p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                        </Link>
-                        <Link href="/cannabis"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7E0F2' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>HISTORY &amp; POLICY</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">大麻をめぐる歴史と世界の動き</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">医療・嗜好をめぐる各国の制度の変化と歴史を中立に整理。<span className="font-bold text-[#E8896B]">日本では違法。</span></p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                        </Link>
-                        <Link href="/counterculture"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all sm:col-span-2" style={{ background: '#E7E0F2' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>HISTORY &amp; IDEAS</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">対抗文化が生んだもの</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">グレイトフル・デッド、フラワームーブメント、ホール・アース・カタログ、パソコン、ジョブズ、EFF、そして規制。「個人に道具を」という思想史を事実ベースで。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                        </Link>
-                    </div>
-                </div>
-
                 {/* 症状から引く */}
                 <div id="symptoms" className="mt-20 md:mt-24 scroll-mt-24 md:scroll-mt-60">
                     <div className="mb-5 flex items-stretch gap-3">
                         <span className="w-1.5 rounded-full" style={{ background: '#EE9A3C' }} />
                         <div className="py-0.5">
-                            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#EE9A3C' }}>10</span>症状から引く</h2>
+                            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#EE9A3C' }}>09</span>症状から引く</h2>
                             <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#EE9A3C', opacity: 0.7 }}>FROM SYMPTOMS</p>
                         </div>
                     </div>
@@ -662,6 +625,43 @@ export default function LibraryIndex() {
                             見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                         </span>
                     </Link>
+                </div>
+
+                {/* 研究と社会のフロンティア */}
+                <div id="frontier" className="mt-20 md:mt-24 scroll-mt-24 md:scroll-mt-60">
+                    <div className="mb-5 flex items-stretch gap-3">
+                        <span className="w-1.5 rounded-full" style={{ background: '#5B86B8' }} />
+                        <div className="py-0.5">
+                            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#5B86B8' }}>10</span>研究と社会のフロンティア</h2>
+                            <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#5B86B8', opacity: 0.7 }}>FRONTIER</p>
+                        </div>
+                    </div>
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
+                        賛否や法律が国によって大きく異なり、いま世界で研究・議論が進んでいるテーマです。<strong>すすめるためでも、否定するためでもなく</strong>、何が分かっていて何が分かっていないかを中立に整理します。<strong className="text-[#E8896B]">いずれも日本では法律で規制されています。</strong>
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <Link href="/psychedelics-research"
+                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7E0F2' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>RESEARCH FRONTIER</div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">サイケデリック研究の潮流</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">うつ・PTSDなどへの治療応用をめぐり、海外で進む研究の潮流を中立に。<span className="font-bold text-[#E8896B]">日本では違法。</span></p>
+                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                        </Link>
+                        <Link href="/cannabis"
+                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7E0F2' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>HISTORY &amp; POLICY</div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">大麻をめぐる歴史と世界の動き</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">医療・嗜好をめぐる各国の制度の変化と歴史を中立に整理。<span className="font-bold text-[#E8896B]">日本では違法。</span></p>
+                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                        </Link>
+                        <Link href="/counterculture"
+                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all sm:col-span-2" style={{ background: '#E7E0F2' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>HISTORY &amp; IDEAS</div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">対抗文化が生んだもの</div>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">グレイトフル・デッド、フラワームーブメント、ホール・アース・カタログ、パソコン、ジョブズ、EFF、そして規制。「個人に道具を」という思想史を事実ベースで。</p>
+                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                        </Link>
+                    </div>
                 </div>
 
                 {/* 思索（〇〇とは？） */}

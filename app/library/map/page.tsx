@@ -100,7 +100,16 @@ const sections: Sec[] = [
         ],
     },
     {
-        n: '6', en: 'AGING & DISEASE', ja: '老化と不調の土台', anchor: '#aging', color: '#F7E2DC',
+        n: '6', en: 'HORMONES', ja: 'ホルモン', anchor: '#hormones', color: '#F3E0EC',
+        desc: '体じゅうに指令を届ける化学メッセンジャー。9種のホルモンと40代の変化。',
+        pages: [
+            { href: '/hormones', label: 'ホルモンの種類' },
+            { href: '/menopause', label: '更年期・更年期移行期' },
+            { href: '/male-menopause', label: '男性更年期（LOH症候群）' },
+        ],
+    },
+    {
+        n: '7', en: 'AGING & DISEASE', ja: '老化と不調の土台', anchor: '#aging', color: '#F7E2DC',
         desc: 'さびる・こげる・くすぶる——共通の根と、そこから生まれる現代病たち。',
         pages: [
             { href: '/oxidative-stress', label: '酸化' },
@@ -113,15 +122,6 @@ const sections: Sec[] = [
             { href: '/hypertension', label: '高血圧' },
             { href: '/fatty-liver', label: '脂肪肝' },
             { href: '/mental-health', label: '心の現代病' },
-        ],
-    },
-    {
-        n: '7', en: 'HORMONES', ja: 'ホルモン', anchor: '#hormones', color: '#F3E0EC',
-        desc: '体じゅうに指令を届ける化学メッセンジャー。9種のホルモンと40代の変化。',
-        pages: [
-            { href: '/hormones', label: 'ホルモンの種類' },
-            { href: '/menopause', label: '更年期・更年期移行期' },
-            { href: '/male-menopause', label: '男性更年期（LOH症候群）' },
         ],
     },
     {
@@ -138,21 +138,21 @@ const sections: Sec[] = [
         ],
     },
     {
-        n: '9', en: 'FRONTIER', ja: '研究と社会のフロンティア', anchor: '#frontier', color: '#E2EAF2',
-        desc: '今まさに研究が進む領域。期待と注意の両方を、フラットに見渡す。',
-        pages: [
-            { href: '/psychedelics-research', label: 'サイケデリックス研究' },
-            { href: '/cannabis', label: 'カンナビス' },
-            { href: '/counterculture', label: 'カウンターカルチャー' },
-        ],
-    },
-    {
-        n: '10', en: 'FROM SYMPTOMS', ja: '症状から引く', anchor: '#symptoms', color: '#FDEAD0',
+        n: '9', en: 'FROM SYMPTOMS', ja: '症状から引く', anchor: '#symptoms', color: '#FDEAD0',
         desc: '「この不調はなぜ？」から逆引きする入口。体感（症状）からも、病態（不調・現代病）からも仕組みへたどる。',
         pages: [
             { href: '/symptoms', label: '症状から引く' },
             { href: '/conditions', label: '不調・現代病を読み解く' },
             { href: '/conditions/iron-deficiency', label: '鉄欠乏（隠れ貧血）' },
+        ],
+    },
+    {
+        n: '10', en: 'FRONTIER', ja: '研究と社会のフロンティア', anchor: '#frontier', color: '#E2EAF2',
+        desc: '今まさに研究が進む領域。期待と注意の両方を、フラットに見渡す。',
+        pages: [
+            { href: '/psychedelics-research', label: 'サイケデリックス研究' },
+            { href: '/cannabis', label: 'カンナビス' },
+            { href: '/counterculture', label: 'カウンターカルチャー' },
         ],
     },
     {
