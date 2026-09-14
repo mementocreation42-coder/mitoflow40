@@ -43,6 +43,7 @@ export const staticPages: StaticPage[] = [
     { path: "/energy", priority: 0.7, changeFrequency: 'monthly', search: { title: "エネルギーとは", sub: "Energy / 疲れにくさの正体", group: "しくみ" } },
     { path: "/enzymes", priority: 0.6, changeFrequency: 'monthly', search: { title: "酵素", sub: "触媒・消化酵素・代謝酵素・補酵素／酵素ドリンクの誤解", group: "しくみ" } },
     { path: "/exercise", priority: 0.6, changeFrequency: 'monthly', search: { title: "運動", sub: "Exercise", group: "生活習慣" } },
+    { path: "/food-topics", priority: 0.7, changeFrequency: 'monthly', search: { title: "食のテーマ", sub: "小麦・米・断食・カロリー・気をつけたい食品・スパイス", group: "食べ物" } },
     { path: "/fasting", priority: 0.6, changeFrequency: 'monthly', search: { title: "食べない時間の力", sub: "断食・空腹がもたらすもの、向く人・向かない人", group: "生活習慣" } },
     { path: "/fatty-liver", priority: 0.6, changeFrequency: 'monthly', search: { title: "脂肪肝（MASLD）", sub: "沈黙の現代病・お酒を飲まなくてもなる脂肪肝", group: "しくみ" } },
     { path: "/food-journey", priority: 0.7, changeFrequency: 'monthly', search: { title: "食べてから、動くまで", sub: "消化・吸収・代謝・排出の全体像（インフォグラフィック）", group: "しくみ" } },

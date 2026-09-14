@@ -46,6 +46,3 @@ ON YOUR PLATE
 
 ## このページからのリンク
 - /foods — 食べ物 一覧へ
-
-## このページへのリンク元
-- /library — LIBRARY

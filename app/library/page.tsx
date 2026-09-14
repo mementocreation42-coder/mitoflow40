@@ -70,6 +70,17 @@ const foodSections = [
         illustration: '/images/misc/25.png',
         description: '「材料」を実際に運ぶ食卓。卵・鮭・納豆など身近な食材で何が摂れるか、40代向けの食べ方・組み合わせから解説します。',
     },
+    {
+        href: '/food-topics',
+        label: 'FOOD TOPICS',
+        ja: '食のテーマ',
+        role: '論点',
+        count: 6,
+        unit: 'テーマ',
+        color: '#FBE9D0',
+        illustration: '/images/for-you/for-you-science.png',
+        description: '「小麦は悪い？」「玄米が正義？」「食べない時間は効く？」「カロリーは健康の指標？」。食卓でよく迷うテーマを、良い・悪いで決めつけずに切り分けて読めるようにしました。',
+    },
 ];
 
 const organSections = [
@@ -294,53 +305,6 @@ export default function LibraryIndex() {
                     ))}
                     </div>
 
-                    {/* 食のテーマ（3カラム） */}
-                    <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        {/* 小麦と健康 */}
-                        <Link href="/wheat"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F6E9CF' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>WHEAT</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">小麦と健康</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">「小麦は体に悪い」は本当？ 血糖・グルテン・精製・超加工に切り分けて、上手なつき合い方を中立に。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                        </Link>
-
-                        {/* 白米・玄米 */}
-                        <Link href="/rice"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F3EEDC' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>RICE</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">白米・玄米の真実</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">「玄米は正義、白米は悪」は本当？ 血糖・栄養・フィチン酸・ヒ素まで、フェアに比べて自分に合う一杯を。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                        </Link>
-
-                        {/* 食べない時間の力 */}
-                        <Link href="/fasting"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E6E0F2' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>FASTING</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">食べない時間の力</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">「何を食べるか」だけでなく「食べない時間をつくる」選択。断食・空腹の効果と、向く人・向かない人を安全第一で。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                        </Link>
-
-                        {/* 気をつけたい食品 */}
-                        <Link href="/caution-foods"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#FBE9D6' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>CAUTION FOODS</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">気をつけたい食品</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">「食べてはいけない」ではなく、頻度と量に気をつけたい8つを、減らし方・代わりとセットで。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                        </Link>
-
-                        {/* カロリーの誤解 */}
-                        <Link href="/calories"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F4E3CB' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>CALORIES</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">カロリーの誤解</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">カロリーは「燃料の量」であって健康の指標ではない。なぜカロリーで考えるのか（歴史）、5つの誤解、そして本体であるATPの視点まで。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                        </Link>
-                    </div>
                 </div>
 
                 {/* 生活習慣 */}

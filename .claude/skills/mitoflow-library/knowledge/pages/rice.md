@@ -43,6 +43,3 @@ RICE
 - label: フィチン酸 ／ white: 少ない ／ brown: 多い（ミネラル吸収を妨げる面）
 - label: 無機ヒ素 ／ white: 相対的に少なめ ／ brown: ぬかに溜まりやすく多め
 - label: 味・食べやすさ ／ white: 万人向け・合わせやすい ／ brown: 好みが分かれる・よく噛む
-
-## このページへのリンク元
-- /library — LIBRARY

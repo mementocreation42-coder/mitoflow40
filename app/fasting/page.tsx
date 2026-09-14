@@ -39,10 +39,10 @@ export default function FastingPage() {
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '食べない時間の力', description: '断食・空腹の効果と仕組み、向く人・向かない人を、安全第一で中立に整理。', path: '/fasting' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '食べ物', path: '/library#food' }, { name: '食べない時間の力', path: '/fasting' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '食のテーマ', path: '/food-topics' }, { name: '食べない時間の力', path: '/fasting' }])} />
 
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '食べ物', href: '/library#food' }, { name: '食べない時間の力' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '食のテーマ', href: '/food-topics' }, { name: '食べない時間の力' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>FASTING</p>
                     <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>

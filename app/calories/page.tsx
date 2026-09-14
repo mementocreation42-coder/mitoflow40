@@ -55,10 +55,10 @@ export default function CaloriesPage() {
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: 'カロリーの誤解', description: '「1kcalは1kcal」は本当？ カロリーをめぐる5つの誤解を解き、便利な目安の正しい使い方を中立に整理。', path: '/calories' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '食べ物', path: '/library#food' }, { name: 'カロリーの誤解', path: '/calories' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '食のテーマ', path: '/food-topics' }, { name: 'カロリーの誤解', path: '/calories' }])} />
 
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '食べ物', href: '/library#food' }, { name: 'カロリーの誤解' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '食のテーマ', href: '/food-topics' }, { name: 'カロリーの誤解' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>CALORIES</p>
                     <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>

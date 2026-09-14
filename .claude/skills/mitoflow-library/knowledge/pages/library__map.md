@@ -15,7 +15,7 @@ LIBRARY MAP
 
 ### sections
 - n: 1 ／ en: HOW THEY CONNECT ／ ja: 身体の地図 ／ anchor: #map ／ desc: 点と点をつなぐ全体像。栄養学の考え方そのものから入る、ライブラリの出発点。 ／ pages: [object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]
-- n: 2 ／ en: ON YOUR PLATE ／ ja: 食べ物 ／ anchor: #food ／ desc: 毎日の皿の上の話。主食から個別の食材、気をつけたい食べ物まで。 ／ pages: [object Object]・[object Object]・[object Object]・[object Object]・[object Object]
+- n: 2 ／ en: ON YOUR PLATE ／ ja: 食べ物 ／ anchor: #food ／ desc: 毎日の皿の上の話。主食から個別の食材、気をつけたい食べ物まで。 ／ pages: [object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]
 - n: 3 ／ en: LIFESTYLE ／ ja: 生活習慣 ／ anchor: #lifestyle ／ desc: 運動・断食・光・解毒・サプリ・計測。知識を日々の暮らしに落とし込む。 ／ pages: [object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]
 - n: 4 ／ en: YOUR ORGANS ／ ja: 内臓・臓器 ／ anchor: #organs ／ desc: 肝臓・腎臓・腸・心臓・脳など、主要な臓器の役割と、関わる検査・栄養。 ／ pages: [object Object]・[object Object]・[object Object]
 - n: 5 ／ en: MECHANISM ／ ja: 身体の仕組み ／ anchor: #mechanism ／ desc: 細胞の中で起きていること。エネルギー産生から消化・腸・酵素まで、土台の生化学。 ／ pages: [object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]

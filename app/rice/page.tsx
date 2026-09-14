@@ -34,10 +34,10 @@ export default function RicePage() {
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '白米・玄米の真実', description: '白米と玄米、どちらが正解？ 血糖・栄養・フィチン酸・ヒ素を中立に整理し、自分に合う食べ方へ。', path: '/rice' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '食べ物', path: '/library#food' }, { name: '白米・玄米の真実', path: '/rice' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '食のテーマ', path: '/food-topics' }, { name: '白米・玄米の真実', path: '/rice' }])} />
 
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '食べ物', href: '/library#food' }, { name: '白米・玄米の真実' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '食のテーマ', href: '/food-topics' }, { name: '白米・玄米の真実' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>RICE</p>
                     <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>

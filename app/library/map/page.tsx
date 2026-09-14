@@ -44,10 +44,12 @@ const sections: Sec[] = [
         desc: '毎日の皿の上の話。主食から個別の食材、気をつけたい食べ物まで。',
         pages: [
             { href: '/foods', label: '食べ物一覧' },
+            { href: '/food-topics', label: '食のテーマ' },
             { href: '/rice', label: '米' },
             { href: '/wheat', label: '小麦' },
             { href: '/caution-foods', label: '注意したい食べ物' },
             { href: '/calories', label: 'カロリーの誤解' },
+            { href: '/spices', label: 'スパイス' },
         ],
     },
     {

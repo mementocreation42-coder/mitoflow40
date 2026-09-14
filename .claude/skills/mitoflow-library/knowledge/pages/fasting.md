@@ -54,4 +54,3 @@ FASTING
 ## このページへのリンク元
 - /chrono-nutrition — 時間栄養学（クロノニュートリション）とは ｜ いつ食べるかで変わる体
 - /health-counterculture — 健康とは、カウンターカルチャーである。｜身体から始める静かな反抗
-- /library — LIBRARY

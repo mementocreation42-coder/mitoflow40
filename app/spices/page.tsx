@@ -59,10 +59,10 @@ export default function SpicesPage() {
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: 'スパイスの歴史と現在', description: '薬から食卓へ。スパイスの効能の期待と、確かめられていることを分けて整理。', path: '/spices' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '食べ物', path: '/foods' }, { name: 'スパイスの歴史と現在', path: '/spices' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '食のテーマ', path: '/food-topics' }, { name: 'スパイスの歴史と現在', path: '/spices' }])} />
 
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '食べ物', href: '/foods' }, { name: 'スパイスの歴史と現在' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '食のテーマ', href: '/food-topics' }, { name: 'スパイスの歴史と現在' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>SPICES</p>
                     <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>

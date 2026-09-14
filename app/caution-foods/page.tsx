@@ -84,10 +84,10 @@ export default function CautionFoodsPage() {
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '気をつけたい食品', description: '「ゼロにしなくていい、でも頻度と量に気をつけたい」食品を、しくみと減らし方からやさしく解説。', path: '/caution-foods' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '食べ物', path: '/foods' }, { name: '気をつけたい食品', path: '/caution-foods' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '食のテーマ', path: '/food-topics' }, { name: '気をつけたい食品', path: '/caution-foods' }])} />
 
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '食べ物', href: '/foods' }, { name: '気をつけたい食品' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '食のテーマ', href: '/food-topics' }, { name: '気をつけたい食品' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         ON YOUR PLATE
