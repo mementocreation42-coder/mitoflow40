@@ -12,7 +12,12 @@ const MODEL = 'claude-haiku-4-5';
 const SYSTEM_PROMPT = `あなたは MitoFlow40 の解析者・小林大介の代理として、ミトコンドリア視点のセルフチェック結果を読み解くアシスタントです。
 
 ## 役割
-12問のセルフチェックとプロフィール（年齢・性別・BMI）から、ユーザーの「自覚症状」をミトコンドリア機能の観点で読み解き、温度感のあるパーソナル解析を返します。
+12問のセルフチェック（各問の回答そのもの）とプロフィール（年齢・性別・BMI）から、ユーザーの「自覚症状」をミトコンドリア機能の観点で読み解き、温度感のあるパーソナル解析を返します。
+
+## 読み解きの材料（必ず使う）
+- 「各問の回答」が主役。どの質問にどう答えたかを具体的に引用して語る（例:「『甘いものへの渇望が週に何度もある』と『1食抜くとフラつく』が重なっている点から…」）。軸スコアやタイプ名だけで語らない。
+- 「読み取れる可能性」は、回答の組み合わせをライブラリの知見に照らして先に出したもの。personal_analysis はこれを骨格にし、その根拠（ground）の範囲で語る。ここに無い病名・診断名・栄養素の欠乏を新たに持ち出さない。
+- 可能性が 1 つも無い場合は、弱い軸と強い軸の対比と、回答の中で目立つサインから語る。
 
 ## 絶対ルール（最重要）
 1. **断定しない、可能性で語る**。すべての主張は以下のいずれかで結ぶ：
@@ -58,7 +63,11 @@ type RequestBody = {
     archetypeName: string;
     archetypeCatch: string;
     flags: { caffeineFlag: boolean; nightOwlFlag: boolean };
+    answers?: { id: string; axis: string; text: string; value: number; sign: string }[];
+    hypotheses?: { id: string; title: string; confidence: 'high' | 'mid'; why: string[]; ground: string }[];
 };
+
+const AXIS_JA: Record<string, string> = { energy: 'エネルギー', mental: '脳のクリアさ', recovery: '回復力', flex: '代謝の柔軟性' };
 
 export async function POST(req: Request) {
     const apiKey = process.env.ANTHROPIC_API_KEY;
@@ -94,7 +103,13 @@ export async function POST(req: Request) {
 - カフェイン依存: ${body.flags.caffeineFlag ? 'あり' : 'なし'}
 - 夜更かし傾向: ${body.flags.nightOwlFlag ? 'あり' : 'なし'}
 
-このユーザーに、archetypeを超えた個別の物語と、3つの具体的アクション、最後に好奇心を引き出す問いかけを JSON で返してください。`;
+## 各問の回答（1=左の選択肢 〜 5=右の選択肢）
+${(body.answers ?? []).map((a) => `- [${AXIS_JA[a.axis] ?? a.axis}] ${a.text} → ${a.value}/5（${a.sign}）`).join('\n') || '（回答の詳細なし）'}
+
+## 読み取れる可能性（ルールで先に抽出。これを骨格にする）
+${(body.hypotheses ?? []).map((h) => `- ${h.title}【${h.confidence === 'high' ? 'サインが重なる' : '気にしておきたい'}】\n  根拠となる回答: ${h.why.join('／')}\n  ライブラリの要点: ${h.ground}`).join('\n') || '（強いパターンなし。弱い軸と目立つ回答から語る）'}
+
+このユーザーに、回答を具体的に引用しながら、上の可能性を骨格にした個別の物語と、3つの具体的アクション、最後に好奇心を引き出す問いかけを JSON で返してください。`;
 
         const client = new Anthropic({ apiKey });
         const response = await client.messages.create({
@@ -149,6 +164,7 @@ async function saveToNotion(body: RequestBody, aiAnalysis: string): Promise<void
     const flagsArr: { name: string }[] = [];
     if (body.flags.caffeineFlag) flagsArr.push({ name: 'カフェイン依存' });
     if (body.flags.nightOwlFlag) flagsArr.push({ name: '夜更かし' });
+    for (const h of body.hypotheses ?? []) flagsArr.push({ name: h.title.replace(/の可能性$/, '').slice(0, 60) });
 
     const now = new Date();
     const isoDate = now.toISOString();

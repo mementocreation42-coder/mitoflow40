@@ -3,29 +3,9 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 
-// ===== 質問定義 =====
-export type Axis = 'energy' | 'mental' | 'recovery' | 'flex';
-// invert: true の場合「あてはまる=活性度低い」のサイン。スコアは 6 - 回答 で反転。
-type Question = { id: string; axis: Axis; text: string; labelLow: string; labelHigh: string; invert?: boolean };
-
-const QUESTIONS: Question[] = [
-    // Energy
-    { id: 'e1', axis: 'energy', text: '朝、目覚めて10分以内に体が動き出せる', labelLow: 'なかなか動けない', labelHigh: 'すぐ動ける' },
-    { id: 'e2', axis: 'energy', text: '午前中、コーヒーやエナジードリンクがないと頭が回らない', labelLow: '頼らない', labelHigh: '毎日頼る', invert: true },
-    { id: 'e3', axis: 'energy', text: '何もしていない午後、体に「重さ」を感じない', labelLow: 'いつも重い', labelHigh: '感じない' },
-    // Mental Clarity
-    { id: 'm1', axis: 'mental', text: '集中したい仕事を90分続けられる', labelLow: '続かない', labelHigh: '続く' },
-    { id: 'm2', axis: 'mental', text: '名前や言葉が「のど元まで出かかる」もどかしさが、週に何度かある', labelLow: 'ほぼない', labelHigh: '頻繁にある', invert: true },
-    { id: 'm3', axis: 'mental', text: '夜遅い時間でも頭が冴えて寝つけないことがある', labelLow: 'ない', labelHigh: 'よくある', invert: true },
-    // Recovery
-    { id: 'r1', axis: 'recovery', text: '軽い運動の翌日、筋肉痛や疲労がほとんど残らない', labelLow: 'いつも残る', labelHigh: '残らない' },
-    { id: 'r2', axis: 'recovery', text: '風邪をひくと長引く、または最近よく体調を崩す', labelLow: 'ない', labelHigh: 'よくある', invert: true },
-    { id: 'r3', axis: 'recovery', text: '寝ても疲れが取れた感覚がない朝が多い', labelLow: 'ほぼない', labelHigh: '頻繁', invert: true },
-    // Metabolic Flexibility
-    { id: 'f1', axis: 'flex', text: '食事を1食抜いても、頭と体が動き続ける', labelLow: 'すぐフラつく', labelHigh: '平気' },
-    { id: 'f2', axis: 'flex', text: '甘いもの・パン・米への強い渇望が、週に何度かある', labelLow: 'ない', labelHigh: 'よくある', invert: true },
-    { id: 'f3', axis: 'flex', text: '冷たい環境でも体の芯から冷えにくい', labelLow: 'すぐ冷える', labelHigh: '冷えにくい' },
-];
+// ===== 質問定義（lib/check-questions.ts に集約。AI 解析とも共有） =====
+import { QUESTIONS, describeAnswers, deriveHypotheses, type Axis, type AnswerLine, type Hypothesis, type Question } from '@/lib/check-questions';
+export type { Axis };
 
 export const AXIS_META: Record<Axis, { label: string; en: string; color: string; description: string }> = {
     energy: { label: 'エネルギー', en: 'ENERGY', color: '#FF9855', description: 'ミトコンドリアが日々のATP（エネルギー通貨）を十分に作れているか。' },
@@ -116,7 +96,9 @@ export default function CheckPage() {
         const profileFlags = { age: ageNum, gender: profile.gender, bmi: bmiNum, ageDecade, bmiBand };
         const archetype = detectArchetype(axisScores, total, { caffeineFlag, nightOwlFlag, ...profileFlags });
         const context = buildContextLine(axisScores, profileFlags);
-        return { axisScores, total, archetype, flags: { caffeineFlag, nightOwlFlag, ...profileFlags }, context };
+        const hypotheses = deriveHypotheses(answers, { gender: profile.gender, bmiBand, age: ageNum });
+        const answerLines = describeAnswers(answers);
+        return { axisScores, total, archetype, flags: { caffeineFlag, nightOwlFlag, ...profileFlags }, context, hypotheses, answerLines };
     }, [answers, profile, bmi]);
 
     const submit = () => {
@@ -630,8 +612,10 @@ function detectArchetype(s: Record<Axis, number>, total: number, flags: { caffei
 }
 
 // ===== Result =====
-export function Result({ scores, onReset }: { scores: { axisScores: Record<Axis, number>; total: number; archetype: Archetype; flags: { caffeineFlag: boolean; nightOwlFlag: boolean } & ProfileFlags; context: string }; onReset: () => void }) {
+export function Result({ scores, onReset }: { scores: { axisScores: Record<Axis, number>; total: number; archetype: Archetype; flags: { caffeineFlag: boolean; nightOwlFlag: boolean } & ProfileFlags; context: string; hypotheses?: Hypothesis[]; answerLines?: AnswerLine[] }; onReset: () => void }) {
     const { axisScores, total, archetype, flags, context } = scores;
+    const hypotheses = scores.hypotheses ?? [];
+    const answerLines = scores.answerLines ?? [];
     const profileChip = [
         flags.age ? `${flags.age}歳` : null,
         flags.gender === 'male' ? '男性' : flags.gender === 'female' ? '女性' : flags.gender === 'other' ? 'その他' : null,
@@ -664,6 +648,8 @@ export function Result({ scores, onReset }: { scores: { axisScores: Record<Axis,
                         archetypeName: archetype.name,
                         archetypeCatch: archetype.catch,
                         flags: { caffeineFlag: flags.caffeineFlag, nightOwlFlag: flags.nightOwlFlag },
+                        answers: answerLines,
+                        hypotheses: hypotheses.map((h) => ({ id: h.id, title: h.title, confidence: h.confidence, why: h.why, ground: h.ground })),
                     }),
                 });
                 if (!res.ok) throw new Error('failed');
@@ -817,6 +803,46 @@ export function Result({ scores, onReset }: { scores: { axisScores: Record<Axis,
                             ))}
                         </div>
                     </div>
+                </div>
+
+                {/* 読み取れる可能性（ルール → ライブラリ） */}
+                <div className="bg-white rounded-2xl border-2 border-[#1A1A1A] p-5 md:p-6 mb-8">
+                    <div className="text-xs font-bold tracking-wider mb-1" style={{ color: '#FF9855', fontFamily: "'Space Grotesk', sans-serif" }}>
+                        READING · 回答から読み取れる可能性
+                    </div>
+                    <p className="text-xs text-[#4A4A4A] leading-relaxed mb-4">
+                        12問の組み合わせから、ライブラリの知見に照らして浮かぶ「可能性」です。診断ではなく、次に確かめる場所の目印としてお読みください。
+                    </p>
+                    {hypotheses.length === 0 ? (
+                        <p className="text-sm text-[#1A1A1A] leading-relaxed">今回の回答では、複数のサインが重なる強いパターンは見えませんでした。気になる軸から、下の「ライブラリで深掘り」へ進んでみてください。</p>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {hypotheses.map((h) => (
+                                <div key={h.id} className="rounded-xl border border-[#1A1A1A]/20 p-4 bg-[#FAFAF7] flex flex-col">
+                                    <div className="flex items-start justify-between gap-2 mb-1.5">
+                                        <div className="text-sm font-bold text-[#1A1A1A] leading-snug">{h.title}</div>
+                                        <span className="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full border"
+                                            style={h.confidence === 'high' ? { background: '#FFE4D2', borderColor: '#FF9855', color: '#1A1A1A' } : { background: '#fff', borderColor: 'rgba(26,26,26,0.25)', color: '#4A4A4A' }}>
+                                            {h.confidence === 'high' ? 'サインが重なる' : '気にしておきたい'}
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-wrap gap-1 mb-2">
+                                        {h.why.map((w) => (
+                                            <span key={w} className="text-[10px] px-2 py-0.5 rounded-full bg-white border border-[#1A1A1A]/15 text-[#4A4A4A]">{w}</span>
+                                        ))}
+                                    </div>
+                                    <p className="text-xs text-[#4A4A4A] leading-relaxed mb-3 flex-1">{h.ground}</p>
+                                    <div className="flex flex-wrap gap-1.5">
+                                        {h.pages.map((pg) => (
+                                            <Link key={pg.href} href={pg.href} className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-white border border-[#1A1A1A]/20 text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white hover:border-[#41C9B4] transition-colors">
+                                                {pg.label} →
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* 強い軸・弱い軸 */}

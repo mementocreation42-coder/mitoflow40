@@ -1,6 +1,7 @@
 'use client';
 
 import { Result, ARCHETYPES, type Axis } from '../page';
+import { deriveHypotheses, describeAnswers } from '@/lib/check-questions';
 
 // セルフチェックの結果サンプル。デモ用に固定スコア＋archetypeで表示。
 // AI解析は API 呼び出し（archetype 「思考オーバーヒート」相当）
@@ -24,6 +25,10 @@ export default function CheckSamplePage() {
         bmiBand: 'normal' as const,
     };
     const context = '40-50代でこの活性度は同世代比で上位レベル。 BMIやや高め＋代謝柔軟性低めは、断食やHIITで改善余地あり。';
+    // 回答例（思考オーバーヒート型：頭は冴えるが回復が追いつかない）
+    const answers: Record<string, number> = { e1: 3, e2: 4, e3: 3, m1: 4, m2: 2, m3: 4, r1: 2, r2: 4, r3: 4, f1: 3, f2: 4, f3: 3 };
+    const hypotheses = deriveHypotheses(answers, { gender: 'male', bmiBand: 'normal', age: 42 });
+    const answerLines = describeAnswers(answers);
 
     return (
         <>
@@ -34,7 +39,7 @@ export default function CheckSamplePage() {
                 </div>
                 <p className="text-xs text-[#1A1A1A]/70 mt-3">これは実際の回答ではなく、結果ページの見本です。</p>
             </div>
-            <Result scores={{ axisScores, total, archetype, flags, context }} onReset={() => { window.location.href = '/check'; }} />
+            <Result scores={{ axisScores, total, archetype, flags, context, hypotheses, answerLines }} onReset={() => { window.location.href = '/check'; }} />
         </>
     );
 }
