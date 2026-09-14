@@ -196,7 +196,7 @@ export default function LibraryIndex() {
                 <TextbookResume />
 
                 {/* はじめに */}
-                <div className="mt-12 mb-5 flex items-stretch gap-3">
+                <div id="intro" className="mt-12 mb-5 flex items-stretch gap-3 scroll-mt-24 md:scroll-mt-60">
                     <span className="w-1.5 rounded-full bg-[#41C9B4]" />
                     <div className="py-0.5">
                         <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>はじめに</h2>
