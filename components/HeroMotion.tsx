@@ -15,10 +15,15 @@ export default function HeroMotion() {
         const id = requestAnimationFrame(() => {
             if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
             const ua = navigator.userAgent;
-            const isSafari = /safari/i.test(ua) && !/chrome|chromium|crios|android|edg/i.test(ua);
+            // iPhone / iPad はどのブラウザも WebKit（Chrome も Firefox も）。WebKit は VP9 の透過に対応しないので、必ず HEVC（アルファ付き mp4）を使う。
+            const isIOS = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+            const isMacSafari = /safari/i.test(ua) && !/chrome|chromium|crios|android|edg|opr|firefox/i.test(ua);
             const v = document.createElement('video');
-            if (isSafari && v.canPlayType('video/mp4; codecs="hvc1"')) setSrc('/videos/hero-illustration.mp4');
-            else if (v.canPlayType('video/webm; codecs="vp9"')) setSrc('/videos/hero-illustration.webm');
+            const hevc = v.canPlayType('video/mp4; codecs="hvc1"');
+            const vp9 = v.canPlayType('video/webm; codecs="vp9"');
+            if ((isIOS || isMacSafari) && hevc) setSrc('/videos/hero-illustration.mp4');
+            else if (vp9 && !isIOS) setSrc('/videos/hero-illustration.webm');
+            else if (hevc) setSrc('/videos/hero-illustration.mp4');
         });
         return () => cancelAnimationFrame(id);
     }, []);

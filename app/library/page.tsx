@@ -103,21 +103,21 @@ function HubCard({ s }: { s: HubSection }) {
     return (
         <Link
             href={s.href}
-            className="group flex flex-col md:flex-row items-stretch overflow-hidden rounded-2xl border border-black hover:shadow-lg hover:-translate-y-0.5 transition-all"
+            className="group flex flex-row items-stretch overflow-hidden rounded-2xl border border-black hover:shadow-lg hover:-translate-y-0.5 transition-all"
             style={{ background: s.color }}
         >
-            <div className="flex-shrink-0 flex items-center justify-center p-4 md:w-[190px] relative overflow-hidden">
-                <img loading="lazy" decoding="async" src={s.illustration} alt="" className="pointer-events-none w-[120px] md:w-[140px] opacity-90 transition-transform" />
+            <div className="flex-shrink-0 flex items-center justify-center p-3 md:p-4 w-[104px] md:w-[190px] relative overflow-hidden">
+                <img loading="lazy" decoding="async" src={s.illustration} alt="" className="pointer-events-none w-[80px] md:w-[140px] opacity-90 transition-transform" />
             </div>
-            <div className="flex-1 p-6 md:py-6 md:pr-8">
-                <div className="flex items-baseline gap-3 mb-2">
-                    <span className="text-2xl md:text-3xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+            <div className="flex-1 p-4 pl-1 md:p-6 md:pl-2 md:pr-8">
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2">
+                    <span className="text-xl md:text-3xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         {s.label}
                     </span>
                     <span className="text-sm font-bold text-[#1A1A1A]/70">{s.ja}</span>
                     <span className="text-xs px-2 py-0.5 rounded-full bg-white/70 text-[#1A1A1A]/70 font-bold">{s.role}</span>
                 </div>
-                <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-4">{s.description}</p>
+                <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3 md:mb-4 line-clamp-3 md:line-clamp-none">{s.description}</p>
                 <div className="inline-flex w-fit items-center gap-2 px-5 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                     <span>{s.count} {s.unit}を見る</span>
                     <span className="group-hover:translate-x-1 transition-transform">→</span>
@@ -153,7 +153,7 @@ export default function LibraryIndex() {
 
             <div className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
                 {/* Hero */}
-                <div className="mb-12">
+                <div className="mb-8 md:mb-12">
                     <p className="text-xs tracking-widest font-bold mb-3" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         KNOWLEDGE LIBRARY
                     </p>
@@ -166,24 +166,26 @@ export default function LibraryIndex() {
                 </div>
 
                 {/* 横断検索 ＋ ライブラリマップへの導線 */}
-                <div className="my-12 flex flex-col sm:flex-row items-center justify-center gap-3 [&>div]:!my-0 [&>div]:!mx-0 [&>div]:w-full sm:[&>div]:w-auto">
+                <div className="my-6 md:my-12 flex flex-col sm:flex-row items-center justify-center gap-3 [&>div]:!my-0 [&>div]:!mx-0 [&>div]:w-full sm:[&>div]:w-auto">
                     <LibrarySearch />
+                    <div className="flex w-full sm:w-auto gap-2 sm:gap-3 sm:contents">
                     <Link href="/library/map"
-                        className="shrink-0 inline-flex items-center justify-center gap-2 px-5 py-4 rounded-full bg-white border border-black text-sm font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white hover:border-[#41C9B4] transition-colors whitespace-nowrap">
+                        className="shrink-0 flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-3 sm:py-4 rounded-full bg-white border border-black text-sm font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white hover:border-[#41C9B4] transition-colors whitespace-nowrap">
                         🗺️ ライブラリマップ
                     </Link>
                     <Link href="/textbook"
-                        className="shrink-0 inline-flex items-center justify-center gap-2 px-5 py-4 rounded-full bg-white border border-black text-sm font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white hover:border-[#41C9B4] transition-colors">
+                        className="shrink-0 flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-3 sm:py-4 rounded-full bg-white border border-black text-sm font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white hover:border-[#41C9B4] transition-colors">
                         📖 教科書（読む順）
                     </Link>
+                    </div>
                 </div>
 
                 {/* 目次（sticky） */}
-                <nav aria-label="ライブラリの目次" className="static md:sticky top-[60px] z-20 py-2 mb-8">
-                    <div className="flex flex-wrap justify-center gap-2 md:gap-2.5">
+                <nav aria-label="ライブラリの目次" className="static md:sticky top-[60px] z-20 py-2 mb-6 md:mb-8">
+                    <div className="flex flex-wrap justify-center gap-1.5 md:gap-2.5">
                         {TOC.map((t) => (
                             <a key={t.href} href={t.href}
-                                className="group inline-flex items-center gap-1.5 md:gap-2 px-3.5 md:px-4 py-1.5 md:py-2 rounded-full border text-sm md:text-[15px] font-bold text-[#1A1A1A] whitespace-nowrap shadow-sm bg-[var(--chip-bg)] hover:bg-[var(--chip)] hover:text-white transition-colors"
+                                className="group inline-flex items-center gap-1 md:gap-2 px-3 md:px-4 py-1 md:py-2 rounded-full border text-[13px] md:text-[15px] font-bold text-[#1A1A1A] whitespace-nowrap shadow-sm bg-[var(--chip-bg)] hover:bg-[var(--chip)] hover:text-white transition-colors"
                                 style={{ borderColor: t.accent, ['--chip-bg' as string]: t.bg, ['--chip' as string]: t.accent } as CSSProperties}>
                                 {t.n && <span className="text-[var(--chip)] group-hover:text-white transition-colors" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{t.n}</span>}
                                 {t.label}
@@ -196,17 +198,17 @@ export default function LibraryIndex() {
                 <TextbookResume />
 
                 {/* はじめに */}
-                <div id="intro" className="mt-12 mb-5 flex items-stretch gap-3 scroll-mt-24 md:scroll-mt-60">
+                <div id="intro" className="mt-8 md:mt-12 mb-3 md:mb-5 flex items-stretch gap-3 scroll-mt-24 md:scroll-mt-60">
                     <span className="w-1.5 rounded-full bg-[#41C9B4]" />
                     <div className="py-0.5">
-                        <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>はじめに</h2>
+                        <h2 className="text-2xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>はじめに</h2>
                         <p className="text-[10px] tracking-[0.2em] font-bold text-[#41C9B4]/60 mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>START HERE</p>
                     </div>
                 </div>
 
                 {/* 健康とは（思想の最上流） */}
                 <Link href="/health-philosophy"
-                    className="group mb-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    className="group mb-3 md:mb-4 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-5 rounded-2xl border border-black bg-white/70 p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all">
                     <div className="flex-shrink-0">
                         <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>THE APPROACH</span>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">健康とは</div>
@@ -221,7 +223,7 @@ export default function LibraryIndex() {
 
                 {/* 精密栄養学とは（思想の入口） */}
                 <Link href="/precision-nutrition"
-                    className="group mb-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    className="group mb-3 md:mb-4 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-5 rounded-2xl border border-black bg-white/70 p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all">
                     <div className="flex-shrink-0">
                         <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>THE APPROACH</span>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">精密栄養学とは</div>
@@ -236,7 +238,7 @@ export default function LibraryIndex() {
 
                 {/* 生化学・栄養学を知ることの価値 */}
                 <Link href="/nutrition-literacy"
-                    className="group mb-12 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    className="group mb-8 md:mb-12 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-5 rounded-2xl border border-black bg-white/70 p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all">
                     <div className="flex-shrink-0">
                         <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>WHY IT MATTERS</span>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">学ぶと、何が変わる？</div>
@@ -250,15 +252,15 @@ export default function LibraryIndex() {
                 </Link>
 
                 {/* 身体の地図 */}
-                <div id="map" className="mt-12 md:mt-16 mb-20 md:mb-24 scroll-mt-24 md:scroll-mt-60">
-                    <div className="mb-5 flex items-stretch gap-3">
+                <div id="map" className="mt-10 md:mt-16 mb-12 md:mb-24 scroll-mt-24 md:scroll-mt-60">
+                    <div className="mb-3 md:mb-5 flex items-stretch gap-3">
                         <span className="w-1.5 rounded-full" style={{ background: '#3AA7C9' }} />
                         <div className="py-0.5">
-                            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#3AA7C9' }}>01</span>身体の地図</h2>
+                            <h2 className="text-2xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#3AA7C9' }}>01</span>身体の地図</h2>
                             <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#3AA7C9', opacity: 0.7 }}>HOW THEY CONNECT</p>
                         </div>
                     </div>
-                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-4 md:mb-5">
                         生まれ持った<strong>遺伝子</strong>という設計図があり、今の状態は<strong>血液検査</strong>で「現在地」として可視化できます。そして<strong>栄養素</strong>は、その差を埋めて体をつくり整えるための「材料」です。3つを行き来することで、自分の体への理解が立体的になります。
                     </p>
 
@@ -268,13 +270,13 @@ export default function LibraryIndex() {
                         <Link
                             key={s.href}
                             href={s.href}
-                            className="group flex flex-col overflow-hidden rounded-2xl border border-black hover:shadow-lg hover:-translate-y-0.5 transition-all"
+                            className="group flex flex-row sm:flex-col overflow-hidden rounded-2xl border border-black hover:shadow-lg hover:-translate-y-0.5 transition-all"
                             style={{ background: s.color }}
                         >
-                            <div className="flex items-center justify-center pt-5 px-4">
-                                <img loading="lazy" decoding="async" src={s.illustration} alt="" className="pointer-events-none w-[120px] md:w-[130px] opacity-90 transition-transform" />
+                            <div className="flex-shrink-0 flex items-center justify-center p-3 w-[104px] sm:w-auto sm:p-0 sm:pt-5 sm:px-4">
+                                <img loading="lazy" decoding="async" src={s.illustration} alt="" className="pointer-events-none w-[80px] sm:w-[120px] md:w-[130px] opacity-90 transition-transform" />
                             </div>
-                            <div className="flex-1 flex flex-col p-5">
+                            <div className="flex-1 flex flex-col p-4 pl-1 sm:p-5">
                                 <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 mb-2">
                                     <span className="text-2xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                         {s.label}
@@ -282,7 +284,7 @@ export default function LibraryIndex() {
                                     <span className="text-sm font-bold text-[#1A1A1A]/70">{s.ja}</span>
                                     <span className="text-xs px-2 py-0.5 rounded-full bg-white/70 text-[#1A1A1A]/70 font-bold">{s.role}</span>
                                 </div>
-                                <p className="flex-1 text-sm text-[#1A1A1A]/80 leading-relaxed mb-4">{s.description}</p>
+                                <p className="flex-1 text-sm text-[#1A1A1A]/80 leading-relaxed mb-3 sm:mb-4 line-clamp-3 sm:line-clamp-none">{s.description}</p>
                                 <div className="inline-flex w-fit items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                     <span>{s.count} {s.unit}を見る</span>
                                     <span className="group-hover:translate-x-1 transition-transform">→</span>
@@ -294,15 +296,15 @@ export default function LibraryIndex() {
                 </div>
 
                 {/* 食べ物 */}
-                <div id="food" className="mt-20 md:mt-24 scroll-mt-24 md:scroll-mt-60">
-                    <div className="mb-5 flex items-stretch gap-3">
+                <div id="food" className="mt-10 md:mt-24 scroll-mt-24 md:scroll-mt-60">
+                    <div className="mb-3 md:mb-5 flex items-stretch gap-3">
                         <span className="w-1.5 rounded-full" style={{ background: '#E39A2E' }} />
                         <div className="py-0.5">
-                            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#E39A2E' }}>02</span>食べ物</h2>
+                            <h2 className="text-2xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#E39A2E' }}>02</span>食べ物</h2>
                             <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#E39A2E', opacity: 0.7 }}>ON YOUR PLATE</p>
                         </div>
                     </div>
-                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-4 md:mb-5">
                         「材料」である栄養素を、実際に体へ運ぶのが毎日の<strong>食べ物</strong>です。身近な食材ひとつひとつで何が摂れるかを知ることが、知識を食卓につなげる最後のピースになります。
                     </p>
 
@@ -313,15 +315,15 @@ export default function LibraryIndex() {
                 </div>
 
                 {/* 生活習慣 */}
-                <div id="lifestyle" className="mt-20 md:mt-24 scroll-mt-24 md:scroll-mt-60">
-                    <div className="mb-5 flex items-stretch gap-3">
+                <div id="lifestyle" className="mt-10 md:mt-24 scroll-mt-24 md:scroll-mt-60">
+                    <div className="mb-3 md:mb-5 flex items-stretch gap-3">
                         <span className="w-1.5 rounded-full" style={{ background: '#7DAE4A' }} />
                         <div className="py-0.5">
-                            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#7DAE4A' }}>03</span>生活習慣</h2>
+                            <h2 className="text-2xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#7DAE4A' }}>03</span>生活習慣</h2>
                             <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#7DAE4A', opacity: 0.7 }}>LIFESTYLE</p>
                         </div>
                     </div>
-                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-4 md:mb-5">
                         しくみを動かすのは、日々の習慣。もっとも効果が大きい「打ち手」をまとめました。
                     </p>
                     <div className="space-y-4">
@@ -334,15 +336,15 @@ export default function LibraryIndex() {
                 </div>
 
                 {/* 内臓・臓器 */}
-                <div id="organs" className="mt-20 md:mt-24 scroll-mt-24 md:scroll-mt-60">
-                    <div className="mb-5 flex items-stretch gap-3">
+                <div id="organs" className="mt-10 md:mt-24 scroll-mt-24 md:scroll-mt-60">
+                    <div className="mb-3 md:mb-5 flex items-stretch gap-3">
                         <span className="w-1.5 rounded-full" style={{ background: '#C98A5E' }} />
                         <div className="py-0.5">
-                            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#C98A5E' }}>04</span>内臓・臓器</h2>
+                            <h2 className="text-2xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#C98A5E' }}>04</span>内臓・臓器</h2>
                             <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#C98A5E', opacity: 0.7 }}>YOUR ORGANS</p>
                         </div>
                     </div>
-                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-4 md:mb-5">
                         遺伝子や栄養素が働く「現場」が、肝臓・腎臓・腸といった<strong>内臓</strong>です。それぞれが何をしていて、40代でどう変化するのかを知ると、血液検査の数値の意味もぐっと立体的になります。
                     </p>
 
@@ -351,21 +353,21 @@ export default function LibraryIndex() {
                         <Link
                             key={s.href}
                             href={s.href}
-                            className="group flex flex-col md:flex-row items-stretch overflow-hidden rounded-2xl border border-black hover:shadow-lg hover:-translate-y-0.5 transition-all"
+                            className="group flex flex-row items-stretch overflow-hidden rounded-2xl border border-black hover:shadow-lg hover:-translate-y-0.5 transition-all"
                             style={{ background: s.color }}
                         >
-                            <div className="flex-shrink-0 flex items-center justify-center p-4 md:w-[190px] relative overflow-hidden">
-                                <img loading="lazy" decoding="async" src={s.illustration} alt="" className="pointer-events-none w-[120px] md:w-[140px] opacity-90 transition-transform" />
+                            <div className="flex-shrink-0 flex items-center justify-center p-3 md:p-4 w-[104px] md:w-[190px] relative overflow-hidden">
+                                <img loading="lazy" decoding="async" src={s.illustration} alt="" className="pointer-events-none w-[80px] md:w-[140px] opacity-90 transition-transform" />
                             </div>
-                            <div className="flex-1 p-6 md:py-6 md:pr-8">
-                                <div className="flex items-baseline gap-3 mb-2">
+                            <div className="flex-1 p-4 pl-1 md:p-6 md:pl-2 md:pr-8">
+                                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2">
                                     <span className="text-2xl md:text-3xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                         {s.label}
                                     </span>
                                     <span className="text-sm font-bold text-[#1A1A1A]/70">{s.ja}</span>
                                     <span className="text-xs px-2 py-0.5 rounded-full bg-white/70 text-[#1A1A1A]/70 font-bold">{s.role}</span>
                                 </div>
-                                <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-4">{s.description}</p>
+                                <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3 md:mb-4 line-clamp-3 md:line-clamp-none">{s.description}</p>
                                 <div className="inline-flex w-fit items-center gap-2 px-5 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                     <span>{s.count} {s.unit}を見る</span>
                                     <span className="group-hover:translate-x-1 transition-transform">→</span>
@@ -377,18 +379,18 @@ export default function LibraryIndex() {
                 </div>
 
                 {/* からだのしくみ */}
-                <div id="mechanism" className="mt-20 md:mt-24 scroll-mt-24 md:scroll-mt-60">
-                    <div className="mb-5 flex items-stretch gap-3">
+                <div id="mechanism" className="mt-10 md:mt-24 scroll-mt-24 md:scroll-mt-60">
+                    <div className="mb-3 md:mb-5 flex items-stretch gap-3">
                         <span className="w-1.5 rounded-full" style={{ background: '#2FB59F' }} />
                         <div className="py-0.5">
-                            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#2FB59F' }}>05</span>身体の仕組み</h2>
+                            <h2 className="text-2xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#2FB59F' }}>05</span>身体の仕組み</h2>
                             <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#2FB59F', opacity: 0.7 }}>MECHANISM</p>
                         </div>
                     </div>
-                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-4 md:mb-5">
                         栄養素や生活習慣がなぜ効くのか——その答えは、細胞の中で起きている仕組みにあります。エネルギー産生から、腸と脳のつながり、細胞の再生まで。
                     </p>
-                    <h3 className="flex items-center gap-2 text-lg md:text-xl font-bold text-[#1A1A1A] mt-6 mb-4">
+                    <h3 className="flex items-center gap-2 text-lg md:text-xl font-bold text-[#1A1A1A] mt-5 md:mt-6 mb-3 md:mb-4">
                         <span className="inline-block w-5 h-0.5 rounded-full bg-[#41C9B4]" />
                         はじめに
                     </h3>
@@ -399,7 +401,7 @@ export default function LibraryIndex() {
                                 FOUNDATION ／ すべての土台
                             </div>
                             <div className="text-base md:text-lg font-bold text-[#1A1A1A] mb-1">生化学とは？</div>
-                            <p className="text-sm text-[#1A1A1A]/70 leading-relaxed">これから挙げる仕組みは、すべて「体の中の化学反応＝生化学」の話。栄養がなぜ効くのか、その土台をまず一言で。
+                            <p className="text-sm text-[#1A1A1A]/70 leading-relaxed line-clamp-2 sm:line-clamp-none">これから挙げる仕組みは、すべて「体の中の化学反応＝生化学」の話。栄養がなぜ効くのか、その土台をまず一言で。
                                 <span className="inline-block ml-1 font-bold text-[#1A1A1A] group-hover:translate-x-0.5 transition-transform">→</span>
                             </p>
                         </Link>
@@ -409,12 +411,12 @@ export default function LibraryIndex() {
                                 THE BIG PICTURE ／ 全体の地図
                             </div>
                             <div className="text-base md:text-lg font-bold text-[#1A1A1A] mb-1">食べてから、動くまで</div>
-                            <p className="text-sm text-[#1A1A1A]/70 leading-relaxed">食べる→消化→吸収→運搬→代謝→利用→排出。体の中で起きていることを、インフォグラフィックで一枚に俯瞰。
+                            <p className="text-sm text-[#1A1A1A]/70 leading-relaxed line-clamp-2 sm:line-clamp-none">食べる→消化→吸収→運搬→代謝→利用→排出。体の中で起きていることを、インフォグラフィックで一枚に俯瞰。
                                 <span className="inline-block ml-1 font-bold text-[#1A1A1A] group-hover:translate-x-0.5 transition-transform">→</span>
                             </p>
                         </Link>
                     </div>
-                    <h3 className="flex items-center gap-2 text-lg md:text-xl font-bold text-[#1A1A1A] mt-8 mb-4">
+                    <h3 className="flex items-center gap-2 text-lg md:text-xl font-bold text-[#1A1A1A] mt-6 md:mt-8 mb-3 md:mb-4">
                         <span className="inline-block w-5 h-0.5 rounded-full bg-[#41C9B4]" />
                         エネルギーの出発点
                     </h3>
@@ -427,7 +429,7 @@ export default function LibraryIndex() {
                                     START HERE ／ THE POWERHOUSE
                                 </div>
                                 <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-1">ミトコンドリアとは</div>
-                                <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3 sm:max-w-[80%]">すべての出発点。細胞のエネルギー工場とは何か、なぜ40代で重要か、どう元気に保つか。</p>
+                                <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-3 sm:max-w-[80%] line-clamp-3 sm:line-clamp-none">すべての出発点。細胞のエネルギー工場とは何か、なぜ40代で重要か、どう元気に保つか。</p>
                                 <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                     見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                                 </span>
@@ -439,13 +441,13 @@ export default function LibraryIndex() {
                                 ENERGY &amp; METABOLISM
                             </div>
                             <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-1">エネルギーとは</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">疲れにくさの正体は「エネルギーを作り続けられること」。作るしくみと、その材料になる栄養までを、やさしく束ねる入口。</p>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2 line-clamp-3 sm:line-clamp-none">疲れにくさの正体は「エネルギーを作り続けられること」。作るしくみと、その材料になる栄養までを、やさしく束ねる入口。</p>
                             <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                 見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                             </span>
                         </Link>
                     </div>
-                    <h3 className="flex items-center gap-2 text-lg md:text-xl font-bold text-[#1A1A1A] mt-8 mb-4">
+                    <h3 className="flex items-center gap-2 text-lg md:text-xl font-bold text-[#1A1A1A] mt-6 md:mt-8 mb-3 md:mb-4">
                         <span className="inline-block w-5 h-0.5 rounded-full bg-[#41C9B4]" />
                         代謝と細胞のしくみ
                     </h3>
@@ -459,15 +461,15 @@ export default function LibraryIndex() {
                 </div>
 
                 {/* ホルモン */}
-                <div id="hormones" className="mt-20 md:mt-24 scroll-mt-24 md:scroll-mt-60">
-                    <div className="mb-5 flex items-stretch gap-3">
+                <div id="hormones" className="mt-10 md:mt-24 scroll-mt-24 md:scroll-mt-60">
+                    <div className="mb-3 md:mb-5 flex items-stretch gap-3">
                         <span className="w-1.5 rounded-full" style={{ background: '#C96BA3' }} />
                         <div className="py-0.5">
-                            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#C96BA3' }}>06</span>ホルモン</h2>
+                            <h2 className="text-2xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#C96BA3' }}>06</span>ホルモン</h2>
                             <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#C96BA3', opacity: 0.7 }}>HORMONES</p>
                         </div>
                     </div>
-                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-4 md:mb-5">
                         体じゅうに指令を届ける化学メッセンジャー。40代以降の変化と、血液検査とのつながり。
                     </p>
                     <Link href="/hormones"
@@ -476,7 +478,7 @@ export default function LibraryIndex() {
                             HORMONES
                         </div>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-1">ホルモンの種類（9種）</div>
-                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">テストステロン・エストロゲン・コルチゾール・インスリン・甲状腺ホルモンなど、主なホルモンを個別ページで解説。</p>
+                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2 line-clamp-3 sm:line-clamp-none">テストステロン・エストロゲン・コルチゾール・インスリン・甲状腺ホルモンなど、主なホルモンを個別ページで解説。</p>
                         <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                             見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                         </span>
@@ -485,28 +487,28 @@ export default function LibraryIndex() {
                         className="group block rounded-2xl border border-black p-5 mt-4 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F3E0EC' }}>
                         <div className="text-[10px] font-bold tracking-widest text-[#A65D92] mb-1">MENOPAUSAL TRANSITION</div>
                         <div className="text-lg font-bold text-[#1A1A1A] mb-1">更年期・更年期移行期</div>
-                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">ほてりだけでなく、睡眠・気分・骨・筋肉・血管まで。新しいホルモン環境へ移る時間を知る。</p>
+                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2 line-clamp-3 sm:line-clamp-none">ほてりだけでなく、睡眠・気分・骨・筋肉・血管まで。新しいホルモン環境へ移る時間を知る。</p>
                         <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]">見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
                     </Link>
                     <Link href="/male-menopause"
                         className="group block rounded-2xl border border-black p-5 mt-4 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E2EAF2' }}>
                         <div className="text-[10px] font-bold tracking-widest text-[#557A9D] mb-1">MALE MENOPAUSE</div>
                         <div className="text-lg font-bold text-[#1A1A1A] mb-1">男性更年期（LOH症候群）</div>
-                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">疲れ・意欲・睡眠・筋力・性機能の変化を、テストステロンと全身の両面から読む。</p>
+                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2 line-clamp-3 sm:line-clamp-none">疲れ・意欲・睡眠・筋力・性機能の変化を、テストステロンと全身の両面から読む。</p>
                         <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]">見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
                     </Link>
                 </div>
 
                 {/* 老化と不調の土台（酸化・糖化・炎症） */}
-                <div id="aging" className="mt-20 md:mt-24 scroll-mt-24 md:scroll-mt-60">
-                    <div className="mb-5 flex items-stretch gap-3">
+                <div id="aging" className="mt-10 md:mt-24 scroll-mt-24 md:scroll-mt-60">
+                    <div className="mb-3 md:mb-5 flex items-stretch gap-3">
                         <span className="w-1.5 rounded-full" style={{ background: '#E07A6A' }} />
                         <div className="py-0.5">
-                            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#E07A6A' }}>07</span>老化と不調の土台</h2>
+                            <h2 className="text-2xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#E07A6A' }}>07</span>老化と不調の土台</h2>
                             <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#E07A6A', opacity: 0.7 }}>AGING &amp; DISEASE</p>
                         </div>
                     </div>
-                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-4 md:mb-5">
                         体の中では今この瞬間も、「<strong>さびる（酸化）</strong>」「<strong>こげる（糖化）</strong>」「<strong>くすぶる（慢性炎症）</strong>」という3つのダメージが静かに進んでいます。これらは見た目の老化を進めるだけでなく、疲れやすさや肌の不調といった日々の不調から、生活習慣病まで、多くの<strong>体の不調の共通の根っこ</strong>です。やっかいなのは、3つが連動して互いを加速させること。けれど裏を返せば、<strong>毎日の食事・運動・睡眠で減らしていけるダメージ</strong>でもあります。「歳のせい」とあきらめる前に、まず仕組みから知っていきましょう。
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -547,7 +549,7 @@ export default function LibraryIndex() {
                 </div>
 
                 {/* 現代病（入口カード） */}
-                <div className="space-y-4 mt-8">
+                <div className="space-y-4 mt-6 md:mt-8">
                     <HubCard s={{
                         href: '/diseases', label: 'MODERN DISEASES', ja: '現代病を読む', role: '各論', count: 10, unit: 'テーマ', color: '#F7E2DC',
                         illustration: '/images/for-you/for-you-recovery.png',
@@ -556,15 +558,15 @@ export default function LibraryIndex() {
                 </div>
 
                 {/* 心とからだ */}
-                <div id="mind" className="mt-20 md:mt-24 scroll-mt-24 md:scroll-mt-60">
-                    <div className="mb-5 flex items-stretch gap-3">
+                <div id="mind" className="mt-10 md:mt-24 scroll-mt-24 md:scroll-mt-60">
+                    <div className="mb-3 md:mb-5 flex items-stretch gap-3">
                         <span className="w-1.5 rounded-full" style={{ background: '#8B78C9' }} />
                         <div className="py-0.5">
-                            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#8B78C9' }}>08</span>心とからだ</h2>
+                            <h2 className="text-2xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#8B78C9' }}>08</span>心とからだ</h2>
                             <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#8B78C9', opacity: 0.7 }}>MIND &amp; BODY</p>
                         </div>
                     </div>
-                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-4 md:mb-5">
                         気分や不安は、「性格」や「気合い」の問題とは限りません。<strong>腸・栄養・睡眠・自律神経・血糖</strong>といった<strong>体の土台</strong>から、心を読み解きます。メンタルも“体から”整える、という視点です。
                     </p>
                     <div className="space-y-4">
@@ -588,15 +590,15 @@ export default function LibraryIndex() {
                 </div>
 
                 {/* 症状から引く */}
-                <div id="symptoms" className="mt-20 md:mt-24 scroll-mt-24 md:scroll-mt-60">
-                    <div className="mb-5 flex items-stretch gap-3">
+                <div id="symptoms" className="mt-10 md:mt-24 scroll-mt-24 md:scroll-mt-60">
+                    <div className="mb-3 md:mb-5 flex items-stretch gap-3">
                         <span className="w-1.5 rounded-full" style={{ background: '#EE9A3C' }} />
                         <div className="py-0.5">
-                            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#EE9A3C' }}>09</span>症状から引く</h2>
+                            <h2 className="text-2xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#EE9A3C' }}>09</span>症状から引く</h2>
                             <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#EE9A3C', opacity: 0.7 }}>FROM SYMPTOMS</p>
                         </div>
                     </div>
-                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-4 md:mb-5">
                         「疲れやすい」「頭がぼんやり」「冷える」——気になる<strong>不調</strong>から逆引きで、考えられる背景・確認したい血液検査・関わる栄養素・関連する体のしくみへたどれます。原因の「あたり」をつける入口に。
                     </p>
                     <Link href="/symptoms"
@@ -605,7 +607,7 @@ export default function LibraryIndex() {
                             FROM SYMPTOMS
                         </div>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-1">症状から引く（14の不調）</div>
-                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">疲れ・ブレインフォグ・冷え・動悸・めまい・むくみ・アレルギー・気分の落ち込みなどから、背景と打ち手を逆引き。</p>
+                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2 line-clamp-3 sm:line-clamp-none">疲れ・ブレインフォグ・冷え・動悸・めまい・むくみ・アレルギー・気分の落ち込みなどから、背景と打ち手を逆引き。</p>
                         <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                             見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                         </span>
@@ -620,7 +622,7 @@ export default function LibraryIndex() {
                             CONDITIONS
                         </div>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-1">不調・現代病を読み解く</div>
-                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">症状の裏にある<strong>病態</strong>の側から。鉄欠乏（隠れ貧血）・インスリン抵抗性・脂肪肝・更年期……定義・歴史・細胞レベルのしくみ・確認したい血液検査・受診の目安まで、1枚ずつ丁寧に。</p>
+                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2 line-clamp-3 sm:line-clamp-none">症状の裏にある<strong>病態</strong>の側から。鉄欠乏（隠れ貧血）・インスリン抵抗性・脂肪肝・更年期……定義・歴史・細胞レベルのしくみ・確認したい血液検査・受診の目安まで、1枚ずつ丁寧に。</p>
                         <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                             見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                         </span>
@@ -628,15 +630,15 @@ export default function LibraryIndex() {
                 </div>
 
                 {/* 研究と社会のフロンティア */}
-                <div id="frontier" className="mt-20 md:mt-24 scroll-mt-24 md:scroll-mt-60">
-                    <div className="mb-5 flex items-stretch gap-3">
+                <div id="frontier" className="mt-10 md:mt-24 scroll-mt-24 md:scroll-mt-60">
+                    <div className="mb-3 md:mb-5 flex items-stretch gap-3">
                         <span className="w-1.5 rounded-full" style={{ background: '#5B86B8' }} />
                         <div className="py-0.5">
-                            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#5B86B8' }}>10</span>研究と社会のフロンティア</h2>
+                            <h2 className="text-2xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#5B86B8' }}>10</span>研究と社会のフロンティア</h2>
                             <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#5B86B8', opacity: 0.7 }}>FRONTIER</p>
                         </div>
                     </div>
-                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-4 md:mb-5">
                         賛否や法律が国によって大きく異なり、いま世界で研究・議論が進んでいるテーマです。<strong>すすめるためでも、否定するためでもなく</strong>、何が分かっていて何が分かっていないかを中立に整理します。<strong className="text-[#E8896B]">いずれも日本では法律で規制されています。</strong>
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -644,36 +646,36 @@ export default function LibraryIndex() {
                             className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7E0F2' }}>
                             <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>RESEARCH FRONTIER</div>
                             <div className="text-lg font-bold text-[#1A1A1A] mb-1">サイケデリック研究の潮流</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">うつ・PTSDなどへの治療応用をめぐり、海外で進む研究の潮流を中立に。<span className="font-bold text-[#E8896B]">日本では違法。</span></p>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2 line-clamp-3 sm:line-clamp-none">うつ・PTSDなどへの治療応用をめぐり、海外で進む研究の潮流を中立に。<span className="font-bold text-[#E8896B]">日本では違法。</span></p>
                             <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
                         </Link>
                         <Link href="/cannabis"
                             className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7E0F2' }}>
                             <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>HISTORY &amp; POLICY</div>
                             <div className="text-lg font-bold text-[#1A1A1A] mb-1">大麻をめぐる歴史と世界の動き</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">医療・嗜好をめぐる各国の制度の変化と歴史を中立に整理。<span className="font-bold text-[#E8896B]">日本では違法。</span></p>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2 line-clamp-3 sm:line-clamp-none">医療・嗜好をめぐる各国の制度の変化と歴史を中立に整理。<span className="font-bold text-[#E8896B]">日本では違法。</span></p>
                             <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
                         </Link>
                         <Link href="/counterculture"
                             className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all sm:col-span-2" style={{ background: '#E7E0F2' }}>
                             <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>HISTORY &amp; IDEAS</div>
                             <div className="text-lg font-bold text-[#1A1A1A] mb-1">対抗文化が生んだもの</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">グレイトフル・デッド、フラワームーブメント、ホール・アース・カタログ、パソコン、ジョブズ、EFF、そして規制。「個人に道具を」という思想史を事実ベースで。</p>
+                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2 line-clamp-3 sm:line-clamp-none">グレイトフル・デッド、フラワームーブメント、ホール・アース・カタログ、パソコン、ジョブズ、EFF、そして規制。「個人に道具を」という思想史を事実ベースで。</p>
                             <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
                         </Link>
                     </div>
                 </div>
 
                 {/* 思索（〇〇とは？） */}
-                <div id="thoughts" className="mt-20 md:mt-24 scroll-mt-24 md:scroll-mt-60">
-                    <div className="mb-5 flex items-stretch gap-3">
+                <div id="thoughts" className="mt-10 md:mt-24 scroll-mt-24 md:scroll-mt-60">
+                    <div className="mb-3 md:mb-5 flex items-stretch gap-3">
                         <span className="w-1.5 rounded-full" style={{ background: '#A08F6A' }} />
                         <div className="py-0.5">
-                            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#A08F6A' }}>11</span>思索</h2>
+                            <h2 className="text-2xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#A08F6A' }}>11</span>思索</h2>
                             <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#A08F6A', opacity: 0.7 }}>THOUGHTS</p>
                         </div>
                     </div>
-                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-4 md:mb-5">
                         運命、自由、老い、幸せ——答えの出ない<strong>問い</strong>を「体・健康・生き方」の側から考えるコラム。哲学のようでいて、結局は今日の暮らし方の話です。
                     </p>
                     <Link href="/thoughts"
@@ -682,7 +684,7 @@ export default function LibraryIndex() {
                             THOUGHTS
                         </div>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-1">〇〇とは？</div>
-                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">運命とは？自由とは？老いるとは？幸せとは？——体の側から問いを見つめるエッセイ。</p>
+                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2 line-clamp-3 sm:line-clamp-none">運命とは？自由とは？老いるとは？幸せとは？——体の側から問いを見つめるエッセイ。</p>
                         <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                             読む <span className="group-hover:translate-x-1 transition-transform">→</span>
                         </span>
@@ -690,10 +692,10 @@ export default function LibraryIndex() {
                 </div>
 
                 {/* 考え方と立ち位置 */}
-                <div id="approach" className="mt-20 md:mt-24 mb-5 flex items-stretch gap-3 scroll-mt-24 md:scroll-mt-60">
+                <div id="approach" className="mt-10 md:mt-24 mb-5 flex items-stretch gap-3 scroll-mt-24 md:scroll-mt-60">
                     <span className="w-1.5 rounded-full" style={{ background: '#7A7A7A' }} />
                     <div className="py-0.5">
-                        <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>考え方と立ち位置</h2>
+                        <h2 className="text-2xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>考え方と立ち位置</h2>
                         <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#7A7A7A', opacity: 0.7 }}>OUR APPROACH</p>
                     </div>
                 </div>
@@ -729,7 +731,7 @@ export default function LibraryIndex() {
 
                 {/* なぜ、未病予防か（ミッション） */}
                 <Link href="/mission"
-                    className="group mb-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    className="group mb-3 md:mb-4 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-5 rounded-2xl border border-black bg-white/70 p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all">
                     <div className="flex-shrink-0">
                         <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>OUR MISSION</span>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">なぜ、未病予防か</div>
@@ -744,7 +746,7 @@ export default function LibraryIndex() {
 
                 {/* 医療者の役割とMitoflow40の立ち位置 */}
                 <Link href="/medical-roles"
-                    className="group mb-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    className="group mb-3 md:mb-4 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-5 rounded-2xl border border-black bg-white/70 p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all">
                     <div className="flex-shrink-0">
                         <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>WHO DOES WHAT</span>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">医療者の役割と立ち位置</div>
@@ -759,7 +761,7 @@ export default function LibraryIndex() {
 
                 {/* 統合医療とは（西洋医学＋補完療法の立ち位置） */}
                 <Link href="/integrative-medicine"
-                    className="group mb-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    className="group mb-3 md:mb-4 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-5 rounded-2xl border border-black bg-white/70 p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all">
                     <div className="flex-shrink-0">
                         <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>WEST &amp; BEYOND</span>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">統合医療とは</div>
@@ -774,7 +776,7 @@ export default function LibraryIndex() {
 
                 {/* 栄養学の歴史 */}
                 <Link href="/nutrition-history"
-                    className="group mb-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black bg-white/70 p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    className="group mb-3 md:mb-4 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-5 rounded-2xl border border-black bg-white/70 p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all">
                     <div className="flex-shrink-0">
                         <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>NUTRITION HISTORY</span>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">栄養学の歴史</div>
@@ -792,17 +794,17 @@ export default function LibraryIndex() {
                     className="group block rounded-2xl border border-black p-5 md:p-6 mt-2 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#FFF1DF' }}>
                     <div className="text-[10px] font-bold tracking-widest text-[#D67845] mb-1">HEALTH CHECK GUIDE</div>
                     <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-1">40代の健康診断の読み方</div>
-                    <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">A・B判定だけで終わらせず、経年変化と関連項目をつなぎ、再検査・受診まで行動に変える。</p>
+                    <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2 line-clamp-3 sm:line-clamp-none">A・B判定だけで終わらせず、経年変化と関連項目をつなぎ、再検査・受診まで行動に変える。</p>
                     <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]">見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
                 </Link>
 
 
                 {/* 著書：健康とは、カウンターカルチャーである */}
                 <div className="mt-20 md:mt-24">
-                    <div className="mb-5 flex items-stretch gap-3">
+                    <div className="mb-3 md:mb-5 flex items-stretch gap-3">
                         <span className="w-1.5 rounded-full bg-[#C0392B]" />
                         <div className="py-0.5">
-                            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>学んで、感じたこと</h2>
+                            <h2 className="text-2xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>学んで、感じたこと</h2>
                             <p className="text-[10px] tracking-[0.2em] font-bold text-[#C0392B]/70 mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>MANIFESTO</p>
                         </div>
                     </div>
