@@ -52,5 +52,4 @@ WHERE IT FITS ／ エネルギー産生の最終段階
 - /library#mechanism — 身体の仕組み に戻る
 
 ## このページへのリンク元
-- /library — LIBRARY
 - /tca-cycle — TCA回路（クエン酸回路）

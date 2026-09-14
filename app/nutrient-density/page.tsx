@@ -45,10 +45,10 @@ export default function NutrientDensityPage() {
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '食べ物の栄養価は変わってきている｜下がる野菜と、上がるきのこ', description: '野菜の栄養素は数十年で減少傾向。一方UV照射きのこはビタミンDが増える。事実ベースで食の栄養価の変化を解説。', path: '/nutrient-density' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '生活習慣', path: '/library#lifestyle' }, { name: '食べ物の栄養価の変化', path: '/nutrient-density' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '生活習慣', path: '/lifestyle' }, { name: '食べ物の栄養価の変化', path: '/nutrient-density' }])} />
 
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '生活習慣', href: '/library#lifestyle' }, { name: '食べ物の栄養価の変化' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '生活習慣', href: '/lifestyle' }, { name: '食べ物の栄養価の変化' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>NUTRIENT DENSITY</p>
                     <h1 className="text-3xl md:text-5xl font-bold mt-6 mb-8 md:mt-8 md:mb-10 text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>

@@ -45,9 +45,9 @@ export default function GutBrainPage() {
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '脳腸相関とは', description: '腸と脳が双方向に影響し合う「脳腸相関」を、3つの経路・セロトニン・腸内環境から解説。', path: '/gut-brain' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '身体の仕組み', path: '/library#mechanism' }, { name: '脳腸相関', path: '/gut-brain' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '代謝と細胞のしくみ', path: '/cell-metabolism' }, { name: '脳腸相関', path: '/gut-brain' }])} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の仕組み', href: '/library#mechanism' }, { name: '脳腸相関' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '代謝と細胞のしくみ', href: '/cell-metabolism' }, { name: '脳腸相関' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         GUT-BRAIN AXIS

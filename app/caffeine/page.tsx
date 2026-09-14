@@ -46,10 +46,10 @@ export default function CaffeinePage() {
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: 'カフェインとの付き合い方', description: '眠気が飛ぶ仕組み・半減期・代謝の個人差から、自分に合うコーヒーの飲み方を考える。', path: '/caffeine' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '生活習慣', path: '/library#lifestyle' }, { name: 'カフェイン', path: '/caffeine' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '生活習慣', path: '/lifestyle' }, { name: 'カフェイン', path: '/caffeine' }])} />
 
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '生活習慣', href: '/library#lifestyle' }, { name: 'カフェイン' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '生活習慣', href: '/lifestyle' }, { name: 'カフェイン' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>CAFFEINE</p>
                     <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>

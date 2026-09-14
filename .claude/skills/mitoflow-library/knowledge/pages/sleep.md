@@ -56,6 +56,5 @@ SLEEP
 
 ## このページへのリンク元
 - /chrono-nutrition — 時間栄養学（クロノニュートリション）とは ｜ いつ食べるかで変わる体
-- /library — LIBRARY
 - /menopause — 更年期・更年期移行期とは｜ホルモンの揺らぎと40代の心身
 - /psychedelics-research — サイケデリック研究の潮流（海外）｜ 中立な解説

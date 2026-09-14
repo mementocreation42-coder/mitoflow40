@@ -41,4 +41,3 @@ GUT HEALTH
 
 ## このページへのリンク元
 - /gut-troubles — 気になる腸のキーワード ｜ グルテン・カゼイン・リーキーガット・SIBO
-- /library — LIBRARY

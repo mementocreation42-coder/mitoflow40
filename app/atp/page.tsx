@@ -51,10 +51,10 @@ export default function AtpPage() {
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: 'ATP（アデノシン三リン酸）とは', description: '体のエネルギー通貨「ATP」を、作られ方・使われ方・支える栄養素から解説。', path: '/atp' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '身体の仕組み', path: '/library#mechanism' }, { name: 'ATP', path: '/atp' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '代謝と細胞のしくみ', path: '/cell-metabolism' }, { name: 'ATP', path: '/atp' }])} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
                 {/* Hero */}
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の仕組み', href: '/library#mechanism' }, { name: 'ATP' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '代謝と細胞のしくみ', href: '/cell-metabolism' }, { name: 'ATP' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         ENERGY CURRENCY

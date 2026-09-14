@@ -61,6 +61,3 @@ SELF CHECK
 
 ## このページからのリンク
 - /library#lifestyle — 生活習慣 に戻る
-
-## このページへのリンク元
-- /library — LIBRARY

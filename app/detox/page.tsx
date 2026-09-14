@@ -57,9 +57,9 @@ export default function DetoxPage() {
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '解毒（デトックス）とは', description: '体に備わった解毒システムを、肝臓・腸・腎臓の仕組みと、支える栄養素・遺伝子から解説。', path: '/detox' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '生活習慣', path: '/library#lifestyle' }, { name: '解毒', path: '/detox' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '生活習慣', path: '/lifestyle' }, { name: '解毒', path: '/detox' }])} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '生活習慣', href: '/library#lifestyle' }, { name: '解毒' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '生活習慣', href: '/lifestyle' }, { name: '解毒' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         DETOXIFICATION

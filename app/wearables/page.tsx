@@ -52,9 +52,9 @@ export default function WearablesPage() {
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: 'ウェアラブル活用術（Apple Watch）', description: 'Apple Watchなどのウェアラブルで自分の体を読む。RHR・HRV・睡眠・VO2 Max・活動量の見方と活かし方を解説。', path: '/wearables' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '生活習慣', path: '/library#lifestyle' }, { name: 'ウェアラブル活用術', path: '/wearables' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '生活習慣', path: '/lifestyle' }, { name: 'ウェアラブル活用術', path: '/wearables' }])} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '生活習慣', href: '/library#lifestyle' }, { name: 'ウェアラブル活用術' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '生活習慣', href: '/lifestyle' }, { name: 'ウェアラブル活用術' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         QUANTIFY YOURSELF

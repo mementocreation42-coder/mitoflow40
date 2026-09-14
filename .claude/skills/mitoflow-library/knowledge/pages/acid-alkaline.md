@@ -54,6 +54,3 @@ pHとは、液体が酸性か・アルカリ性かを0〜14の数字で表した
 - /foods — 食べ物を見る
 - /nutrients — 栄養素
 - /nutrition-literacy — 学ぶと、何が変わる？
-
-## このページへのリンク元
-- /library — LIBRARY

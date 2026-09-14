@@ -46,4 +46,3 @@ CELLULAR RECYCLING
 
 ## このページへのリンク元
 - /health-counterculture — 健康とは、カウンターカルチャーである。｜身体から始める静かな反抗
-- /library — LIBRARY

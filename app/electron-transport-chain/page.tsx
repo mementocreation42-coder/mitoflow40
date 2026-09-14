@@ -45,9 +45,9 @@ export default function EtcPage() {
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '電子伝達系（ETC）とは', description: 'ATPの大半を生み出す最終工程「電子伝達系」を、仕組み・酸素と活性酸素・必要な栄養素から解説。', path: '/electron-transport-chain' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '身体の仕組み', path: '/library#mechanism' }, { name: '電子伝達系', path: '/electron-transport-chain' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '代謝と細胞のしくみ', path: '/cell-metabolism' }, { name: '電子伝達系', path: '/electron-transport-chain' }])} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の仕組み', href: '/library#mechanism' }, { name: '電子伝達系' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '代謝と細胞のしくみ', href: '/cell-metabolism' }, { name: '電子伝達系' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         ENERGY FINAL STEP

@@ -56,10 +56,10 @@ export default function ReduceToxinsPage() {
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '有害物質を減らす暮らし', description: '農薬・水銀・マイクロプラスチック・添加物。神経質になりすぎず、できる範囲で曝露を減らすコツ。', path: '/reduce-toxins' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '身体の仕組み', path: '/library#mechanism' }, { name: '有害物質を減らす暮らし', path: '/reduce-toxins' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '生活習慣', path: '/lifestyle' }, { name: '有害物質を減らす暮らし', path: '/reduce-toxins' }])} />
 
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の仕組み', href: '/library#mechanism' }, { name: '有害物質を減らす暮らし' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '生活習慣', href: '/lifestyle' }, { name: '有害物質を減らす暮らし' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         REDUCE YOUR EXPOSURE

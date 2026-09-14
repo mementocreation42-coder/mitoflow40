@@ -57,6 +57,3 @@ CAFFEINE
 - item: エスプレッソ（1ショット） ／ mg: 約60〜80mg
 - item: 緑茶・紅茶（1杯/150ml） ／ mg: 約20〜30mg
 - item: エナジードリンク（1本） ／ mg: 約80〜150mg
-
-## このページへのリンク元
-- /library — LIBRARY

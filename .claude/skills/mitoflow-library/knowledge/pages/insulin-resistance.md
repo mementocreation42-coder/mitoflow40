@@ -72,5 +72,4 @@ INSULIN RESISTANCE
 
 ## このページへのリンク元
 - /diabetes — 糖尿病とは ｜ 種類・サイン・予防と、境界型のうちにできること
-- /library — LIBRARY
 - /metabolic-syndrome — メタボリックシンドロームとは｜腹囲・血圧・血糖・脂質のつながり

@@ -55,4 +55,3 @@ DIGESTION &amp; ABSORPTION
 
 ## このページへのリンク元
 - /enzymes — 酵素とは｜体を動かす「触媒」の正体と、酵素ドリンクの誤解
-- /library — LIBRARY

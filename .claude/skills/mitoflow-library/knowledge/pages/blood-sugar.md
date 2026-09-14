@@ -65,5 +65,4 @@ BLOOD SUGAR
 - /fatty-liver — 脂肪肝（MASLD）とは｜お酒を飲まなくてもなる"沈黙の現代病"
 - /food-journey — 食べてから、動くまで｜体の中で起きていること（消化・吸収・代謝の全体像）
 - /insulin-resistance — インスリン抵抗性とは｜血糖が上がる前に起きていること
-- /library — LIBRARY
 - /sarcopenia — サルコペニア・フレイルとは｜40代から始まる筋肉の減少

@@ -51,5 +51,4 @@ GUT-BRAIN AXIS
 - /library#mechanism — 身体の仕組み に戻る
 
 ## このページへのリンク元
-- /library — LIBRARY
 - /psychedelics-research — サイケデリック研究の潮流（海外）｜ 中立な解説

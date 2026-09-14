@@ -60,9 +60,9 @@ export default function CircadianPage() {
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: 'サーカディアンリズム（体内時計）とは', description: '体内時計を、仕組み・乱れの影響・ホルモンや血糖との関係・整える1日の過ごし方から解説。', path: '/circadian-rhythm' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '身体の仕組み', path: '/library#mechanism' }, { name: 'サーカディアンリズム', path: '/circadian-rhythm' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '代謝と細胞のしくみ', path: '/cell-metabolism' }, { name: 'サーカディアンリズム', path: '/circadian-rhythm' }])} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の仕組み', href: '/library#mechanism' }, { name: 'サーカディアンリズム' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '代謝と細胞のしくみ', href: '/cell-metabolism' }, { name: 'サーカディアンリズム' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         CIRCADIAN RHYTHM

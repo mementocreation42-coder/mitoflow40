@@ -50,5 +50,4 @@ FOOD SAFETY
 - /foods/almond — ナッツ
 
 ## このページへのリンク元
-- /library — LIBRARY
 - /reduce-toxins — 有害物質を減らす暮らし ｜ 農薬・水銀・マイクロプラスチック

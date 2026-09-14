@@ -72,10 +72,10 @@ export default function TcaCyclePage() {
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: 'TCA回路（クエン酸回路）とは', description: 'ミトコンドリアのエネルギー産生エンジン「TCA回路」を、流れ・役割・必要な栄養素から解説。', path: '/tca-cycle' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '身体の仕組み', path: '/library#mechanism' }, { name: 'TCA回路', path: '/tca-cycle' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '代謝と細胞のしくみ', path: '/cell-metabolism' }, { name: 'TCA回路', path: '/tca-cycle' }])} />
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
                 {/* Hero */}
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の仕組み', href: '/library#mechanism' }, { name: 'TCA回路' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '代謝と細胞のしくみ', href: '/cell-metabolism' }, { name: 'TCA回路' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>
                         ENERGY ENGINE

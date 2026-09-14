@@ -97,6 +97,36 @@ const organSections = [
     },
 ];
 
+type HubSection = { href: string; label: string; ja: string; role: string; count: number; unit: string; color: string; illustration: string; description: string };
+
+function HubCard({ s }: { s: HubSection }) {
+    return (
+        <Link
+            href={s.href}
+            className="group flex flex-col md:flex-row items-stretch overflow-hidden rounded-2xl border border-black hover:shadow-lg hover:-translate-y-0.5 transition-all"
+            style={{ background: s.color }}
+        >
+            <div className="flex-shrink-0 flex items-center justify-center p-4 md:w-[190px] relative overflow-hidden">
+                <img loading="lazy" decoding="async" src={s.illustration} alt="" className="pointer-events-none w-[120px] md:w-[140px] opacity-90 transition-transform" />
+            </div>
+            <div className="flex-1 p-6 md:py-6 md:pr-8">
+                <div className="flex items-baseline gap-3 mb-2">
+                    <span className="text-2xl md:text-3xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                        {s.label}
+                    </span>
+                    <span className="text-sm font-bold text-[#1A1A1A]/70">{s.ja}</span>
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-white/70 text-[#1A1A1A]/70 font-bold">{s.role}</span>
+                </div>
+                <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-4">{s.description}</p>
+                <div className="inline-flex w-fit items-center gap-2 px-5 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                    <span>{s.count} {s.unit}を見る</span>
+                    <span className="group-hover:translate-x-1 transition-transform">→</span>
+                </div>
+            </div>
+        </Link>
+    );
+}
+
 const TOC = [
     { href: '#map', n: '01', label: '身体の地図', bg: '#CFE8F0', accent: '#3AA7C9' },
     { href: '#food', n: '02', label: '食べ物', bg: '#FBE9D0', accent: '#E39A2E' },
@@ -277,32 +307,7 @@ export default function LibraryIndex() {
                     </p>
 
                     <div className="space-y-4">
-                    {foodSections.map((s) => (
-                        <Link
-                            key={s.href}
-                            href={s.href}
-                            className="group flex flex-col md:flex-row items-stretch overflow-hidden rounded-2xl border border-black hover:shadow-lg hover:-translate-y-0.5 transition-all"
-                            style={{ background: s.color }}
-                        >
-                            <div className="flex-shrink-0 flex items-center justify-center p-4 md:w-[190px] relative overflow-hidden">
-                                <img loading="lazy" decoding="async" src={s.illustration} alt="" className="pointer-events-none w-[120px] md:w-[140px] opacity-90 transition-transform" />
-                            </div>
-                            <div className="flex-1 p-6 md:py-6 md:pr-8">
-                                <div className="flex items-baseline gap-3 mb-2">
-                                    <span className="text-2xl md:text-3xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                        {s.label}
-                                    </span>
-                                    <span className="text-sm font-bold text-[#1A1A1A]/70">{s.ja}</span>
-                                    <span className="text-xs px-2 py-0.5 rounded-full bg-white/70 text-[#1A1A1A]/70 font-bold">{s.role}</span>
-                                </div>
-                                <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-4">{s.description}</p>
-                                <div className="inline-flex w-fit items-center gap-2 px-5 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                    <span>{s.count} {s.unit}を見る</span>
-                                    <span className="group-hover:translate-x-1 transition-transform">→</span>
-                                </div>
-                            </div>
-                        </Link>
-                    ))}
+                    {foodSections.map((s) => <HubCard key={s.href} s={s} />)}
                     </div>
 
                 </div>
@@ -319,98 +324,12 @@ export default function LibraryIndex() {
                     <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
                         しくみを動かすのは、日々の習慣。もっとも効果が大きい「打ち手」をまとめました。
                     </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <Link href="/sleep"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#DCE3F0' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>SLEEP</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">睡眠</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">修復・再生の最強の回復時間。すべての土台。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                        </Link>
-                        <Link href="/sunlight"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#FBEFD2' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>SUNLIGHT</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">日光と健康</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">体内時計・セロトニン・ビタミンDをつくる太陽の光と、紫外線との付き合い方。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                        </Link>
-                        <Link href="/water"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#DCE8F0' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>WATER</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">水と健康</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">体の約60%は水。役割・必要量・脱水のサインと、水素水など「機能水」の見極めを中立に。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                        </Link>
-                        <Link href="/exercise"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E1EFDD' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>EXERCISE</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">運動</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">ミトコンドリアを増やす唯一の確実な方法。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                        </Link>
-                        <Link href="/stimulants"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7EFD8' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>ON YOUR HABITS</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">嗜好品と体</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">アルコール・タバコ・カフェイン。体への影響を知って、自分で選ぶ。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                        </Link>
-                        <Link href="/caffeine"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#EDE6D3' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>CAFFEINE</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">カフェイン</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">眠気が飛ぶ仕組み・半減期・代謝の個人差から、自分に合うコーヒーの飲み方を。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                        </Link>
-                        <Link href="/detox"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7EFD8' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>DETOX</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">解毒</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">肝臓・腸・腎臓に備わる本来の解毒システム。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                        </Link>
-                        <Link href="/reduce-toxins"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7EFD8' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>REDUCE EXPOSURE</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">有害物質を減らす暮らし</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">農薬・水銀・マイクロプラスチック。「出す」と対になる「入れない」の話。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                        </Link>
-                        <Link href="/mycotoxins"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7EFD8' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>FOOD SAFETY</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">カビ毒と食の安全</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">カビが作る有害物質「マイコトキシン」。種類と、家庭でできる減らし方。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                        </Link>
-                        <Link href="/nutrient-density"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7EFD8' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>NUTRIENT DENSITY</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">食べ物の栄養価の変化</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">野菜の栄養素は数十年で減少傾向。一方、UV照射きのこは栄養価が上昇。事実ベースで。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                        </Link>
-                        <Link href="/wearables"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#DCE8EC' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>WEARABLES</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">ウェアラブル活用術</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">Apple Watchで自分の体を読む。HRV・睡眠・心肺機能の活かし方。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                        </Link>
-                        <Link href="/cgm"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#DCE8EC' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>CGM</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">血糖モニタリング</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">フリースタイルリブレ等で「何が自分の血糖を上げるか」を可視化。自分実験の道具。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                        </Link>
-                        <Link href="/supplements"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#EDE6D3' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>SUPPLEMENTS</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">サプリメントの選び方</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">形態・吸収・タイミングで効きが変わる。賢い選び方の地図。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                        </Link>
+                    <div className="space-y-4">
+                        <HubCard s={{
+                            href: '/lifestyle', label: 'LIFESTYLE', ja: '生活習慣', role: '打ち手', count: 13, unit: 'テーマ', color: '#E7EFD8',
+                            illustration: '/images/flow/flow-illustration-practice.png',
+                            description: '睡眠・日光・水・運動の土台から、嗜好品や有害物質を減らす暮らし、ウェアラブルや血糖モニターで測る道具、サプリメントの選び方まで。もっとも効果が大きい打ち手を順に。',
+                        }} />
                     </div>
                 </div>
 
@@ -530,214 +449,12 @@ export default function LibraryIndex() {
                         <span className="inline-block w-5 h-0.5 rounded-full bg-[#41C9B4]" />
                         代謝と細胞のしくみ
                     </h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <Link href="/glycolysis"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F4EFCE' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                GLYCOLYSIS
-                            </div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">解糖系</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">ブドウ糖からエネルギーを取り出す最初のステップ。酸素いらずの速攻発電。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </span>
-                        </Link>
-                        <Link href="/tca-cycle"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#FFE9D2' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                TCA CYCLE
-                            </div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">TCA回路</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">食べたものをエネルギーに変える、ミトコンドリアの中心エンジン。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </span>
-                        </Link>
-                        <Link href="/electron-transport-chain"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#D9E6F2' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                ETC
-                            </div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">電子伝達系</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">酸素を使いATPの大半を生む最終工程。TCA回路とATPの架け橋。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </span>
-                        </Link>
-                        <Link href="/atp"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#D7F0E8' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                ATP
-                            </div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">ATP（エネルギー通貨）</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">体のあらゆる活動を動かすエネルギー通貨。作られ方と支える栄養素。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </span>
-                        </Link>
-                        <Link href="/enzymes"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#D7F0E8' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                ENZYMES
-                            </div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">酵素</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">体内反応を進める「触媒」。消化・代謝・補酵素の働きと、酵素ドリンクの誤解。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </span>
-                        </Link>
-                        <Link href="/histamine"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F6E2DC' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                HISTAMINE
-                            </div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">ヒスタミン</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">アレルギー・胃酸・脳の覚醒という3つの顔。分解酵素DAO/HNMTの個人差と不耐症を中立に。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </span>
-                        </Link>
-                        <Link href="/acid-alkaline"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#D9E6F2' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                ACID & ALKALINE
-                            </div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">酸性・アルカリ性（pH）</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">血液のpHは体が厳密に管理。「アルカリ性食品で体質改善」の誤解を仕組みから解く。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </span>
-                        </Link>
-                        <Link href="/ketones"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E6E0F2' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                KETONES
-                            </div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">ケトン体</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">糖が足りないとき脂肪から作る第二の燃料。代謝の柔軟性の鍵。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </span>
-                        </Link>
-                        <Link href="/methylation"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E6EFD9' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                METHYLATION
-                            </div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">メチレーション</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">遺伝子・栄養素・血液検査が交わるハブ。解毒・気分・血管の土台。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </span>
-                        </Link>
-                        <Link href="/blood-sugar"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#FBEFD2' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                BLOOD SUGAR
-                            </div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">血糖コントロール</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">食後の眠気・甘いもの渇望の正体「血糖の波」。整える食べ方。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </span>
-                        </Link>
-                        <Link href="/insulin-resistance"
-                            className="group rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F6E6CF' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#D67845] mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>INSULIN RESISTANCE</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">インスリン抵抗性</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">血糖が上がる前から始まる代謝の変化。筋肉・脂肪・肝臓と膵臓の負担をつなげて理解する。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </span>
-                        </Link>
-                        <Link href="/autonomic-nervous-system"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#DCE7F0' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                ANS &amp; HRV
-                            </div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">自律神経とHRV</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">アクセルとブレーキのバランス。Apple Watchで測れるHRV。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </span>
-                        </Link>
-                        <Link href="/circadian-rhythm"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E2E0F0' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                CIRCADIAN RHYTHM
-                            </div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">サーカディアンリズム</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">約24時間の体内時計。睡眠・ホルモン・代謝を束ねるリズム。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </span>
-                        </Link>
-                        <Link href="/chrono-nutrition"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F4ECDA' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                CHRONO-NUTRITION
-                            </div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">時間栄養学</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">「いつ食べるか」で体は変わる。体内時計と栄養、時間制限食を中立に。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </span>
-                        </Link>
-                        <Link href="/gut-health"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#DCEFE4' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                GUT HEALTH
-                            </div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">腸内環境（腸活）</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">免疫・気分・解毒の交差点。腸内細菌の多様性と、腸活の基本。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </span>
-                        </Link>
-                        <Link href="/microbiome"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#DCEFE4' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                MICROBIOME
-                            </div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">腸内フローラ・プレ/プロ</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">善玉菌・悪玉菌のバランスと、プレ/プロ/シン/ポストバイオティクスの違い。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </span>
-                        </Link>
-                        <Link href="/gut-brain"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#DCEFE4' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                GUT-BRAIN AXIS
-                            </div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">脳腸相関</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">腸と脳は会話している。お腹の調子と気分・集中・睡眠のつながり。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </span>
-                        </Link>
-                        <Link href="/digestion"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#DCEFE4' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                DIGESTION & ABSORPTION
-                            </div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">消化・吸収</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">「食べた」と「吸収できた」は別の話。消化のリレーと酵素、吸収を高める習慣。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </span>
-                        </Link>
-                        <Link href="/autophagy"
-                            className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7EEDA' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                AUTOPHAGY
-                            </div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">オートファジー</div>
-                            <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">細胞の自己リサイクル。ミトコンドリアの質を保つ仕組み。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </span>
-                        </Link>
+                    <div className="space-y-4">
+                        <HubCard s={{
+                            href: '/cell-metabolism', label: 'CELL & METABOLISM', ja: '代謝と細胞のしくみ', role: '生化学', count: 19, unit: 'しくみ', color: '#D7F0E8',
+                            illustration: '/images/pricing/pricing-plan-illustration.png',
+                            description: '解糖系→TCA回路→電子伝達系→ATPというエネルギーの工程から、酵素・ケトン体・メチレーション、血糖と自律神経と体内時計、腸と消化、オートファジーまで。栄養や習慣が「なぜ効くのか」の答え。',
+                        }} />
                     </div>
                 </div>
 

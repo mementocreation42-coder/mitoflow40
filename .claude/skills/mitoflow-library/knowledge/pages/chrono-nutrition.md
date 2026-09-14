@@ -61,6 +61,3 @@ MECHANISM
 - /circadian-rhythm — → サーカディアンリズムをおさらいする
 - /fasting — → ファスティング（断食）を中立に見る
 - /sleep — → 睡眠を整える
-
-## このページへのリンク元
-- /library — LIBRARY

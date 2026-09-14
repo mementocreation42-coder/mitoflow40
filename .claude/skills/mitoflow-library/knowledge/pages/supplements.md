@@ -67,5 +67,4 @@ HOW TO CHOOSE
 - /library#lifestyle — 生活習慣 に戻る
 
 ## このページへのリンク元
-- /library — LIBRARY
 - /nutrient-density — 食べ物の栄養価は変わってきている｜下がる野菜と、上がるきのこ

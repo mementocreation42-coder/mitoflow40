@@ -51,4 +51,3 @@ ATPを作り続けるには、これらの栄養素が欠かせません。各�
 
 ## このページへのリンク元
 - /electron-transport-chain — 電子伝達系（ETC）
-- /library — LIBRARY

@@ -54,6 +54,3 @@ ENZYMES
 - /nutrients — 栄養素を見る
 - /energy — エネルギー産生
 - /digestion — 消化・吸収
-
-## このページへのリンク元
-- /library — LIBRARY

@@ -81,6 +81,5 @@ Phase I だけが進んで Phase II が追いつかないと、反応性の高�
 - /library#lifestyle — 生活習慣 に戻る
 
 ## このページへのリンク元
-- /library — LIBRARY
 - /mycotoxins — カビ毒（マイコトキシン）と食の安全
 - /reduce-toxins — 有害物質を減らす暮らし ｜ 農薬・水銀・マイクロプラスチック

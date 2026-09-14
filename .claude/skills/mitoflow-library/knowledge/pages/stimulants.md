@@ -37,6 +37,3 @@ ON YOUR HABITS
 - [2]Tobacco — Fact sheet — WHO（世界保健機関）
 
 全テーマの出典は 参照文献・出典ページ にまとめています。
-
-## このページへのリンク元
-- /library — LIBRARY

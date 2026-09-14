@@ -53,5 +53,4 @@ HRV（Heart Rate Variability＝心拍変動）は、心拍の「ゆらぎ」の�
 
 ## このページへのリンク元
 - /digestion — 消化・吸収とは ｜ 食べた栄養を活かすしくみ
-- /library — LIBRARY
 - /psychedelics-research — サイケデリック研究の潮流（海外）｜ 中立な解説

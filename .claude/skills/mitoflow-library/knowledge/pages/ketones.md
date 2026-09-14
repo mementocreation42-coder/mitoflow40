@@ -58,6 +58,3 @@ ALTERNATIVE FUEL
 
 ## このページからのリンク
 - /library#mechanism — 身体の仕組み に戻る
-
-## このページへのリンク元
-- /library — LIBRARY

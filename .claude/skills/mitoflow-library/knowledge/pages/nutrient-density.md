@@ -73,5 +73,4 @@ NUTRIENT DENSITY
 - /supplements — サプリメント
 
 ## このページへのリンク元
-- /library — LIBRARY
 - /sarcopenia — サルコペニア・フレイルとは｜40代から始まる筋肉の減少

@@ -56,6 +56,7 @@ const sections: Sec[] = [
         n: 3, en: 'LIFESTYLE', ja: '生活習慣', anchor: '#lifestyle', color: '#E7EFD8',
         desc: '運動・断食・光・解毒・サプリ・計測。知識を日々の暮らしに落とし込む。',
         pages: [
+            { href: '/lifestyle', label: '生活習慣の入口' },
             { href: '/exercise', label: '運動' },
             { href: '/fasting', label: '断食' },
             { href: '/sunlight', label: '日光' },
@@ -80,6 +81,7 @@ const sections: Sec[] = [
         pages: [
             { href: '/mitochondria', label: 'ミトコンドリア' },
             { href: '/energy', label: 'エネルギー' },
+            { href: '/cell-metabolism', label: '代謝と細胞のしくみ' },
             { href: '/insulin-resistance', label: 'インスリン抵抗性' },
             { href: '/enzymes', label: '酵素' },
             { href: '/acid-alkaline', label: '酸性・アルカリ性' },

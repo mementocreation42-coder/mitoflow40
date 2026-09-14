@@ -56,5 +56,4 @@ EXERCISE
 - /library#lifestyle — 生活習慣 に戻る
 
 ## このページへのリンク元
-- /library — LIBRARY
 - /sarcopenia — サルコペニア・フレイルとは｜40代から始まる筋肉の減少

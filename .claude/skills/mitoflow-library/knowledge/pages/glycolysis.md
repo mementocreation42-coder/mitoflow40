@@ -59,6 +59,3 @@ THE FIRST STEP
 ## このページからのリンク
 - /tca-cycle — TCA回路を見る →
 - /library#mechanism — 身体の仕組み に戻る
-
-## このページへのリンク元
-- /library — LIBRARY

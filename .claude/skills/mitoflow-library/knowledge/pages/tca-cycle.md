@@ -60,4 +60,3 @@ TCA回路が生んだ NADH・FADH2 は、ミトコンドリア内膜の「電子
 ## このページへのリンク元
 - /electron-transport-chain — 電子伝達系（ETC）
 - /glycolysis — 解糖系（グリコリシス）とは
-- /library — LIBRARY

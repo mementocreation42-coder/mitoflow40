@@ -47,5 +47,4 @@ REDUCE YOUR EXPOSURE
 - /mycotoxins — カビ毒と食の安全 →
 
 ## このページへのリンク元
-- /library — LIBRARY
 - /mycotoxins — カビ毒（マイコトキシン）と食の安全

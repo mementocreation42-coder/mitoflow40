@@ -52,6 +52,3 @@ DAOがきちんと働くには、補酵素となる栄養素が必要だと考�
 - [2]Histamine and histamine intolerance（ヒスタミンとヒスタミン不耐症・DAO/HNMTの総説） — Maintz &amp; Novak, Am J Clin Nutr（2007）
 - [3]Allergic reactions（抗ヒスタミン薬と眠気を含むアレルギーの基礎） — MedlinePlus（米国国立医学図書館）
 - [4]ヒスタミンによる食中毒（鮮度・加熱で壊れない点・予防） — 農林水産省
-
-## このページへのリンク元
-- /library — LIBRARY
