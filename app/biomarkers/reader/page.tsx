@@ -27,8 +27,8 @@ export default function ReaderPage() {
 
     return (
         <div className="relative overflow-hidden pt-[calc(60px+3rem)] md:pt-[calc(60px+5rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen" style={{ background: '#DEEDF7' }}>
-            <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
-                style={{ top: '0', right: '-40px', width: '260px', transform: 'scaleY(-1)' }} />
+            <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block mf-deco-flip"
+                style={{ top: '0', right: '-40px', width: '260px' }} />
             <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '血液検査', path: '/biomarkers' }, { name: '検査値リーダー', path: '/biomarkers/reader' }])} />
             <div className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
                 <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '血液検査', href: '/biomarkers' }, { name: '検査値リーダー' }]} />

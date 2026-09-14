@@ -22,8 +22,8 @@ export default function TextbookPage() {
     const total = readingPaths.reduce((a, p) => a + p.steps.length, 0);
     return (
         <div className="relative overflow-x-clip pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-24 md:pb-32 px-6 md:px-4 min-h-screen" style={{ background: '#ECE6F3' }}>
-            <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block"
-                style={{ top: '0', right: '-40px', width: '260px', transform: 'scaleY(-1)' }} />
+            <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block mf-deco-flip"
+                style={{ top: '0', right: '-40px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '教科書 ｜ ライブラリを読む順番', description: 'ライブラリを、辞書ではなく教科書として読むための順番。', path: '/textbook' })} />
             <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '教科書', path: '/textbook' }])} />

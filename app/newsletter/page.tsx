@@ -32,10 +32,10 @@ export default async function NewsletterPage() {
     return (
         <div className="pt-40 pb-20 px-6 md:px-10 overflow-hidden" style={{ background: "#FFB6B6", flex: 1, position: "relative" }}>
             <div className="absolute top-0 right-0 w-[260px] md:w-[380px] h-[260px] md:h-[380px] pointer-events-none">
-                <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bg.png" alt="" style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "top right" }} />
+                <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bg.png" alt="" className="mf-deco" style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "top right" }} />
             </div>
             <div className="absolute bottom-0 left-0 w-[300px] md:w-[440px] h-[300px] md:h-[440px] pointer-events-none">
-                <img loading="lazy" decoding="async" src="/images/hero/hero-illustration-bl.png" alt="" style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "bottom" }} />
+                <img loading="lazy" decoding="async" src="/images/hero/hero-illustration-bl.png" alt="" className="mf-deco mf-deco-delay" style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "bottom" }} />
             </div>
             <div style={{ maxWidth: "600px", margin: "0 auto", position: "relative", zIndex: 1 }}>
                 <p className="text-xs tracking-widest text-[#1A1A1A] font-bold mb-6" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>MITOFLOW40 LETTER</p>
