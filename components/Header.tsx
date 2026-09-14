@@ -26,7 +26,7 @@ export default function Header() {
 
     return (
         <>
-        <header className="w-full z-50 bg-white/80 backdrop-blur-sm border-b border-[#1A1A1A]/20">
+        <header className="relative w-full z-50 bg-white/80 backdrop-blur-sm border-b border-[#1A1A1A]/20">
             <div className="max-w-[800px] mx-auto px-4 h-[60px] flex items-center justify-between">
                 {/* Logo */}
                 <Link href="/" className="text-xl font-bold tracking-tight" style={{ fontFamily: "'MuseoModerno', sans-serif" }}>

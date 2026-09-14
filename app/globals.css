@@ -325,7 +325,7 @@ h6 {
 
 /* 各ページ上部の装飾ミトコンドリア（右上は上下反転して置いてあるので、反転を含めた別の keyframes にする） */
 @keyframes mf-deco-float { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-8px) rotate(1.2deg); } }
-@keyframes mf-deco-float-flip { 0%, 100% { transform: scaleY(-1) translateY(0) rotate(0deg); } 50% { transform: scaleY(-1) translateY(8px) rotate(-1.2deg); } }
+@keyframes mf-deco-float-flip { 0%, 100% { transform: scaleY(-1) translateY(0) rotate(0deg); } 50% { transform: scaleY(-1) translateY(-8px) rotate(-1.2deg); } }
 .mf-deco { animation: mf-deco-float 9s ease-in-out infinite; will-change: transform; }
 .mf-deco-flip { animation: mf-deco-float-flip 10s ease-in-out infinite; will-change: transform; }
 .mf-deco-delay { animation-delay: -4s; }
