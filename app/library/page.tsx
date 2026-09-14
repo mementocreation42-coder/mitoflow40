@@ -33,6 +33,7 @@ const sections = [
         color: '#DCF1EA',
         illustration: '/images/about/about-illustration-bg.png',
         description: '生まれ持った体質の「設計図」。MTHFRやCOMTなど、栄養の使い方やストレス耐性を左右する主要遺伝子を解説します。',
+        short: '体質の「設計図」。MTHFRやCOMTなど主要遺伝子を解説。',
     },
     {
         href: '/biomarkers',
@@ -44,6 +45,7 @@ const sections = [
         color: '#DEEDF7',
         illustration: '/images/misc/24.png',
         description: '今の体の「現在地」。血液検査50項目を精密栄養学の視点で読み解き、基準値だけでなく理想値から状態を捉えます。',
+        short: '体の「現在地」。血液検査50項目を理想値から読む。',
     },
     {
         href: '/nutrients',
@@ -55,6 +57,7 @@ const sections = [
         color: '#FCE3D4',
         illustration: '/images/misc/2.png',
         description: '体をつくり、整える「材料」。タンパク質・ビタミン・ミネラルなど、体を支えるための栄養素を働き・食品・摂り方から解説します。',
+        short: '体をつくる「材料」。栄養素を働き・食品・摂り方から解説。',
     },
 ];
 
@@ -69,6 +72,7 @@ const foodSections = [
         color: '#FFEFD6',
         illustration: '/images/misc/25.png',
         description: '「材料」を実際に運ぶ食卓。卵・鮭・納豆など身近な食材で何が摂れるか、40代向けの食べ方・組み合わせから解説します。',
+        short: '「材料」を運ぶ食卓。身近な食材で何が摂れるかを解説。',
     },
     {
         href: '/food-topics',
@@ -80,6 +84,7 @@ const foodSections = [
         color: '#FBE9D0',
         illustration: '/images/for-you/for-you-science.png',
         description: '「小麦は悪い？」「玄米が正義？」「食べない時間は効く？」「カロリーは健康の指標？」。食卓でよく迷うテーマを、良い・悪いで決めつけずに切り分けて読めるようにしました。',
+        short: '小麦・玄米・断食・カロリー。迷いやすい食のテーマを切り分けて読む。',
     },
 ];
 
@@ -94,10 +99,11 @@ const organSections = [
         color: '#F4E2D2',
         illustration: '/images/misc/13.png',
         description: '肝臓・腎臓・腸・心臓・脳など、主要な内臓の役割。40代での変化と、関わる血液検査・栄養素をあわせて読み解きます。',
+        short: '肝臓・腎臓・腸・心臓・脳の役割と、40代での変化。',
     },
 ];
 
-type HubSection = { href: string; label: string; ja: string; role: string; count: number; unit: string; color: string; illustration: string; description: string };
+type HubSection = { href: string; label: string; ja: string; role: string; count: number; unit: string; color: string; illustration: string; description: string; short?: string };
 
 function HubCard({ s }: { s: HubSection }) {
     return (
@@ -118,7 +124,7 @@ function HubCard({ s }: { s: HubSection }) {
                     <span className="text-sm font-bold text-[#1A1A1A]/70">{s.ja}</span>
                     <span className="text-xs px-2 py-0.5 rounded-full bg-white/70 text-[#1A1A1A]/70 font-bold">{s.role}</span>
                 </div>
-                <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/80 mb-3 md:mb-4 line-clamp-3 md:line-clamp-none">{s.description}</p>
+                <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/80 mb-3 md:mb-4"><span className="md:hidden">{s.short ?? s.description}</span><span className="hidden md:inline">{s.description}</span></p>
                 <div className="inline-flex w-fit items-center gap-2 px-5 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                     <span>{s.count} {s.unit}を見る</span>
                     <span className="group-hover:translate-x-1 transition-transform">→</span>
@@ -214,9 +220,7 @@ export default function LibraryIndex() {
                         <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>THE APPROACH</span>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">健康とは</div>
                     </div>
-                    <p className="flex-1 text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A]">
-                        「病気でない」がゴールではありません。本来の力を発揮できる状態へ——すべての土台になる、Mitoflow40の健康の考え方。
-                    </p>
+                    <p className="flex-1 text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A]"><span className="md:hidden">「病気でない」がゴールではない。本来の力を発揮できる状態へ。</span><span className="hidden md:inline">「病気でない」がゴールではありません。本来の力を発揮できる状態へ——すべての土台になる、Mitoflow40の健康の考え方。</span></p>
                     <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         読む <span className="group-hover:translate-x-1 transition-transform">→</span>
                     </span>
@@ -229,9 +233,7 @@ export default function LibraryIndex() {
                         <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>THE APPROACH</span>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">精密栄養学とは</div>
                     </div>
-                    <p className="flex-1 text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A]">
-                        このライブラリ全体を貫く考え方。「みんなの平均」ではなく「あなたの最適」を探す——その読み解き方をまず知ることから。
-                    </p>
+                    <p className="flex-1 text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A]"><span className="md:hidden">「みんなの平均」ではなく「あなたの最適」を探す読み解き方。</span><span className="hidden md:inline">このライブラリ全体を貫く考え方。「みんなの平均」ではなく「あなたの最適」を探す——その読み解き方をまず知ることから。</span></p>
                     <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         読む <span className="group-hover:translate-x-1 transition-transform">→</span>
                     </span>
@@ -244,9 +246,7 @@ export default function LibraryIndex() {
                         <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>WHY IT MATTERS</span>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">学ぶと、何が変わる？</div>
                     </div>
-                    <p className="flex-1 text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A]">
-                        体の仕組みがわかると、健康情報に振り回されず、自分の体を自分で読み解ける。学ぶことが、これからの数十年を支える力になる理由。
-                    </p>
+                    <p className="flex-1 text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A]"><span className="md:hidden">仕組みがわかれば、情報に振り回されず自分の体を読める。</span><span className="hidden md:inline">体の仕組みがわかると、健康情報に振り回されず、自分の体を自分で読み解ける。学ぶことが、これからの数十年を支える力になる理由。</span></p>
                     <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         読む <span className="group-hover:translate-x-1 transition-transform">→</span>
                     </span>
@@ -261,9 +261,7 @@ export default function LibraryIndex() {
                             <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#3AA7C9', opacity: 0.7 }}>HOW THEY CONNECT</p>
                         </div>
                     </div>
-                    <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A] mb-4 md:mb-5 line-clamp-3 md:line-clamp-none">
-                        生まれ持った<strong>遺伝子</strong>という設計図があり、今の状態は<strong>血液検査</strong>で「現在地」として可視化できます。そして<strong>栄養素</strong>は、その差を埋めて体をつくり整えるための「材料」です。3つを行き来することで、自分の体への理解が立体的になります。
-                    </p>
+                    <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A] mb-4 md:mb-5"><span className="md:hidden">設計図（遺伝子）・現在地（血液検査）・材料（栄養素）。3つを行き来して体を読む。</span><span className="hidden md:inline">生まれ持った<strong>遺伝子</strong>という設計図があり、今の状態は<strong>血液検査</strong>で「現在地」として可視化できます。そして<strong>栄養素</strong>は、その差を埋めて体をつくり整えるための「材料」です。3つを行き来することで、自分の体への理解が立体的になります。</span></p>
 
                     {/* 3つのセクションカード */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
@@ -286,7 +284,7 @@ export default function LibraryIndex() {
                                     <span className="text-sm font-bold text-[#1A1A1A]/70">{s.ja}</span>
                                     <span className="text-xs px-2 py-0.5 rounded-full bg-white/70 text-[#1A1A1A]/70 font-bold">{s.role}</span>
                                 </div>
-                                <p className="flex-1 text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/80 mb-3 sm:mb-4 line-clamp-3 sm:line-clamp-none">{s.description}</p>
+                                <p className="flex-1 text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/80 mb-3 sm:mb-4"><span className="md:hidden">{s.short ?? s.description}</span><span className="hidden md:inline">{s.description}</span></p>
                                 <div className="inline-flex w-fit items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                     <span>{s.count} {s.unit}を見る</span>
                                     <span className="group-hover:translate-x-1 transition-transform">→</span>
@@ -306,9 +304,7 @@ export default function LibraryIndex() {
                             <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#E39A2E', opacity: 0.7 }}>ON YOUR PLATE</p>
                         </div>
                     </div>
-                    <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A] mb-4 md:mb-5 line-clamp-3 md:line-clamp-none">
-                        「材料」である栄養素を、実際に体へ運ぶのが毎日の<strong>食べ物</strong>です。身近な食材ひとつひとつで何が摂れるかを知ることが、知識を食卓につなげる最後のピースになります。
-                    </p>
+                    <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A] mb-4 md:mb-5"><span className="md:hidden">栄養素を実際に体へ運ぶのは毎日の食べ物。食材ごとに何が摂れるかを知る。</span><span className="hidden md:inline">「材料」である栄養素を、実際に体へ運ぶのが毎日の<strong>食べ物</strong>です。身近な食材ひとつひとつで何が摂れるかを知ることが、知識を食卓につなげる最後のピースになります。</span></p>
 
                     <div className="space-y-3 md:space-y-4">
                     {foodSections.map((s) => <HubCard key={s.href} s={s} />)}
@@ -333,6 +329,7 @@ export default function LibraryIndex() {
                             href: '/lifestyle', label: 'LIFESTYLE', ja: '生活習慣', role: '打ち手', count: 13, unit: 'テーマ', color: '#E7EFD8',
                             illustration: '/images/flow/flow-illustration-practice.png',
                             description: '睡眠・日光・水・運動の土台から、嗜好品や有害物質を減らす暮らし、ウェアラブルや血糖モニターで測る道具、サプリメントの選び方まで。もっとも効果が大きい打ち手を順に。',
+                            short: '睡眠・光・水・運動から、嗜好品・解毒・計測・サプリまで。効果の大きい打ち手を順に。',
                         }} />
                     </div>
                 </div>
@@ -346,9 +343,7 @@ export default function LibraryIndex() {
                             <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#C98A5E', opacity: 0.7 }}>YOUR ORGANS</p>
                         </div>
                     </div>
-                    <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A] mb-4 md:mb-5 line-clamp-3 md:line-clamp-none">
-                        遺伝子や栄養素が働く「現場」が、肝臓・腎臓・腸といった<strong>内臓</strong>です。それぞれが何をしていて、40代でどう変化するのかを知ると、血液検査の数値の意味もぐっと立体的になります。
-                    </p>
+                    <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A] mb-4 md:mb-5"><span className="md:hidden">遺伝子や栄養素が働く「現場」が内臓。役割と40代の変化を知る。</span><span className="hidden md:inline">遺伝子や栄養素が働く「現場」が、肝臓・腎臓・腸といった<strong>内臓</strong>です。それぞれが何をしていて、40代でどう変化するのかを知ると、血液検査の数値の意味もぐっと立体的になります。</span></p>
 
                     <div className="space-y-3 md:space-y-4">
                     {organSections.map((s) => <HubCard key={s.href} s={s} />)}
@@ -364,9 +359,7 @@ export default function LibraryIndex() {
                             <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#2FB59F', opacity: 0.7 }}>MECHANISM</p>
                         </div>
                     </div>
-                    <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A] mb-4 md:mb-5 line-clamp-3 md:line-clamp-none">
-                        栄養素や生活習慣がなぜ効くのか——その答えは、細胞の中で起きている仕組みにあります。エネルギー産生から、腸と脳のつながり、細胞の再生まで。
-                    </p>
+                    <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A] mb-4 md:mb-5"><span className="md:hidden">栄養や習慣がなぜ効くのか。答えは細胞の中の仕組みにある。</span><span className="hidden md:inline">栄養素や生活習慣がなぜ効くのか——その答えは、細胞の中で起きている仕組みにあります。エネルギー産生から、腸と脳のつながり、細胞の再生まで。</span></p>
                     <h3 className="flex items-center gap-2 text-lg md:text-xl font-bold text-[#1A1A1A] mt-5 md:mt-6 mb-3 md:mb-4">
                         <span className="inline-block w-5 h-0.5 rounded-full bg-[#41C9B4]" />
                         はじめに
@@ -378,9 +371,8 @@ export default function LibraryIndex() {
                                 FOUNDATION ／ すべての土台
                             </div>
                             <div className="text-base md:text-lg font-bold text-[#1A1A1A] mb-1">生化学とは？</div>
-                            <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/70 line-clamp-2 sm:line-clamp-none">これから挙げる仕組みは、すべて「体の中の化学反応＝生化学」の話。栄養がなぜ効くのか、その土台をまず一言で。
-                                <span className="inline-block ml-1 font-bold text-[#1A1A1A] group-hover:translate-x-0.5 transition-transform">→</span>
-                            </p>
+                            <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/70"><span className="md:hidden">栄養がなぜ効くのか、その土台を一言で。</span><span className="hidden md:inline">これから挙げる仕組みは、すべて「体の中の化学反応＝生化学」の話。栄養がなぜ効くのか、その土台をまず一言で。</span>
+                                <span className="inline-block ml-1 font-bold text-[#1A1A1A] group-hover:translate-x-0.5 transition-transform">→</span></p>
                         </Link>
                         <Link href="/food-journey"
                             className="group block rounded-2xl border border-dashed border-[#1A1A1A]/40 p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all">
@@ -388,9 +380,8 @@ export default function LibraryIndex() {
                                 THE BIG PICTURE ／ 全体の地図
                             </div>
                             <div className="text-base md:text-lg font-bold text-[#1A1A1A] mb-1">食べてから、動くまで</div>
-                            <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/70 line-clamp-2 sm:line-clamp-none">食べる→消化→吸収→運搬→代謝→利用→排出。体の中で起きていることを、インフォグラフィックで一枚に俯瞰。
-                                <span className="inline-block ml-1 font-bold text-[#1A1A1A] group-hover:translate-x-0.5 transition-transform">→</span>
-                            </p>
+                            <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/70"><span className="md:hidden">食べる→消化→吸収→代謝→排出を一枚で俯瞰。</span><span className="hidden md:inline">食べる→消化→吸収→運搬→代謝→利用→排出。体の中で起きていることを、インフォグラフィックで一枚に俯瞰。</span>
+                                <span className="inline-block ml-1 font-bold text-[#1A1A1A] group-hover:translate-x-0.5 transition-transform">→</span></p>
                         </Link>
                     </div>
                     <h3 className="flex items-center gap-2 text-lg md:text-xl font-bold text-[#1A1A1A] mt-6 md:mt-8 mb-3 md:mb-4">
@@ -418,7 +409,7 @@ export default function LibraryIndex() {
                                 ENERGY &amp; METABOLISM
                             </div>
                             <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-1">エネルギーとは</div>
-                            <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/80 mb-2 line-clamp-3 sm:line-clamp-none">疲れにくさの正体は「エネルギーを作り続けられること」。作るしくみと、その材料になる栄養までを、やさしく束ねる入口。</p>
+                            <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/80 mb-2 line-clamp-3 sm:line-clamp-none"><span className="md:hidden">疲れにくさの正体は「エネルギーを作り続けられること」。</span><span className="hidden md:inline">疲れにくさの正体は「エネルギーを作り続けられること」。作るしくみと、その材料になる栄養までを、やさしく束ねる入口。</span></p>
                             <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                 見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                             </span>
@@ -433,6 +424,7 @@ export default function LibraryIndex() {
                             href: '/cell-metabolism', label: 'CELL & METABOLISM', ja: '代謝と細胞のしくみ', role: '生化学', count: 19, unit: 'しくみ', color: '#D7F0E8',
                             illustration: '/images/pricing/pricing-plan-illustration.png',
                             description: '解糖系→TCA回路→電子伝達系→ATPというエネルギーの工程から、酵素・ケトン体・メチレーション、血糖と自律神経と体内時計、腸と消化、オートファジーまで。栄養や習慣が「なぜ効くのか」の答え。',
+                            short: '解糖系からATP、血糖・体内時計・腸・オートファジーまで。「なぜ効くのか」の答え。',
                         }} />
                     </div>
                 </div>
@@ -455,7 +447,7 @@ export default function LibraryIndex() {
                             HORMONES
                         </div>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-1">ホルモンの種類（9種）</div>
-                        <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/80 mb-2 line-clamp-3 sm:line-clamp-none">テストステロン・エストロゲン・コルチゾール・インスリン・甲状腺ホルモンなど、主なホルモンを個別ページで解説。</p>
+                        <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/80 mb-2 line-clamp-3 sm:line-clamp-none"><span className="md:hidden">テストステロン・エストロゲン・コルチゾールなど9種を個別に解説。</span><span className="hidden md:inline">テストステロン・エストロゲン・コルチゾール・インスリン・甲状腺ホルモンなど、主なホルモンを個別ページで解説。</span></p>
                         <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                             見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                         </span>
@@ -485,9 +477,7 @@ export default function LibraryIndex() {
                             <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#E07A6A', opacity: 0.7 }}>AGING &amp; DISEASE</p>
                         </div>
                     </div>
-                    <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A] mb-4 md:mb-5 line-clamp-3 md:line-clamp-none">
-                        体の中では今この瞬間も、「<strong>さびる（酸化）</strong>」「<strong>こげる（糖化）</strong>」「<strong>くすぶる（慢性炎症）</strong>」という3つのダメージが静かに進んでいます。これらは見た目の老化を進めるだけでなく、疲れやすさや肌の不調といった日々の不調から、生活習慣病まで、多くの<strong>体の不調の共通の根っこ</strong>です。やっかいなのは、3つが連動して互いを加速させること。けれど裏を返せば、<strong>毎日の食事・運動・睡眠で減らしていけるダメージ</strong>でもあります。「歳のせい」とあきらめる前に、まず仕組みから知っていきましょう。
-                    </p>
+                    <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A] mb-4 md:mb-5"><span className="md:hidden">さびる（酸化）・こげる（糖化）・くすぶる（炎症）。老化と不調の共通の土台。</span><span className="hidden md:inline">体の中では今この瞬間も、「<strong>さびる（酸化）</strong>」「<strong>こげる（糖化）</strong>」「<strong>くすぶる（慢性炎症）</strong>」という3つのダメージが静かに進んでいます。これらは見た目の老化を進めるだけでなく、疲れやすさや肌の不調といった日々の不調から、生活習慣病まで、多くの<strong>体の不調の共通の根っこ</strong>です。やっかいなのは、3つが連動して互いを加速させること。けれど裏を返せば、<strong>毎日の食事・運動・睡眠で減らしていけるダメージ</strong>でもあります。「歳のせい」とあきらめる前に、まず仕組みから知っていきましょう。</span></p>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
                         <Link href="/oxidative-stress"
                             className="group flex flex-col gap-3 rounded-2xl border border-black p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F3DEDE' }}>
@@ -531,6 +521,7 @@ export default function LibraryIndex() {
                         href: '/diseases', label: 'MODERN DISEASES', ja: '現代病を読む', role: '各論', count: 10, unit: 'テーマ', color: '#F7E2DC',
                         illustration: '/images/for-you/for-you-recovery.png',
                         description: '現代病とは何かという俯瞰から、糖尿病・メタボ・高血圧・脂肪肝・脂質異常症・サルコペニア・慢性腎臓病・心の現代病・歯周病まで。バラバラに見える病気を「体の設計と環境のズレ」として読む。',
+                        short: '糖尿病・メタボ・高血圧・脂肪肝など。現代病を「体の設計と環境のズレ」として読む。',
                     }} />
                 </div>
 
@@ -543,14 +534,13 @@ export default function LibraryIndex() {
                             <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#8B78C9', opacity: 0.7 }}>MIND &amp; BODY</p>
                         </div>
                     </div>
-                    <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A] mb-4 md:mb-5 line-clamp-3 md:line-clamp-none">
-                        気分や不安は、「性格」や「気合い」の問題とは限りません。<strong>腸・栄養・睡眠・自律神経・血糖</strong>といった<strong>体の土台</strong>から、心を読み解きます。メンタルも“体から”整える、という視点です。
-                    </p>
+                    <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A] mb-4 md:mb-5"><span className="md:hidden">気分や不安を、腸・栄養・睡眠・自律神経・血糖という体の側から読む。</span><span className="hidden md:inline">気分や不安は、「性格」や「気合い」の問題とは限りません。<strong>腸・栄養・睡眠・自律神経・血糖</strong>といった<strong>体の土台</strong>から、心を読み解きます。メンタルも“体から”整える、という視点です。</span></p>
                     <div className="space-y-3 md:space-y-4">
                         <HubCard s={{
                             href: '/mind-body', label: 'MIND & BODY', ja: '心とからだ', role: '心身相関', count: 13, unit: 'テーマ', color: '#EFEAF6',
                             illustration: '/images/experience/experience_sleep_new.png',
                             description: 'ストレス・HSP・気分と栄養・不安・神経炎症・片頭痛・呼吸・スピリチュアリティ・音・匂い・運動の潮流まで。心の側に現れることを、腸・栄養・睡眠・自律神経・血糖という体の側から読み解く。',
+                            short: 'ストレス・HSP・不安・片頭痛など。心の側に出ることを体の側から読む。',
                         }} />
                     </div>
                     <div className="mt-4 flex flex-wrap items-center gap-2">
@@ -575,16 +565,14 @@ export default function LibraryIndex() {
                             <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#EE9A3C', opacity: 0.7 }}>FROM SYMPTOMS</p>
                         </div>
                     </div>
-                    <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A] mb-4 md:mb-5 line-clamp-3 md:line-clamp-none">
-                        「疲れやすい」「頭がぼんやり」「冷える」——気になる<strong>不調</strong>から逆引きで、考えられる背景・確認したい血液検査・関わる栄養素・関連する体のしくみへたどれます。原因の「あたり」をつける入口に。
-                    </p>
+                    <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A] mb-4 md:mb-5"><span className="md:hidden">気になる不調から、背景・血液検査・栄養素・しくみへ逆引き。</span><span className="hidden md:inline">「疲れやすい」「頭がぼんやり」「冷える」——気になる<strong>不調</strong>から逆引きで、考えられる背景・確認したい血液検査・関わる栄養素・関連する体のしくみへたどれます。原因の「あたり」をつける入口に。</span></p>
                     <Link href="/symptoms"
                         className="group block rounded-2xl border border-black p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F0E7E0' }}>
                         <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                             FROM SYMPTOMS
                         </div>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-1">症状から引く（14の不調）</div>
-                        <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/80 mb-2 line-clamp-3 sm:line-clamp-none">疲れ・ブレインフォグ・冷え・動悸・めまい・むくみ・アレルギー・気分の落ち込みなどから、背景と打ち手を逆引き。</p>
+                        <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/80 mb-2 line-clamp-3 sm:line-clamp-none"><span className="md:hidden">疲れ・ブレインフォグ・冷え・むくみなどから背景と打ち手を逆引き。</span><span className="hidden md:inline">疲れ・ブレインフォグ・冷え・動悸・めまい・むくみ・アレルギー・気分の落ち込みなどから、背景と打ち手を逆引き。</span></p>
                         <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                             見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                         </span>
@@ -599,7 +587,7 @@ export default function LibraryIndex() {
                             CONDITIONS
                         </div>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-1">不調・現代病を読み解く</div>
-                        <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/80 mb-2 line-clamp-3 sm:line-clamp-none">症状の裏にある<strong>病態</strong>の側から。鉄欠乏（隠れ貧血）・インスリン抵抗性・脂肪肝・更年期……定義・歴史・細胞レベルのしくみ・確認したい血液検査・受診の目安まで、1枚ずつ丁寧に。</p>
+                        <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/80 mb-2 line-clamp-3 sm:line-clamp-none"><span className="md:hidden">鉄欠乏・インスリン抵抗性・脂肪肝・更年期など、病態の側から1枚ずつ。</span><span className="hidden md:inline">症状の裏にある<strong>病態</strong>の側から。鉄欠乏（隠れ貧血）・インスリン抵抗性・脂肪肝・更年期……定義・歴史・細胞レベルのしくみ・確認したい血液検査・受診の目安まで、1枚ずつ丁寧に。</span></p>
                         <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                             見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                         </span>
@@ -615,9 +603,7 @@ export default function LibraryIndex() {
                             <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#5B86B8', opacity: 0.7 }}>FRONTIER</p>
                         </div>
                     </div>
-                    <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A] mb-4 md:mb-5 line-clamp-3 md:line-clamp-none">
-                        賛否や法律が国によって大きく異なり、いま世界で研究・議論が進んでいるテーマです。<strong>すすめるためでも、否定するためでもなく</strong>、何が分かっていて何が分かっていないかを中立に整理します。<strong className="text-[#E8896B]">いずれも日本では法律で規制されています。</strong>
-                    </p>
+                    <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A] mb-4 md:mb-5"><span className="md:hidden">世界で研究・議論が進むテーマを、すすめず否定せず中立に整理。日本では法律で規制。</span><span className="hidden md:inline">賛否や法律が国によって大きく異なり、いま世界で研究・議論が進んでいるテーマです。<strong>すすめるためでも、否定するためでもなく</strong>、何が分かっていて何が分かっていないかを中立に整理します。<strong className="text-[#E8896B]">いずれも日本では法律で規制されています。</strong></span></p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                         <Link href="/psychedelics-research"
                             className="group block rounded-2xl border border-black p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7E0F2' }}>
@@ -637,7 +623,7 @@ export default function LibraryIndex() {
                             className="group block rounded-2xl border border-black p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all sm:col-span-2" style={{ background: '#E7E0F2' }}>
                             <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>HISTORY &amp; IDEAS</div>
                             <div className="text-lg font-bold text-[#1A1A1A] mb-1">対抗文化が生んだもの</div>
-                            <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/80 mb-2 line-clamp-3 sm:line-clamp-none">グレイトフル・デッド、フラワームーブメント、ホール・アース・カタログ、パソコン、ジョブズ、EFF、そして規制。「個人に道具を」という思想史を事実ベースで。</p>
+                            <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/80 mb-2 line-clamp-3 sm:line-clamp-none"><span className="md:hidden">「個人に道具を」という思想史を、事実ベースでたどる。</span><span className="hidden md:inline">グレイトフル・デッド、フラワームーブメント、ホール・アース・カタログ、パソコン、ジョブズ、EFF、そして規制。「個人に道具を」という思想史を事実ベースで。</span></p>
                             <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
                         </Link>
                     </div>
@@ -652,9 +638,7 @@ export default function LibraryIndex() {
                             <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#A08F6A', opacity: 0.7 }}>THOUGHTS</p>
                         </div>
                     </div>
-                    <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A] mb-4 md:mb-5 line-clamp-3 md:line-clamp-none">
-                        運命、自由、老い、幸せ——答えの出ない<strong>問い</strong>を「体・健康・生き方」の側から考えるコラム。哲学のようでいて、結局は今日の暮らし方の話です。
-                    </p>
+                    <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A] mb-4 md:mb-5"><span className="md:hidden">運命、自由、老い、幸せ。答えの出ない問いを体と暮らしの側から考える。</span><span className="hidden md:inline">運命、自由、老い、幸せ——答えの出ない<strong>問い</strong>を「体・健康・生き方」の側から考えるコラム。哲学のようでいて、結局は今日の暮らし方の話です。</span></p>
                     <Link href="/thoughts"
                         className="group block rounded-2xl border border-black p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7E0F2' }}>
                         <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
@@ -686,9 +670,7 @@ export default function LibraryIndex() {
                         <p className="relative text-2xl md:text-3xl font-bold text-white leading-snug mb-4" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
                             足すよりも、引く。
                         </p>
-                        <p className="relative text-sm md:text-base text-white/75 leading-relaxed">
-                            健康は、サプリや「体にいいもの」を足し続けることではありません。むしろ、いらないものを<strong className="text-white">引いていく</strong>こと——食べすぎ・座りすぎ・夜ふかし・嗜好品・有害物質。引き算で整えた体は、もともと備わった回復力を取り戻していきます。このライブラリが大切にしている、いちばん基本の姿勢です。
-                        </p>
+                        <p className="relative text-sm md:text-base text-white/75 leading-relaxed"><span className="md:hidden">足すより引く。食べすぎ・座りすぎ・夜ふかし・嗜好品を引いた体は、回復力を取り戻す。</span><span className="hidden md:inline">健康は、サプリや「体にいいもの」を足し続けることではありません。むしろ、いらないものを<strong className="text-white">引いていく</strong>こと——食べすぎ・座りすぎ・夜ふかし・嗜好品・有害物質。引き算で整えた体は、もともと備わった回復力を取り戻していきます。このライブラリが大切にしている、いちばん基本の姿勢です。</span></p>
                     </div>
                     {/* バランス（中庸） */}
                     <Link href="/balance" className="group rounded-2xl border border-black p-5 md:p-6 relative overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all block" style={{ background: '#EAE6DD' }}>
@@ -697,9 +679,7 @@ export default function LibraryIndex() {
                         <p className="relative text-2xl md:text-3xl font-bold text-[#1A1A1A] leading-snug mb-4" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
                             引きすぎず、<br className="hidden md:block" />ちょうどよく。
                         </p>
-                        <p className="relative text-sm md:text-base text-[#4A4A4A] leading-relaxed mb-4">
-                            でも、引き算にも「底」があります。動かなさすぎ・食べなさすぎもまた不調のもと。運動も栄養も刺激も、少なすぎず多すぎない<strong className="text-[#1A1A1A]">「ちょうどよさ（中庸）」</strong>に、体はいちばん応えます。U字とホルミシスから、バランスという健康の core を考えます。
-                        </p>
+                        <p className="relative text-sm md:text-base text-[#4A4A4A] leading-relaxed mb-4"><span className="md:hidden">引き算にも「底」がある。少なすぎず多すぎない中庸に、体はいちばん応える。</span><span className="hidden md:inline">でも、引き算にも「底」があります。動かなさすぎ・食べなさすぎもまた不調のもと。運動も栄養も刺激も、少なすぎず多すぎない<strong className="text-[#1A1A1A]">「ちょうどよさ（中庸）」</strong>に、体はいちばん応えます。U字とホルミシスから、バランスという健康の core を考えます。</span></p>
                         <span className="relative inline-flex items-center gap-1 px-5 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                             読む <span className="group-hover:translate-x-1 transition-transform">→</span>
                         </span>
@@ -713,9 +693,7 @@ export default function LibraryIndex() {
                         <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>OUR MISSION</span>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">なぜ、未病予防か</div>
                     </div>
-                    <p className="flex-1 text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A]">
-                        超高齢社会、医療費、健康寿命のギャップ——その一助になりうる「未病予防」の社会的意義と、Mitoflow40の役割。
-                    </p>
+                    <p className="flex-1 text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A]"><span className="md:hidden">未病予防の社会的意義と、Mitoflow40の役割。</span><span className="hidden md:inline">超高齢社会、医療費、健康寿命のギャップ——その一助になりうる「未病予防」の社会的意義と、Mitoflow40の役割。</span></p>
                     <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         読む <span className="group-hover:translate-x-1 transition-transform">→</span>
                     </span>
@@ -728,9 +706,7 @@ export default function LibraryIndex() {
                         <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>WHO DOES WHAT</span>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">医療者の役割と立ち位置</div>
                     </div>
-                    <p className="flex-1 text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A]">
-                        医師・看護師・薬剤師・管理栄養士は何ができて、何ができないのか。診断も治療もしないMitoflow40が「未病の手前」でどこに立つのかを整理します。
-                    </p>
+                    <p className="flex-1 text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A]"><span className="md:hidden">医療者に何ができて、何ができないか。Mitoflow40が「未病の手前」で立つ場所。</span><span className="hidden md:inline">医師・看護師・薬剤師・管理栄養士は何ができて、何ができないのか。診断も治療もしないMitoflow40が「未病の手前」でどこに立つのかを整理します。</span></p>
                     <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         読む <span className="group-hover:translate-x-1 transition-transform">→</span>
                     </span>
@@ -743,9 +719,7 @@ export default function LibraryIndex() {
                         <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>WEST &amp; BEYOND</span>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">統合医療とは</div>
                     </div>
-                    <p className="flex-1 text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A]">
-                        西洋医学（標準治療）を土台に、鍼灸・ヨガ・食事・サプリなどの補完療法をエビデンスで組み合わせる考え方。「代替だけに頼らない」原則と、その中でMitoflow40がどこに立つのかを中立に整理します。
-                    </p>
+                    <p className="flex-1 text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A]"><span className="md:hidden">西洋医学を土台に補完療法を組み合わせる考え方と、Mitoflow40の立ち位置。</span><span className="hidden md:inline">西洋医学（標準治療）を土台に、鍼灸・ヨガ・食事・サプリなどの補完療法をエビデンスで組み合わせる考え方。「代替だけに頼らない」原則と、その中でMitoflow40がどこに立つのかを中立に整理します。</span></p>
                     <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         読む <span className="group-hover:translate-x-1 transition-transform">→</span>
                     </span>
@@ -758,9 +732,7 @@ export default function LibraryIndex() {
                         <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>NUTRITION HISTORY</span>
                         <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">栄養学の歴史</div>
                     </div>
-                    <p className="flex-1 text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A]">
-                        カロリー→ビタミン→細胞へ。そしてGHQ・学校給食・粉食奨励という日本の戦後まで。「いまの常識」がどう作られたかを知ると、情報に振り回されにくくなる。
-                    </p>
+                    <p className="flex-1 text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A]"><span className="md:hidden">カロリー→ビタミン→細胞へ。「いまの常識」がどう作られたか。</span><span className="hidden md:inline">カロリー→ビタミン→細胞へ。そしてGHQ・学校給食・粉食奨励という日本の戦後まで。「いまの常識」がどう作られたかを知ると、情報に振り回されにくくなる。</span></p>
                     <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         読む <span className="group-hover:translate-x-1 transition-transform">→</span>
                     </span>
@@ -795,9 +767,7 @@ export default function LibraryIndex() {
                             <div className="flex-1 text-center sm:text-left">
                                 <div className="text-[10px] font-bold tracking-widest text-[#C0392B] mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>身体から始める静かな反抗</div>
                                 <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-3">健康とは、カウンターカルチャーである。</div>
-                                <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A] mb-4">
-                                    生化学や栄養学を学んでいくうちに、たどり着いた一つの実感——健康とは、もう一度<strong>自分の身体の主権を取り戻す</strong>静かな反抗なのではないか。学びの先に感じたことを綴った一冊を、章ごとに紹介します。
-                                </p>
+                                <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A] mb-4"><span className="md:hidden">健康とは、身体の主権を取り戻す静かな反抗。学びの先に感じたことを一冊に。</span><span className="hidden md:inline">生化学や栄養学を学んでいくうちに、たどり着いた一つの実感——健康とは、もう一度<strong>自分の身体の主権を取り戻す</strong>静かな反抗なのではないか。学びの先に感じたことを綴った一冊を、章ごとに紹介します。</span></p>
                                 <span className="inline-flex items-center gap-1 px-5 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                     読む <span className="group-hover:translate-x-1 transition-transform">→</span>
                                 </span>
@@ -827,9 +797,7 @@ export default function LibraryIndex() {
                 <div className="mt-12 md:mt-16 rounded-2xl border border-black p-5 md:p-6 text-center" style={{ background: '#EFEAF6' }}>
                     <p className="text-[10px] font-bold tracking-widest text-[#41C9B4] mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>ALWAYS EVOLVING</p>
                     <h2 className="text-lg md:text-xl font-bold text-[#1A1A1A] mb-3">このライブラリは、完成品ではありません</h2>
-                    <p className="text-sm text-[#4A4A4A] leading-loose max-w-[560px] mx-auto">
-                        精密栄養学は、いまも世界で研究が進む<strong>発展途上の分野</strong>です。だからこのLibraryも、一度作って終わりではなく、新しい知見が見つかるたびに見直し、加筆し、ときに書き換えながら、<strong>常に進化し続けます</strong>。今日ここに書かれていることも、未来にはもっと深く、正確になっているはずです。
-                    </p>
+                    <p className="text-sm text-[#4A4A4A] leading-loose max-w-[560px] mx-auto"><span className="md:hidden">精密栄養学は発展途上。このLibraryも見直し、加筆しながら進化し続けます。</span><span className="hidden md:inline">精密栄養学は、いまも世界で研究が進む<strong>発展途上の分野</strong>です。だからこのLibraryも、一度作って終わりではなく、新しい知見が見つかるたびに見直し、加筆し、ときに書き換えながら、<strong>常に進化し続けます</strong>。今日ここに書かれていることも、未来にはもっと深く、正確になっているはずです。</span></p>
                 </div>
 
                 {/* セルフチェックへの導線 */}
