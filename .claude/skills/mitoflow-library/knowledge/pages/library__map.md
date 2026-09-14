@@ -7,7 +7,9 @@
 
 LIBRARY MAP
 
-このライブラリは、「はじめに」と11のセクション、そして「考え方と立ち位置」でできています。全体の構造をひと目で見渡し、気になる入口から読みはじめてください。
+上から下へ、体の外側から内側へ。何を入れ、体の中で何が起き、崩れるとどうなるか。その流れに沿って、11のセクションを並べました。
+
+3つを重ねると、自分の体への理解が立体的になります。すべてのページは、このレンズで読みます。
 
 ※ 各セクションには、ここに挙げた以外にも多くのページがあります。チップは代表的な入口です。
 
@@ -27,6 +29,10 @@ LIBRARY MAP
 - n: 10 ／ en: FROM SYMPTOMS ／ ja: 症状から引く ／ anchor: #symptoms ／ desc: 「この不調はなぜ？」から逆引きする入口。体感（症状）からも、病態（不調・現代病）からも仕組みへたどる。 ／ pages: [object Object]・[object Object]・[object Object]
 - n: 11 ／ en: THOUGHTS ／ ja: 思索 ／ anchor: #thoughts ／ desc: 「運命とは」「自由とは」「老いるとは」。健康を、問いから考えるエッセイ。 ／ pages: [object Object]・[object Object]・[object Object]・[object Object]
 - n:  ／ en: APPROACH ／ ja: 考え方と立ち位置 ／ anchor: #approach ／ desc: このライブラリがどこに立っているか。使命、中庸、医療との距離感、栄養学の歴史。 ／ pages: [object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]
+
+## このページからのリンク
+- /library#map
+- /textbook — 教科書で順に読む →
 
 ## このページへのリンク元
 - /library — LIBRARY

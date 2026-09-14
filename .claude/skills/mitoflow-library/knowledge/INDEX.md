@@ -1,6 +1,6 @@
 # Mitoflow40 ライブラリ 知識索引
 
-生成: 2026-09-14 01:55 ／ 再生成: `node .claude/skills/mitoflow-library/scripts/build.mjs`
+生成: 2026-09-14 02:04 ／ 再生成: `node .claude/skills/mitoflow-library/scripts/build.mjs`
 
 使い方: この索引で当たりを付けて、必要な .md だけを Read する（全部は読まない）。各ファイル冒頭に公開 URL がある。
 

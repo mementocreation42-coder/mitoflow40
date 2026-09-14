@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import Link from 'next/link';
 import JsonLd, { medicalWebPage, breadcrumb } from '@/components/JsonLd';
 import Breadcrumbs from '@/components/Breadcrumbs';
@@ -178,7 +179,77 @@ const sections: Sec[] = [
     },
 ];
 
+// ── インフォグラフィック部品 ─────────────────────────────
+const byAnchor = Object.fromEntries(sections.map((s) => [s.anchor, s])) as Record<string, Sec>;
+
+function Chips({ s, limit }: { s: Sec; limit?: number }) {
+    return (
+        <div className="mt-3 flex flex-wrap gap-1.5">
+            {(limit ? s.pages.slice(0, limit) : s.pages).map((p) => (
+                <Link key={p.href} href={p.href}
+                    className="text-[11px] px-2.5 py-1 rounded-full bg-white border border-[#1A1A1A]/15 font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white hover:border-[#41C9B4] transition-colors">
+                    {p.label}
+                </Link>
+            ))}
+        </div>
+    );
+}
+
+/** セクションの箱：番号・見出し・一言・入口チップ */
+function Node({ s, children, className = '' }: { s: Sec; children?: React.ReactNode; className?: string }) {
+    return (
+        <div className={`rounded-2xl border border-black p-4 md:p-5 flex flex-col ${className}`} style={{ background: s.color }}>
+            <div className="flex items-center gap-2.5">
+                <a href={`/library${s.anchor}`}
+                    className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-[#1A1A1A] bg-white border border-black shrink-0 hover:bg-[#1A1A1A] hover:text-white transition-colors"
+                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{s.n || '・'}</a>
+                <div className="min-w-0">
+                    <div className="text-[9px] font-bold tracking-widest text-[#1A1A1A]/45 leading-none" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{s.en}</div>
+                    <a href={`/library${s.anchor}`} className="text-base md:text-lg font-bold text-[#1A1A1A] leading-tight hover:underline decoration-2 underline-offset-2">{s.ja}</a>
+                </div>
+            </div>
+            <p className="mt-2 text-xs text-[#1A1A1A]/75 leading-relaxed">{s.desc}</p>
+            {children}
+            <Chips s={s} />
+        </div>
+    );
+}
+
+/** 箱の中の「流れ」：A → B → C */
+function Chain({ items, accent }: { items: { href: string; label: string }[]; accent: string }) {
+    return (
+        <div className="mt-3 flex flex-wrap items-center gap-1.5">
+            {items.map((it, i) => (
+                <div key={it.href} className="flex items-center gap-1.5">
+                    <Link href={it.href} className="text-xs font-bold text-[#1A1A1A] px-2.5 py-1 rounded-lg border border-black bg-white/80 hover:bg-white transition-colors whitespace-nowrap">{it.label}</Link>
+                    {i < items.length - 1 && <span className="text-sm font-bold" style={{ color: accent }}>→</span>}
+                </div>
+            ))}
+        </div>
+    );
+}
+
+/** 縦の矢印と、その段の意味 */
+function Arrow({ label }: { label: string }) {
+    return (
+        <div className="flex flex-col items-center py-1" aria-hidden="true">
+            <span className="w-0.5 h-4 bg-[#1A1A1A]/40" />
+            <span className="my-1 text-[11px] md:text-xs font-bold text-[#1A1A1A] bg-white border border-[#1A1A1A]/30 rounded-full px-3 py-1">{label}</span>
+            <span className="w-0.5 h-4 bg-[#1A1A1A]/40" />
+            <span className="w-0 h-0 border-l-[6px] border-r-[6px] border-t-[8px] border-l-transparent border-r-transparent border-t-[#1A1A1A]/40" />
+        </div>
+    );
+}
+
 export default function LibraryMapPage() {
+    const intro = byAnchor['#intro'], map = byAnchor['#map'], food = byAnchor['#food'], life = byAnchor['#lifestyle'];
+    const organs = byAnchor['#organs'], mech = byAnchor['#mechanism'], aging = byAnchor['#aging'], horm = byAnchor['#hormones'];
+    const mind = byAnchor['#mind'], frontier = byAnchor['#frontier'], symptoms = byAnchor['#symptoms'], thoughts = byAnchor['#thoughts'], approach = byAnchor['#approach'];
+    const lens = [
+        { href: '/genes', en: 'GENES', ja: '遺伝子', role: '設計図', note: '生まれ持った体質', color: '#D7F0E8' },
+        { href: '/biomarkers', en: 'BIOMARKERS', ja: '血液検査', role: '現在地', note: '今の体の状態', color: '#DCE8F0' },
+        { href: '/nutrients', en: 'NUTRIENTS', ja: '栄養素', role: '材料', note: '体をつくり、整える', color: '#FFE4D2' },
+    ];
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#FFF1DF' }}>
             <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block mf-deco-flip"
@@ -191,17 +262,17 @@ export default function LibraryMapPage() {
 
             <article className="max-w-[920px] mx-auto relative" style={{ zIndex: 1 }}>
                 <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: 'ライブラリマップ' }]} />
-                <header className="mb-10 text-center">
+                <header className="mb-8 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>LIBRARY MAP</p>
-                    <h1 className="text-3xl md:text-5xl font-bold mt-4 mb-6 text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                    <h1 className="text-3xl md:text-5xl font-bold mt-4 mb-5 text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         ライブラリマップ
                     </h1>
                     <p className="text-sm md:text-base text-[#1A1A1A] font-medium leading-loose max-w-[600px] mx-auto">
-                        このライブラリは、「はじめに」と<strong>11のセクション</strong>、そして「考え方と立ち位置」でできています。全体の構造をひと目で見渡し、気になる入口から読みはじめてください。
+                        上から下へ、<strong>体の外側から内側へ</strong>。何を入れ、体の中で何が起き、崩れるとどうなるか。その流れに沿って、11のセクションを並べました。
                     </p>
                 </header>
 
-                {/* セクションの流れ（ミニ凡例） */}
+                {/* 凡例 */}
                 <div className="mb-8 flex flex-wrap justify-center gap-1.5">
                     {sections.map((s) => (
                         <a key={s.anchor} href={`/library${s.anchor}`}
@@ -212,29 +283,93 @@ export default function LibraryMapPage() {
                     ))}
                 </div>
 
-                {/* マップ本体：2カラムのセクションカード */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {sections.map((s) => (
-                        <div key={s.anchor} className="rounded-2xl border border-black overflow-hidden flex flex-col" style={{ background: s.color }}>
-                            <div className="flex items-center gap-3 px-5 pt-5 pb-3">
-                                <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-[#1A1A1A] bg-white/80 border border-[#1A1A1A]/15 shrink-0"
-                                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{s.n || '・'}</div>
-                                <div>
-                                    <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/45 leading-none" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{s.en}</div>
-                                    <a href={`/library${s.anchor}`} className="text-lg font-bold text-[#1A1A1A] leading-tight hover:underline decoration-2 underline-offset-2">{s.ja}</a>
-                                </div>
-                            </div>
-                            <p className="px-5 text-sm text-[#1A1A1A]/75 leading-relaxed">{s.desc}</p>
-                            <div className="px-5 pt-3 pb-5 mt-auto flex flex-wrap gap-1.5">
-                                {s.pages.map((p) => (
-                                    <Link key={p.href} href={p.href}
-                                        className="text-xs px-2.5 py-1 rounded-full bg-white border border-[#1A1A1A]/15 font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white hover:border-[#41C9B4] transition-colors">
-                                        {p.label}
-                                    </Link>
-                                ))}
-                            </div>
+                {/* ── 0. はじめに ── */}
+                <div className="max-w-[640px] mx-auto">
+                    <Node s={intro} />
+                </div>
+
+                <Arrow label="体を読むための、3つのレンズ" />
+
+                {/* ── 1. 身体の地図：遺伝子 × 血液検査 × 栄養素 ── */}
+                <div className="rounded-2xl border border-black p-4 md:p-5" style={{ background: map.color }}>
+                    <div className="flex items-center gap-2.5 mb-3">
+                        <a href="/library#map" className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-[#1A1A1A] bg-white border border-black shrink-0 hover:bg-[#1A1A1A] hover:text-white transition-colors" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>1</a>
+                        <div>
+                            <div className="text-[9px] font-bold tracking-widest text-[#1A1A1A]/45 leading-none" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{map.en}</div>
+                            <a href="/library#map" className="text-base md:text-lg font-bold text-[#1A1A1A] leading-tight hover:underline decoration-2 underline-offset-2">{map.ja}</a>
                         </div>
-                    ))}
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr_auto_1fr] items-stretch gap-2">
+                        {lens.map((l, i) => (
+                            <Fragment key={l.href}>
+                                <Link href={l.href} className="group rounded-xl border border-black p-4 text-center hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: l.color }}>
+                                    <div className="text-[9px] font-bold tracking-widest text-[#1A1A1A]/45" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{l.en}</div>
+                                    <div className="text-lg md:text-xl font-bold text-[#1A1A1A] leading-tight mt-0.5">{l.ja}</div>
+                                    <div className="inline-block mt-1.5 text-[11px] font-bold px-2 py-0.5 rounded-full bg-white/80 border border-[#1A1A1A]/20 text-[#1A1A1A]">{l.role}</div>
+                                    <div className="text-xs text-[#1A1A1A]/70 mt-1.5">{l.note}</div>
+                                </Link>
+                                {i < lens.length - 1 && <div className="hidden sm:flex items-center justify-center text-2xl font-bold text-[#1A1A1A]/60" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>×</div>}
+                            </Fragment>
+                        ))}
+                    </div>
+                    <p className="mt-3 text-xs text-[#1A1A1A]/75 leading-relaxed text-center">3つを重ねると、自分の体への理解が立体的になります。すべてのページは、このレンズで読みます。</p>
+                </div>
+
+                <Arrow label="何を入れて、どう動かすか（体の外側）" />
+
+                {/* ── 2・3. 食べ物 / 生活習慣 ── */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Node s={food} />
+                    <Node s={life} />
+                </div>
+
+                <Arrow label="体の中で起きていること（細胞の内側）" />
+
+                {/* ── 5. 身体の仕組み（中心）＋ 4. 臓器 / 7. ホルモン ── */}
+                <div className="grid grid-cols-1 md:grid-cols-[1fr_1.4fr_1fr] gap-4 items-stretch">
+                    <Node s={organs} className="order-2 md:order-1" />
+                    <Node s={mech} className="order-1 md:order-2 md:ring-4 md:ring-[#41C9B4]/30">
+                        <Chain accent="#2FB59F" items={[
+                            { href: '/mitochondria', label: 'ミトコンドリア' },
+                            { href: '/energy', label: 'エネルギー' },
+                            { href: '/cell-metabolism', label: '代謝と細胞' },
+                        ]} />
+                    </Node>
+                    <Node s={horm} className="order-3" />
+                </div>
+
+                <Arrow label="土台が崩れると（さびる・こげる・くすぶる）" />
+
+                {/* ── 6. 老化と不調 → 現代病 ／ 8. 心とからだ ── */}
+                <div className="grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-4">
+                    <Node s={aging}>
+                        <Chain accent="#E07A6A" items={[
+                            { href: '/oxidative-stress', label: '酸化' },
+                            { href: '/glycation', label: '糖化' },
+                            { href: '/inflammation', label: '炎症' },
+                            { href: '/diseases', label: '現代病' },
+                        ]} />
+                    </Node>
+                    <Node s={mind} />
+                </div>
+
+                <Arrow label="不調から逆引きする" />
+
+                {/* ── 10. 症状から引く ── */}
+                <div className="max-w-[640px] mx-auto">
+                    <Node s={symptoms} />
+                </div>
+
+                {/* ── 視野を広げる ── */}
+                <div className="mt-10 mb-4 flex items-center gap-3">
+                    <span className="flex-1 h-px bg-[#1A1A1A]/20" />
+                    <span className="text-xs font-bold tracking-widest text-[#1A1A1A]/60" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>視野を広げる</span>
+                    <span className="flex-1 h-px bg-[#1A1A1A]/20" />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <Node s={frontier} />
+                    <Node s={thoughts} />
+                    <Node s={approach} />
                 </div>
 
                 <p className="text-xs text-[#1A1A1A]/55 mt-5 text-center leading-relaxed">
@@ -243,6 +378,7 @@ export default function LibraryMapPage() {
 
                 <div className="text-center mt-10 flex flex-wrap justify-center gap-3">
                     <Link href="/library" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">ライブラリ全体を見る →</Link>
+                    <Link href="/textbook" className="inline-block px-8 py-3 bg-white text-[#1A1A1A] border border-black rounded-full font-bold hover:bg-[#41C9B4] hover:text-white transition-colors">教科書で順に読む →</Link>
                 </div>
             </article>
         </div>
