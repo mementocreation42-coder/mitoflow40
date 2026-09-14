@@ -25,10 +25,10 @@ export default function ElectrotherapyPage() {
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '電気療法とミトコンドリア', description: '整体・接骨院の「電気」は本当に細胞を元気にするのか。種類ごとの根拠と限界を事実ベースで。', path: '/electrotherapy' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '心とからだ', path: '/library#mind' }, { name: '電気療法とミトコンドリア', path: '/electrotherapy' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '心とからだ', path: '/mind-body' }, { name: '電気療法とミトコンドリア', path: '/electrotherapy' }])} />
 
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '心とからだ', href: '/library#mind' }, { name: '電気療法とミトコンドリア' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '心とからだ', href: '/mind-body' }, { name: '電気療法とミトコンドリア' }]} />
                 <header className="mb-10 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>MIND &amp; BODY</p>
                     <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>

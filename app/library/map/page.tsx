@@ -95,7 +95,8 @@ const sections: Sec[] = [
             { href: '/oxidative-stress', label: '酸化' },
             { href: '/glycation', label: '糖化' },
             { href: '/inflammation', label: '炎症' },
-            { href: '/modern-diseases', label: '現代病' },
+            { href: '/diseases', label: '現代病を読む（一覧）' },
+            { href: '/modern-diseases', label: '現代病とは' },
             { href: '/metabolic-syndrome', label: 'メタボリックシンドローム' },
             { href: '/diabetes', label: '糖尿病' },
             { href: '/hypertension', label: '高血圧' },
@@ -119,6 +120,7 @@ const sections: Sec[] = [
         n: 8, en: 'MIND & BODY', ja: '心とからだ', anchor: '#mind', color: '#E6E0F2',
         desc: '気分や不安を「体の土台」から読み解く。ストレス・睡眠・自律神経・栄養。',
         pages: [
+            { href: '/mind-body', label: '心とからだの入口' },
             { href: '/stress', label: 'ストレス' },
             { href: '/mood-nutrition', label: '気分と栄養' },
             { href: '/mindfulness', label: 'マインドフルネス' },

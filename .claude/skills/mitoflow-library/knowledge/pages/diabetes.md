@@ -66,4 +66,3 @@ DIABETES
 ## このページへのリンク元
 - /dyslipidemia — 脂質異常症とは｜LDL・HDL・中性脂肪をまとめて読む
 - /fatty-liver — 脂肪肝（MASLD）とは｜お酒を飲まなくてもなる"沈黙の現代病"
-- /library — LIBRARY

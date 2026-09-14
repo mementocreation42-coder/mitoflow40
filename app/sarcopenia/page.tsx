@@ -32,10 +32,10 @@ export default function SarcopeniaPage() {
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: 'サルコペニア・フレイルとは', description: '加齢で筋肉が減るサルコペニア。40代から始まる理由、代謝・血糖への影響、運動とたんぱく質での防ぎ方を解説。', path: '/sarcopenia' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '老化と不調の土台', path: '/library#aging' }, { name: 'サルコペニア・フレイル', path: '/sarcopenia' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '現代病を読む', path: '/diseases' }, { name: 'サルコペニア・フレイル', path: '/sarcopenia' }])} />
 
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '老化と不調の土台', href: '/library#aging' }, { name: 'サルコペニア・フレイル' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '現代病を読む', href: '/diseases' }, { name: 'サルコペニア・フレイル' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>SARCOPENIA / FRAILTY</p>
                     <h1 className="text-3xl md:text-5xl font-bold mt-6 mb-8 md:mt-8 md:mb-10 text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>

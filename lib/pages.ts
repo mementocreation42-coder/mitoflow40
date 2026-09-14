@@ -45,6 +45,8 @@ export const staticPages: StaticPage[] = [
     { path: "/exercise", priority: 0.6, changeFrequency: 'monthly', search: { title: "運動", sub: "Exercise", group: "生活習慣" } },
     { path: "/lifestyle", priority: 0.7, changeFrequency: 'monthly', search: { title: "生活習慣", sub: "睡眠・光・水・運動・嗜好品・解毒・計測・サプリ", group: "生活習慣" } },
     { path: "/cell-metabolism", priority: 0.7, changeFrequency: 'monthly', search: { title: "代謝と細胞のしくみ", sub: "解糖系からオートファジーまで、細胞の中の生化学", group: "しくみ" } },
+    { path: "/diseases", priority: 0.7, changeFrequency: 'monthly', search: { title: "現代病を読む", sub: "糖尿病・メタボ・高血圧・脂肪肝・脂質異常症・サルコペニア・CKD・心・歯周病", group: "しくみ" } },
+    { path: "/mind-body", priority: 0.7, changeFrequency: 'monthly', search: { title: "心とからだ", sub: "気分・不安・ストレスを「体の土台」から読み解く", group: "心とからだ" } },
     { path: "/food-topics", priority: 0.7, changeFrequency: 'monthly', search: { title: "食のテーマ", sub: "小麦・米・断食・カロリー・気をつけたい食品・スパイス", group: "食べ物" } },
     { path: "/fasting", priority: 0.6, changeFrequency: 'monthly', search: { title: "食べない時間の力", sub: "断食・空腹がもたらすもの、向く人・向かない人", group: "生活習慣" } },
     { path: "/fatty-liver", priority: 0.6, changeFrequency: 'monthly', search: { title: "脂肪肝（MASLD）", sub: "沈黙の現代病・お酒を飲まなくてもなる脂肪肝", group: "しくみ" } },

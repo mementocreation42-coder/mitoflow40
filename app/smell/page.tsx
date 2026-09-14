@@ -39,10 +39,10 @@ export default function SmellPage() {
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '匂いと健康', description: '匂いが気分・記憶・脳に届く仕組みと、アロマの効果を根拠の確かさで分けて中立に整理。', path: '/smell' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '心とからだ', path: '/library#mind' }, { name: '匂いと健康', path: '/smell' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '心とからだ', path: '/mind-body' }, { name: '匂いと健康', path: '/smell' }])} />
 
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '心とからだ', href: '/library#mind' }, { name: '匂いと健康' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '心とからだ', href: '/mind-body' }, { name: '匂いと健康' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>SMELL</p>
                     <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>

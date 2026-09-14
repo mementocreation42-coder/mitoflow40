@@ -48,6 +48,3 @@ MENTAL HEALTH
 
 ## このページからのリンク
 - /anxiety — 不安と栄養へ
-
-## このページへのリンク元
-- /library — LIBRARY

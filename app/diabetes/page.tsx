@@ -40,10 +40,10 @@ export default function DiabetesPage() {
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '糖尿病とは', description: '糖尿病の種類・サイン・指標・合併症と、境界型のうちにできること。診断・治療は医療機関で。', path: '/diabetes' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '身体の仕組み', path: '/library#mechanism' }, { name: '糖尿病', path: '/diabetes' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '現代病を読む', path: '/diseases' }, { name: '糖尿病', path: '/diabetes' }])} />
 
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '身体の仕組み', href: '/library#mechanism' }, { name: '糖尿病' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '現代病を読む', href: '/diseases' }, { name: '糖尿病' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>DIABETES</p>
                     <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>

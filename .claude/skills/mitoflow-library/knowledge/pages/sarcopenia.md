@@ -50,5 +50,4 @@ SARCOPENIA / FRAILTY
 - /nutrient-density — きのことビタミンD
 
 ## このページへのリンク元
-- /library — LIBRARY
 - /menopause — 更年期・更年期移行期とは｜ホルモンの揺らぎと40代の心身

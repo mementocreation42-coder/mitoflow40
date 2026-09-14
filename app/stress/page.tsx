@@ -25,10 +25,10 @@ export default function StressPage() {
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: 'ストレスとは', description: 'ストレスは敵ではなく信号。コルチゾール・自律神経のしくみと、体から整える方法。', path: '/stress' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '心とからだ', path: '/library#mind' }, { name: 'ストレス', path: '/stress' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '心とからだ', path: '/mind-body' }, { name: 'ストレス', path: '/stress' }])} />
 
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '心とからだ', href: '/library#mind' }, { name: 'ストレス' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '心とからだ', href: '/mind-body' }, { name: 'ストレス' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>MIND &amp; BODY</p>
                     <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>

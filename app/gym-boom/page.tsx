@@ -25,10 +25,10 @@ export default function GymBoomPage() {
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: 'ジムの乱立を読む', description: 'なぜジムは増えるのか。運動を「買う」時代の構造と、毎日の代謝の視点を中立に。', path: '/gym-boom' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '心とからだ', path: '/library#mind' }, { name: 'ジムの乱立を読む', path: '/gym-boom' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '心とからだ', path: '/mind-body' }, { name: 'ジムの乱立を読む', path: '/gym-boom' }])} />
 
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '心とからだ', href: '/library#mind' }, { name: 'ジムの乱立を読む' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '心とからだ', href: '/mind-body' }, { name: 'ジムの乱立を読む' }]} />
                 <header className="mb-10 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>MIND &amp; BODY</p>
                     <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>

@@ -31,10 +31,10 @@ export default function FattyLiverPage() {
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '脂肪肝（MASLD）とは', description: '肝臓に脂肪がたまる脂肪肝（MASLD）。原因・無症状で進む怖さ・糖尿病や心血管病との関係・戻せる対策を解説。', path: '/fatty-liver' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '身体の仕組み', path: '/library#aging' }, { name: '脂肪肝とは', path: '/fatty-liver' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '現代病を読む', path: '/diseases' }, { name: '脂肪肝とは', path: '/fatty-liver' }])} />
 
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '老化と不調の土台', href: '/library#aging' }, { name: '脂肪肝とは' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '現代病を読む', href: '/diseases' }, { name: '脂肪肝とは' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#FF9855' }}>FATTY LIVER / MASLD</p>
                     <h1 className="text-3xl md:text-5xl font-bold mt-6 mb-8 md:mt-8 md:mb-10 text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>

@@ -55,6 +55,3 @@ METABOLIC SYNDROME
 - /inflammation — 慢性炎症
 - /fatty-liver — 脂肪肝
 - /library#aging — ← 老化と不調の土台に戻る
-
-## このページへのリンク元
-- /library — LIBRARY

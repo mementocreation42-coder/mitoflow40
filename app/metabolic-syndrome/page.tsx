@@ -29,10 +29,10 @@ export default function MetabolicSyndromePage() {
             <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none mf-deco mf-deco-delay" style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: 'メタボリックシンドロームとは', description: '腹囲・血圧・血糖・脂質を、一つの代謝の地図として読む。', path: '/metabolic-syndrome' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '老化と不調の土台', path: '/library#aging' }, { name: 'メタボリックシンドローム', path: '/metabolic-syndrome' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '現代病を読む', path: '/diseases' }, { name: 'メタボリックシンドローム', path: '/metabolic-syndrome' }])} />
 
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '老化と不調の土台', href: '/library#aging' }, { name: 'メタボリックシンドローム' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '現代病を読む', href: '/diseases' }, { name: 'メタボリックシンドローム' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2 text-[#B76B47]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>METABOLIC SYNDROME</p>
                     <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>

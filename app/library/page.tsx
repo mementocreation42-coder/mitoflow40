@@ -507,106 +507,13 @@ export default function LibraryIndex() {
                     </div>
                 </div>
 
-                {/* 現代病ハブ群（3カラム） */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
-                    <Link href="/modern-diseases"
-                        className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F0E2D8' }}>
-                        <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                            MODERN DISEASES
-                        </div>
-                        <div className="text-lg font-bold text-[#1A1A1A] mb-1">現代病とは</div>
-                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">生活習慣病・慢性炎症・自律神経の乱れ・睡眠負債・座りすぎ——「体の進化」と「変わりすぎた環境」のズレを俯瞰し、対策テーマへつなぎます。</p>
-                        <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                            見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                        </span>
-                    </Link>
-                    <Link href="/diabetes"
-                        className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F7E2DC' }}>
-                        <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                            DIABETES
-                        </div>
-                        <div className="text-lg font-bold text-[#1A1A1A] mb-1">糖尿病とは</div>
-                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">現代病の代表格。1型・2型の違い、見逃しやすいサイン、HbA1c、合併症、そして「境界型」のうちにできること。</p>
-                        <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                            見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                        </span>
-                    </Link>
-                    <Link href="/metabolic-syndrome"
-                        className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F0E2D8' }}>
-                        <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1">METABOLIC SYNDROME</div>
-                        <div className="text-lg font-bold text-[#1A1A1A] mb-1">メタボリックシンドローム</div>
-                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">腹囲・血圧・血糖・脂質を、別々の数字ではなく内臓脂肪からつながる一枚の代謝地図として読む。</p>
-                        <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]">見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                    </Link>
-                    <Link href="/hypertension"
-                        className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E2EAF2' }}>
-                        <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                            HYPERTENSION
-                        </div>
-                        <div className="text-lg font-bold text-[#1A1A1A] mb-1">高血圧とは</div>
-                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">症状がなくても血管・心臓・脳・腎臓に積み重なる負担。数字の意味、家庭血圧の測り方、受診の目安、生活で整える方向を解説。</p>
-                        <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                            見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                        </span>
-                    </Link>
-                    <Link href="/fatty-liver"
-                        className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F3E2D2' }}>
-                        <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                            FATTY LIVER
-                        </div>
-                        <div className="text-lg font-bold text-[#1A1A1A] mb-1">脂肪肝とは</div>
-                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">お酒を飲まなくてもなる“沈黙の現代病”（MASLD）。糖・果糖・内臓脂肪が原因で、糖尿病や心臓病の入口にも。戻せる段階での対策を解説。</p>
-                        <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                            見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                        </span>
-                    </Link>
-                    <Link href="/dyslipidemia"
-                        className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7EFD8' }}>
-                        <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>DYSLIPIDEMIA</div>
-                        <div className="text-lg font-bold text-[#1A1A1A] mb-1">脂質異常症とは</div>
-                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">LDL・HDL・中性脂肪・non-HDLを、善玉・悪玉だけでなく血管リスクの全体像から読む。</p>
-                        <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]">見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                    </Link>
-                    <Link href="/sarcopenia"
-                        className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E7EEDA' }}>
-                        <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                            SARCOPENIA
-                        </div>
-                        <div className="text-lg font-bold text-[#1A1A1A] mb-1">サルコペニア・フレイル</div>
-                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">40代から始まる筋肉の減少。代謝・血糖・転倒・要介護とつながる「動ける体」の土台。運動とたんぱく質で守り・取り戻す3本柱。</p>
-                        <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                            見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                        </span>
-                    </Link>
-                    <Link href="/chronic-kidney-disease"
-                        className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#DDE9E6' }}>
-                        <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1">CHRONIC KIDNEY DISEASE</div>
-                        <div className="text-lg font-bold text-[#1A1A1A] mb-1">慢性腎臓病（CKD）</div>
-                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">症状が出にくい腎臓の変化を、eGFR・クレアチニン・尿たんぱくの両面から読む。</p>
-                        <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]">見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                    </Link>
-                    <Link href="/mental-health"
-                        className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#E6E0F2' }}>
-                        <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                            MENTAL HEALTH
-                        </div>
-                        <div className="text-lg font-bold text-[#1A1A1A] mb-1">心の現代病</div>
-                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">うつ・不安・燃え尽きは、気合いの問題ではない。ストレス・睡眠・腸・栄養・炎症から「体」として心をとらえ、適切な助けにつなぐ視点。</p>
-                        <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                            見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                        </span>
-                    </Link>
-                    <Link href="/periodontal-disease"
-                        className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F7E2DC' }}>
-                        <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                            PERIODONTAL DISEASE
-                        </div>
-                        <div className="text-lg font-bold text-[#1A1A1A] mb-1">歯周病とは</div>
-                        <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">痛みなく静かに進む口の中の慢性炎症。糖尿病・心血管・腸内環境とつながる「全身への波及」を、口の外まで含めて捉え直します。</p>
-                        <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                            見る <span className="group-hover:translate-x-1 transition-transform">→</span>
-                        </span>
-                    </Link>
+                {/* 現代病（入口カード） */}
+                <div className="space-y-4 mt-8">
+                    <HubCard s={{
+                        href: '/diseases', label: 'MODERN DISEASES', ja: '現代病を読む', role: '各論', count: 10, unit: 'テーマ', color: '#F7E2DC',
+                        illustration: '/images/for-you/for-you-recovery.png',
+                        description: '現代病とは何かという俯瞰から、糖尿病・メタボ・高血圧・脂肪肝・脂質異常症・サルコペニア・慢性腎臓病・心の現代病・歯周病まで。バラバラに見える病気を「体の設計と環境のズレ」として読む。',
+                    }} />
                 </div>
 
                 {/* ホルモン */}
@@ -660,30 +567,12 @@ export default function LibraryIndex() {
                     <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
                         気分や不安は、「性格」や「気合い」の問題とは限りません。<strong>腸・栄養・睡眠・自律神経・血糖</strong>といった<strong>体の土台</strong>から、心を読み解きます。メンタルも“体から”整える、という視点です。
                     </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                        {[
-                            { href: '/stress', en: 'STRESS', ja: 'ストレスとは', note: '敵ではなく信号。コルチゾールと自律神経のしくみ。', bg: '#EFEAF6' },
-                            { href: '/hsp', en: 'HSP', ja: 'HSP・繊細さん', note: '感覚処理感受性と遺伝子（COMT・5-HTTLPR他）。“気質”と“体の状態”を切り分ける。', bg: '#EFEAF6' },
-                            { href: '/mood-nutrition', en: 'MOOD & FOOD', ja: '気分と栄養', note: 'セロトニン・ドーパミンの“材料”は栄養という視点。', bg: '#EFEAF6' },
-                            { href: '/anxiety', en: 'ANXIETY', ja: '不安と体', note: '血糖・腸・睡眠など、不安を揺さぶる体の要因。', bg: '#EFEAF6' },
-                            { href: '/neuroinflammation', en: 'NEUROINFLAMMATION', ja: '神経炎症と心', note: 'IL-6など炎症性サイトカインが脳に及ぶとき。だるさ・うつ・ブレインフォグを中立に。', bg: '#EFEAF6' },
-                            { href: '/migraine', en: 'MIGRAINE', ja: '片頭痛と体', note: '引き金・栄養（Mg・B2・CoQ10）・危険な頭痛の見分け方。', bg: '#EFEAF6' },
-                            { href: '/mindfulness', en: 'BREATH', ja: 'マインドフルネス・呼吸', note: '呼吸という、自律神経への手動スイッチ。', bg: '#EFEAF6' },
-                            { href: '/spirituality', en: 'MIND & SPIRIT', ja: 'スピリチュアリティと体', note: '祈り・瞑想・つながりを“心身相関”で読み解く。', bg: '#EFEAF6' },
-                            { href: '/sound', en: 'SOUND', ja: '音と健康', note: 'α波・振動・音楽療法と、周波数ヒーリングの潮流を中立に。', bg: '#EFEAF6' },
-                            { href: '/smell', en: 'SMELL', ja: '匂いと健康', note: '記憶・感情・脳とのつながりと、アロマの効果の見極め。', bg: '#EFEAF6' },
-                            { href: '/gym-boom', en: 'GYM BOOM', ja: 'ジムの乱立を読む', note: 'なぜジムは増える？運動を「買う」時代の構造と、毎日の代謝の視点を中立に。', bg: '#EFEAF6' },
-                            { href: '/jogging', en: 'JOGGING', ja: 'ジョギングと体', note: '効果・「膝に悪い」の真偽・どれだけ走ればいいかの用量反応を中立に。', bg: '#EFEAF6' },
-                            { href: '/electrotherapy', en: 'ELECTROTHERAPY', ja: '電気療法とミトコンドリア', note: '整体・接骨院の「電気」。低周波・EMS・微弱電流の違いと、ATPの主張の出どころを中立に。', bg: '#EFEAF6' },
-                        ].map((s) => (
-                            <Link key={s.href} href={s.href}
-                                className="group block rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: s.bg }}>
-                                <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{s.en}</div>
-                                <div className="text-lg font-bold text-[#1A1A1A] mb-1">{s.ja}</div>
-                                <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-2">{s.note}</p>
-                                <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                            </Link>
-                        ))}
+                    <div className="space-y-4">
+                        <HubCard s={{
+                            href: '/mind-body', label: 'MIND & BODY', ja: '心とからだ', role: '心身相関', count: 13, unit: 'テーマ', color: '#EFEAF6',
+                            illustration: '/images/experience/experience_sleep_new.png',
+                            description: 'ストレス・HSP・気分と栄養・不安・神経炎症・片頭痛・呼吸・スピリチュアリティ・音・匂い・運動の潮流まで。心の側に現れることを、腸・栄養・睡眠・自律神経・血糖という体の側から読み解く。',
+                        }} />
                     </div>
                     <div className="mt-4 flex flex-wrap items-center gap-2">
                         <span className="text-[10px] font-bold tracking-wider text-[#1A1A1A]/40" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>あわせて</span>

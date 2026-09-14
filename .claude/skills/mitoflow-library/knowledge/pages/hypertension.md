@@ -68,5 +68,4 @@ HYPERTENSION
 
 ## このページへのリンク元
 - /dyslipidemia — 脂質異常症とは｜LDL・HDL・中性脂肪をまとめて読む
-- /library — LIBRARY
 - /menopause — 更年期・更年期移行期とは｜ホルモンの揺らぎと40代の心身

@@ -42,10 +42,10 @@ export default function DyslipidemiaPage() {
             <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none mf-deco mf-deco-delay" style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '脂質異常症とは', description: 'LDL・HDL・中性脂肪・non-HDLを、善玉・悪玉だけでなく全体像から読む。', path: '/dyslipidemia' })} />
-            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '老化と不調の土台', path: '/library#aging' }, { name: '脂質異常症', path: '/dyslipidemia' }])} />
+            <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '現代病を読む', path: '/diseases' }, { name: '脂質異常症', path: '/dyslipidemia' }])} />
 
             <article className="max-w-[820px] mx-auto relative" style={{ zIndex: 1 }}>
-                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '老化と不調の土台', href: '/library#aging' }, { name: '脂質異常症' }]} />
+                <Breadcrumbs items={[{ name: 'Library', href: '/library' }, { name: '現代病を読む', href: '/diseases' }, { name: '脂質異常症' }]} />
                 <header className="mb-12 text-center">
                     <p className="text-xs tracking-widest font-bold mb-2 text-[#54865B]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>DYSLIPIDEMIA</p>
                     <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>

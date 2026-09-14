@@ -53,5 +53,4 @@ FATTY LIVER / MASLD
 - /modern-diseases — 現代病とは
 
 ## このページへのリンク元
-- /library — LIBRARY
 - /metabolic-syndrome — メタボリックシンドロームとは｜腹囲・血圧・血糖・脂質のつながり

@@ -54,6 +54,3 @@ CKD（Chronic Kidney Disease）は、腎臓の障害を示す所見、または�
 
 ## このページからのリンク
 - /library#aging — ← 老化と不調の土台に戻る
-
-## このページへのリンク元
-- /library — LIBRARY
