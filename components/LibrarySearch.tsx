@@ -44,7 +44,7 @@ export default function LibrarySearch() {
                     onKeyDown={handleKeyDown}
                     placeholder="栄養素・食べ物・症状・しくみを検索…"
                     aria-label="Libraryを検索"
-                    className="w-full pl-11 pr-10 py-4 text-sm border border-black rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-[#41C9B4]/50 transition-all"
+                    className="w-full pl-11 pr-10 py-3 sm:py-4 text-sm border border-black rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-[#41C9B4]/50 transition-all"
                 />
                 {query && (
                     <button
