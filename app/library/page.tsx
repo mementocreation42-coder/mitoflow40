@@ -189,10 +189,10 @@ export default function LibraryIndex() {
 
                 {/* 目次（sticky） */}
                 <nav aria-label="ライブラリの目次" className="static md:sticky top-[60px] z-20 py-2 mb-6 md:mb-8">
-                    <div className="grid grid-cols-3 gap-1.5 md:flex md:flex-wrap md:justify-center md:gap-2.5">
+                    <div className="grid grid-cols-3 md:grid-cols-6 gap-1.5 md:gap-2">
                         {TOC.map((t) => (
                             <a key={t.href} href={t.href}
-                                className="group inline-flex items-center justify-center md:justify-start gap-1 md:gap-2 px-2 md:px-4 py-1 md:py-2 rounded-full border text-[11px] md:text-[15px] font-bold text-[#1A1A1A] whitespace-nowrap shadow-sm bg-[var(--chip-bg)] hover:bg-[var(--chip)] hover:text-white transition-colors"
+                                className="group inline-flex items-center justify-center gap-1 md:gap-1.5 px-2 md:px-2.5 py-1 md:py-1.5 rounded-full border text-[11px] md:text-[13px] font-bold text-[#1A1A1A] whitespace-nowrap shadow-sm bg-[var(--chip-bg)] hover:bg-[var(--chip)] hover:text-white transition-colors"
                                 style={{ borderColor: t.accent, ['--chip-bg' as string]: t.bg, ['--chip' as string]: t.accent } as CSSProperties}>
                                 {t.n && <span className="text-[var(--chip)] group-hover:text-white transition-colors" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{t.n}</span>}
                                 {t.label}
