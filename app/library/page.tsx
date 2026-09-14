@@ -112,11 +112,8 @@ function HubCard({ s }: { s: HubSection }) {
             className="group relative flex flex-row items-stretch overflow-hidden rounded-2xl border border-black hover:shadow-lg hover:-translate-y-0.5 transition-all"
             style={{ background: s.color }}
         >
-            <div className="hidden md:flex flex-shrink-0 items-center justify-center p-4 w-[190px] relative overflow-hidden">
-                <img loading="lazy" decoding="async" src={s.illustration} alt="" className="pointer-events-none w-[140px] opacity-90 transition-transform" />
-            </div>
-            <img loading="lazy" decoding="async" src={s.illustration} alt="" className="md:hidden pointer-events-none absolute right-2 bottom-1 w-[120px] opacity-25" />
-            <div className="relative flex-1 p-4 md:p-6 md:pl-2 md:pr-8">
+            <img loading="lazy" decoding="async" src={s.illustration} alt="" className="pointer-events-none absolute right-2 bottom-1 md:right-6 md:bottom-2 w-[120px] md:w-[190px] opacity-25 transition-transform group-hover:scale-105" />
+            <div className="relative flex-1 p-4 md:p-6 md:pr-48">
                 <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2">
                     <span className="text-xl md:text-3xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         {s.label}
@@ -272,10 +269,7 @@ export default function LibraryIndex() {
                             className="group relative flex flex-col overflow-hidden rounded-2xl border border-black hover:shadow-lg hover:-translate-y-0.5 transition-all"
                             style={{ background: s.color }}
                         >
-                            <div className="hidden sm:flex items-center justify-center pt-5 px-4">
-                                <img loading="lazy" decoding="async" src={s.illustration} alt="" className="pointer-events-none w-[120px] md:w-[130px] opacity-90 transition-transform" />
-                            </div>
-                            <img loading="lazy" decoding="async" src={s.illustration} alt="" className="sm:hidden pointer-events-none absolute right-2 top-2 w-[110px] opacity-25" />
+                            <img loading="lazy" decoding="async" src={s.illustration} alt="" className="pointer-events-none absolute right-2 top-2 sm:right-3 sm:bottom-3 sm:top-auto w-[110px] sm:w-[130px] opacity-25 transition-transform group-hover:scale-105" />
                             <div className="relative flex-1 flex flex-col p-4 sm:p-5">
                                 <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 mb-2">
                                     <span className="text-2xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
