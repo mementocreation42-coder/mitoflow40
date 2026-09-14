@@ -68,7 +68,7 @@ export default function TcaCyclePage() {
             {/* Decorative illustrations */}
             <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block mf-deco-flip"
                 style={{ top: '-48px', right: '0', width: '260px' }} />
-            <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none mf-deco mf-deco-delay"
+            <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none"
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: 'TCA回路（クエン酸回路）とは', description: 'ミトコンドリアのエネルギー産生エンジン「TCA回路」を、流れ・役割・必要な栄養素から解説。', path: '/tca-cycle' })} />

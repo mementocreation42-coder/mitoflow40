@@ -45,7 +45,7 @@ export default function GlycolysisPage() {
             {/* Decorative illustrations */}
             <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block mf-deco-flip"
                 style={{ top: '-48px', right: '0', width: '260px' }} />
-            <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none mf-deco mf-deco-delay"
+            <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none"
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
             <JsonLd data={medicalWebPage({ name: '解糖系（グリコリシス）とは', description: 'エネルギー産生の最初のステップ「解糖系」を、流れ・酸素との関係・TCA回路への橋渡し・必要な栄養素から解説。', path: '/glycolysis' })} />

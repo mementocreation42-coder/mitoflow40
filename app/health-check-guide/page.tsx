@@ -29,7 +29,7 @@ export default function HealthCheckGuidePage() {
     return (
         <div className="pt-[calc(60px+3rem)] md:pt-[calc(60px+6rem)] pb-12 md:pb-24 px-6 md:px-4 min-h-screen relative overflow-hidden" style={{ background: '#FFF1DF' }}>
             <img loading="lazy" decoding="async" src="/images/for-you/for-you-illustration-bl.png" alt="" className="absolute pointer-events-none opacity-90 hidden md:block mf-deco-flip" style={{ top: '-48px', right: '0', width: '260px' }} />
-            <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none mf-deco mf-deco-delay" style={{ bottom: '8px', left: '8px', width: '260px' }} />
+            <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none" style={{ bottom: '8px', left: '8px', width: '260px' }} />
             <JsonLd data={medicalWebPage({ name: '40代の健康診断の読み方', description: '結果票を点数表ではなく、経年変化と次の行動を決める地図として読む。', path: '/health-check-guide' })} />
             <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: '身体の地図', path: '/library#map' }, { name: '健康診断の読み方', path: '/health-check-guide' }])} />
 
