@@ -263,27 +263,27 @@ export default function LibraryIndex() {
                     </p>
 
                     {/* 3つのセクションカード */}
-                    <div className="space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     {sections.map((s) => (
                         <Link
                             key={s.href}
                             href={s.href}
-                            className="group flex flex-col md:flex-row items-stretch overflow-hidden rounded-2xl border border-black hover:shadow-lg hover:-translate-y-0.5 transition-all"
+                            className="group flex flex-col overflow-hidden rounded-2xl border border-black hover:shadow-lg hover:-translate-y-0.5 transition-all"
                             style={{ background: s.color }}
                         >
-                            <div className="flex-shrink-0 flex items-center justify-center p-4 md:w-[190px] relative overflow-hidden">
-                                <img loading="lazy" decoding="async" src={s.illustration} alt="" className="pointer-events-none w-[120px] md:w-[140px] opacity-90 transition-transform" />
+                            <div className="flex items-center justify-center pt-5 px-4">
+                                <img loading="lazy" decoding="async" src={s.illustration} alt="" className="pointer-events-none w-[120px] md:w-[130px] opacity-90 transition-transform" />
                             </div>
-                            <div className="flex-1 p-6 md:py-6 md:pr-8">
-                                <div className="flex items-baseline gap-3 mb-2">
-                                    <span className="text-2xl md:text-3xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            <div className="flex-1 flex flex-col p-5">
+                                <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 mb-2">
+                                    <span className="text-2xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                         {s.label}
                                     </span>
                                     <span className="text-sm font-bold text-[#1A1A1A]/70">{s.ja}</span>
                                     <span className="text-xs px-2 py-0.5 rounded-full bg-white/70 text-[#1A1A1A]/70 font-bold">{s.role}</span>
                                 </div>
-                                <p className="text-sm text-[#1A1A1A]/80 leading-relaxed mb-4">{s.description}</p>
-                                <div className="inline-flex w-fit items-center gap-2 px-5 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                <p className="flex-1 text-sm text-[#1A1A1A]/80 leading-relaxed mb-4">{s.description}</p>
+                                <div className="inline-flex w-fit items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                     <span>{s.count} {s.unit}を見る</span>
                                     <span className="group-hover:translate-x-1 transition-transform">→</span>
                                 </div>
@@ -470,37 +470,37 @@ export default function LibraryIndex() {
                     <p className="text-sm text-[#4A4A4A] leading-relaxed mb-5">
                         体の中では今この瞬間も、「<strong>さびる（酸化）</strong>」「<strong>こげる（糖化）</strong>」「<strong>くすぶる（慢性炎症）</strong>」という3つのダメージが静かに進んでいます。これらは見た目の老化を進めるだけでなく、疲れやすさや肌の不調といった日々の不調から、生活習慣病まで、多くの<strong>体の不調の共通の根っこ</strong>です。やっかいなのは、3つが連動して互いを加速させること。けれど裏を返せば、<strong>毎日の食事・運動・睡眠で減らしていけるダメージ</strong>でもあります。「歳のせい」とあきらめる前に、まず仕組みから知っていきましょう。
                     </p>
-                    <div className="space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <Link href="/oxidative-stress"
-                            className="group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F3DEDE' }}>
+                            className="group flex flex-col gap-3 rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F3DEDE' }}>
                             <div className="flex-shrink-0">
                                 <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>OXIDATIVE STRESS</span>
-                                <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">活性酸素（さびる）</div>
+                                <div className="text-lg font-bold text-[#1A1A1A] mt-1">活性酸素（さびる）</div>
                             </div>
-                            <p className="flex-1 text-sm text-[#4A4A4A] leading-relaxed">体がさびる酸化ストレスと、抗酸化のバランス。</p>
-                            <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            <p className="flex-1 text-sm text-[#1A1A1A]/80 leading-relaxed">体がさびる酸化ストレスと、抗酸化のバランス。</p>
+                            <span className="inline-flex w-fit items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                 見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                             </span>
                         </Link>
                         <Link href="/glycation"
-                            className="group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F6E6CF' }}>
+                            className="group flex flex-col gap-3 rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F6E6CF' }}>
                             <div className="flex-shrink-0">
                                 <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>GLYCATION</span>
-                                <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">糖化（こげる）</div>
+                                <div className="text-lg font-bold text-[#1A1A1A] mt-1">糖化（こげる）</div>
                             </div>
-                            <p className="flex-1 text-sm text-[#4A4A4A] leading-relaxed">余った糖が組織を劣化させるAGEs。血糖との関係。</p>
-                            <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            <p className="flex-1 text-sm text-[#1A1A1A]/80 leading-relaxed">余った糖が組織を劣化させるAGEs。血糖との関係。</p>
+                            <span className="inline-flex w-fit items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                 見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                             </span>
                         </Link>
                         <Link href="/inflammation"
-                            className="group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl border border-black p-5 md:p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F6DCD0' }}>
+                            className="group flex flex-col gap-3 rounded-2xl border border-black p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#F6DCD0' }}>
                             <div className="flex-shrink-0">
                                 <span className="text-[10px] font-bold tracking-widest text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>INFLAMMATION</span>
-                                <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1">慢性炎症（くすぶる）</div>
+                                <div className="text-lg font-bold text-[#1A1A1A] mt-1">慢性炎症（くすぶる）</div>
                             </div>
-                            <p className="flex-1 text-sm text-[#4A4A4A] leading-relaxed">自覚なくくすぶる弱い炎症。老化と万病の隠れた土台。</p>
-                            <span className="flex-shrink-0 inline-flex items-center gap-1 px-5 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            <p className="flex-1 text-sm text-[#1A1A1A]/80 leading-relaxed">自覚なくくすぶる弱い炎症。老化と万病の隠れた土台。</p>
+                            <span className="inline-flex w-fit items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                 見る <span className="group-hover:translate-x-1 transition-transform">→</span>
                             </span>
                         </Link>
