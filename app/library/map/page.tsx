@@ -284,7 +284,7 @@ export default function LibraryMapPage() {
                 </div>
 
                 {/* ── 0. はじめに ── */}
-                <div className="max-w-[640px] mx-auto">
+                <div>
                     <Node s={intro} />
                 </div>
 
@@ -356,7 +356,7 @@ export default function LibraryMapPage() {
                 <Arrow label="不調から逆引きする" />
 
                 {/* ── 10. 症状から引く ── */}
-                <div className="max-w-[640px] mx-auto">
+                <div>
                     <Node s={symptoms} />
                 </div>
 
