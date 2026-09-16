@@ -27,16 +27,16 @@ const SWEET = ['🍩', '🥤', '🍰'];
 const FAT = ['🥑', '🥜', '🫒', '🥥'];
 const MAX_MITO = 6;
 const maxAtp = (mito: number) => 100 + (mito - 1) * 10;
-const TIPS = [
-    '甘いもののあとに来るヨロヨロ、あれが「血糖の波」。',
-    'コーヒーは眠気を隠すだけ。エネルギーは作らない。',
-    '活性酸素は「さびる」のもと。抗酸化の食べ物で守れる。',
-    '卵・鮭・納豆。ATP の材料は、いつもの食卓にある。',
-    'ミトコンドリアを増やす確実な方法は、動くこと。',
-    '午後の眠気、年齢のせいじゃないかもしれない。',
-    'ケトン体は、糖が来ない時間に脂肪から作る第二の燃料。',
-    '夜のコーヒーは残る。半減期はおよそ 5 時間。',
-    'ブルーベリーの色は抗酸化の色。さびから守る。',
+const TIPS: { text: string; href: string; label: string }[] = [
+    { text: '甘いもののあとに来るヨロヨロ、あれが「血糖の波」。', href: '/blood-sugar', label: '血糖の波のしくみ' },
+    { text: 'コーヒーは眠気を隠すだけ。エネルギーは作らない。', href: '/caffeine', label: 'カフェインとの付き合い方' },
+    { text: '活性酸素は「さびる」のもと。抗酸化の食べ物で守れる。', href: '/oxidative-stress', label: '酸化ストレスとは' },
+    { text: '卵・鮭・納豆。ATP の材料は、いつもの食卓にある。', href: '/foods', label: '食べ物の一覧' },
+    { text: 'ミトコンドリアを増やす確実な方法は、動くこと。', href: '/exercise', label: '運動とミトコンドリア' },
+    { text: '午後の眠気、年齢のせいじゃないかもしれない。', href: '/symptoms/post-meal-sleepiness', label: '食後の眠気の背景' },
+    { text: 'ケトン体は、糖が来ない時間に脂肪から作る第二の燃料。', href: '/ketones', label: 'ケトン体とは' },
+    { text: '夜のコーヒーは残る。半減期はおよそ 5 時間。', href: '/circadian-rhythm', label: '体内時計のしくみ' },
+    { text: 'ブルーベリーの色は抗酸化の色。さびから守る。', href: '/oxidative-stress', label: '抗酸化のしくみ' },
 ];
 
 export default function MitoRun() {
@@ -341,7 +341,7 @@ export default function MitoRun() {
     }, [jump]);
 
     const share = async () => {
-        const text = `走れミトス（MITOFLOW）\nSCORE ${score}（BEST ${best}）\n${tip}`;
+        const text = `走れミトス（MITOFLOW）\nSCORE ${score}（BEST ${best}）\n${tip.text}`;
         const url = typeof window !== 'undefined' ? `${window.location.origin}/play` : 'https://mitoflow40.com/play';
         try {
             if (navigator.share) await navigator.share({ title: 'MITOFLOW', text, url });
@@ -374,10 +374,13 @@ export default function MitoRun() {
                         <p className="text-[10px] tracking-[0.3em] font-bold text-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>ATP が尽きた</p>
                         <div className="text-5xl font-bold text-[#1A1A1A] mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{score}</div>
                         <p className="text-[11px] text-[#4A4A4A] mb-3" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>BEST {best}</p>
-                        <p className="text-xs text-[#1A1A1A] leading-relaxed bg-[#FFF6E5] border border-[#FF9855] rounded-xl p-3 mb-4">{tip}</p>
+                        <a href={tip.href} className="block text-left text-xs text-[#1A1A1A] leading-relaxed bg-[#FFF6E5] border border-[#FF9855] rounded-xl p-3 mb-4 hover:bg-[#FFE4D2] transition-colors">
+                            <span className="block text-[9px] tracking-widest font-bold text-[#FF9855] mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>HINT</span>
+                            {tip.text}
+                            <span className="block mt-1.5 text-[11px] font-bold underline underline-offset-2">{tip.label} →</span>
+                        </a>
                         <button onPointerDown={(e) => { e.stopPropagation(); start(); }} className="w-full py-3 rounded-full bg-[#FF9855] border-2 border-[#1A1A1A] font-bold text-[#1A1A1A] mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>もう一回</button>
                         <button onClick={share} className="w-full py-2.5 rounded-full bg-white border-2 border-[#1A1A1A] font-bold text-[#1A1A1A] text-sm">{shared === 'done' ? 'シェアしました' : 'スコアをシェア'}</button>
-                        <a href="/library" className="block text-[11px] text-[#4A4A4A] underline mt-3">なぜ？はライブラリで →</a>
                     </div>
                 </div>
             )}
