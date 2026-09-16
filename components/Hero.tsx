@@ -52,7 +52,7 @@ export default function Hero() {
                                 className="relative z-20 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 border border-[#1A1A1A] text-xs font-bold text-[#1A1A1A] hover:bg-[#FF9855] transition-colors"
                                 style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                                 <span className="text-[10px] tracking-widest">PLAY</span>
-                                <span className="font-bold" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>ミトコンドリア、はしる</span>
+                                <span className="font-bold" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>走れミトス</span>
                                 <span aria-hidden="true">▶</span>
                             </Link>
                         </FadeOnScroll>

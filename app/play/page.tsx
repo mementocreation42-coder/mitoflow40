@@ -2,13 +2,13 @@ import Link from 'next/link';
 import MitoRun from '@/components/game/MitoRun';
 
 export const metadata = {
-    title: 'MITOFLOW ｜ ミトコンドリア、はしる | Mitoflow40',
-    description: '血管の中をミトコンドリアが走る、1 タップのランゲーム。良い食べ物で ATP を保て。甘いものは速いけど、あとがつらい。',
+    title: '走れミトス ｜ MITOFLOW | Mitoflow40',
+    description: '血管の中をミトコンドリアの「ミトス」が走る、1 タップのランゲーム。良い食べ物で ATP を保て。甘いものは速いけど、あとがつらい。',
     alternates: { canonical: 'https://mitoflow40.com/play' },
     openGraph: {
         siteName: 'Mitoflow40',
         locale: 'ja_JP',
-        title: 'MITOFLOW ｜ ミトコンドリア、はしる',
+        title: '走れミトス ｜ MITOFLOW',
         description: '血管の中をミトコンドリアが走る、1 タップのランゲーム。',
         url: 'https://mitoflow40.com/play',
         type: 'website',
