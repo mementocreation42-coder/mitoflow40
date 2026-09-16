@@ -26,6 +26,9 @@ const GOOD = ['🥚', '🐟', '🥦', '🍙', '🍅', '🥬'];
 const SWEET = ['🍩', '🥤', '🍰'];
 const FAT = ['🥑', '🥜', '🫒', '🥥'];
 const MAX_MITO = 6;
+const GOAL_M = 1500;   // ここまで走ると、コンドロスが見えてくる（?goal=数値 で変えられる。動作確認用）
+const goalM = () => { try { const q = new URLSearchParams(window.location.search).get('goal'); const n = q ? Number(q) : NaN; return Number.isFinite(n) && n > 0 ? n : GOAL_M; } catch { return GOAL_M; } };
+const KONDROS_TIP = { text: 'ミトスとコンドロスが出会って、ミトコンドリア。細胞の中で ATP を作る工場になった。', href: '/mitochondria', label: 'ミトコンドリアとは' };
 const maxAtp = (mito: number) => 100 + (mito - 1) * 10;
 const TIPS: { text: string; href: string; label: string }[] = [
     { text: '甘いもののあとに来るヨロヨロ、あれが「血糖の波」。', href: '/blood-sugar', label: '血糖の波のしくみ' },
@@ -41,7 +44,7 @@ const TIPS: { text: string; href: string; label: string }[] = [
 
 export default function MitoRun() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [phase, setPhase] = useState<'start' | 'playing' | 'over'>('start');
+    const [phase, setPhase] = useState<'start' | 'playing' | 'over' | 'clear'>('start');
     const [score, setScore] = useState(0);
     const [best, setBest] = useState(0);
     const [tip, setTip] = useState(TIPS[0]);
@@ -74,11 +77,14 @@ export default function MitoRun() {
         jumpCount: 0, // 運動量：ジャンプの回数でミトコンドリアが増える
         mito: 1,      // ミトコンドリアの数（ATP の上限）
         night: false, // 夜（カフェインが残りやすい）
+        kondros: null as { x: number; y: number } | null, // 相棒。ゴール距離を超えると前方に現れる
+        merge: 0,     // 合体の演出タイマー
+        met: false,   // コンドロスに触れた
         shake: 0,
         last: 0,
         raf: 0,
     });
-    const imgs = useRef<{ mito?: HTMLImageElement; cells: HTMLImageElement[] }>({ cells: [] });
+    const imgs = useRef<{ mito?: HTMLImageElement; kondros?: HTMLImageElement; cells: HTMLImageElement[] }>({ cells: [] });
     const audio = useRef<AudioContext | null>(null);
 
     // ── 音（素材なし。WebAudio で鳴らす） ──
@@ -100,8 +106,8 @@ export default function MitoRun() {
     useEffect(() => {
         try { setBest(Number(localStorage.getItem('mf:run:best') || 0)); } catch { /* noop */ }
         const load = (src: string) => new Promise<HTMLImageElement>((res) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => res(i); i.src = src; });
-        Promise.all([load('/game/mito.png'), load('/game/cell0.png'), load('/game/cell1.png'), load('/game/cell2.png'), load('/game/cell3.png')]).then(([m, ...c]) => {
-            imgs.current = { mito: m, cells: c };
+        Promise.all([load('/game/mito.png'), load('/game/kondros.png'), load('/game/cell0.png'), load('/game/cell1.png'), load('/game/cell2.png'), load('/game/cell3.png')]).then(([m, k, ...c]) => {
+            imgs.current = { mito: m, kondros: k, cells: c };
         });
     }, []);
 
@@ -116,7 +122,7 @@ export default function MitoRun() {
 
     const reset = () => {
         const s = g.current;
-        Object.assign(s, { t: 0, scroll: 0, speed: 260, atp: 100, score: 0, py: GROUND, vy: 0, jumps: 0, squash: 0, items: [], particles: [], spawnIn: 0.8, rush: 0, wave: 0, caffeine: 0, sleepy: 0, hurt: 0, keto: 0, sugar: 0, shield: 0, jumpCount: 0, mito: 1, night: false, shake: 0 });
+        Object.assign(s, { t: 0, scroll: 0, speed: 260, atp: 100, score: 0, py: GROUND, vy: 0, jumps: 0, squash: 0, items: [], particles: [], spawnIn: 0.8, rush: 0, wave: 0, caffeine: 0, sleepy: 0, hurt: 0, keto: 0, sugar: 0, shield: 0, jumpCount: 0, mito: 1, night: false, kondros: null, merge: 0, met: false, shake: 0 });
         s.cells = Array.from({ length: 7 }, (_, i) => ({ x: Math.random() * W, y: 40 + Math.random() * (GROUND - 80), s: 0.35 + Math.random() * 0.35, img: i % 4, rot: Math.random() * 6, vr: (Math.random() - 0.5) * 0.4, speed: 0.15 + Math.random() * 0.25 }));
     };
 
@@ -153,6 +159,24 @@ export default function MitoRun() {
         setPhase('over');
     }, [beep]);
 
+    const clear = useCallback(() => {
+        const s = g.current;
+        s.running = false;
+        s.score += 1000;
+        const final = Math.round(s.score);
+        setScore(final);
+        setTip(KONDROS_TIP);
+        setShared('idle');
+        try {
+            const b = Number(localStorage.getItem('mf:run:best') || 0);
+            if (final > b) { localStorage.setItem('mf:run:best', String(final)); setBest(final); } else setBest(b);
+        } catch { /* noop */ }
+        beep(523, 1046, 0.5, 'sine', 0.08);
+        setTimeout(() => beep(659, 1318, 0.5, 'sine', 0.07), 180);
+        setTimeout(() => beep(784, 1568, 0.7, 'sine', 0.07), 360);
+        setPhase('clear');
+    }, [beep]);
+
     const start = useCallback(() => {
         if (!audio.current) {
             try { audio.current = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)(); } catch { /* noop */ }
@@ -178,6 +202,15 @@ export default function MitoRun() {
         const update = (dt: number) => {
             const s = g.current;
             s.t += dt;
+            // 合体の演出：ふたりが中央で回りながら近づき、ひとつになる
+            if (s.merge > 0) {
+                s.merge -= dt;
+                if (Math.random() < 0.5) burst(W / 2 + (Math.random() - 0.5) * 120, GROUND - 60 + (Math.random() - 0.5) * 80, Math.random() < 0.5 ? '#41C9B4' : '#FF9855', 2);
+                for (const pt of s.particles) { pt.x += pt.vx * dt; pt.y += pt.vy * dt; pt.vy += 500 * dt; pt.life -= dt; }
+                s.particles = s.particles.filter((pt) => pt.life > 0);
+                if (s.merge <= 0) clear();
+                return;
+            }
             // 状態タイマー
             const wasRush = s.rush > 0;
             s.rush = Math.max(0, s.rush - dt); s.wave = Math.max(0, s.wave - dt); s.caffeine = Math.max(0, s.caffeine - dt); s.sleepy = Math.max(0, s.sleepy - dt); s.hurt = Math.max(0, s.hurt - dt); s.shake = Math.max(0, s.shake - dt);
@@ -185,6 +218,7 @@ export default function MitoRun() {
             s.keto = Math.max(0, s.keto - dt); s.shield = Math.max(0, s.shield - dt);
             if (wasKeto && s.keto === 0) burst(PLAYER_X, s.py - 30, '#2FB59F', 6, 'ケトン体、おわり');
             s.sugar = Math.max(0, s.sugar - dt * 0.09);
+            const dist = s.scroll / 10;
             const wasNight = s.night;
             s.night = s.t > 40 && (s.t % 60) > 40;
             if (!wasNight && s.night) burst(W / 2, 90, '#5B86B8', 0, '夜。カフェインが残りやすい');
@@ -207,8 +241,14 @@ export default function MitoRun() {
             if (s.py >= GROUND) { if (s.jumps > 0 && s.vy > 400) s.squash = 0.8; s.py = GROUND; s.vy = 0; s.jumps = 0; }
             s.squash = Math.max(0, s.squash - dt * 4);
             // 生成
+            if (!s.kondros && dist >= goalM()) { s.kondros = { x: W + 80, y: GROUND }; s.items = s.items.filter((it) => it.kind !== 'radical'); burst(W / 2, 120, '#FF9855', 12, 'コンドロスが見えた!'); beep(600, 900, 0.3, 'sine', 0.07); }
+            if (s.kondros) {
+                s.kondros.x -= s.speed * dt * 0.45;
+                const dx = s.kondros.x - PLAYER_X, dy = (s.kondros.y - 34) - (s.py - 34);
+                if (!s.met && dx * dx + dy * dy < 70 * 70) { s.met = true; s.merge = 2.0; s.shake = 0; burst(PLAYER_X + dx / 2, s.py - 40, '#41C9B4', 24, 'ミトス ＋ コンドロス'); beep(440, 880, 0.4, 'triangle', 0.08); return; }
+            }
             s.spawnIn -= dt;
-            if (s.spawnIn <= 0) {
+            if (s.spawnIn <= 0 && !s.kondros) {
                 const r = Math.random();
                 const air = Math.random() < 0.45;
                 const y = air ? GROUND - 120 - Math.random() * 90 : GROUND - 22;
@@ -287,10 +327,12 @@ export default function MitoRun() {
             // プレイヤー
             const m = imgs.current.mito;
             const wob = s.wave > 0 ? Math.sin(s.t * 18) * 0.25 : 0;
+            if (s.merge > 0) { /* 合体中は下で描く */ }
             const sq = s.squash;
             if (s.keto > 0) { const gl = ctx.createRadialGradient(PLAYER_X, s.py - 34, 10, PLAYER_X, s.py - 34, 80); gl.addColorStop(0, 'rgba(47,181,159,0.45)'); gl.addColorStop(1, 'rgba(47,181,159,0)'); ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(PLAYER_X, s.py - 34, 80, 0, Math.PI * 2); ctx.fill(); }
             if (s.shield > 0) { ctx.strokeStyle = `rgba(91,134,184,${0.4 + 0.4 * Math.abs(Math.sin(s.t * 6))})`; ctx.lineWidth = 3; ctx.setLineDash([8, 6]); ctx.beginPath(); ctx.arc(PLAYER_X, s.py - 34, 62, s.t * 2, s.t * 2 + Math.PI * 2); ctx.stroke(); ctx.setLineDash([]); }
             ctx.save();
+            if (s.merge > 0) ctx.globalAlpha = 0;
             ctx.translate(PLAYER_X, s.py);
             ctx.rotate(wob + Math.max(-0.35, Math.min(0.35, s.vy / 2400)));
             ctx.scale(1 + sq * 0.18, 1 - sq * 0.22);
@@ -298,6 +340,26 @@ export default function MitoRun() {
             if (m?.width) { const w = 96, h = (m.height / m.width) * 96; ctx.drawImage(m, -w / 2, -h, w, h); }
             else { ctx.fillStyle = '#E07A6A'; ctx.beginPath(); ctx.ellipse(0, -30, 44, 30, 0, 0, Math.PI * 2); ctx.fill(); }
             ctx.restore();
+            // コンドロス（相棒）
+            const k = imgs.current.kondros;
+            if (s.kondros && s.merge <= 0 && k?.width) {
+                const bob = Math.sin(s.t * 7) * 6;
+                const w = 92, h = (k.height / k.width) * 92;
+                ctx.save(); ctx.translate(s.kondros.x, s.kondros.y + bob); ctx.rotate(Math.sin(s.t * 3) * 0.08); ctx.drawImage(k, -w / 2, -h, w, h); ctx.restore();
+                ctx.fillStyle = '#1A1A1A'; ctx.font = 'bold 12px "Noto Sans JP", sans-serif'; ctx.textAlign = 'center'; ctx.fillText('コンドロス', s.kondros.x, s.kondros.y - h - 10);
+            }
+            if (s.merge > 0 && m?.width && k?.width) {
+                const p = 1 - s.merge / 2.0; // 0→1
+                const cx = W / 2, cy = GROUND - 40;
+                const gap = (1 - Math.min(1, p * 1.4)) * 110;
+                const spin = p * Math.PI * 4;
+                const scale = 1 + Math.sin(p * Math.PI) * 0.25;
+                ctx.save(); ctx.translate(cx, cy); ctx.rotate(spin); ctx.scale(scale, scale);
+                const w1 = 96, h1 = (m.height / m.width) * 96; ctx.drawImage(m, -gap - w1 / 2, -h1 / 2, w1, h1);
+                const w2 = 92, h2 = (k.height / k.width) * 92; ctx.drawImage(k, gap - w2 / 2, -h2 / 2, w2, h2);
+                ctx.restore();
+                if (p > 0.85) { ctx.fillStyle = `rgba(255,255,255,${(p - 0.85) / 0.15 * 0.9})`; ctx.fillRect(-20, -20, W + 40, H + 40); }
+            }
             // 粒子
             for (const p of s.particles) {
                 ctx.globalAlpha = Math.max(0, Math.min(1, p.life * 2));
@@ -317,6 +379,8 @@ export default function MitoRun() {
             ctx.font = 'bold 10px "Noto Sans JP", sans-serif'; ctx.fillStyle = '#1A1A1A'; ctx.fillText(labels.join(' · '), 16, 74);
             ctx.font = 'bold 22px "Space Grotesk", sans-serif'; ctx.textAlign = 'right'; ctx.fillText(String(Math.round(s.score)), W - 16, 32);
             ctx.font = 'bold 10px "Space Grotesk", sans-serif'; ctx.fillText('SCORE', W - 16, 44);
+            const left = Math.max(0, Math.round(goalM() - s.scroll / 10));
+            ctx.font = 'bold 10px "Noto Sans JP", sans-serif'; ctx.fillStyle = left === 0 ? '#FF9855' : '#1A1A1A'; ctx.fillText(left === 0 ? 'コンドロスはすぐそこ' : `コンドロスまで ${left}m`, W - 16, 60);
         };
 
         const loop = (now: number) => {
@@ -331,7 +395,7 @@ export default function MitoRun() {
         g.current.last = performance.now();
         g.current.raf = requestAnimationFrame(loop);
         return () => cancelAnimationFrame(g.current.raf);
-    }, [gameOver, beep]);
+    }, [gameOver, clear, beep]);
 
     // 入力
     useEffect(() => {
@@ -341,7 +405,7 @@ export default function MitoRun() {
     }, [jump]);
 
     const share = async () => {
-        const text = `走れミトス（MITOFLOW）\nSCORE ${score}（BEST ${best}）\n${tip.text}`;
+        const text = `走れミトス（MITOFLOW）${phase === 'clear' ? '\nミトコンドリア、誕生！' : ''}\nSCORE ${score}（BEST ${best}）\n${tip.text}`;
         const url = typeof window !== 'undefined' ? `${window.location.origin}/play` : 'https://mitoflow40.com/play';
         try {
             if (navigator.share) await navigator.share({ title: 'MITOFLOW', text, url });
@@ -361,13 +425,30 @@ export default function MitoRun() {
                     <div className="bg-white rounded-2xl border-2 border-[#1A1A1A] p-6 max-w-[300px] shadow-xl">
                         <p className="text-[10px] tracking-[0.3em] font-bold text-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>MITOFLOW</p>
                         <h1 className="text-3xl font-bold text-[#1A1A1A] mt-1 mb-2">走れミトス</h1>
-                        <p className="text-xs text-[#4A4A4A] leading-relaxed mb-4">タップでジャンプ（2 回まで）。<br />🥚🐟🥦 で ATP を保て。🍩🥤 は速いけど、あとがつらい。<br />🥑🥜 は糖を断っていればケトン体モード。<br />🫐 は抗酸化のバリア。<br />☕ は切れると眠い。夜はもっと残る。<br />跳び続けるとミトコンドリアが増える。</p>
+                        <p className="text-xs text-[#4A4A4A] leading-relaxed mb-4">タップでジャンプ（2 回まで）。<br />🥚🐟🥦 で ATP を保て。🍩🥤 は速いけど、あとがつらい。<br />🥑🥜 は糖を断っていればケトン体モード。<br />🫐 は抗酸化のバリア。<br />☕ は切れると眠い。夜はもっと残る。<br />跳び続けるとミトコンドリアが増える。<br />遠くにいるコンドロスと出会えたら、ミトコンドリアになれる。</p>
                         <button className="w-full py-3 rounded-full bg-[#FF9855] border-2 border-[#1A1A1A] font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>START</button>
                         {best > 0 && <p className="text-[11px] text-[#4A4A4A] mt-3">BEST {best}</p>}
                     </div>
                 </div>
             )}
 
+            {phase === 'clear' && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-[#1A1A1A]/45 sm:rounded-3xl">
+                    <div className="bg-white rounded-2xl border-2 border-[#1A1A1A] p-6 w-full max-w-[300px] shadow-xl">
+                        <p className="text-[10px] tracking-[0.3em] font-bold text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>ミトス ＋ コンドロス</p>
+                        <h2 className="text-2xl font-bold text-[#1A1A1A] mt-1 leading-tight">ミトコンドリア、<br />誕生！</h2>
+                        <div className="text-4xl font-bold text-[#1A1A1A] mt-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{score}</div>
+                        <p className="text-[11px] text-[#4A4A4A] mb-3" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>+1000 BONUS · BEST {best}</p>
+                        <a href={tip.href} className="block text-left text-xs text-[#1A1A1A] leading-relaxed bg-[#E6F7F3] border border-[#41C9B4] rounded-xl p-3 mb-4 hover:bg-[#D2F0EA] transition-colors">
+                            <span className="block text-[9px] tracking-widest font-bold text-[#2FB59F] mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>HINT</span>
+                            {tip.text}
+                            <span className="block mt-1.5 text-[11px] font-bold underline underline-offset-2">{tip.label} →</span>
+                        </a>
+                        <button onPointerDown={(e) => { e.stopPropagation(); start(); }} className="w-full py-3 rounded-full bg-[#41C9B4] border-2 border-[#1A1A1A] font-bold text-[#1A1A1A] mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>もう一回</button>
+                        <button onClick={share} className="w-full py-2.5 rounded-full bg-white border-2 border-[#1A1A1A] font-bold text-[#1A1A1A] text-sm">{shared === 'done' ? 'シェアしました' : 'スコアをシェア'}</button>
+                    </div>
+                </div>
+            )}
             {phase === 'over' && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-[#1A1A1A]/45 sm:rounded-3xl">
                     <div className="bg-white rounded-2xl border-2 border-[#1A1A1A] p-6 w-full max-w-[300px] shadow-xl">
