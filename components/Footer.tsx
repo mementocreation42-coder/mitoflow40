@@ -41,6 +41,7 @@ export default function Footer() {
                     <ul className="flex flex-wrap justify-center gap-3 md:gap-6 text-xs opacity-70">
                         <li><Link href="/check" className="footer-link">無料セルフチェック</Link></li>
                         <li><Link href="/podcast" className="footer-link">ポッドキャスト</Link></li>
+                        <li><Link href="/play" className="footer-link">ゲーム「ミトコンドリア、はしる」</Link></li>
                         <li><Link href="/author" className="footer-link">著者・監修</Link></li>
                         <li><Link href="/references" className="footer-link">参照文献・出典</Link></li>
                         <li><Link href="/terms" className="footer-link">利用規約</Link></li>

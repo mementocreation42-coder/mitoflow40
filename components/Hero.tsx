@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import FadeOnScroll from './FadeOnScroll';
 import HeroMotion from './HeroMotion';
 
@@ -32,19 +33,30 @@ export default function Hero() {
                             <span className="block">AFTER 40</span>
                         </FadeOnScroll>
                     </h1>
-                    <FadeOnScroll delay={0.5}>
-                        <p
-                            className="text-lg md:text-xl text-[#333333] leading-relaxed font-bold relative z-20 mb-64 md:mb-0"
-                            style={{
-                                writingMode: 'horizontal-tb',
-                                maxWidth: '500px',
-                                marginLeft: 'auto'
-                            }}
-                        >
-                            40代からはじめる健康戦略。<br />
-                            ミトコンドリアから、人生をフローさせる。
-                        </p>
-                    </FadeOnScroll>
+                    <div className="mb-64 md:mb-0">
+                        <FadeOnScroll delay={0.5}>
+                            <p
+                                className="text-lg md:text-xl text-[#333333] leading-relaxed font-bold relative z-20 mb-4"
+                                style={{
+                                    writingMode: 'horizontal-tb',
+                                    maxWidth: '500px',
+                                    marginLeft: 'auto'
+                                }}
+                            >
+                                40代からはじめる健康戦略。<br />
+                                ミトコンドリアから、人生をフローさせる。
+                            </p>
+                        </FadeOnScroll>
+                        <FadeOnScroll delay={0.7}>
+                            <Link href="/play"
+                                className="relative z-20 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 border border-[#1A1A1A] text-xs font-bold text-[#1A1A1A] hover:bg-[#FF9855] transition-colors"
+                                style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                <span className="text-[10px] tracking-widest">PLAY</span>
+                                <span className="font-bold" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>ミトコンドリア、はしる</span>
+                                <span aria-hidden="true">▶</span>
+                            </Link>
+                        </FadeOnScroll>
+                    </div>
                 </div>
             </div>
 
