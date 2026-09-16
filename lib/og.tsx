@@ -16,7 +16,7 @@ function loadImage(file: string): string | null {
 }
 
 // コンセプト/生活習慣/老化ページ共通のOG画像テンプレート
-export function ogImage({ eyebrow, title, subtitle, bg, image = 'for-you-illustration-bl.png', imageSide = 'left' }: { eyebrow: string; title: string; subtitle?: string; bg: string; image?: string; imageSide?: 'left' | 'right' }) {
+export function ogImage({ eyebrow, title, subtitle, bg, image = 'for-you-illustration-bl.png', imageSide = 'left', titleSize = 80 }: { eyebrow: string; title: string; subtitle?: string; bg: string; image?: string; imageSide?: 'left' | 'right'; titleSize?: number }) {
     const imgSrc = image ? loadImage(image) : null;
     const onLeft = imgSrc != null && imageSide === 'left';
     const onRight = imgSrc != null && imageSide === 'right';
@@ -41,7 +41,7 @@ export function ogImage({ eyebrow, title, subtitle, bg, image = 'for-you-illustr
                     <div style={{ fontSize: 22, color: '#41C9B4', letterSpacing: 4 }}>{eyebrow}</div>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems, textAlign, maxWidth: imgSrc ? 760 : '100%', marginLeft: onLeft ? 'auto' : 0 }}>
-                    <div style={{ fontSize: 80, fontWeight: 800, color: '#1A1A1A', lineHeight: 1.15 }}>{title}</div>
+                    <div style={{ fontSize: titleSize, fontWeight: 800, color: '#1A1A1A', lineHeight: 1.15 }}>{title}</div>
                     {subtitle ? <div style={{ fontSize: 30, color: '#1A1A1A', opacity: 0.7, marginTop: 16 }}>{subtitle}</div> : null}
                 </div>
                 <div style={{ display: 'flex', justifyContent: onLeft ? 'flex-end' : 'flex-start', fontSize: 22, color: '#1A1A1A', opacity: 0.5 }}>40代からの健康戦略 ／ KNOWLEDGE LIBRARY</div>
