@@ -17,7 +17,7 @@ const PLAYER_X = 96;
 const GRAVITY = 2100;
 const JUMP_V = -760;
 
-type ItemKind = 'good' | 'sweet' | 'coffee' | 'fat' | 'iron' | 'berry' | 'radical';
+type ItemKind = 'good' | 'sweet' | 'coffee' | 'fat' | 'berry' | 'radical';
 type Item = { kind: ItemKind; emoji: string; x: number; y: number; r: number; dead?: boolean; vy?: number };
 type Particle = { x: number; y: number; vx: number; vy: number; life: number; color: string; text?: string };
 type Cell = { x: number; y: number; s: number; img: number; rot: number; vr: number; speed: number };
@@ -25,7 +25,6 @@ type Cell = { x: number; y: number; s: number; img: number; rot: number; vr: num
 const GOOD = ['🥚', '🐟', '🥦', '🍙', '🍅', '🥬'];
 const SWEET = ['🍩', '🥤', '🍰'];
 const FAT = ['🥑', '🥜', '🫒', '🥥'];
-const IRON = ['🥩', '🦪', '🫘'];
 const MAX_MITO = 6;
 const maxAtp = (mito: number) => 100 + (mito - 1) * 10;
 const TIPS = [
@@ -36,7 +35,6 @@ const TIPS = [
     'ミトコンドリアを増やす確実な方法は、動くこと。',
     '午後の眠気、年齢のせいじゃないかもしれない。',
     'ケトン体は、糖が来ない時間に脂肪から作る第二の燃料。',
-    '鉄が足りないと、貧血の前に ATP の工場が静かに減速する。',
     '夜のコーヒーは残る。半減期はおよそ 5 時間。',
     'ブルーベリーの色は抗酸化の色。さびから守る。',
 ];
@@ -72,7 +70,6 @@ export default function MitoRun() {
         hurt: 0,      // 無敵時間
         keto: 0,      // ケトン体モード（脂肪を燃やす）
         sugar: 0,     // 糖の負荷 0〜1（高いとケトン体に入れない）
-        iron: 80,     // 鉄の残量 0〜100（低いと ATP が作りにくい）
         shield: 0,    // 抗酸化バリア
         jumpCount: 0, // 運動量：ジャンプの回数でミトコンドリアが増える
         mito: 1,      // ミトコンドリアの数（ATP の上限）
@@ -119,7 +116,7 @@ export default function MitoRun() {
 
     const reset = () => {
         const s = g.current;
-        Object.assign(s, { t: 0, scroll: 0, speed: 260, atp: 100, score: 0, py: GROUND, vy: 0, jumps: 0, squash: 0, items: [], particles: [], spawnIn: 0.8, rush: 0, wave: 0, caffeine: 0, sleepy: 0, hurt: 0, keto: 0, sugar: 0, iron: 80, shield: 0, jumpCount: 0, mito: 1, night: false, shake: 0 });
+        Object.assign(s, { t: 0, scroll: 0, speed: 260, atp: 100, score: 0, py: GROUND, vy: 0, jumps: 0, squash: 0, items: [], particles: [], spawnIn: 0.8, rush: 0, wave: 0, caffeine: 0, sleepy: 0, hurt: 0, keto: 0, sugar: 0, shield: 0, jumpCount: 0, mito: 1, night: false, shake: 0 });
         s.cells = Array.from({ length: 7 }, (_, i) => ({ x: Math.random() * W, y: 40 + Math.random() * (GROUND - 80), s: 0.35 + Math.random() * 0.35, img: i % 4, rot: Math.random() * 6, vr: (Math.random() - 0.5) * 0.4, speed: 0.15 + Math.random() * 0.25 }));
     };
 
@@ -188,11 +185,10 @@ export default function MitoRun() {
             s.keto = Math.max(0, s.keto - dt); s.shield = Math.max(0, s.shield - dt);
             if (wasKeto && s.keto === 0) burst(PLAYER_X, s.py - 30, '#2FB59F', 6, 'ケトン体、おわり');
             s.sugar = Math.max(0, s.sugar - dt * 0.09);
-            s.iron = Math.max(0, s.iron - dt * 1.1);
             const wasNight = s.night;
             s.night = s.t > 40 && (s.t % 60) > 40;
             if (!wasNight && s.night) burst(W / 2, 90, '#5B86B8', 0, '夜。カフェインが残りやすい');
-            const lowIron = s.iron < 30;
+
             if (wasRush && s.rush === 0) { s.wave = 2.2; s.atp = Math.max(1, s.atp - 10); burst(PLAYER_X, s.py - 30, '#8B78C9', 8, '血糖の波…'); beep(400, 120, 0.4, 'sine', 0.06); }
             // 速度：時間で少しずつ上がる ＋ 状態の補正
             const base = 260 + Math.min(220, s.t * 6);
@@ -200,7 +196,6 @@ export default function MitoRun() {
             if (s.rush > 0) mult *= 1.55; else if (s.wave > 0) mult *= 0.6;
             if (s.caffeine > 0) mult *= 1.3; else if (s.sleepy > 0) mult *= 0.85;
             if (s.keto > 0) mult *= 1.08;
-            if (lowIron) mult *= 0.9;
             s.speed = base * mult;
             s.scroll += s.speed * dt;
             s.score += (s.speed * dt) / 12 * (s.rush > 0 ? 2 : 1) * (s.keto > 0 ? 1.5 : 1);
@@ -221,9 +216,8 @@ export default function MitoRun() {
                 if (r < 0.32) s.items.push({ kind: 'good', emoji: pick(GOOD), x: W + 40, y, r: 20 });
                 else if (r < 0.48) s.items.push({ kind: 'sweet', emoji: pick(SWEET), x: W + 40, y, r: 20 });
                 else if (r < 0.56) s.items.push({ kind: 'coffee', emoji: '☕', x: W + 40, y, r: 20 });
-                else if (r < 0.68) s.items.push({ kind: 'fat', emoji: pick(FAT), x: W + 40, y, r: 20 });
-                else if (r < 0.76) s.items.push({ kind: 'iron', emoji: pick(IRON), x: W + 40, y, r: 20 });
-                else if (r < 0.82) s.items.push({ kind: 'berry', emoji: '🫐', x: W + 40, y, r: 20 });
+                else if (r < 0.72) s.items.push({ kind: 'fat', emoji: pick(FAT), x: W + 40, y, r: 20 });
+                else if (r < 0.80) s.items.push({ kind: 'berry', emoji: '🫐', x: W + 40, y, r: 20 });
                 else s.items.push({ kind: 'radical', emoji: '', x: W + 40, y: GROUND - 20 - (Math.random() < 0.3 ? 110 : 0), r: 18, vy: 0 });
                 s.spawnIn = 0.55 + Math.random() * 0.7 - Math.min(0.25, s.t * 0.004);
             }
@@ -237,12 +231,10 @@ export default function MitoRun() {
                 if (dx * dx + dy * dy < (it.r + 26) * (it.r + 26)) {
                     it.dead = true;
                     const cap = maxAtp(s.mito);
-                    const gainK = lowIron ? 0.5 : 1; // 鉄が足りないと ATP を作りにくい
-                    if (it.kind === 'good') { s.atp = Math.min(cap, s.atp + 16 * gainK); s.score += 100; burst(it.x, it.y, '#41C9B4', 12, lowIron ? '+ATP（鉄不足で半分）' : '+ATP'); beep(660, 990, 0.14, 'sine'); }
+                    if (it.kind === 'good') { s.atp = Math.min(cap, s.atp + 16); s.score += 100; burst(it.x, it.y, '#41C9B4', 12, '+ATP'); beep(660, 990, 0.14, 'sine'); }
                     else if (it.kind === 'sweet') { s.atp = Math.min(cap, s.atp + 6); s.score += 60; s.rush = 1.6; s.sugar = Math.min(1, s.sugar + 0.6); if (s.keto > 0) { s.keto = 0; burst(PLAYER_X, s.py - 30, '#2FB59F', 6, '糖が入ってケトン体が切れた'); } burst(it.x, it.y, '#FF9855', 12, 'ダッシュ!'); beep(500, 1200, 0.2, 'square', 0.05); }
                     else if (it.kind === 'coffee') { s.score += 40; s.caffeine = 3; s.sleepy = 0; const atNight = s.night; burst(it.x, it.y, '#A0764B', 10, atNight ? '夜のカフェイン…' : 'カフェイン'); beep(700, 1000, 0.15, 'triangle'); setTimeout(() => { const q = g.current; if (q.running && q.caffeine <= 0.05) { q.sleepy = atNight ? 3.6 : 1.8; burst(PLAYER_X, q.py - 30, '#5B86B8', 6, atNight ? '眠い……（夜は残る）' : '眠い…'); } }, 3000); }
-                    else if (it.kind === 'fat') { if (s.sugar < 0.2) { s.keto = Math.max(s.keto, 6); s.score += 80; burst(it.x, it.y, '#2FB59F', 14, 'ケトン体モード!'); beep(440, 880, 0.3, 'sine', 0.07); } else { s.atp = Math.min(cap, s.atp + 8 * gainK); s.score += 50; burst(it.x, it.y, '#7DAE4A', 8, '脂質だけ（糖が多い）'); beep(600, 800, 0.12, 'sine'); } }
-                    else if (it.kind === 'iron') { s.iron = Math.min(100, s.iron + 45); s.score += 70; burst(it.x, it.y, '#C0392B', 12, '鉄を補給'); beep(520, 780, 0.15, 'triangle'); }
+                    else if (it.kind === 'fat') { if (s.sugar < 0.2) { s.keto = Math.max(s.keto, 6); s.score += 80; burst(it.x, it.y, '#2FB59F', 14, 'ケトン体モード!'); beep(440, 880, 0.3, 'sine', 0.07); } else { s.atp = Math.min(cap, s.atp + 8); s.score += 50; burst(it.x, it.y, '#7DAE4A', 8, '脂質だけ（糖が多い）'); beep(600, 800, 0.12, 'sine'); } }
                     else if (it.kind === 'berry') { s.shield = 5; s.score += 60; burst(it.x, it.y, '#5B86B8', 12, '抗酸化バリア'); beep(700, 1100, 0.18, 'sine'); }
                     else if (s.shield > 0) { burst(it.x, it.y, '#5B86B8', 14, '抗酸化でガード!'); beep(900, 1300, 0.15, 'sine'); }
                     else { if (s.hurt <= 0) { s.atp -= 28; s.hurt = 1; s.shake = 0.35; burst(it.x, it.y, '#E07A6A', 14, 'さびる!'); beep(180, 60, 0.3, 'sawtooth', 0.08); if (s.atp <= 0) { s.atp = 0; gameOver(); return; } } else it.dead = false; }
@@ -303,7 +295,6 @@ export default function MitoRun() {
             ctx.rotate(wob + Math.max(-0.35, Math.min(0.35, s.vy / 2400)));
             ctx.scale(1 + sq * 0.18, 1 - sq * 0.22);
             if (s.hurt > 0 && Math.floor(s.t * 20) % 2 === 0) ctx.globalAlpha = 0.45;
-            else if (s.iron < 30) ctx.globalAlpha = 0.7; // 鉄不足は顔色が悪い
             if (m?.width) { const w = 96, h = (m.height / m.width) * 96; ctx.drawImage(m, -w / 2, -h, w, h); }
             else { ctx.fillStyle = '#E07A6A'; ctx.beginPath(); ctx.ellipse(0, -30, 44, 30, 0, 0, Math.PI * 2); ctx.fill(); }
             ctx.restore();
@@ -320,14 +311,10 @@ export default function MitoRun() {
             ctx.strokeStyle = '#1A1A1A'; ctx.lineWidth = 1.5; ctx.strokeRect(16, 16, 200, 14);
             ctx.fillStyle = s.atp > 35 ? (s.keto > 0 ? '#2FB59F' : '#41C9B4') : '#E07A6A'; ctx.fillRect(18, 18, Math.max(0, 196 * (s.atp / maxAtp(s.mito))), 10);
             ctx.fillStyle = '#1A1A1A'; ctx.font = 'bold 11px "Space Grotesk", sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.fillText(`ATP ${Math.round(s.atp)}/${maxAtp(s.mito)}`, 16, 44);
-            // 鉄
-            ctx.fillStyle = 'rgba(255,255,255,0.85)'; ctx.fillRect(16, 50, 90, 6); ctx.strokeStyle = 'rgba(26,26,26,0.6)'; ctx.lineWidth = 1; ctx.strokeRect(16, 50, 90, 6);
-            ctx.fillStyle = s.iron < 30 ? '#E07A6A' : '#C0392B'; ctx.fillRect(17, 51, Math.max(0, 88 * (s.iron / 100)), 4);
-            ctx.fillStyle = s.iron < 30 ? '#E07A6A' : '#1A1A1A'; ctx.font = 'bold 9px "Space Grotesk", sans-serif'; ctx.fillText(s.iron < 30 ? '鉄 不足' : '鉄', 110, 56);
             // ミトコンドリアの数と状態
-            ctx.font = 'bold 10px "Space Grotesk", sans-serif'; ctx.fillStyle = '#1A1A1A'; ctx.fillText(`MITO ×${s.mito}`, 16, 70);
+            ctx.font = 'bold 10px "Space Grotesk", sans-serif'; ctx.fillStyle = '#1A1A1A'; ctx.fillText(`MITO ×${s.mito}`, 16, 60);
             const labels = [s.keto > 0 && 'ケトン体モード', s.shield > 0 && '抗酸化バリア', s.rush > 0 && 'ダッシュ', s.wave > 0 && '血糖の波', s.caffeine > 0 && 'カフェイン', s.sleepy > 0 && '眠い', s.night && '夜'].filter(Boolean) as string[];
-            ctx.font = 'bold 10px "Noto Sans JP", sans-serif'; ctx.fillStyle = '#1A1A1A'; ctx.fillText(labels.join(' · '), 16, 84);
+            ctx.font = 'bold 10px "Noto Sans JP", sans-serif'; ctx.fillStyle = '#1A1A1A'; ctx.fillText(labels.join(' · '), 16, 74);
             ctx.font = 'bold 22px "Space Grotesk", sans-serif'; ctx.textAlign = 'right'; ctx.fillText(String(Math.round(s.score)), W - 16, 32);
             ctx.font = 'bold 10px "Space Grotesk", sans-serif'; ctx.fillText('SCORE', W - 16, 44);
         };
@@ -374,7 +361,7 @@ export default function MitoRun() {
                     <div className="bg-white rounded-2xl border-2 border-[#1A1A1A] p-6 max-w-[300px] shadow-xl">
                         <p className="text-[10px] tracking-[0.3em] font-bold text-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>MITOFLOW</p>
                         <h1 className="text-3xl font-bold text-[#1A1A1A] mt-1 mb-2">走れミトス</h1>
-                        <p className="text-xs text-[#4A4A4A] leading-relaxed mb-4">タップでジャンプ（2 回まで）。<br />🥚🐟🥦 で ATP を保て。🍩🥤 は速いけど、あとがつらい。<br />🥑🥜 は糖を断っていればケトン体モード。<br />🥩🦪 で鉄を補給。🫐 は抗酸化のバリア。<br />☕ は切れると眠い。夜はもっと残る。<br />跳び続けるとミトコンドリアが増える。</p>
+                        <p className="text-xs text-[#4A4A4A] leading-relaxed mb-4">タップでジャンプ（2 回まで）。<br />🥚🐟🥦 で ATP を保て。🍩🥤 は速いけど、あとがつらい。<br />🥑🥜 は糖を断っていればケトン体モード。<br />🫐 は抗酸化のバリア。<br />☕ は切れると眠い。夜はもっと残る。<br />跳び続けるとミトコンドリアが増える。</p>
                         <button className="w-full py-3 rounded-full bg-[#FF9855] border-2 border-[#1A1A1A] font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>START</button>
                         {best > 0 && <p className="text-[11px] text-[#4A4A4A] mt-3">BEST {best}</p>}
                     </div>
