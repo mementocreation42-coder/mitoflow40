@@ -64,7 +64,7 @@ export default function FloatingNav() {
                     {/* Author avatar */}
                     <Link
                         href="/#profile"
-                        className="flex items-center gap-1.5 px-1.5 sm:px-2 py-1 rounded-full hover:bg-black/5 transition-colors"
+                        className="hidden sm:flex items-center gap-1.5 px-1.5 sm:px-2 py-1 rounded-full hover:bg-black/5 transition-colors"
                     >
                         <div className="w-6 h-6 rounded-full overflow-hidden ring-2 ring-[#41C9B4]/60">
                             <Image
@@ -78,7 +78,7 @@ export default function FloatingNav() {
                         <span className="text-xs font-semibold text-[#1A1A1A]/80 hidden sm:block">小林大介</span>
                     </Link>
 
-                    <div className="w-px h-4 bg-black/10 mx-0.5" />
+                    <div className="hidden sm:block w-px h-4 bg-black/10 mx-0.5" />
 
                     {/* Nav links */}
                     {navItems.map((item) => (
@@ -93,9 +93,9 @@ export default function FloatingNav() {
 
                     {/* Play */}
                     <GameLauncher
-                        className="px-2 sm:px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-bold text-[#1A1A1A] whitespace-nowrap transition-all"
+                        className="px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-bold text-[#1A1A1A] whitespace-nowrap transition-all"
                         style={{ background: '#FF9855', boxShadow: '0 2px 8px rgba(255,152,85,0.45)' }}>
-                        ▶<span className="hidden sm:inline"> Play</span>
+                        ▶ Play
                     </GameLauncher>
 
                     <div className="w-px h-4 bg-black/10 mx-0.5" />
