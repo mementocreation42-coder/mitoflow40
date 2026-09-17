@@ -17,12 +17,15 @@ const PLAYER_Y = H * 0.85;   // ミトスの中心。画面の下のほうに置
 const GOAL_M = 800;
 const goalM = () => { try { const q = new URLSearchParams(window.location.search).get('goal'); const n = q ? Number(q) : NaN; return Number.isFinite(n) && n > 0 ? n : GOAL_M; } catch { return GOAL_M; } };
 
-type ItemKind = 'food' | 'bubble' | 'sweet' | 'radical';
+type ItemKind = 'food' | 'bubble' | 'sweet' | 'radical' | 'protein' | 'shield' | 'spicy' | 'ice' | 'sun' | 'sleep' | 'buddy' | 'junk';
 type Item = { kind: ItemKind; emoji: string; x: number; y: number; r: number; dead?: boolean; drift: number };
 type Particle = { x: number; y: number; vx: number; vy: number; life: number; color: string; text?: string };
 type Cell = { x: number; y: number; s: number; img: number; rot: number; vr: number; speed: number };
 
-const FOOD = ['🥚', '🐟', '🥦', '🍙', '🍅', '🍌', '🫐', '🥕', '🍠', '🥬', '🍄', '🫘', '🧀', '🍤', '🥜', '🍎', '🍇', '🌽', '🥑', '🍊', '🥒', '🍗', '🦑', '🥛'];
+const FOOD = ['🥚', '🐟', '🥦', '🍙', '🍅', '🍌', '🥕', '🍠', '🥬', '🍄', '🫘', '🧀', '🍤', '🥜', '🍎', '🌽', '🥑', '🍊', '🥒', '🦑', '🥛'];
+const PROTEIN = ['🥩', '🍖', '🍗', '🍳'];   // たんぱく質 → おおきくなる
+const SHIELD = ['🫐', '🍇', '🍓'];         // 色のこい くだもの → バリア
+const JUNK = ['🪨', '🧦', '🧱'];           // たべられない → ペッ
 const SWEET = ['🍩', '🍭', '🍰', '🍫', '🧁', '🥤', '🍬'];
 const TIPS: { text: string; href: string; label: string }[] = [
     { text: 'たまごや さかなは、ミトスの ごはん。からだの「でんち」をつくる。', href: '/foods', label: 'たべものをみる' },
@@ -30,6 +33,10 @@ const TIPS: { text: string; href: string; label: string }[] = [
     { text: 'トゲトゲは「さびる」のもと。いろのこい やさいが まもってくれる。', href: '/oxidative-stress', label: 'さびるって なに？' },
     { text: 'ミトスは、からだの なかで うごく「でんきの こうじょう」。', href: '/mitochondria', label: 'ミトコンドリアとは' },
     { text: 'はしったり あそんだりすると、ミトスが ふえる。', href: '/exercise', label: 'うんどうと ミトコンドリア' },
+    { text: 'おにくや たまごの たんぱくしつは、からだを つくる ざいりょう。', href: '/nutrients/protein', label: 'たんぱくしつって なに？' },
+    { text: 'おひさまの ひかりで、からだの なかに ビタミンDが できる。', href: '/sunlight', label: 'おひさまと からだ' },
+    { text: 'よく ねむると、ミトスも げんきに なる。', href: '/sleep', label: 'ねむりの はなし' },
+    { text: 'たべものじゃ ないものは、ペッ。からだに いれない。', href: '/reduce-toxins', label: 'いれない くふう' },
 ];
 const KONDROS_TIP = { text: 'ミトスと コンドロスが であって、ミトコンドリア。からだの でんきを つくる こうじょうに なった。', href: '/mitochondria', label: 'ミトコンドリアとは' };
 
@@ -44,6 +51,7 @@ export default function MitoClimb() {
     const g = useRef({
         running: false, t: 0, climb: 0, speed: 90, atp: 100, eaten: 0,
         px: W / 2, targetX: W / 2, dizzy: 0, hurt: 0, shake: 0,
+        big: 0, shield: 0, spicy: 0, ice: 0, sun: 0, sleepy: 0, buddy: 0, // 状態のタイマー（秒）
         items: [] as Item[], particles: [] as Particle[], cells: [] as Cell[], spawnIn: 0.6,
         kondros: null as { x: number; y: number } | null, merge: 0, met: false,
         last: 0, raf: 0,
@@ -73,7 +81,7 @@ export default function MitoClimb() {
 
     const reset = () => {
         const s = g.current;
-        Object.assign(s, { t: 0, climb: 0, speed: 90, atp: 100, eaten: 0, px: W / 2, targetX: W / 2, dizzy: 0, hurt: 0, shake: 0, items: [], particles: [], spawnIn: 0.6, kondros: null, merge: 0, met: false });
+        Object.assign(s, { t: 0, climb: 0, speed: 90, atp: 100, eaten: 0, px: W / 2, targetX: W / 2, dizzy: 0, hurt: 0, shake: 0, big: 0, shield: 0, spicy: 0, ice: 0, sun: 0, sleepy: 0, buddy: 0, items: [], particles: [], spawnIn: 0.6, kondros: null, merge: 0, met: false });
         s.cells = Array.from({ length: 6 }, (_, i) => ({ x: Math.random() * W, y: Math.random() * H, s: 0.3 + Math.random() * 0.35, img: i % 4, rot: Math.random() * 6, vr: (Math.random() - 0.5) * 0.3, speed: 0.2 + Math.random() * 0.3 }));
     };
 
@@ -124,13 +132,15 @@ export default function MitoClimb() {
                 return;
             }
             s.dizzy = Math.max(0, s.dizzy - dt); s.hurt = Math.max(0, s.hurt - dt); s.shake = Math.max(0, s.shake - dt);
-            s.speed = 105 + Math.min(75, s.t * 1.6);
+            for (const key of ['big', 'shield', 'spicy', 'ice', 'sun', 'sleepy', 'buddy'] as const) s[key] = Math.max(0, s[key] - dt);
+            s.speed = (105 + Math.min(75, s.t * 1.6)) * (s.spicy > 0 ? 1.8 : 1) * (s.ice > 0 ? 0.45 : 1);
             s.climb += s.speed * dt;
-            s.atp -= dt * 3.4;
+            s.atp -= dt * 3.4 * (s.ice > 0 ? 0.5 : 1);
+            if (s.sun > 0) s.atp = Math.min(100, s.atp + dt * 4); // ぽかぽか：じわじわ回復
             if (s.atp <= 0) { s.atp = 0; finish('over'); return; }
             // 左右の移動（ぐるぐる中は逆向き）
             const tx = s.dizzy > 0 ? W - s.targetX : s.targetX;
-            s.px += (tx - s.px) * Math.min(1, dt * 6);
+            s.px += (tx - s.px) * Math.min(1, dt * (s.sleepy > 0 ? 1.5 : 6)); // ねむいと動きがにぶい
             // コンドロス
             const dist = s.climb / 10;
             if (!s.kondros && dist >= goalM()) { s.kondros = { x: W / 2, y: -80 }; s.items = s.items.filter((it) => it.kind !== 'radical'); burst(W / 2, 100, '#FF9855', 12, 'コンドロスが みえた!'); beep(600, 900, 0.3); }
@@ -148,7 +158,13 @@ export default function MitoClimb() {
                 if (r < 0.52) s.items.push({ kind: 'food', emoji: pick(FOOD), x, y: -30, r: 22, drift: (Math.random() - 0.5) * 40 });
                 else if (r < 0.62) s.items.push({ kind: 'bubble', emoji: '💧', x, y: -30, r: 18, drift: (Math.random() - 0.5) * 50 });
                 else if (r < 0.76) s.items.push({ kind: 'sweet', emoji: pick(SWEET), x, y: -30, r: 22, drift: (Math.random() - 0.5) * 40 });
-                else s.items.push({ kind: 'radical', emoji: '', x, y: -30, r: 18, drift: (Math.random() - 0.5) * 80 });
+                else if (r < 0.96) {
+                    const q = (r - 0.76) / 0.20; // 20% を特別なものに分ける
+                    const spec: [ItemKind, string][] = [['radical', ''], ['radical', ''], ['radical', ''], ['radical', ''], ['radical', ''], ['radical', ''], ['radical', ''], ['radical', ''],
+                        ['protein', pick(PROTEIN)], ['protein', pick(PROTEIN)], ['shield', pick(SHIELD)], ['shield', pick(SHIELD)], ['spicy', '🌶️'], ['ice', '🧊'], ['sun', '☀️'], ['sleep', '🌙'], ['buddy', '👟'], ['junk', pick(JUNK)]];
+                    const [kind, emoji] = spec[Math.min(spec.length - 1, Math.floor(q * spec.length))];
+                    s.items.push({ kind, emoji, x, y: -30, r: kind === 'radical' ? 18 : 22, drift: (Math.random() - 0.5) * (kind === 'radical' ? 80 : 40) });
+                } else s.items.push({ kind: 'radical', emoji: '', x, y: -30, r: 18, drift: (Math.random() - 0.5) * 80 });
                 s.spawnIn = 0.55 + Math.random() * 0.5 - Math.min(0.15, s.t * 0.003);
             }
             // アイテム
@@ -156,11 +172,21 @@ export default function MitoClimb() {
                 it.y += s.speed * dt; it.x += it.drift * dt + Math.sin(s.t * 2 + it.y * 0.02) * 0.4;
                 if (it.dead) continue;
                 const dx = it.x - s.px, dy = it.y - PLAYER_Y;
-                if (dx * dx + dy * dy < (it.r + 30) * (it.r + 30)) {
+                const reach = 30 + (s.big > 0 ? 12 : 0) + (s.buddy > 0 ? 34 : 0); // おおきい・なかまがいると届く範囲が広い
+                if (dx * dx + dy * dy < (it.r + reach) * (it.r + reach)) {
                     it.dead = true;
                     if (it.kind === 'food') { s.atp = Math.min(100, s.atp + 11); s.eaten += 1; burst(it.x, it.y, '#41C9B4', 12, 'おいしい'); beep(660, 990, 0.14); }
                     else if (it.kind === 'bubble') { s.atp = Math.min(100, s.atp + 5); s.eaten += 1; burst(it.x, it.y, '#5B86B8', 8, 'ポン'); beep(900, 1300, 0.1); }
                     else if (it.kind === 'sweet') { s.eaten += 1; s.dizzy = 2.0; burst(it.x, it.y, '#FF9855', 10, 'ぐるぐる〜'); beep(500, 300, 0.4, 'sine', 0.05); }
+                    else if (it.kind === 'protein') { s.big = 6; s.eaten += 1; s.atp = Math.min(100, s.atp + 8); burst(it.x, it.y, '#E07A6A', 14, 'おおきく なった!'); beep(300, 600, 0.3, 'triangle'); }
+                    else if (it.kind === 'shield') { s.shield = 5; s.eaten += 1; s.atp = Math.min(100, s.atp + 6); burst(it.x, it.y, '#5B86B8', 12, 'バリア!'); beep(700, 1100, 0.2); }
+                    else if (it.kind === 'spicy') { s.spicy = 1.5; s.eaten += 1; s.shake = 0.4; burst(it.x, it.y, '#E03A2A', 16, 'からい!!'); beep(800, 1600, 0.25, 'square', 0.05); }
+                    else if (it.kind === 'ice') { s.ice = 2.5; s.eaten += 1; burst(it.x, it.y, '#7FD3F0', 12, 'つめたい〜'); beep(1200, 600, 0.35); }
+                    else if (it.kind === 'sun') { s.sun = 6; s.eaten += 1; burst(it.x, it.y, '#F5C242', 14, 'ぽかぽか'); beep(500, 800, 0.3); }
+                    else if (it.kind === 'sleep') { s.sleepy = 2.5; burst(it.x, it.y, '#5B86B8', 8, 'ねむい…'); beep(400, 150, 0.5, 'sine', 0.05); }
+                    else if (it.kind === 'buddy') { s.buddy = 8; s.eaten += 1; burst(it.x, it.y, '#41C9B4', 18, 'ミトスが ふえた!'); beep(520, 1040, 0.35); }
+                    else if (it.kind === 'junk') { s.eaten = Math.max(0, s.eaten - 1); burst(it.x, it.y, '#8B8B8B', 8, 'ペッ たべられない'); beep(250, 120, 0.2, 'square', 0.04); }
+                    else if (s.shield > 0) { burst(it.x, it.y, '#5B86B8', 14, 'はじいた!'); beep(900, 1300, 0.15); }
                     else { if (s.hurt <= 0) { s.atp = Math.max(0, s.atp - 18); s.hurt = 1; s.shake = 0.3; burst(it.x, it.y, '#E07A6A', 12, 'いたっ'); beep(200, 90, 0.25, 'sawtooth', 0.06); if (s.atp <= 0) { finish('over'); return; } } else it.dead = false; }
                 }
             }
@@ -183,6 +209,10 @@ export default function MitoClimb() {
             for (let i = 0; i < 5; i++) { const x = 50 + i * 72; const off = (s.climb * (0.3 + i * 0.08)) % 140; ctx.beginPath(); for (let y = -140 + off; y < H + 140; y += 140) { ctx.moveTo(x, y); ctx.lineTo(x, y + 60); } ctx.stroke(); }
             for (const c of s.cells) { const im = imgs.current.cells[c.img]; if (!im?.width) continue; ctx.save(); ctx.globalAlpha = 0.4; ctx.translate(c.x, c.y); ctx.rotate(c.rot); ctx.drawImage(im, -im.width * c.s / 2, -im.height * c.s / 2, im.width * c.s, im.height * c.s); ctx.restore(); }
             if (s.dizzy > 0) { ctx.fillStyle = 'rgba(255,152,85,0.12)'; ctx.fillRect(-20, -20, W + 40, H + 40); }
+            if (s.spicy > 0) { ctx.fillStyle = 'rgba(224,58,42,0.14)'; ctx.fillRect(-20, -20, W + 40, H + 40); }
+            if (s.ice > 0) { ctx.fillStyle = 'rgba(127,211,240,0.22)'; ctx.fillRect(-20, -20, W + 40, H + 40); }
+            if (s.sun > 0) { const gl = ctx.createRadialGradient(W - 60, 60, 10, W - 60, 60, 260); gl.addColorStop(0, 'rgba(245,194,66,0.45)'); gl.addColorStop(1, 'rgba(245,194,66,0)'); ctx.fillStyle = gl; ctx.fillRect(-20, -20, W + 40, H + 40); }
+            if (s.sleepy > 0) { ctx.fillStyle = 'rgba(20,24,70,0.22)'; ctx.fillRect(-20, -20, W + 40, H + 40); }
             // アイテム
             for (const it of s.items) {
                 if (it.kind === 'radical') {
@@ -209,12 +239,18 @@ export default function MitoClimb() {
                 const breath = Math.sin(s.t * 5) * 0.06 + Math.sin(s.t * 1.7) * 0.03;
                 const bob = Math.sin(s.t * 2.2) * 6;
                 const lean = Math.max(-0.3, Math.min(0.3, (s.targetX - s.px) / 400)) + (s.dizzy > 0 ? Math.sin(s.t * 14) * 0.3 : 0);
+                if (s.shield > 0) { ctx.strokeStyle = `rgba(91,134,184,${0.4 + 0.4 * Math.abs(Math.sin(s.t * 6))})`; ctx.lineWidth = 3; ctx.setLineDash([8, 6]); ctx.beginPath(); ctx.arc(s.px, PLAYER_Y, 68, s.t * 2, s.t * 2 + Math.PI * 2); ctx.stroke(); ctx.setLineDash([]); }
+                const grow = s.big > 0 ? 1 + 0.35 * Math.min(1, s.big * 3) * Math.min(1, (6 - s.big) * 3 + 0.001) : 1; // ふくらんで、しぼむ
                 ctx.save(); ctx.translate(s.px, PLAYER_Y + bob); ctx.rotate(lean);
-                ctx.scale(1 + breath, 1 - breath);
+                ctx.scale((1 + breath) * grow, (1 - breath) * grow);
                 if (s.hurt > 0 && Math.floor(s.t * 20) % 2 === 0) ctx.globalAlpha = 0.45;
                 if (m?.width) { const w = 100, h = (m.height / m.width) * 100; ctx.drawImage(m, -w / 2, -h / 2, w, h); }
                 ctx.restore();
                 if (s.dizzy > 0) { ctx.font = '22px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; ctx.textAlign = 'center'; ctx.fillText('💫', s.px + Math.cos(s.t * 8) * 40, PLAYER_Y - 60 + Math.sin(s.t * 8) * 12); }
+                if (s.sleepy > 0) { ctx.font = '20px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; ctx.textAlign = 'center'; ctx.fillText('💤', s.px + 44, PLAYER_Y - 50 - (s.t * 20 % 16)); }
+                if (s.buddy > 0 && m?.width) { // なかまのミトスが まわりを ぐるぐる
+                    for (let i = 0; i < 2; i++) { const a = s.t * 2.2 + i * Math.PI; const bx = s.px + Math.cos(a) * 62, by = PLAYER_Y + Math.sin(a) * 26 - 10; const w = 44, h = (m.height / m.width) * 44; ctx.save(); ctx.translate(bx, by); ctx.rotate(Math.sin(s.t * 4 + i) * 0.2); ctx.drawImage(m, -w / 2, -h / 2, w, h); ctx.restore(); }
+                }
             } else if (m?.width && k?.width) {
                 const p = 1 - s.merge / 2.2; const cx = W / 2, cy = H * 0.45; const gap = (1 - Math.min(1, p * 1.4)) * 110; const spin = p * Math.PI * 4; const scale = 1 + Math.sin(p * Math.PI) * 0.25;
                 ctx.save(); ctx.translate(cx, cy); ctx.rotate(spin); ctx.scale(scale, scale);
@@ -234,6 +270,8 @@ export default function MitoClimb() {
             ctx.fillStyle = 'rgba(255,255,255,0.85)'; ctx.fillRect(16, 16, 200, 14); ctx.strokeStyle = '#1A1A1A'; ctx.lineWidth = 1.5; ctx.strokeRect(16, 16, 200, 14);
             ctx.fillStyle = s.atp > 35 ? '#41C9B4' : '#E07A6A'; ctx.fillRect(18, 18, Math.max(0, 196 * (s.atp / 100)), 10);
             ctx.fillStyle = '#1A1A1A'; ctx.font = 'bold 11px "Space Grotesk", sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.fillText(`ATP ${Math.round(s.atp)}`, 16, 44);
+            const labels = [s.big > 0 && 'おおきい', s.shield > 0 && 'バリア', s.buddy > 0 && 'なかま', s.spicy > 0 && 'からい', s.ice > 0 && 'つめたい', s.sun > 0 && 'ぽかぽか', s.sleepy > 0 && 'ねむい', s.dizzy > 0 && 'ぐるぐる'].filter(Boolean) as string[];
+            ctx.font = 'bold 10px "Noto Sans JP", sans-serif'; ctx.fillText(labels.join(' · '), 16, 58);
             ctx.font = 'bold 22px "Space Grotesk", sans-serif'; ctx.textAlign = 'right'; ctx.fillText(String(s.eaten), W - 16, 32);
             ctx.font = 'bold 10px "Noto Sans JP", sans-serif'; ctx.fillText('たべた', W - 16, 44);
             const left = Math.max(0, Math.round(goalM() - s.climb / 10));
@@ -290,7 +328,7 @@ export default function MitoClimb() {
                     <div className="bg-white rounded-2xl border-2 border-[#1A1A1A] p-6 max-w-[300px] shadow-xl">
                         <p className="text-[10px] tracking-[0.3em] font-bold text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>MITOFLOW · ゆっくり</p>
                         <h1 className="text-3xl font-bold text-[#1A1A1A] mt-1 mb-2">歩けミトス</h1>
-                        <p className="text-xs text-[#4A4A4A] leading-relaxed mb-4">ゆびで さわった ほうへ、ミトスが うごく。<br />🥚🐟🥦 の ごはんを あつめよう。<br />🍩🍭 は ぐるぐる。トゲトゲは いたっ。<br />ずっと あるくと、コンドロスに あえる。</p>
+                        <p className="text-xs text-[#4A4A4A] leading-relaxed mb-4">ゆびで さわった ほうへ、ミトスが うごく。<br />🥚🐟🥦 の ごはんを あつめよう。<br />🥩 で おおきく、🫐 で バリア、👟 で なかまが ふえる。<br />🌶️ は からい、🧊 は つめたい、☀️ は ぽかぽか。<br />🍩 は ぐるぐる、🌙 は ねむい。トゲトゲは いたっ。<br />ずっと あるくと、コンドロスに あえる。</p>
                         <button className="w-full py-3 rounded-full bg-[#41C9B4] border-2 border-[#1A1A1A] font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>START</button>
                         {best > 0 && <p className="text-[11px] text-[#4A4A4A] mt-3">BEST {best}</p>}
                         <a href="/play" className="block text-[11px] text-[#4A4A4A] underline mt-3" onPointerDown={(e) => e.stopPropagation()}>はしる版（走れミトス）はこちら →</a>
