@@ -4,7 +4,7 @@ import { PhoneFrame } from '@/components/game/GameLauncher';
 
 export const metadata = {
     title: '歩けミトス（ゆっくり版） ｜ MITOFLOW | Mitoflow40',
-    description: '血管の中をミトスがゆっくり歩いていく、子どもと遊べるゲーム。指で動かして、ごはんを集めよう。',
+    description: 'からだの中をミトスがゆっくり歩いていく、子どもと遊べるゲーム。血管・胃と腸・肝臓・脳・細胞の中の 5 コース。指で動かして、ごはんを集めよう。',
     alternates: { canonical: 'https://mitoflow40.com/play/slow' },
     openGraph: {
         siteName: 'Mitoflow40',
