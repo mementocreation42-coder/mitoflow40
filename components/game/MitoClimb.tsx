@@ -13,7 +13,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 const W = 390;
 const H = 640;
-const PLAYER_Y = H * 0.72;
+const PLAYER_Y = H * 0.85;   // ミトスの中心。画面の下のほうに置いて、上から来るものを見やすく
 const GOAL_M = 600;
 const goalM = () => { try { const q = new URLSearchParams(window.location.search).get('goal'); const n = q ? Number(q) : NaN; return Number.isFinite(n) && n > 0 ? n : GOAL_M; } catch { return GOAL_M; } };
 
@@ -137,8 +137,8 @@ export default function MitoClimb() {
             if (s.kondros) {
                 s.kondros.y += s.speed * dt * 0.6;
                 s.kondros.x += (s.px - s.kondros.x) * Math.min(1, dt * 0.8);
-                const dx = s.kondros.x - s.px, dy = s.kondros.y - (PLAYER_Y - 30);
-                if (!s.met && dx * dx + dy * dy < 70 * 70) { s.met = true; s.merge = 2.2; burst(s.px, PLAYER_Y - 60, '#41C9B4', 24, 'ミトス ＋ コンドロス'); beep(440, 880, 0.4, 'triangle'); return; }
+                const dx = s.kondros.x - s.px, dy = s.kondros.y - PLAYER_Y;
+                if (!s.met && dx * dx + dy * dy < 70 * 70) { s.met = true; s.merge = 2.2; burst(s.px, PLAYER_Y - 50, '#41C9B4', 24, 'ミトス ＋ コンドロス'); beep(440, 880, 0.4, 'triangle'); return; }
             }
             // 生成
             s.spawnIn -= dt;
@@ -155,7 +155,7 @@ export default function MitoClimb() {
             for (const it of s.items) {
                 it.y += s.speed * dt; it.x += it.drift * dt + Math.sin(s.t * 2 + it.y * 0.02) * 0.4;
                 if (it.dead) continue;
-                const dx = it.x - s.px, dy = it.y - (PLAYER_Y - 30);
+                const dx = it.x - s.px, dy = it.y - PLAYER_Y;
                 if (dx * dx + dy * dy < (it.r + 30) * (it.r + 30)) {
                     it.dead = true;
                     if (it.kind === 'food') { s.atp = Math.min(100, s.atp + 12); s.eaten += 1; burst(it.x, it.y, '#41C9B4', 12, 'おいしい'); beep(660, 990, 0.14); }
@@ -212,9 +212,9 @@ export default function MitoClimb() {
                 ctx.save(); ctx.translate(s.px, PLAYER_Y + bob); ctx.rotate(lean);
                 ctx.scale(1 + breath, 1 - breath);
                 if (s.hurt > 0 && Math.floor(s.t * 20) % 2 === 0) ctx.globalAlpha = 0.45;
-                if (m?.width) { const w = 100, h = (m.height / m.width) * 100; ctx.drawImage(m, -w / 2, -h / 2 - 30, w, h); }
+                if (m?.width) { const w = 100, h = (m.height / m.width) * 100; ctx.drawImage(m, -w / 2, -h / 2, w, h); }
                 ctx.restore();
-                if (s.dizzy > 0) { ctx.font = '22px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; ctx.textAlign = 'center'; ctx.fillText('💫', s.px + Math.cos(s.t * 8) * 40, PLAYER_Y - 70 + Math.sin(s.t * 8) * 12); }
+                if (s.dizzy > 0) { ctx.font = '22px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; ctx.textAlign = 'center'; ctx.fillText('💫', s.px + Math.cos(s.t * 8) * 40, PLAYER_Y - 60 + Math.sin(s.t * 8) * 12); }
             } else if (m?.width && k?.width) {
                 const p = 1 - s.merge / 2.2; const cx = W / 2, cy = H * 0.45; const gap = (1 - Math.min(1, p * 1.4)) * 110; const spin = p * Math.PI * 4; const scale = 1 + Math.sin(p * Math.PI) * 0.25;
                 ctx.save(); ctx.translate(cx, cy); ctx.rotate(spin); ctx.scale(scale, scale);
