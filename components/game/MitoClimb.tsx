@@ -14,7 +14,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 const W = 390;
 const H = 640;
 const PLAYER_Y = H * 0.85;   // ミトスの中心。画面の下のほうに置いて、上から来るものを見やすく
-const GOAL_M = 600;
+const GOAL_M = 800;
 const goalM = () => { try { const q = new URLSearchParams(window.location.search).get('goal'); const n = q ? Number(q) : NaN; return Number.isFinite(n) && n > 0 ? n : GOAL_M; } catch { return GOAL_M; } };
 
 type ItemKind = 'food' | 'bubble' | 'sweet' | 'radical';
@@ -22,8 +22,8 @@ type Item = { kind: ItemKind; emoji: string; x: number; y: number; r: number; de
 type Particle = { x: number; y: number; vx: number; vy: number; life: number; color: string; text?: string };
 type Cell = { x: number; y: number; s: number; img: number; rot: number; vr: number; speed: number };
 
-const FOOD = ['🥚', '🐟', '🥦', '🍙', '🍅', '🍌', '🫐', '🥕'];
-const SWEET = ['🍩', '🍭', '🍰'];
+const FOOD = ['🥚', '🐟', '🥦', '🍙', '🍅', '🍌', '🫐', '🥕', '🍠', '🥬', '🍄', '🫘', '🧀', '🍤', '🥜', '🍎', '🍇', '🌽', '🥑', '🍊', '🥒', '🍗', '🦑', '🥛'];
+const SWEET = ['🍩', '🍭', '🍰', '🍫', '🧁', '🥤', '🍬'];
 const TIPS: { text: string; href: string; label: string }[] = [
     { text: 'たまごや さかなは、ミトスの ごはん。からだの「でんち」をつくる。', href: '/foods', label: 'たべものをみる' },
     { text: 'あまいものを たべすぎると、ぐるぐる。すこしなら だいじょうぶ。', href: '/blood-sugar', label: 'どうして ぐるぐる？' },
@@ -124,9 +124,9 @@ export default function MitoClimb() {
                 return;
             }
             s.dizzy = Math.max(0, s.dizzy - dt); s.hurt = Math.max(0, s.hurt - dt); s.shake = Math.max(0, s.shake - dt);
-            s.speed = 90 + Math.min(50, s.t * 1.2);
+            s.speed = 105 + Math.min(75, s.t * 1.6);
             s.climb += s.speed * dt;
-            s.atp -= dt * 2.5;
+            s.atp -= dt * 3.4;
             if (s.atp <= 0) { s.atp = 0; finish('over'); return; }
             // 左右の移動（ぐるぐる中は逆向き）
             const tx = s.dizzy > 0 ? W - s.targetX : s.targetX;
@@ -145,11 +145,11 @@ export default function MitoClimb() {
             if (s.spawnIn <= 0 && !s.kondros) {
                 const r = Math.random(); const x = 40 + Math.random() * (W - 80);
                 const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
-                if (r < 0.58) s.items.push({ kind: 'food', emoji: pick(FOOD), x, y: -30, r: 22, drift: (Math.random() - 0.5) * 30 });
-                else if (r < 0.72) s.items.push({ kind: 'bubble', emoji: '💧', x, y: -30, r: 18, drift: (Math.random() - 0.5) * 40 });
-                else if (r < 0.84) s.items.push({ kind: 'sweet', emoji: pick(SWEET), x, y: -30, r: 22, drift: (Math.random() - 0.5) * 30 });
-                else s.items.push({ kind: 'radical', emoji: '', x, y: -30, r: 18, drift: (Math.random() - 0.5) * 50 });
-                s.spawnIn = 0.7 + Math.random() * 0.6;
+                if (r < 0.52) s.items.push({ kind: 'food', emoji: pick(FOOD), x, y: -30, r: 22, drift: (Math.random() - 0.5) * 40 });
+                else if (r < 0.62) s.items.push({ kind: 'bubble', emoji: '💧', x, y: -30, r: 18, drift: (Math.random() - 0.5) * 50 });
+                else if (r < 0.76) s.items.push({ kind: 'sweet', emoji: pick(SWEET), x, y: -30, r: 22, drift: (Math.random() - 0.5) * 40 });
+                else s.items.push({ kind: 'radical', emoji: '', x, y: -30, r: 18, drift: (Math.random() - 0.5) * 80 });
+                s.spawnIn = 0.55 + Math.random() * 0.5 - Math.min(0.15, s.t * 0.003);
             }
             // アイテム
             for (const it of s.items) {
@@ -158,10 +158,10 @@ export default function MitoClimb() {
                 const dx = it.x - s.px, dy = it.y - PLAYER_Y;
                 if (dx * dx + dy * dy < (it.r + 30) * (it.r + 30)) {
                     it.dead = true;
-                    if (it.kind === 'food') { s.atp = Math.min(100, s.atp + 12); s.eaten += 1; burst(it.x, it.y, '#41C9B4', 12, 'おいしい'); beep(660, 990, 0.14); }
+                    if (it.kind === 'food') { s.atp = Math.min(100, s.atp + 11); s.eaten += 1; burst(it.x, it.y, '#41C9B4', 12, 'おいしい'); beep(660, 990, 0.14); }
                     else if (it.kind === 'bubble') { s.atp = Math.min(100, s.atp + 5); s.eaten += 1; burst(it.x, it.y, '#5B86B8', 8, 'ポン'); beep(900, 1300, 0.1); }
-                    else if (it.kind === 'sweet') { s.eaten += 1; s.dizzy = 1.6; burst(it.x, it.y, '#FF9855', 10, 'ぐるぐる〜'); beep(500, 300, 0.4, 'sine', 0.05); }
-                    else { if (s.hurt <= 0) { s.atp = Math.max(0, s.atp - 15); s.hurt = 1; s.shake = 0.3; burst(it.x, it.y, '#E07A6A', 12, 'いたっ'); beep(200, 90, 0.25, 'sawtooth', 0.06); if (s.atp <= 0) { finish('over'); return; } } else it.dead = false; }
+                    else if (it.kind === 'sweet') { s.eaten += 1; s.dizzy = 2.0; burst(it.x, it.y, '#FF9855', 10, 'ぐるぐる〜'); beep(500, 300, 0.4, 'sine', 0.05); }
+                    else { if (s.hurt <= 0) { s.atp = Math.max(0, s.atp - 18); s.hurt = 1; s.shake = 0.3; burst(it.x, it.y, '#E07A6A', 12, 'いたっ'); beep(200, 90, 0.25, 'sawtooth', 0.06); if (s.atp <= 0) { finish('over'); return; } } else it.dead = false; }
                 }
             }
             s.items = s.items.filter((it) => it.y < H + 60 && !it.dead);
