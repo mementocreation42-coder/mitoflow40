@@ -31,19 +31,19 @@ type Course = {
 };
 
 const COURSES: Course[] = [
-    { id: 1, name: 'けっかん', kanji: '血管', goal: 300, base: 85, ramp: 0.8, cap: 110, drain: 2.2, gap: [0.75, 0.6],
+    { id: 1, name: 'けっかん', kanji: '血管', goal: 600, base: 85, ramp: 0.8, cap: 110, drain: 2.2, gap: [0.75, 0.6],
         w: { food: 64, bubble: 14, sweet: 8, radical: 5, special: 9 }, specials: ['protein', 'shield', 'sun', 'buddy'],
         dizzy: 1.4, hit: 12, bg: ['#FBE3E7', '#EFC1CD'], wall: '#D89AAE' },
-    { id: 2, name: 'い と ちょう', kanji: '胃と腸', goal: 450, base: 95, ramp: 1.2, cap: 135, drain: 2.7, gap: [0.68, 0.55],
+    { id: 2, name: 'い と ちょう', kanji: '胃と腸', goal: 800, base: 95, ramp: 1.2, cap: 135, drain: 2.7, gap: [0.68, 0.55],
         w: { food: 58, bubble: 10, sweet: 13, radical: 8, special: 11 }, specials: ['protein', 'shield', 'sun', 'buddy', 'junk', 'junk', 'ice'],
         dizzy: 1.7, hit: 14, bg: ['#FDEBD3', '#F4C9A0'], wall: '#D9A071' },
-    { id: 3, name: 'かんぞう', kanji: '肝臓', goal: 600, base: 105, ramp: 1.5, cap: 155, drain: 3.1, gap: [0.6, 0.5],
+    { id: 3, name: 'かんぞう', kanji: '肝臓', goal: 1000, base: 105, ramp: 1.5, cap: 155, drain: 3.1, gap: [0.6, 0.5],
         w: { food: 53, bubble: 9, sweet: 14, radical: 12, special: 12 }, specials: ['protein', 'shield', 'sun', 'buddy', 'junk', 'ice', 'spicy', 'spicy'],
         dizzy: 2.0, hit: 16, bg: ['#F8DED2', '#E0A892'], wall: '#B5735F' },
-    { id: 4, name: 'のう', kanji: '脳', goal: 750, base: 115, ramp: 1.8, cap: 175, drain: 3.5, gap: [0.55, 0.45],
+    { id: 4, name: 'のう', kanji: '脳', goal: 1200, base: 115, ramp: 1.8, cap: 175, drain: 3.5, gap: [0.55, 0.45],
         w: { food: 49, bubble: 8, sweet: 16, radical: 15, special: 12 }, specials: ['protein', 'shield', 'sun', 'buddy', 'ice', 'spicy', 'sleep', 'sleep', 'sleep'],
         dizzy: 2.3, hit: 18, bg: ['#ECE6F6', '#C6B8E2'], wall: '#9A86C9' },
-    { id: 5, name: 'さいぼうの なか', kanji: '細胞の中', goal: 900, base: 125, ramp: 2.0, cap: 195, drain: 3.9, gap: [0.5, 0.42],
+    { id: 5, name: 'さいぼうの なか', kanji: '細胞の中', goal: 1500, base: 125, ramp: 2.0, cap: 195, drain: 3.9, gap: [0.5, 0.42],
         w: { food: 46, bubble: 7, sweet: 16, radical: 19, special: 12 }, specials: ['protein', 'shield', 'sun', 'buddy', 'junk', 'ice', 'spicy', 'sleep'],
         dizzy: 2.5, hit: 20, bg: ['#DDF3EC', '#ABDDCD'], wall: '#5FB59F' },
 ];
