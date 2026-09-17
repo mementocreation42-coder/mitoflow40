@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-// ── MITOFLOW ／ のぼれミトス（ゆっくり版・縦スクロール） ──────────────────
+// ── MITOFLOW ／ 歩けミトス（ゆっくり版・縦スクロール） ──────────────────
 // 血管の中をミトスがふわふわ上っていく。指で左右に動かして、ごはん（良い食べ物）を集める。
 // 速くならない。落ちない。ぶつかっても「いたっ」で済む。子どもと一緒に遊べるテンポ。
 //   ・🥚🐟🥦🍙  ごはん → ATP が増える、キラキラ
@@ -256,7 +256,7 @@ export default function MitoClimb() {
     }, []);
 
     const share = async () => {
-        const text = `のぼれミトス（MITOFLOW）${phase === 'clear' ? '\nミトコンドリア、たんじょう！' : ''}\nたべた ${score}（BEST ${best}）\n${tip.text}`;
+        const text = `歩けミトス（MITOFLOW）${phase === 'clear' ? '\nミトコンドリア、たんじょう！' : ''}\nたべた ${score}（BEST ${best}）\n${tip.text}`;
         const url = typeof window !== 'undefined' ? `${window.location.origin}/play/slow` : 'https://mitoflow40.com/play/slow';
         try { if (navigator.share) await navigator.share({ title: 'MITOFLOW', text, url }); else await navigator.clipboard.writeText(`${text}\n${url}`); setShared('done'); } catch { /* キャンセル */ }
     };
@@ -289,8 +289,8 @@ export default function MitoClimb() {
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-[#1A1A1A]/35 sm:rounded-3xl" onPointerDown={start}>
                     <div className="bg-white rounded-2xl border-2 border-[#1A1A1A] p-6 max-w-[300px] shadow-xl">
                         <p className="text-[10px] tracking-[0.3em] font-bold text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>MITOFLOW · ゆっくり</p>
-                        <h1 className="text-3xl font-bold text-[#1A1A1A] mt-1 mb-2">のぼれミトス</h1>
-                        <p className="text-xs text-[#4A4A4A] leading-relaxed mb-4">ゆびで さわった ほうへ、ミトスが うごく。<br />🥚🐟🥦 の ごはんを あつめよう。<br />🍩🍭 は ぐるぐる。トゲトゲは いたっ。<br />ずっと のぼると、コンドロスに あえる。</p>
+                        <h1 className="text-3xl font-bold text-[#1A1A1A] mt-1 mb-2">歩けミトス</h1>
+                        <p className="text-xs text-[#4A4A4A] leading-relaxed mb-4">ゆびで さわった ほうへ、ミトスが うごく。<br />🥚🐟🥦 の ごはんを あつめよう。<br />🍩🍭 は ぐるぐる。トゲトゲは いたっ。<br />ずっと あるくと、コンドロスに あえる。</p>
                         <button className="w-full py-3 rounded-full bg-[#41C9B4] border-2 border-[#1A1A1A] font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>START</button>
                         {best > 0 && <p className="text-[11px] text-[#4A4A4A] mt-3">BEST {best}</p>}
                         <a href="/play" className="block text-[11px] text-[#4A4A4A] underline mt-3" onPointerDown={(e) => e.stopPropagation()}>はしる版（走れミトス）はこちら →</a>

@@ -3,10 +3,11 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import MitoRun from './MitoRun';
+import MitoClimb from './MitoClimb';
 
 // 「走れミトス」の入口。ポップアップは body 直下にポータルで描く（ヒーローの transform の中だと fixed が効かないため）。
 // PC でもスマホでも、その場にポップアップ（スマホ型の枠）で開く。/play は直リンク・シェア用。
-export default function GameLauncher({ children, className, style }: { children: ReactNode; className?: string; style?: React.CSSProperties }) {
+export default function GameLauncher({ children, className, style, game = 'run' }: { children: ReactNode; className?: string; style?: React.CSSProperties; game?: 'run' | 'climb' }) {
     const [open, setOpen] = useState(false);
 
     const launch = useCallback((e: React.MouseEvent) => {
@@ -25,16 +26,16 @@ export default function GameLauncher({ children, className, style }: { children:
 
     return (
         <>
-            <a href="/play" onClick={launch} className={className} style={style}>{children}</a>
+            <a href={game === 'climb' ? '/play/slow' : '/play'} onClick={launch} className={className} style={style}>{children}</a>
             {open && createPortal(
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#1A1A1A]/60 backdrop-blur-sm p-4 pb-10" onClick={() => setOpen(false)} role="dialog" aria-modal="true" aria-label="走れミトス">
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#1A1A1A]/60 backdrop-blur-sm p-4 pb-10" onClick={() => setOpen(false)} role="dialog" aria-modal="true" aria-label={game === 'climb' ? '歩けミトス' : '走れミトス'}>
                     <div className="relative" onClick={(e) => e.stopPropagation()}>
                         <PhoneFrame>
-                            <MitoRun />
+                            {game === 'climb' ? <MitoClimb /> : <MitoRun />}
                         </PhoneFrame>
                         <button onClick={() => setOpen(false)} aria-label="閉じる"
                             className="absolute -top-3 -right-3 w-10 h-10 rounded-full bg-white border-2 border-[#1A1A1A] font-bold text-[#1A1A1A] shadow-lg hover:bg-[#FF9855] transition-colors">×</button>
-                        <p className="absolute -bottom-8 left-0 right-0 text-center text-[11px] font-bold text-white/80" style={{ fontFamily: "'Space Grotesk', sans-serif" }}><span className="hidden md:inline">SPACE / CLICK でジャンプ · ESC で閉じる</span><span className="md:hidden">タップでジャンプ · × で閉じる</span></p>
+                        <p className="absolute -bottom-8 left-0 right-0 text-center text-[11px] font-bold text-white/80" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{game === 'climb' ? (<><span className="hidden md:inline">← → か クリックで うごく · ESC で閉じる</span><span className="md:hidden">ゆびで うごかす · × で閉じる</span></>) : (<><span className="hidden md:inline">SPACE / CLICK でジャンプ · ESC で閉じる</span><span className="md:hidden">タップでジャンプ · × で閉じる</span></>)}</p>
                     </div>
                 </div>,
                 document.body,

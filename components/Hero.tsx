@@ -48,13 +48,23 @@ export default function Hero() {
                             </p>
                         </FadeOnScroll>
                         <FadeOnScroll delay={0.7}>
-                            <GameLauncher
-                                className="relative z-20 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 border border-[#1A1A1A] text-xs font-bold text-[#1A1A1A] hover:bg-[#FF9855] transition-colors"
-                                style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                <span className="text-[10px] tracking-widest">PLAY</span>
-                                <span className="font-bold" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>走れミトス</span>
-                                <span aria-hidden="true">▶</span>
-                            </GameLauncher>
+                            <div className="relative z-20 flex flex-wrap justify-end gap-2">
+                                <GameLauncher
+                                    className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 border border-[#1A1A1A] text-xs font-bold text-[#1A1A1A] hover:bg-[#FF9855] transition-colors"
+                                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                    <span className="text-[10px] tracking-widest">PLAY</span>
+                                    <span className="font-bold" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>走れミトス</span>
+                                    <span aria-hidden="true">▶</span>
+                                </GameLauncher>
+                                <GameLauncher game="climb"
+                                    className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 border border-[#1A1A1A] text-xs font-bold text-[#1A1A1A] hover:bg-[#41C9B4] transition-colors"
+                                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                                    <span className="text-[10px] tracking-widest">PLAY</span>
+                                    <span className="font-bold" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>歩けミトス</span>
+                                    <span className="text-[10px] text-[#4A4A4A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>子どもと</span>
+                                    <span aria-hidden="true">▶</span>
+                                </GameLauncher>
+                            </div>
                         </FadeOnScroll>
                     </div>
                 </div>

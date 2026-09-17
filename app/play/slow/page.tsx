@@ -3,13 +3,13 @@ import MitoClimb from '@/components/game/MitoClimb';
 import { PhoneFrame } from '@/components/game/GameLauncher';
 
 export const metadata = {
-    title: 'のぼれミトス（ゆっくり版） ｜ MITOFLOW | Mitoflow40',
-    description: '血管の中をミトスがふわふわ上っていく、子どもと遊べるゆっくりなゲーム。指で動かして、ごはんを集めよう。',
+    title: '歩けミトス（ゆっくり版） ｜ MITOFLOW | Mitoflow40',
+    description: '血管の中をミトスがゆっくり歩いていく、子どもと遊べるゲーム。指で動かして、ごはんを集めよう。',
     alternates: { canonical: 'https://mitoflow40.com/play/slow' },
     openGraph: {
         siteName: 'Mitoflow40',
         locale: 'ja_JP',
-        title: 'のぼれミトス（ゆっくり版） ｜ MITOFLOW',
+        title: '歩けミトス（ゆっくり版） ｜ MITOFLOW',
         description: '子どもと遊べる、ゆっくりな縦スクロールのミトスのゲーム。',
         url: 'https://mitoflow40.com/play/slow',
         type: 'website',
