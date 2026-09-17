@@ -4,13 +4,13 @@ import { PhoneFrame } from '@/components/game/GameLauncher';
 
 export const metadata = {
     title: '走れミトス ｜ MITOFLOW | Mitoflow40',
-    description: '血管の中をミトコンドリアの「ミトス」が走る、1 タップのランゲーム。良い食べ物で ATP を保て。甘いものは速いけど、あとがつらい。',
+    description: 'すみかの細胞をめざして、ミトコンドリアの「ミトス」が血管を走る 1 タップのランゲーム。良い食べ物で ATP を保て。甘いものは速いけど、あとがつらい。',
     alternates: { canonical: 'https://mitoflow40.com/play' },
     openGraph: {
         siteName: 'Mitoflow40',
         locale: 'ja_JP',
         title: '走れミトス ｜ MITOFLOW',
-        description: '血管の中をミトコンドリアの「ミトス」が走る、1 タップのランゲーム。',
+        description: 'すみかの細胞をめざして、ミトスが血管を走る 1 タップのランゲーム。',
         url: 'https://mitoflow40.com/play',
         type: 'website',
     },

@@ -85,15 +85,18 @@ const TIPS: Tip[] = [
     { text: 'おひさまの ひかりで、からだの なかに ビタミンDが できる。', href: '/sunlight', label: 'おひさまと からだ' },
     { text: 'よく ねむると、ミトスも げんきに なる。', href: '/sleep', label: 'ねむりの はなし' },
     { text: 'たべものじゃ ないものは、ペッ。からだに いれない。', href: '/reduce-toxins', label: 'いれない くふう' },
+    { text: 'ほんとうの ミトコンドリアは、さいぼうの なかに いる。けっかんを たびするのは ゲームの なかだけ。', href: '/mitochondria', label: 'ミトコンドリアとは' },
+    { text: 'あかい けっきゅうには、ミトコンドリアが ひとつも いない。しろい けっきゅうには いる。', href: '/mitochondria', label: 'ミトコンドリアとは' },
 ];
 /** コースをぬけたときの ひとこと（そのコースの からだの ばしょ） */
 const COURSE_TIPS: Record<number, Tip> = {
-    1: { text: 'けっかんは、からだじゅうに ごはんと くうきを はこぶ みち。', href: '/food-journey', label: 'たべてから うごくまで' },
+    1: { text: 'けっかんは、ごはんと くうきを はこぶ みち。ほんとうの ミトコンドリアは、ここを ながれる さいぼうの なかに いる。', href: '/food-journey', label: 'たべてから うごくまで' },
     2: { text: 'い と ちょうは、たべものを こまかくして からだに とりこむ ところ。', href: '/digestion', label: 'しょうか と きゅうしゅう' },
     3: { text: 'かんぞうは、からだの おそうじ こうじょう。いらないものを かたづける。', href: '/organs/liver', label: 'かんぞうの はなし' },
     4: { text: 'のうは、からだで いちばん でんきを つかう。だから ミトスが たくさん いる。', href: '/organs/brain', label: 'のうの はなし' },
 };
-const KONDROS_TIP: Tip = { text: 'ミトスと コンドロスが であって、ミトコンドリア。からだの でんきを つくる こうじょうに なった。', href: '/mitochondria', label: 'ミトコンドリアとは' };
+// 語源はギリシャ語の mitos（糸）＋ chondrion（粒）。1898 年にカール・ベンダが名付けた
+const KONDROS_TIP: Tip = { text: 'ミトスは「いと」、コンドロスは「つぶ」という いみ。ふたつ あわせて ミトコンドリア。さいぼうの なかで、からだの でんきを つくる。', href: '/mitochondria', label: 'ミトコンドリアとは' };
 
 export default function MitoClimb() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -189,6 +192,7 @@ export default function MitoClimb() {
         const i = Math.max(0, Math.min(COURSES.length - 1, idx ?? g.current.course));
         g.current.course = i; setCourseIdx(i);
         reset();
+        burst(W / 2, 190, '#1A1A1A', 0, i === COURSES.length - 1 ? 'ここが ミトスの すみか' : `コース ${COURSES[i].id}「${COURSES[i].name}」`);
         g.current.running = true; g.current.last = performance.now();
         setPhase('playing'); setScore(0);
     }, []);
@@ -442,7 +446,7 @@ export default function MitoClimb() {
                     <div className="bg-white rounded-2xl border-2 border-[#1A1A1A] p-4 w-full max-w-[310px] shadow-xl">
                         <p className="text-[10px] tracking-[0.3em] font-bold text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>MITOFLOW · ゆっくり</p>
                         <h1 className="text-2xl font-bold text-[#1A1A1A] mt-0.5 mb-1">歩けミトス</h1>
-                        <p className="text-[11px] text-[#4A4A4A] leading-relaxed mb-3">ゆびで さわった ほうへ うごく。🥚🐟🥦 を あつめて、トゲトゲを よけよう。<br />からだの なかを 5 コース。さいごに コンドロスが まっている。</p>
+                        <p className="text-[11px] text-[#4A4A4A] leading-relaxed mb-3">ミトスは、すみかの さいぼうを さがして たびの とちゅう。<br />ゆびで さわった ほうへ うごく。🥚🐟🥦 を あつめて、トゲトゲを よけよう。<br />5 コースめの「さいぼうの なか」で、コンドロスが まっている。</p>
                         <div className="space-y-1.5">
                             {COURSES.map((c, i) => {
                                 const locked = c.id > unlocked;

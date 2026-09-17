@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 // ── MITOFLOW ／ 走れミトス（試作） ──────────────────────────
-// 血管の中をミトコンドリアの「ミトス」が走る 1 タップのランゲーム。教えない。手触りで覚える。
+// すみかの細胞をめざして、ミトコンドリアの「ミトス」が血管を走る 1 タップのランゲーム。教えない。手触りで覚える。
+// 本物のミトコンドリアは細胞の中にいる（血流を単独で流れない）。ゲームは「細胞へ帰る旅」という物語にして、ヒントで事実を伝える。
 //   ・良い食べ物 → ATP が増えて加速
 //   ・甘いもの   → 一瞬だけ速くなり、そのあと「血糖の波」でヨロヨロ
 //   ・コーヒー   → しばらく速いが、切れると眠くてジャンプが弱い
@@ -28,7 +29,8 @@ const FAT = ['🥑', '🥜', '🫒', '🥥'];
 const MAX_MITO = 6;
 const GOAL_M = 1500;   // ここまで走ると、コンドロスが見えてくる（?goal=数値 で変えられる。動作確認用）
 const goalM = () => { try { const q = new URLSearchParams(window.location.search).get('goal'); const n = q ? Number(q) : NaN; return Number.isFinite(n) && n > 0 ? n : GOAL_M; } catch { return GOAL_M; } };
-const KONDROS_TIP = { text: 'ミトスとコンドロスが出会って、ミトコンドリア。細胞の中で ATP を作る工場になった。', href: '/mitochondria', label: 'ミトコンドリアとは' };
+// 語源はギリシャ語の mitos（糸）＋ chondrion（粒）。1898 年にカール・ベンダが名付けた
+const KONDROS_TIP = { text: 'ミトスは「糸」、コンドロスは「粒」。ギリシャ語の 2 つの言葉が合わさってミトコンドリア。細胞の中で ATP を作る工場になった。', href: '/mitochondria', label: 'ミトコンドリアとは' };
 const maxAtp = (mito: number) => 100 + (mito - 1) * 10;
 const TIPS: { text: string; href: string; label: string }[] = [
     { text: '甘いもののあとに来るヨロヨロ、あれが「血糖の波」。', href: '/blood-sugar', label: '血糖の波のしくみ' },
@@ -40,6 +42,7 @@ const TIPS: { text: string; href: string; label: string }[] = [
     { text: 'ケトン体は、糖が来ない時間に脂肪から作る第二の燃料。', href: '/ketones', label: 'ケトン体とは' },
     { text: '夜のコーヒーは残る。半減期はおよそ 5 時間。', href: '/circadian-rhythm', label: '体内時計のしくみ' },
     { text: 'ブルーベリーの色は抗酸化の色。さびから守る。', href: '/oxidative-stress', label: '抗酸化のしくみ' },
+    { text: '本物のミトコンドリアは細胞の中にいます。血管を走るのはゲームの中だけ。赤血球には 1 つもありません。', href: '/mitochondria', label: 'ミトコンドリアとは' },
 ];
 
 export default function MitoRun() {
@@ -431,7 +434,7 @@ export default function MitoRun() {
                     <div className="bg-white rounded-2xl border-2 border-[#1A1A1A] p-6 max-w-[300px] shadow-xl">
                         <p className="text-[10px] tracking-[0.3em] font-bold text-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>MITOFLOW</p>
                         <h1 className="text-3xl font-bold text-[#1A1A1A] mt-1 mb-2">走れミトス</h1>
-                        <p className="text-xs text-[#4A4A4A] leading-relaxed mb-4">タップでジャンプ（2 回まで）。<br />🥚🐟🥦 で ATP を保て。🍩🥤 は速いけど、あとがつらい。<br />🥑🥜 は糖を断っていればケトン体モード。<br />🫐 は抗酸化のバリア。<br />☕ は切れると眠い。夜はもっと残る。<br />跳び続けるとミトコンドリアが増える。<br />遠くにいるコンドロスと出会えたら、ミトコンドリアになれる。</p>
+                        <p className="text-xs text-[#4A4A4A] leading-relaxed mb-4">すみかの細胞をめざして、ミトスは走る。<br />タップでジャンプ（2 回まで）。<br />🥚🐟🥦 で ATP を保て。🍩🥤 は速いけど、あとがつらい。<br />🥑🥜 は糖を断っていればケトン体モード。<br />🫐 は抗酸化のバリア。<br />☕ は切れると眠い。夜はもっと残る。<br />跳び続けるとミトコンドリアが増える。<br />遠くにいるコンドロスと出会えたら、ミトコンドリアになれる。</p>
                         <button className="w-full py-3 rounded-full bg-[#FF9855] border-2 border-[#1A1A1A] font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>START</button>
                         {best > 0 && <p className="text-[11px] text-[#4A4A4A] mt-3">BEST {best}</p>}
                         <a href="/play/slow" className="block text-[11px] text-[#4A4A4A] underline mt-3" onPointerDown={(e) => e.stopPropagation()}>ゆっくり版（子どもと）はこちら →</a>
