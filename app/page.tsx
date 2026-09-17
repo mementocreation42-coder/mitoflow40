@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import PlayBanner from "@/components/PlayBanner";
 import About from "@/components/About";
 import Benefits from "@/components/Benefits";
 import ForYou from "@/components/ForYou";
@@ -17,6 +18,7 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
+        <PlayBanner />
         <About />
         <Benefits />
         <ForYou />
