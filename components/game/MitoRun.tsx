@@ -2,14 +2,17 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-// ── MITOFLOW ／ 走れミトス（試作） ──────────────────────────
-// すみかの細胞をめざして、ミトコンドリアの「ミトス」が血管を走る 1 タップのランゲーム。教えない。手触りで覚える。
+// ── MITOFLOW ／ 走れミトス（1 タップのランゲーム・5 面） ──────────────────────────
+// すみかの細胞をめざして、ミトコンドリアの「ミトス」が体の中を走る。教えない。手触りで覚える。
 // 本物のミトコンドリアは細胞の中にいる（血流を単独で流れない）。ゲームは「細胞へ帰る旅」という物語にして、ヒントで事実を伝える。
-//   ・良い食べ物 → ATP が増えて加速
-//   ・甘いもの   → 一瞬だけ速くなり、そのあと「血糖の波」でヨロヨロ
-//   ・コーヒー   → しばらく速いが、切れると眠くてジャンプが弱い
-//   ・活性酸素   → ぶつかると ATP が減る
-// ATP が尽きたらゲームオーバー。スコアは距離＋食べたもの。
+// 面は 5 つ。血管 → 胃と腸 → 肝臓 → 脳 → 細胞の中。進むほど速く、ATP の減りが早く、活性酸素が増え、仕組みが足されていく。
+//   面 1：良い食べ物・甘いもの（ダッシュ → 血糖の波）・活性酸素
+//   面 2：＋ 脂質（糖を断っていればケトン体モード）・ブルーベリー（抗酸化バリア）
+//   面 3：＋ コーヒー（速い → 切れると眠い）
+//   面 4：＋ 夜（カフェインが長く残る）
+//   面 5：ぜんぶ。最後にコンドロスと出会い、ミトコンドリアになる
+// ジャンプを重ねるとミトコンドリアが増えて ATP の上限が上がる。「次の面へ」で進むと、その数を持ち越せる。
+// 進み具合は端末に保存：mf:run:unlocked、mf:run:best:<面>、mf:run:done
 
 const W = 390;
 const H = 640;
@@ -17,22 +20,55 @@ const GROUND = H * 0.78;
 const PLAYER_X = 96;
 const GRAVITY = 2100;
 const JUMP_V = -760;
+const MAX_MITO = 6;
+const maxAtp = (mito: number) => 100 + (mito - 1) * 10;
 
 type ItemKind = 'good' | 'sweet' | 'coffee' | 'fat' | 'berry' | 'radical';
 type Item = { kind: ItemKind; emoji: string; x: number; y: number; r: number; dead?: boolean; vy?: number };
 type Particle = { x: number; y: number; vx: number; vy: number; life: number; color: string; text?: string };
 type Cell = { x: number; y: number; s: number; img: number; rot: number; vr: number; speed: number };
+type Tip = { text: string; href: string; label: string };
+
+type Stage = {
+    id: number; name: string; note: string; goal: number;
+    base: number; ramp: number; cap: number;   // 走る速さ：はじめ・1 秒あたりの伸び・上限
+    drain: number;                             // ATP の減り（毎秒）
+    gap: [number, number];                     // 次のものが出るまでの間隔：最小＋ばらつき
+    w: Record<ItemKind, number>;               // 出る割合（0 は出ない）
+    air: number; wobble: number; hit: number;  // 活性酸素：空中に出る確率・上下の揺れ・当たったときの痛さ
+    night: boolean;                            // 夜が来るか
+    intro: string;                             // 面のはじめに出る一言
+    bg: [string, string, string]; ground: [string, string];
+};
+
+const STAGES: Stage[] = [
+    { id: 1, name: '血管', note: '基本。食べて、よける', goal: 2000, base: 240, ramp: 4, cap: 380, drain: 4.6, gap: [0.65, 0.7],
+        w: { good: 50, sweet: 18, coffee: 0, fat: 0, berry: 0, radical: 12 }, air: 0.15, wobble: 0.4, hit: 22, night: false,
+        intro: '🥚🐟🥦 で ATP を保て', bg: ['#F7D9DE', '#F3C9D2', '#E9B6C3'], ground: ['#D89AAE', '#C98AA0'] },
+    { id: 2, name: '胃と腸', note: '＋ 🥑 ケトン体・🫐 バリア', goal: 2300, base: 255, ramp: 5, cap: 420, drain: 5.2, gap: [0.6, 0.7],
+        w: { good: 40, sweet: 16, coffee: 0, fat: 16, berry: 8, radical: 15 }, air: 0.25, wobble: 0.5, hit: 25, night: false,
+        intro: 'アボカドやナッツは、糖を断っていればケトン体モード', bg: ['#FDEBD3', '#F8D9B4', '#F0C596'], ground: ['#D9A071', '#C98C5C'] },
+    { id: 3, name: '肝臓', note: '＋ ☕ カフェイン', goal: 2600, base: 265, ramp: 5.5, cap: 450, drain: 5.7, gap: [0.57, 0.68],
+        w: { good: 35, sweet: 16, coffee: 9, fat: 15, berry: 8, radical: 18 }, air: 0.3, wobble: 0.6, hit: 27, night: false,
+        intro: 'コーヒーは速い。切れると眠い', bg: ['#F8DED2', '#EEC2AE', '#E0A892'], ground: ['#B5735F', '#A2614E'] },
+    { id: 4, name: '脳', note: '＋ 🌙 夜。カフェインが残る', goal: 2900, base: 275, ramp: 6, cap: 480, drain: 6.0, gap: [0.53, 0.65],
+        w: { good: 33, sweet: 18, coffee: 10, fat: 14, berry: 7, radical: 20 }, air: 0.35, wobble: 0.8, hit: 29, night: true,
+        intro: '夜のコーヒーは、長く残る', bg: ['#ECE6F6', '#D8CDEC', '#C6B8E2'], ground: ['#9A86C9', '#8672B8'] },
+    { id: 5, name: '細胞の中', note: 'ぜんぶ。最後にコンドロス', goal: 3200, base: 290, ramp: 6.5, cap: 520, drain: 6.3, gap: [0.5, 0.6],
+        w: { good: 33, sweet: 17, coffee: 9, fat: 14, berry: 7, radical: 23 }, air: 0.4, wobble: 1.0, hit: 31, night: true,
+        intro: 'ここがミトスのすみか', bg: ['#DDF3EC', '#C4E8DC', '#ABDDCD'], ground: ['#5FB59F', '#4DA38D'] },
+];
+
+/** ?goal=数値 でゴールまでの距離を短くできる（動作確認用） */
+const goalM = (def: number) => { try { const q = new URLSearchParams(window.location.search).get('goal'); const n = q ? Number(q) : NaN; return Number.isFinite(n) && n > 0 ? n : def; } catch { return def; } };
 
 const GOOD = ['🥚', '🐟', '🥦', '🍙', '🍅', '🥬'];
 const SWEET = ['🍩', '🥤', '🍰'];
 const FAT = ['🥑', '🥜', '🫒', '🥥'];
-const MAX_MITO = 6;
-const GOAL_M = 1500;   // ここまで走ると、コンドロスが見えてくる（?goal=数値 で変えられる。動作確認用）
-const goalM = () => { try { const q = new URLSearchParams(window.location.search).get('goal'); const n = q ? Number(q) : NaN; return Number.isFinite(n) && n > 0 ? n : GOAL_M; } catch { return GOAL_M; } };
-// 語源はギリシャ語の mitos（糸）＋ chondrion（粒）。1898 年にカール・ベンダが名付けた
-const KONDROS_TIP = { text: 'ミトスは「糸」、コンドロスは「粒」。ギリシャ語の 2 つの言葉が合わさってミトコンドリア。細胞の中で ATP を作る工場になった。', href: '/mitochondria', label: 'ミトコンドリアとは' };
-const maxAtp = (mito: number) => 100 + (mito - 1) * 10;
-const TIPS: { text: string; href: string; label: string }[] = [
+const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
+const emojiFor = (kind: ItemKind): string => kind === 'good' ? pick(GOOD) : kind === 'sweet' ? pick(SWEET) : kind === 'fat' ? pick(FAT) : kind === 'coffee' ? '☕' : kind === 'berry' ? '🫐' : '';
+
+const TIPS: Tip[] = [
     { text: '甘いもののあとに来るヨロヨロ、あれが「血糖の波」。', href: '/blood-sugar', label: '血糖の波のしくみ' },
     { text: 'コーヒーは眠気を隠すだけ。エネルギーは作らない。', href: '/caffeine', label: 'カフェインとの付き合い方' },
     { text: '活性酸素は「さびる」のもと。抗酸化の食べ物で守れる。', href: '/oxidative-stress', label: '酸化ストレスとは' },
@@ -44,31 +80,34 @@ const TIPS: { text: string; href: string; label: string }[] = [
     { text: 'ブルーベリーの色は抗酸化の色。さびから守る。', href: '/oxidative-stress', label: '抗酸化のしくみ' },
     { text: '本物のミトコンドリアは細胞の中にいます。血管を走るのはゲームの中だけ。赤血球には 1 つもありません。', href: '/mitochondria', label: 'ミトコンドリアとは' },
 ];
+/** 面をぬけたときの一言（その場所の話） */
+const STAGE_TIPS: Record<number, Tip> = {
+    1: { text: '血管は栄養と酸素を運ぶ道。ここを流れる赤血球にはミトコンドリアが 1 つもなく、解糖系だけで動いている。', href: '/glycolysis', label: '解糖系とは' },
+    2: { text: '食べたものは、胃と腸で分解され、吸収されて初めて材料になる。「食べた」と「吸収できた」は別の話。', href: '/digestion', label: '消化・吸収' },
+    3: { text: '肝臓は代謝と解毒の中心。カフェインを分解する速さにも、遺伝子による個人差がある。', href: '/organs/liver', label: '肝臓' },
+    4: { text: '脳は体重の約 2% で、エネルギーの約 20% を使う。だからミトコンドリアが多い。', href: '/organs/brain', label: '脳' },
+};
+// 語源はギリシャ語の mitos（糸）＋ chondrion（粒）。1898 年にカール・ベンダが名付けた
+const KONDROS_TIP: Tip = { text: 'ミトスは「糸」、コンドロスは「粒」。ギリシャ語の 2 つの言葉が合わさってミトコンドリア。細胞の中で ATP を作る工場になった。', href: '/mitochondria', label: 'ミトコンドリアとは' };
 
 export default function MitoRun() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [phase, setPhase] = useState<'start' | 'playing' | 'over' | 'clear'>('start');
     const [score, setScore] = useState(0);
-    const [best, setBest] = useState(0);
-    const [tip, setTip] = useState(TIPS[0]);
+    const [stageIdx, setStageIdx] = useState(0);
+    const [unlocked, setUnlocked] = useState(1);   // 選べる面（?stage= で一時的に広げられる）
+    const [progress, setProgress] = useState(1);   // 実際に進んだところ（⭐ の判定に使う）
+    const [done, setDone] = useState(false);
+    const [bests, setBests] = useState<Record<number, number>>({});
+    const [mitoKept, setMitoKept] = useState(1);
+    const [tip, setTip] = useState<Tip>(TIPS[0]);
     const [shared, setShared] = useState<'idle' | 'done'>('idle');
 
     // ゲームの状態は ref に置いて、描画ループから直接触る
     const g = useRef({
-        running: false,
-        t: 0,
-        scroll: 0,
-        speed: 260,
-        atp: 100,
-        score: 0,
-        py: GROUND,
-        vy: 0,
-        jumps: 0,
-        squash: 0,
-        items: [] as Item[],
-        particles: [] as Particle[],
-        cells: [] as Cell[],
-        spawnIn: 0.8,
+        running: false, stage: 0, t: 0, scroll: 0, speed: 260, atp: 100, score: 0,
+        py: GROUND, vy: 0, jumps: 0, squash: 0,
+        items: [] as Item[], particles: [] as Particle[], cells: [] as Cell[], spawnIn: 0.8,
         rush: 0,      // 甘いもの：加速中
         wave: 0,      // 血糖の波：ヨロヨロ中
         caffeine: 0,  // コーヒー：加速中
@@ -80,12 +119,11 @@ export default function MitoRun() {
         jumpCount: 0, // 運動量：ジャンプの回数でミトコンドリアが増える
         mito: 1,      // ミトコンドリアの数（ATP の上限）
         night: false, // 夜（カフェインが残りやすい）
-        kondros: null as { x: number; y: number } | null, // 相棒。ゴール距離を超えると前方に現れる
+        gate: null as { x: number } | null,               // 面 1〜4 のゴール
+        kondros: null as { x: number; y: number } | null, // 面 5 のゴール：相棒
         merge: 0,     // 合体の演出タイマー
         met: false,   // コンドロスに触れた
-        shake: 0,
-        last: 0,
-        raf: 0,
+        shake: 0, last: 0, raf: 0,
     });
     const imgs = useRef<{ mito?: HTMLImageElement; kondros?: HTMLImageElement; cells: HTMLImageElement[] }>({ cells: [] });
     const audio = useRef<AudioContext | null>(null);
@@ -107,7 +145,18 @@ export default function MitoRun() {
     }, []);
 
     useEffect(() => {
-        try { setBest(Number(localStorage.getItem('mf:run:best') || 0)); } catch { /* noop */ }
+        try {
+            let u = Math.min(5, Math.max(1, Number(localStorage.getItem('mf:run:unlocked') || 1)));
+            setProgress(u);
+            // ?stage=3 でその面まで開ける（動作確認用。保存はしない）
+            const q = Number(new URLSearchParams(window.location.search).get('stage') || 0);
+            if (q >= 1 && q <= 5) { u = Math.max(u, q); setStageIdx(q - 1); g.current.stage = q - 1; }
+            setUnlocked(u);
+            setDone(localStorage.getItem('mf:run:done') === '1');
+            const b: Record<number, number> = {};
+            for (const st of STAGES) b[st.id] = Number(localStorage.getItem(`mf:run:best:${st.id}`) || 0);
+            setBests(b);
+        } catch { /* noop */ }
         const load = (src: string) => new Promise<HTMLImageElement>((res) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => res(i); i.src = src; });
         Promise.all([load('/game/mito.png'), load('/game/kondros.png'), load('/game/cell0.png'), load('/game/cell1.png'), load('/game/cell2.png'), load('/game/cell3.png')]).then(([m, k, ...c]) => {
             imgs.current = { mito: m, kondros: k, cells: c };
@@ -120,12 +169,12 @@ export default function MitoRun() {
             const a = Math.random() * Math.PI * 2, sp = 120 + Math.random() * 220;
             s.particles.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 80, life: 0.5 + Math.random() * 0.3, color });
         }
-        if (text) s.particles.push({ x, y: y - 10, vx: 0, vy: -90, life: 0.9, color, text });
+        if (text) s.particles.push({ x, y: y - 10, vx: 0, vy: -90, life: text.length > 8 ? 1.6 : 0.9, color, text });
     };
 
     const reset = () => {
         const s = g.current;
-        Object.assign(s, { t: 0, scroll: 0, speed: 260, atp: 100, score: 0, py: GROUND, vy: 0, jumps: 0, squash: 0, items: [], particles: [], spawnIn: 0.8, rush: 0, wave: 0, caffeine: 0, sleepy: 0, hurt: 0, keto: 0, sugar: 0, shield: 0, jumpCount: 0, mito: 1, night: false, kondros: null, merge: 0, met: false, shake: 0 });
+        Object.assign(s, { t: 0, scroll: 0, speed: 260, atp: 100, score: 0, py: GROUND, vy: 0, jumps: 0, squash: 0, items: [], particles: [], spawnIn: 0.8, rush: 0, wave: 0, caffeine: 0, sleepy: 0, hurt: 0, keto: 0, sugar: 0, shield: 0, jumpCount: 0, mito: 1, night: false, gate: null, kondros: null, merge: 0, met: false, shake: 0 });
         s.cells = Array.from({ length: 7 }, (_, i) => ({ x: Math.random() * W, y: 40 + Math.random() * (GROUND - 80), s: 0.35 + Math.random() * 0.35, img: i % 4, rot: Math.random() * 6, vr: (Math.random() - 0.5) * 0.4, speed: 0.15 + Math.random() * 0.25 }));
     };
 
@@ -147,45 +196,48 @@ export default function MitoRun() {
         beep(s.jumps === 1 ? 420 : 520, 760, 0.12, 'triangle');
     }, [beep]);
 
-    const gameOver = useCallback(() => {
+    const finish = useCallback((kind: 'over' | 'clear') => {
         const s = g.current;
+        const ST = STAGES[s.stage];
         s.running = false;
+        if (kind === 'clear') s.score += ST.id === 5 ? 1000 : 500; // ゴールのボーナス
         const final = Math.round(s.score);
         setScore(final);
-        setTip(TIPS[Math.floor(Math.random() * TIPS.length)]);
+        setMitoKept(s.mito);
+        setTip(kind === 'clear' ? (ST.id === 5 ? KONDROS_TIP : STAGE_TIPS[ST.id]) : TIPS[Math.floor(Math.random() * TIPS.length)]);
         setShared('idle');
         try {
-            const b = Number(localStorage.getItem('mf:run:best') || 0);
-            if (final > b) { localStorage.setItem('mf:run:best', String(final)); setBest(final); } else setBest(b);
-        } catch { /* noop */ }
-        beep(300, 80, 0.5, 'sawtooth', 0.06);
-        setPhase('over');
+            const key = `mf:run:best:${ST.id}`;
+            const nb = Math.max(Number(localStorage.getItem(key) || 0), final);
+            localStorage.setItem(key, String(nb));
+            setBests((prev) => ({ ...prev, [ST.id]: nb }));
+            if (kind === 'clear' && ST.id < 5) {
+                const u = Math.max(Number(localStorage.getItem('mf:run:unlocked') || 1), ST.id + 1);
+                localStorage.setItem('mf:run:unlocked', String(u));
+                setUnlocked((v) => Math.max(v, u));
+                setProgress((v) => Math.max(v, u));
+            }
+            if (kind === 'clear' && ST.id === 5) { localStorage.setItem('mf:run:done', '1'); setDone(true); }
+        } catch { if (kind === 'clear' && ST.id < 5) setUnlocked((v) => Math.max(v, ST.id + 1)); }
+        if (kind === 'clear') { beep(523, 1046, 0.5, 'sine', 0.08); setTimeout(() => beep(659, 1318, 0.5, 'sine', 0.07), 180); setTimeout(() => beep(784, 1568, 0.7, 'sine', 0.07), 360); }
+        else beep(300, 80, 0.5, 'sawtooth', 0.06);
+        setPhase(kind);
     }, [beep]);
 
-    const clear = useCallback(() => {
-        const s = g.current;
-        s.running = false;
-        s.score += 1000;
-        const final = Math.round(s.score);
-        setScore(final);
-        setTip(KONDROS_TIP);
-        setShared('idle');
-        try {
-            const b = Number(localStorage.getItem('mf:run:best') || 0);
-            if (final > b) { localStorage.setItem('mf:run:best', String(final)); setBest(final); } else setBest(b);
-        } catch { /* noop */ }
-        beep(523, 1046, 0.5, 'sine', 0.08);
-        setTimeout(() => beep(659, 1318, 0.5, 'sine', 0.07), 180);
-        setTimeout(() => beep(784, 1568, 0.7, 'sine', 0.07), 360);
-        setPhase('clear');
-    }, [beep]);
-
-    const start = useCallback(() => {
+    /** keep=true なら、ミトコンドリアの数を次の面へ持ち越す */
+    const start = useCallback((idx?: number, keep = false) => {
         if (!audio.current) {
             try { audio.current = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)(); } catch { /* noop */ }
         }
         audio.current?.resume();
+        const i = Math.max(0, Math.min(STAGES.length - 1, idx ?? g.current.stage));
+        const mito = keep ? g.current.mito : 1;
+        const jc = keep ? g.current.jumpCount : 0;
+        g.current.stage = i; setStageIdx(i);
         reset();
+        g.current.mito = mito; g.current.jumpCount = jc; g.current.atp = maxAtp(mito);
+        burst(W / 2, 170, '#1A1A1A', 0, `面 ${STAGES[i].id}「${STAGES[i].name}」`);
+        burst(W / 2, 200, '#4A4A4A', 0, STAGES[i].intro);
         g.current.running = true;
         g.current.last = performance.now();
         setPhase('playing');
@@ -204,6 +256,7 @@ export default function MitoRun() {
 
         const update = (dt: number) => {
             const s = g.current;
+            const ST = STAGES[s.stage];
             s.t += dt;
             // 合体の演出：ふたりが中央で回りながら近づき、ひとつになる
             if (s.merge > 0) {
@@ -211,7 +264,7 @@ export default function MitoRun() {
                 if (Math.random() < 0.5) burst(W / 2 + (Math.random() - 0.5) * 120, GROUND - 60 + (Math.random() - 0.5) * 80, Math.random() < 0.5 ? '#41C9B4' : '#FF9855', 2);
                 for (const pt of s.particles) { pt.x += pt.vx * dt; pt.y += pt.vy * dt; pt.vy += 500 * dt; pt.life -= dt; }
                 s.particles = s.particles.filter((pt) => pt.life > 0);
-                if (s.merge <= 0) clear();
+                if (s.merge <= 0) finish('clear');
                 return;
             }
             // 状態タイマー
@@ -222,13 +275,14 @@ export default function MitoRun() {
             if (wasKeto && s.keto === 0) burst(PLAYER_X, s.py - 30, '#2FB59F', 6, 'ケトン体、おわり');
             s.sugar = Math.max(0, s.sugar - dt * 0.09);
             const dist = s.scroll / 10;
+            const goal = goalM(ST.goal);
             const wasNight = s.night;
-            s.night = s.t > 40 && (s.t % 60) > 40;
+            s.night = ST.night && s.t > 30 && (s.t % 50) > 32;
             if (!wasNight && s.night) burst(W / 2, 90, '#5B86B8', 0, '夜。カフェインが残りやすい');
 
             if (wasRush && s.rush === 0) { s.wave = 2.2; s.atp = Math.max(1, s.atp - 10); burst(PLAYER_X, s.py - 30, '#8B78C9', 8, '血糖の波…'); beep(400, 120, 0.4, 'sine', 0.06); }
             // 速度：時間で少しずつ上がる ＋ 状態の補正
-            const base = 260 + Math.min(220, s.t * 6);
+            const base = ST.base + Math.min(ST.cap - ST.base, s.t * ST.ramp);
             let mult = 1;
             if (s.rush > 0) mult *= 1.55; else if (s.wave > 0) mult *= 0.6;
             if (s.caffeine > 0) mult *= 1.3; else if (s.sleepy > 0) mult *= 0.85;
@@ -237,38 +291,43 @@ export default function MitoRun() {
             s.scroll += s.speed * dt;
             s.score += (s.speed * dt) / 12 * (s.rush > 0 ? 2 : 1) * (s.keto > 0 ? 1.5 : 1);
             // ATP は減り続ける（ケトン体モードは半分、カフェインは少し早い）
-            s.atp -= dt * (s.caffeine > 0 ? 7.5 : 6) * (s.keto > 0 ? 0.5 : 1);
-            if (s.atp <= 0) { s.atp = 0; gameOver(); return; }
+            s.atp -= dt * ST.drain * (s.caffeine > 0 ? 1.25 : 1) * (s.keto > 0 ? 0.5 : 1);
+            if (s.atp <= 0) { s.atp = 0; finish('over'); return; }
             // プレイヤー
             s.vy += GRAVITY * dt; s.py += s.vy * dt;
             if (s.py >= GROUND) { if (s.jumps > 0 && s.vy > 400) s.squash = 0.8; s.py = GROUND; s.vy = 0; s.jumps = 0; }
             s.squash = Math.max(0, s.squash - dt * 4);
-            // 生成
-            if (!s.kondros && dist >= goalM()) { s.kondros = { x: W + 80, y: GROUND }; s.items = s.items.filter((it) => it.kind !== 'radical'); burst(W / 2, 120, '#FF9855', 12, 'コンドロスが見えた!'); beep(600, 900, 0.3, 'sine', 0.07); }
-            if (s.kondros) {
-                s.kondros.x -= s.speed * dt * 0.45;
-                const dx = s.kondros.x - PLAYER_X, dy = (s.kondros.y - 34) - (s.py - 34);
-                if (!s.met && dx * dx + dy * dy < 70 * 70) { s.met = true; s.merge = 2.0; s.shake = 0; burst(PLAYER_X + dx / 2, s.py - 40, '#41C9B4', 24, 'ミトス ＋ コンドロス'); beep(440, 880, 0.4, 'triangle', 0.08); return; }
+            // ゴール：面 1〜4 は旗、面 5 はコンドロス
+            if (ST.id === 5) {
+                if (!s.kondros && dist >= goal) { s.kondros = { x: W + 80, y: GROUND }; s.items = s.items.filter((it) => it.kind !== 'radical'); burst(W / 2, 120, '#FF9855', 12, 'コンドロスが見えた!'); beep(600, 900, 0.3, 'sine', 0.07); }
+                if (s.kondros) {
+                    s.kondros.x -= s.speed * dt * 0.45;
+                    const dx = s.kondros.x - PLAYER_X, dy = (s.kondros.y - 34) - (s.py - 34);
+                    if (!s.met && dx * dx + dy * dy < 70 * 70) { s.met = true; s.merge = 2.0; s.shake = 0; burst(PLAYER_X + dx / 2, s.py - 40, '#41C9B4', 24, 'ミトス ＋ コンドロス'); beep(440, 880, 0.4, 'triangle', 0.08); return; }
+                }
+            } else {
+                if (!s.gate && dist >= goal) { s.gate = { x: W + 60 }; s.items = s.items.filter((it) => it.kind !== 'radical'); burst(W / 2, 120, '#FF9855', 12, 'ゴールが見えた!'); beep(600, 900, 0.3, 'sine', 0.07); }
+                if (s.gate) {
+                    s.gate.x -= s.speed * dt;
+                    if (s.gate.x <= PLAYER_X + 10) { burst(PLAYER_X, s.py - 40, '#41C9B4', 28, 'ゴール!'); finish('clear'); return; }
+                }
             }
+            // 生成（ゴールが見えたら止める）
             s.spawnIn -= dt;
-            if (s.spawnIn <= 0 && !s.kondros) {
-                const r = Math.random();
-                const air = Math.random() < 0.45;
-                const y = air ? GROUND - 120 - Math.random() * 90 : GROUND - 22;
-                const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
-                if (r < 0.32) s.items.push({ kind: 'good', emoji: pick(GOOD), x: W + 40, y, r: 20 });
-                else if (r < 0.48) s.items.push({ kind: 'sweet', emoji: pick(SWEET), x: W + 40, y, r: 20 });
-                else if (r < 0.56) s.items.push({ kind: 'coffee', emoji: '☕', x: W + 40, y, r: 20 });
-                else if (r < 0.72) s.items.push({ kind: 'fat', emoji: pick(FAT), x: W + 40, y, r: 20 });
-                else if (r < 0.80) s.items.push({ kind: 'berry', emoji: '🫐', x: W + 40, y, r: 20 });
-                else s.items.push({ kind: 'radical', emoji: '', x: W + 40, y: GROUND - 20 - (Math.random() < 0.3 ? 110 : 0), r: 18, vy: 0 });
-                s.spawnIn = 0.55 + Math.random() * 0.7 - Math.min(0.25, s.t * 0.004);
+            if (s.spawnIn <= 0 && !s.kondros && !s.gate) {
+                const w = ST.w;
+                let r = Math.random() * (w.good + w.sweet + w.coffee + w.fat + w.berry + w.radical);
+                let kind: ItemKind = 'radical';
+                for (const key of ['good', 'sweet', 'coffee', 'fat', 'berry', 'radical'] as const) { if ((r -= w[key]) < 0) { kind = key; break; } }
+                if (kind === 'radical') s.items.push({ kind, emoji: '', x: W + 40, y: GROUND - 20 - (Math.random() < ST.air ? 110 : 0), r: 18, vy: 0 });
+                else { const air = Math.random() < 0.45; s.items.push({ kind, emoji: emojiFor(kind), x: W + 40, y: air ? GROUND - 120 - Math.random() * 90 : GROUND - 22, r: 20 }); }
+                s.spawnIn = ST.gap[0] + Math.random() * ST.gap[1] - Math.min(0.2, s.t * 0.003);
             }
             // アイテムの移動と当たり
             const px = PLAYER_X, py = s.py - 34;
             for (const it of s.items) {
                 it.x -= s.speed * dt;
-                if (it.kind === 'radical') it.y += Math.sin(s.t * 6 + it.x * 0.02) * 0.6;
+                if (it.kind === 'radical') it.y += Math.sin(s.t * 6 + it.x * 0.02) * ST.wobble;
                 if (it.dead) continue;
                 const dx = it.x - px, dy = it.y - py;
                 if (dx * dx + dy * dy < (it.r + 26) * (it.r + 26)) {
@@ -280,38 +339,45 @@ export default function MitoRun() {
                     else if (it.kind === 'fat') { if (s.sugar < 0.2) { s.keto = Math.max(s.keto, 6); s.score += 80; burst(it.x, it.y, '#2FB59F', 14, 'ケトン体モード!'); beep(440, 880, 0.3, 'sine', 0.07); } else { s.atp = Math.min(cap, s.atp + 8); s.score += 50; burst(it.x, it.y, '#7DAE4A', 8, '脂質だけ（糖が多い）'); beep(600, 800, 0.12, 'sine'); } }
                     else if (it.kind === 'berry') { s.shield = 5; s.score += 60; burst(it.x, it.y, '#5B86B8', 12, '抗酸化バリア'); beep(700, 1100, 0.18, 'sine'); }
                     else if (s.shield > 0) { burst(it.x, it.y, '#5B86B8', 14, '抗酸化でガード!'); beep(900, 1300, 0.15, 'sine'); }
-                    else { if (s.hurt <= 0) { s.atp -= 28; s.hurt = 1; s.shake = 0.35; burst(it.x, it.y, '#E07A6A', 14, 'さびる!'); beep(180, 60, 0.3, 'sawtooth', 0.08); if (s.atp <= 0) { s.atp = 0; gameOver(); return; } } else it.dead = false; }
+                    else { if (s.hurt <= 0) { s.atp -= ST.hit; s.hurt = 1; s.shake = 0.35; burst(it.x, it.y, '#E07A6A', 14, 'さびる!'); beep(180, 60, 0.3, 'sawtooth', 0.08); if (s.atp <= 0) { s.atp = 0; finish('over'); return; } } else it.dead = false; }
                 }
             }
             s.items = s.items.filter((it) => it.x > -60 && !it.dead);
             // 粒子と背景の細胞
-            for (const p of s.particles) { p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 500 * dt; p.life -= dt; }
+            for (const p of s.particles) { p.x += p.vx * dt; p.y += p.vy * dt; p.vy += (p.text ? 0 : 500) * dt; p.life -= dt; }
             s.particles = s.particles.filter((p) => p.life > 0);
             for (const c of s.cells) { c.x -= s.speed * c.speed * dt; c.rot += c.vr * dt; if (c.x < -120) { c.x = W + 120; c.y = 40 + Math.random() * (GROUND - 80); } }
         };
 
         const draw = () => {
             const s = g.current;
+            const ST = STAGES[s.stage];
             const shake = s.shake > 0 ? (Math.random() - 0.5) * 10 : 0;
             ctx.save();
             ctx.translate(shake, s.shake > 0 ? (Math.random() - 0.5) * 8 : 0);
-            // 背景：血管
+            // 背景：面ごとの色
             const grad = ctx.createLinearGradient(0, 0, 0, H);
-            grad.addColorStop(0, '#F7D9DE'); grad.addColorStop(0.7, '#F3C9D2'); grad.addColorStop(1, '#E9B6C3');
+            grad.addColorStop(0, ST.bg[0]); grad.addColorStop(0.7, ST.bg[1]); grad.addColorStop(1, ST.bg[2]);
             ctx.fillStyle = grad; ctx.fillRect(-20, -20, W + 40, H + 40);
             // 流れの線
             ctx.strokeStyle = 'rgba(255,255,255,0.35)'; ctx.lineWidth = 2;
             for (let i = 0; i < 6; i++) { const y = 60 + i * 90; const off = (s.scroll * (0.3 + i * 0.08)) % 140; ctx.beginPath(); for (let x = -140 + (140 - off); x < W + 140; x += 140) { ctx.moveTo(x, y); ctx.lineTo(x + 70, y); } ctx.stroke(); }
             // 漂う細胞
             for (const c of s.cells) { const im = imgs.current.cells[c.img]; if (!im?.width) continue; ctx.save(); ctx.globalAlpha = 0.45; ctx.translate(c.x, c.y); ctx.rotate(c.rot); ctx.drawImage(im, -im.width * c.s / 2, -im.height * c.s / 2, im.width * c.s, im.height * c.s); ctx.restore(); }
-            // 地面（血管の壁）
-            ctx.fillStyle = '#D89AAE'; ctx.fillRect(-20, GROUND, W + 40, H - GROUND);
-            ctx.fillStyle = '#C98AA0'; for (let x = -((s.scroll * 1) % 60); x < W + 60; x += 60) { ctx.beginPath(); ctx.ellipse(x, GROUND + 6, 26, 8, 0, 0, Math.PI * 2); ctx.fill(); }
+            // 地面
+            ctx.fillStyle = ST.ground[0]; ctx.fillRect(-20, GROUND, W + 40, H - GROUND);
+            ctx.fillStyle = ST.ground[1]; for (let x = -((s.scroll * 1) % 60); x < W + 60; x += 60) { ctx.beginPath(); ctx.ellipse(x, GROUND + 6, 26, 8, 0, 0, Math.PI * 2); ctx.fill(); }
             // 状態の空気感
-            if (s.night) { ctx.fillStyle = 'rgba(20,24,70,0.28)'; ctx.fillRect(-20, -20, W + 40, H + 40); ctx.fillStyle = 'rgba(255,255,255,0.85)'; ctx.beginPath(); ctx.arc(W - 60, 80, 16, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = 'rgba(20,24,70,0.9)'; ctx.beginPath(); ctx.arc(W - 52, 74, 14, 0, Math.PI * 2); ctx.fill(); }
+            if (s.night) { ctx.fillStyle = 'rgba(20,24,70,0.28)'; ctx.fillRect(-20, -20, W + 40, H + 40); ctx.fillStyle = 'rgba(255,255,255,0.85)'; ctx.beginPath(); ctx.arc(W - 60, 100, 16, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = 'rgba(20,24,70,0.9)'; ctx.beginPath(); ctx.arc(W - 52, 94, 14, 0, Math.PI * 2); ctx.fill(); }
             if (s.wave > 0) { ctx.fillStyle = 'rgba(139,120,201,0.12)'; ctx.fillRect(-20, -20, W + 40, H + 40); }
             if (s.sleepy > 0) { ctx.fillStyle = 'rgba(30,30,60,0.18)'; ctx.fillRect(-20, -20, W + 40, H + 40); }
             if (s.rush > 0) { ctx.strokeStyle = 'rgba(255,152,85,0.5)'; ctx.lineWidth = 3; for (let i = 0; i < 8; i++) { const y = 30 + Math.random() * (GROUND - 40); ctx.beginPath(); ctx.moveTo(W - Math.random() * W, y); ctx.lineTo(W - Math.random() * W - 60, y); ctx.stroke(); } }
+            // ゴールの旗（市松もようの柱）
+            if (s.gate) {
+                const x = s.gate.x, sz = 14, top = GROUND - 196;
+                for (let j = 0; j < 14; j++) for (let i = 0; i < 2; i++) { ctx.fillStyle = (i + j) % 2 ? '#1A1A1A' : '#FFFFFF'; ctx.fillRect(x + i * sz, top + j * sz, sz, sz); }
+                ctx.fillStyle = '#1A1A1A'; ctx.font = 'bold 16px "Space Grotesk", sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; ctx.fillText('GOAL', x + sz, top - 8);
+            }
             // アイテム
             for (const it of s.items) {
                 if (it.kind === 'radical') {
@@ -330,12 +396,11 @@ export default function MitoRun() {
             // プレイヤー
             const m = imgs.current.mito;
             const wob = s.wave > 0 ? Math.sin(s.t * 18) * 0.25 : 0;
-            if (s.merge > 0) { /* 合体中は下で描く */ }
             const sq = s.squash;
             if (s.keto > 0) { const gl = ctx.createRadialGradient(PLAYER_X, s.py - 34, 10, PLAYER_X, s.py - 34, 80); gl.addColorStop(0, 'rgba(47,181,159,0.45)'); gl.addColorStop(1, 'rgba(47,181,159,0)'); ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(PLAYER_X, s.py - 34, 80, 0, Math.PI * 2); ctx.fill(); }
             if (s.shield > 0) { ctx.strokeStyle = `rgba(91,134,184,${0.4 + 0.4 * Math.abs(Math.sin(s.t * 6))})`; ctx.lineWidth = 3; ctx.setLineDash([8, 6]); ctx.beginPath(); ctx.arc(PLAYER_X, s.py - 34, 62, s.t * 2, s.t * 2 + Math.PI * 2); ctx.stroke(); ctx.setLineDash([]); }
             ctx.save();
-            if (s.merge > 0) ctx.globalAlpha = 0;
+            if (s.merge > 0) ctx.globalAlpha = 0; // 合体中は下で描く
             // ムニムニ：ゼリーのように、呼吸（伸び縮み）＋ゆっくりした揺れ＋走っているときの小さな弾み
             const onGround = s.py >= GROUND - 0.5;
             const breath = Math.sin(s.t * 7.5) * 0.06 + Math.sin(s.t * 2.3) * 0.03;
@@ -355,7 +420,7 @@ export default function MitoRun() {
                 const bob = Math.sin(s.t * 7) * 6;
                 const w = 92, h = (k.height / k.width) * 92;
                 ctx.save(); ctx.translate(s.kondros.x, s.kondros.y + bob); ctx.rotate(Math.sin(s.t * 3) * 0.08); ctx.drawImage(k, -w / 2, -h, w, h); ctx.restore();
-                ctx.fillStyle = '#1A1A1A'; ctx.font = 'bold 12px "Noto Sans JP", sans-serif'; ctx.textAlign = 'center'; ctx.fillText('コンドロス', s.kondros.x, s.kondros.y - h - 10);
+                ctx.fillStyle = '#1A1A1A'; ctx.font = 'bold 12px "Noto Sans JP", sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; ctx.fillText('コンドロス', s.kondros.x, s.kondros.y - h - 10);
             }
             if (s.merge > 0 && m?.width && k?.width) {
                 const p = 1 - s.merge / 2.0; // 0→1
@@ -372,7 +437,7 @@ export default function MitoRun() {
             // 粒子
             for (const p of s.particles) {
                 ctx.globalAlpha = Math.max(0, Math.min(1, p.life * 2));
-                if (p.text) { ctx.fillStyle = p.color; ctx.font = 'bold 14px "Noto Sans JP", sans-serif'; ctx.textAlign = 'center'; ctx.fillText(p.text, p.x, p.y); }
+                if (p.text) { ctx.fillStyle = p.color; ctx.font = 'bold 14px "Noto Sans JP","Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; ctx.fillText(p.text, p.x, p.y); }
                 else { ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, Math.PI * 2); ctx.fill(); }
                 ctx.globalAlpha = 1;
             }
@@ -382,14 +447,15 @@ export default function MitoRun() {
             ctx.strokeStyle = '#1A1A1A'; ctx.lineWidth = 1.5; ctx.strokeRect(16, 16, 200, 14);
             ctx.fillStyle = s.atp > 35 ? (s.keto > 0 ? '#2FB59F' : '#41C9B4') : '#E07A6A'; ctx.fillRect(18, 18, Math.max(0, 196 * (s.atp / maxAtp(s.mito))), 10);
             ctx.fillStyle = '#1A1A1A'; ctx.font = 'bold 11px "Space Grotesk", sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.fillText(`ATP ${Math.round(s.atp)}/${maxAtp(s.mito)}`, 16, 44);
-            // ミトコンドリアの数と状態
-            ctx.font = 'bold 10px "Space Grotesk", sans-serif'; ctx.fillStyle = '#1A1A1A'; ctx.fillText(`MITO ×${s.mito}`, 16, 60);
+            // ミトコンドリアの数・面・状態
+            ctx.font = 'bold 10px "Noto Sans JP", sans-serif'; ctx.fillText(`MITO ×${s.mito} · 面 ${ST.id} ${ST.name}`, 16, 60);
             const labels = [s.keto > 0 && 'ケトン体モード', s.shield > 0 && '抗酸化バリア', s.rush > 0 && 'ダッシュ', s.wave > 0 && '血糖の波', s.caffeine > 0 && 'カフェイン', s.sleepy > 0 && '眠い', s.night && '夜'].filter(Boolean) as string[];
-            ctx.font = 'bold 10px "Noto Sans JP", sans-serif'; ctx.fillStyle = '#1A1A1A'; ctx.fillText(labels.join(' · '), 16, 74);
+            ctx.fillText(labels.join(' · '), 16, 74);
             ctx.font = 'bold 22px "Space Grotesk", sans-serif'; ctx.textAlign = 'right'; ctx.fillText(String(Math.round(s.score)), W - 16, 32);
             ctx.font = 'bold 10px "Space Grotesk", sans-serif'; ctx.fillText('SCORE', W - 16, 44);
-            const left = Math.max(0, Math.round(goalM() - s.scroll / 10));
-            ctx.font = 'bold 10px "Noto Sans JP", sans-serif'; ctx.fillStyle = left === 0 ? '#FF9855' : '#1A1A1A'; ctx.fillText(left === 0 ? 'コンドロスはすぐそこ' : `コンドロスまで ${left}m`, W - 16, 60);
+            const left = Math.max(0, Math.round(goalM(ST.goal) - s.scroll / 10));
+            const target = ST.id === 5 ? 'コンドロス' : 'ゴール';
+            ctx.font = 'bold 10px "Noto Sans JP", sans-serif'; ctx.fillStyle = left === 0 ? '#FF9855' : '#1A1A1A'; ctx.fillText(left === 0 ? `${target}はすぐそこ` : `${target}まで ${left}m`, W - 16, 60);
         };
 
         const loop = (now: number) => {
@@ -404,7 +470,7 @@ export default function MitoRun() {
         g.current.last = performance.now();
         g.current.raf = requestAnimationFrame(loop);
         return () => cancelAnimationFrame(g.current.raf);
-    }, [gameOver, clear, beep]);
+    }, [finish, beep]);
 
     // 入力
     useEffect(() => {
@@ -413,8 +479,14 @@ export default function MitoRun() {
         return () => window.removeEventListener('keydown', onKey);
     }, [jump]);
 
+    const ST = STAGES[stageIdx];
+    const next = STAGES[stageIdx + 1];
+    const best = bests[ST.id] || 0;
+    const finale = phase === 'clear' && ST.id === 5;
+
     const share = async () => {
-        const text = `走れミトス（MITOFLOW）${phase === 'clear' ? '\nミトコンドリア、誕生！' : ''}\nSCORE ${score}（BEST ${best}）\n${tip.text}`;
+        const head = finale ? 'ミトコンドリア、誕生！' : phase === 'clear' ? `面 ${ST.id}「${ST.name}」クリア！` : `面 ${ST.id}「${ST.name}」`;
+        const text = `走れミトス（MITOFLOW）\n${head}\nSCORE ${score}（BEST ${best}）\n${tip.text}`;
         const url = typeof window !== 'undefined' ? `${window.location.origin}/play` : 'https://mitoflow40.com/play';
         try {
             if (navigator.share) await navigator.share({ title: 'MITOFLOW', text, url });
@@ -423,6 +495,33 @@ export default function MitoRun() {
         } catch { /* キャンセル */ }
     };
 
+    const resultCard = (eyebrow: string, title: React.ReactNode, color: string, sub: string) => (
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-5 bg-[#1A1A1A]/45 sm:rounded-3xl">
+            <div className="bg-white rounded-2xl border-2 border-[#1A1A1A] p-5 w-full max-w-[300px] shadow-xl">
+                <p className="text-[10px] tracking-[0.2em] font-bold" style={{ color, fontFamily: "'Space Grotesk', sans-serif" }}>{eyebrow}</p>
+                {title}
+                <div className="text-4xl font-bold text-[#1A1A1A] mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{score}</div>
+                <p className="text-[11px] text-[#4A4A4A] mb-3" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{sub} · BEST {best}</p>
+                <a href={tip.href} className="block text-left text-xs text-[#1A1A1A] leading-relaxed border rounded-xl p-3 mb-3 transition-colors" style={{ background: phase === 'clear' ? '#E6F7F3' : '#FFF6E5', borderColor: color }}>
+                    <span className="block text-[9px] tracking-widest font-bold mb-1" style={{ color, fontFamily: "'Space Grotesk', sans-serif" }}>HINT</span>
+                    {tip.text}
+                    <span className="block mt-1.5 text-[11px] font-bold underline underline-offset-2">{tip.label} →</span>
+                </a>
+                {phase === 'clear' && next ? (
+                    <button onPointerDown={(e) => { e.stopPropagation(); start(stageIdx + 1, true); }} className="w-full py-3 rounded-full border-2 border-[#1A1A1A] font-bold text-[#1A1A1A] mb-2 text-sm" style={{ background: color }}>
+                        次は 面 {next.id}「{next.name}」▶
+                        {mitoKept > 1 && <span className="block text-[10px] font-normal">MITO ×{mitoKept} を持ち越し</span>}
+                    </button>
+                ) : null}
+                <button onPointerDown={(e) => { e.stopPropagation(); start(stageIdx); }} className={`w-full rounded-full border-2 border-[#1A1A1A] font-bold text-[#1A1A1A] mb-2 ${phase === 'clear' && next ? 'py-2 text-sm bg-white' : 'py-3'}`} style={phase === 'clear' && next ? undefined : { background: color }}>もう一回</button>
+                <div className="flex gap-2">
+                    <button onPointerDown={(e) => { e.stopPropagation(); setPhase('start'); }} className="flex-1 py-2 rounded-full bg-white border-2 border-[#1A1A1A] font-bold text-[#1A1A1A] text-xs">面をえらぶ</button>
+                    <button onClick={share} className="flex-1 py-2 rounded-full bg-white border-2 border-[#1A1A1A] font-bold text-[#1A1A1A] text-xs">{shared === 'done' ? 'シェアしました' : 'シェア'}</button>
+                </div>
+            </div>
+        </div>
+    );
+
     return (
         <div className="relative mx-auto w-full max-w-[420px] select-none" style={{ aspectRatio: `${W} / ${H}`, maxHeight: '100dvh' }}>
             <canvas ref={canvasRef} className="block w-full h-full rounded-none sm:rounded-3xl sm:border-2 sm:border-[#1A1A1A]"
@@ -430,51 +529,39 @@ export default function MitoRun() {
                 onPointerDown={(e) => { e.preventDefault(); if (phase === 'playing') jump(); }} />
 
             {phase === 'start' && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-[#1A1A1A]/35 sm:rounded-3xl" onPointerDown={start}>
-                    <div className="bg-white rounded-2xl border-2 border-[#1A1A1A] p-6 max-w-[300px] shadow-xl">
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4 bg-[#1A1A1A]/35 sm:rounded-3xl">
+                    <div className="bg-white rounded-2xl border-2 border-[#1A1A1A] p-4 w-full max-w-[310px] shadow-xl">
                         <p className="text-[10px] tracking-[0.3em] font-bold text-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>MITOFLOW</p>
-                        <h1 className="text-3xl font-bold text-[#1A1A1A] mt-1 mb-2">走れミトス</h1>
-                        <p className="text-xs text-[#4A4A4A] leading-relaxed mb-4">すみかの細胞をめざして、ミトスは走る。<br />タップでジャンプ（2 回まで）。<br />🥚🐟🥦 で ATP を保て。🍩🥤 は速いけど、あとがつらい。<br />🥑🥜 は糖を断っていればケトン体モード。<br />🫐 は抗酸化のバリア。<br />☕ は切れると眠い。夜はもっと残る。<br />跳び続けるとミトコンドリアが増える。<br />遠くにいるコンドロスと出会えたら、ミトコンドリアになれる。</p>
-                        <button className="w-full py-3 rounded-full bg-[#FF9855] border-2 border-[#1A1A1A] font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>START</button>
-                        {best > 0 && <p className="text-[11px] text-[#4A4A4A] mt-3">BEST {best}</p>}
-                        <a href="/play/slow" className="block text-[11px] text-[#4A4A4A] underline mt-3" onPointerDown={(e) => e.stopPropagation()}>ゆっくり版（子どもと）はこちら →</a>
+                        <h1 className="text-2xl font-bold text-[#1A1A1A] mt-0.5 mb-1">走れミトス</h1>
+                        <p className="text-[11px] text-[#4A4A4A] leading-relaxed mb-3">すみかの細胞をめざして、ミトスは走る。<br />タップでジャンプ（2 回まで）。🥚🐟🥦 で ATP を保ち、トゲトゲをよける。<br />🍩🥤 は速いけど、あとがつらい。跳び続けるとミトコンドリアが増える。</p>
+                        <div className="space-y-1.5">
+                            {STAGES.map((st, i) => {
+                                const locked = st.id > unlocked;
+                                const cleared = st.id < progress || (st.id === 5 && done);
+                                return (
+                                    <button key={st.id} disabled={locked}
+                                        onPointerDown={(e) => { e.stopPropagation(); if (!locked) start(i); }}
+                                        className={`w-full flex items-center gap-2.5 rounded-xl border-2 px-2.5 py-1.5 text-left transition-transform ${locked ? 'border-[#1A1A1A]/20 opacity-60' : 'border-[#1A1A1A] active:translate-y-0.5'}`}
+                                        style={{ background: locked ? '#F1F1F1' : st.bg[0] }}>
+                                        <span className="w-7 h-7 shrink-0 rounded-full bg-white border border-[#1A1A1A] flex items-center justify-center text-xs font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{st.id}</span>
+                                        <span className="flex-1 min-w-0">
+                                            <span className="block text-sm font-bold text-[#1A1A1A] leading-tight">{st.name} <span className="text-[10px] font-normal text-[#4A4A4A]">{st.goal}m{bests[st.id] ? ` · BEST ${bests[st.id]}` : ''}</span></span>
+                                            <span className="block text-[10px] text-[#4A4A4A] leading-tight">{st.note}</span>
+                                        </span>
+                                        <span className="text-sm shrink-0" aria-hidden="true">{locked ? '🔒' : cleared ? '⭐' : '▶'}</span>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                        <a href="/play/slow" className="block text-[11px] text-[#4A4A4A] underline mt-3">ゆっくり版（子どもと）はこちら →</a>
                     </div>
                 </div>
             )}
 
-            {phase === 'clear' && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-[#1A1A1A]/45 sm:rounded-3xl">
-                    <div className="bg-white rounded-2xl border-2 border-[#1A1A1A] p-6 w-full max-w-[300px] shadow-xl">
-                        <p className="text-[10px] tracking-[0.3em] font-bold text-[#41C9B4]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>ミトス ＋ コンドロス</p>
-                        <h2 className="text-2xl font-bold text-[#1A1A1A] mt-1 leading-tight">ミトコンドリア、<br />誕生！</h2>
-                        <div className="text-4xl font-bold text-[#1A1A1A] mt-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{score}</div>
-                        <p className="text-[11px] text-[#4A4A4A] mb-3" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>+1000 BONUS · BEST {best}</p>
-                        <a href={tip.href} className="block text-left text-xs text-[#1A1A1A] leading-relaxed bg-[#E6F7F3] border border-[#41C9B4] rounded-xl p-3 mb-4 hover:bg-[#D2F0EA] transition-colors">
-                            <span className="block text-[9px] tracking-widest font-bold text-[#2FB59F] mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>HINT</span>
-                            {tip.text}
-                            <span className="block mt-1.5 text-[11px] font-bold underline underline-offset-2">{tip.label} →</span>
-                        </a>
-                        <button onPointerDown={(e) => { e.stopPropagation(); start(); }} className="w-full py-3 rounded-full bg-[#41C9B4] border-2 border-[#1A1A1A] font-bold text-[#1A1A1A] mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>もう一回</button>
-                        <button onClick={share} className="w-full py-2.5 rounded-full bg-white border-2 border-[#1A1A1A] font-bold text-[#1A1A1A] text-sm">{shared === 'done' ? 'シェアしました' : 'スコアをシェア'}</button>
-                    </div>
-                </div>
-            )}
-            {phase === 'over' && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-[#1A1A1A]/45 sm:rounded-3xl">
-                    <div className="bg-white rounded-2xl border-2 border-[#1A1A1A] p-6 w-full max-w-[300px] shadow-xl">
-                        <p className="text-[10px] tracking-[0.3em] font-bold text-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>ATP が尽きた</p>
-                        <div className="text-5xl font-bold text-[#1A1A1A] mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{score}</div>
-                        <p className="text-[11px] text-[#4A4A4A] mb-3" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>BEST {best}</p>
-                        <a href={tip.href} className="block text-left text-xs text-[#1A1A1A] leading-relaxed bg-[#FFF6E5] border border-[#FF9855] rounded-xl p-3 mb-4 hover:bg-[#FFE4D2] transition-colors">
-                            <span className="block text-[9px] tracking-widest font-bold text-[#FF9855] mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>HINT</span>
-                            {tip.text}
-                            <span className="block mt-1.5 text-[11px] font-bold underline underline-offset-2">{tip.label} →</span>
-                        </a>
-                        <button onPointerDown={(e) => { e.stopPropagation(); start(); }} className="w-full py-3 rounded-full bg-[#FF9855] border-2 border-[#1A1A1A] font-bold text-[#1A1A1A] mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>もう一回</button>
-                        <button onClick={share} className="w-full py-2.5 rounded-full bg-white border-2 border-[#1A1A1A] font-bold text-[#1A1A1A] text-sm">{shared === 'done' ? 'シェアしました' : 'スコアをシェア'}</button>
-                    </div>
-                </div>
-            )}
+            {phase === 'clear' && (finale
+                ? resultCard('ミトス ＋ コンドロス', <h2 className="text-2xl font-bold text-[#1A1A1A] mt-1 leading-tight">ミトコンドリア、<br />誕生！</h2>, '#41C9B4', '+1000 BONUS')
+                : resultCard(`面 ${ST.id} クリア！`, <h2 className="text-xl font-bold text-[#1A1A1A] mt-1 leading-tight">「{ST.name}」を走り抜けた</h2>, '#41C9B4', '+500 BONUS'))}
+            {phase === 'over' && resultCard(`面 ${ST.id} · ${ST.name}`, <h2 className="text-xl font-bold text-[#1A1A1A] mt-1 leading-tight">ATP が尽きた</h2>, '#FF9855', 'SCORE')}
         </div>
     );
 }

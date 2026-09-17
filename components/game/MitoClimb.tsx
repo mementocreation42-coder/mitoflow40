@@ -365,7 +365,7 @@ export default function MitoClimb() {
             }
             for (const p of s.particles) {
                 ctx.globalAlpha = Math.max(0, Math.min(1, p.life * 2));
-                if (p.text) { ctx.fillStyle = p.color; ctx.font = 'bold 15px "Noto Sans JP", sans-serif'; ctx.textAlign = 'center'; ctx.fillText(p.text, p.x, p.y); }
+                if (p.text) { ctx.fillStyle = p.color; ctx.font = 'bold 15px "Noto Sans JP","Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; ctx.textAlign = 'center'; ctx.fillText(p.text, p.x, p.y); }
                 else { ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, Math.PI * 2); ctx.fill(); }
                 ctx.globalAlpha = 1;
             }
