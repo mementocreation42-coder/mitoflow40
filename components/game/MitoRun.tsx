@@ -333,9 +333,15 @@ export default function MitoRun() {
             if (s.shield > 0) { ctx.strokeStyle = `rgba(91,134,184,${0.4 + 0.4 * Math.abs(Math.sin(s.t * 6))})`; ctx.lineWidth = 3; ctx.setLineDash([8, 6]); ctx.beginPath(); ctx.arc(PLAYER_X, s.py - 34, 62, s.t * 2, s.t * 2 + Math.PI * 2); ctx.stroke(); ctx.setLineDash([]); }
             ctx.save();
             if (s.merge > 0) ctx.globalAlpha = 0;
-            ctx.translate(PLAYER_X, s.py);
+            // ムニムニ：ゼリーのように、呼吸（伸び縮み）＋ゆっくりした揺れ＋走っているときの小さな弾み
+            const onGround = s.py >= GROUND - 0.5;
+            const breath = Math.sin(s.t * 7.5) * 0.06 + Math.sin(s.t * 2.3) * 0.03;
+            const hop = onGround ? Math.abs(Math.sin(s.t * 9)) * 4 : 0;
+            const skew = onGround ? Math.sin(s.t * 9) * 0.08 : Math.max(-0.12, Math.min(0.12, -s.vy / 6000));
+            ctx.translate(PLAYER_X, s.py - hop);
             ctx.rotate(wob + Math.max(-0.35, Math.min(0.35, s.vy / 2400)));
-            ctx.scale(1 + sq * 0.18, 1 - sq * 0.22);
+            ctx.transform(1, 0, skew, 1, 0, 0);
+            ctx.scale((1 + sq * 0.18) * (1 + breath), (1 - sq * 0.22) * (1 - breath));
             if (s.hurt > 0 && Math.floor(s.t * 20) % 2 === 0) ctx.globalAlpha = 0.45;
             if (m?.width) { const w = 96, h = (m.height / m.width) * 96; ctx.drawImage(m, -w / 2, -h, w, h); }
             else { ctx.fillStyle = '#E07A6A'; ctx.beginPath(); ctx.ellipse(0, -30, 44, 30, 0, 0, Math.PI * 2); ctx.fill(); }
