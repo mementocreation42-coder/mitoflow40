@@ -434,6 +434,7 @@ export default function MitoRun() {
                         <p className="text-xs text-[#4A4A4A] leading-relaxed mb-4">タップでジャンプ（2 回まで）。<br />🥚🐟🥦 で ATP を保て。🍩🥤 は速いけど、あとがつらい。<br />🥑🥜 は糖を断っていればケトン体モード。<br />🫐 は抗酸化のバリア。<br />☕ は切れると眠い。夜はもっと残る。<br />跳び続けるとミトコンドリアが増える。<br />遠くにいるコンドロスと出会えたら、ミトコンドリアになれる。</p>
                         <button className="w-full py-3 rounded-full bg-[#FF9855] border-2 border-[#1A1A1A] font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>START</button>
                         {best > 0 && <p className="text-[11px] text-[#4A4A4A] mt-3">BEST {best}</p>}
+                        <a href="/play/slow" className="block text-[11px] text-[#4A4A4A] underline mt-3" onPointerDown={(e) => e.stopPropagation()}>ゆっくり版（子どもと）はこちら →</a>
                     </div>
                 </div>
             )}
