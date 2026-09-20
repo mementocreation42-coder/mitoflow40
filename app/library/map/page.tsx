@@ -5,7 +5,7 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata = {
     title: 'ライブラリマップ｜全体の構造をひと目で | Mitoflow40',
-    description: 'Mitoflow40ライブラリの全体像を、インフォグラフィックでひと目に。身体の地図・食べ物・生活習慣・内臓・仕組み・老化と不調・ホルモン・心・フロンティア・症状・思索——11のセクションの構造と、それぞれの代表ページへの入口をまとめた、軽やかなライブラリマップです。',
+    description: 'Mitoflow40ライブラリの全体像を、インフォグラフィックでひと目に。身体の地図・食べ物・生活習慣・内臓・仕組み・老化と不調・ホルモン・心・フロンティア・症状・思索——12のセクションの構造と、それぞれの代表ページへの入口をまとめた、軽やかなライブラリマップです。',
     alternates: { canonical: 'https://mitoflow40.com/library/map' },
     openGraph: {
         siteName: 'Mitoflow40',
@@ -283,7 +283,7 @@ export default function LibraryMapPage() {
                         ライブラリマップ
                     </h1>
                     <p className="text-sm md:text-base text-[#1A1A1A] font-medium leading-loose max-w-[600px] mx-auto">
-                        上から下へ、<strong>体の外側から内側へ</strong>。何を入れ、体の中で何が起き、崩れるとどうなるか。その流れに沿って、11のセクションを並べました。
+                        上から下へ、<strong>体の外側から内側へ</strong>。何を入れ、体の中で何が起き、崩れるとどうなるか。その流れに沿って、12のセクションを並べました。
                     </p>
                 </header>
 
