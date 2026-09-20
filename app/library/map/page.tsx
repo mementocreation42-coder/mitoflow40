@@ -175,7 +175,6 @@ const sections: Sec[] = [
         n: '12', en: 'FOR KIDS', ja: 'こどもと', anchor: '#kids', color: '#DCF1EA',
         desc: '図鑑とゲームで、体のしくみに最初に触れる入口。事実の層は嘘をつかず、遊びの層で柔らかく。親子で。図鑑は制作中。',
         pages: [
-            { href: '/for-kids', label: '図鑑：いのちの仲間たち（制作中）' },
             { href: '/play', label: '走れミトス' },
             { href: '/play/slow', label: '歩けミトス（子どもと）' },
         ],

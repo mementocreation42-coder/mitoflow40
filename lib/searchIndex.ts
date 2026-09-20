@@ -12,7 +12,6 @@ import { organs } from './organs';
 import { essays } from './essays';
 import { conditions } from './conditions';
 import { staticPages } from './pages';
-import { characters, dexNo } from './characters';
 
 export interface SearchItem {
     title: string;       // 表示タイトル
@@ -104,13 +103,6 @@ export const searchIndex: SearchItem[] = [
         href: `/thoughts/${e.slug}`,
         group: '思索',
         keywords: norm(e.title, e.en, e.tagline),
-    })),
-    ...characters.map((c) => ({
-        title: `${c.name.nickname}（${c.name.identity}）`,
-        sub: `${dexNo(c.no)} ミトちゃんといのちの仲間たち（制作中）`,
-        href: `/for-kids/${c.id}`,
-        group: 'こどもと',
-        keywords: norm(c.name.nickname, c.name.identity, c.name.title, c.role.kids, 'こども 図鑑 キャラクター ミトちゃん'),
     })),
 ];
 

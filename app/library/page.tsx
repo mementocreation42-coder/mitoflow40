@@ -659,13 +659,13 @@ export default function LibraryIndex() {
                     </div>
                     <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A] mb-4 md:mb-5"><span className="md:hidden">体のしくみに、図鑑とゲームで最初に触れる。親子で。</span><span className="hidden md:inline">体の中ではたらく細胞や栄養をキャラクターにした図鑑と、ミトコンドリアの「ミトス」が体を旅する 2 つのゲーム。事実の層は嘘をつかず、遊びの層で柔らかくする。大人が読んでも、しくみの入口になります。</span></p>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
-                        <Link href="/for-kids"
-                            className="group block rounded-2xl border border-black p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#DCF1EA' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>PICTURE BOOK · 制作中</div>
+                        <div aria-disabled="true"
+                            className="block rounded-2xl border border-dashed border-[#1A1A1A]/50 p-4 md:p-5" style={{ background: '#DCF1EA' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>PICTURE BOOK</div>
                             <div className="text-lg font-bold text-[#1A1A1A] mb-1">ミトちゃんといのちの仲間たち <span className="ml-1 align-middle text-[10px] font-bold px-2 py-0.5 rounded-full border border-[#1A1A1A]/40 text-[#1A1A1A]/70 bg-white/70">制作中</span></div>
                             <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/80 mb-2 line-clamp-3 sm:line-clamp-none">赤血球・腸内細菌・インスリン・活性酸素。体の中の仲間と手ごわい相手を、No. 順に集める図鑑。まだ作っている途中で、絵と仲間はこれから増えます。</p>
-                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
-                        </Link>
+                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A]/50 bg-white/60 border border-[#1A1A1A]/20" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>COMING SOON</span>
+                        </div>
                         <GameLauncher game="run"
                             className="group block rounded-2xl border border-black p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#FBE6D6' }}>
                             <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>GAME · 1 TAP</div>

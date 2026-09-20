@@ -96,7 +96,7 @@ const COURSE_TIPS: Record<number, Tip> = {
     4: { text: 'のうは、からだで いちばん でんきを つかう。だから ミトスが たくさん いる。', href: '/organs/brain', label: 'のうの はなし' },
 };
 // 語源はギリシャ語の mitos（糸）＋ chondrion（粒）。1898 年にカール・ベンダが名付けた
-const KONDROS_TIP: Tip = { text: 'ミトスは「いと」、コンドロスは「つぶ」という いみ。ふたつ あわせて ミトコンドリア。さいぼうの なかで、からだの でんきを つくる。', href: '/for-kids', label: 'いのちの なかまたち ずかん' };
+const KONDROS_TIP: Tip = { text: 'ミトスは「いと」、コンドロスは「つぶ」という いみ。ふたつ あわせて ミトコンドリア。さいぼうの なかで、からだの でんきを つくる。', href: '/mitochondria', label: 'ミトコンドリアとは' };
 
 export default function MitoClimb() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
