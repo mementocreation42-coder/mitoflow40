@@ -661,9 +661,9 @@ export default function LibraryIndex() {
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
                         <Link href="/for-kids"
                             className="group block rounded-2xl border border-black p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#DCF1EA' }}>
-                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>PICTURE BOOK · 21</div>
-                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">ミトちゃんといのちの仲間たち</div>
-                            <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/80 mb-2 line-clamp-3 sm:line-clamp-none">赤血球・腸内細菌・インスリン・活性酸素。体の中の仲間と手ごわい相手を、No. 順に集める図鑑。</p>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>PICTURE BOOK · 制作中</div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">ミトちゃんといのちの仲間たち <span className="ml-1 align-middle text-[10px] font-bold px-2 py-0.5 rounded-full border border-[#1A1A1A]/40 text-[#1A1A1A]/70 bg-white/70">制作中</span></div>
+                            <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/80 mb-2 line-clamp-3 sm:line-clamp-none">赤血球・腸内細菌・インスリン・活性酸素。体の中の仲間と手ごわい相手を、No. 順に集める図鑑。まだ作っている途中で、絵と仲間はこれから増えます。</p>
                             <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
                         </Link>
                         <GameLauncher game="run"

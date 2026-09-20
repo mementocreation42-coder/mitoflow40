@@ -107,7 +107,7 @@ export const searchIndex: SearchItem[] = [
     })),
     ...characters.map((c) => ({
         title: `${c.name.nickname}（${c.name.identity}）`,
-        sub: `${dexNo(c.no)} ミトちゃんといのちの仲間たち`,
+        sub: `${dexNo(c.no)} ミトちゃんといのちの仲間たち（制作中）`,
         href: `/for-kids/${c.id}`,
         group: 'こどもと',
         keywords: norm(c.name.nickname, c.name.identity, c.name.title, c.role.kids, 'こども 図鑑 キャラクター ミトちゃん'),

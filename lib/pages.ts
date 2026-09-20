@@ -54,7 +54,7 @@ export const staticPages: StaticPage[] = [
     { path: "/fatty-liver", priority: 0.6, changeFrequency: 'monthly', search: { title: "脂肪肝（MASLD）", sub: "沈黙の現代病・お酒を飲まなくてもなる脂肪肝", group: "しくみ" } },
     { path: "/food-journey", priority: 0.7, changeFrequency: 'monthly', search: { title: "食べてから、動くまで", sub: "消化・吸収・代謝・排出の全体像（インフォグラフィック）", group: "しくみ" } },
     { path: "/foods", priority: 0.7, changeFrequency: 'monthly' },
-    { path: "/for-kids", priority: 0.6, changeFrequency: 'monthly', search: { title: "ミトちゃんといのちの仲間たち（図鑑）", sub: "体の中ではたらく仲間を、キャラクターで集める図鑑。こどもと", group: "こどもと" } },
+    { path: "/for-kids", priority: 0.6, changeFrequency: 'monthly', search: { title: "ミトちゃんといのちの仲間たち（図鑑・制作中）", sub: "体の中ではたらく仲間を、キャラクターで集める図鑑。こどもと", group: "こどもと" } },
     { path: "/genes", priority: 0.7, changeFrequency: 'monthly' },
     { path: "/glycation", priority: 0.6, changeFrequency: 'monthly', search: { title: "糖化（こげる）", sub: "Glycation", group: "しくみ" } },
     { path: "/glycolysis", priority: 0.6, changeFrequency: 'monthly', search: { title: "解糖系", sub: "Glycolysis", group: "しくみ" } },

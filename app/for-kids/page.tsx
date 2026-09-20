@@ -44,6 +44,11 @@ export default function ForKidsPage() {
                 </p>
             </header>
 
+            <p className="mb-6 rounded-xl border border-[#1A1A1A]/20 bg-white/70 px-4 py-3 text-sm text-[#4A4A4A] leading-relaxed">
+                <span className="mr-2 inline-block rounded-full border border-[#1A1A1A]/40 px-2 py-0.5 text-[10px] font-bold text-[#1A1A1A]/70 align-middle">制作中</span>
+                この図鑑はまだ作っている途中です。絵と仲間は少しずつ増えます。いまは {charactersByNo.length} 体。
+            </p>
+
             <div className="grid gap-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
                 {charactersByNo.map((c) => (
                     <CharacterCard key={c.id} character={c} />
