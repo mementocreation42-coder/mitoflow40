@@ -21,13 +21,14 @@ LIBRARY MAP
 - n: 2 ／ en: ON YOUR PLATE ／ ja: 食べ物 ／ anchor: #food ／ desc: 毎日の皿の上の話。身近な食材と、小麦・米・断食・カロリーなど迷いやすい食のテーマ。 ／ pages: [object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]
 - n: 3 ／ en: LIFESTYLE ／ ja: 生活習慣 ／ anchor: #lifestyle ／ desc: 睡眠・光・水・運動の土台から、嗜好品・解毒・計測・サプリまで。知識を日々の暮らしに落とし込む。 ／ pages: [object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]
 - n: 4 ／ en: YOUR ORGANS ／ ja: 内臓・臓器 ／ anchor: #organs ／ desc: 肝臓・腎臓・腸・心臓・脳など、主要な臓器の役割と、関わる検査・栄養。 ／ pages: [object Object]・[object Object]・[object Object]・[object Object]
-- n: 5 ／ en: MECHANISM ／ ja: 身体の仕組み ／ anchor: #mechanism ／ desc: 細胞の中で起きていること。ミトコンドリアとエネルギーから、代謝・血糖・腸・酵素まで、土台の生化学。 ／ pages: [object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]
+- n: 5 ／ en: MECHANISM ／ ja: 身体の仕組み ／ anchor: #mechanism ／ desc: 細胞の中で起きていること。ミトコンドリアとエネルギーから、代謝・血糖・腸・酵素まで、土台の生化学。 ／ pages: [object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]
 - n: 6 ／ en: HORMONES ／ ja: ホルモン ／ anchor: #hormones ／ desc: 体じゅうに指令を届ける化学メッセンジャー。9種のホルモンと40代の変化。 ／ pages: [object Object]・[object Object]・[object Object]
 - n: 7 ／ en: AGING & DISEASE ／ ja: 老化と不調の土台 ／ anchor: #aging ／ desc: さびる・こげる・くすぶる——共通の根と、そこから生まれる現代病たち。 ／ pages: [object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]
 - n: 8 ／ en: MIND & BODY ／ ja: 心とからだ ／ anchor: #mind ／ desc: 気分や不安を「体の土台」から読み解く。腸・栄養・睡眠・自律神経・血糖。 ／ pages: [object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]
 - n: 9 ／ en: FROM SYMPTOMS ／ ja: 症状から引く ／ anchor: #symptoms ／ desc: 「この不調はなぜ？」から逆引きする入口。体感（症状）からも、病態（不調・現代病）からも仕組みへたどる。 ／ pages: [object Object]・[object Object]・[object Object]
 - n: 10 ／ en: FRONTIER ／ ja: 研究と社会のフロンティア ／ anchor: #frontier ／ desc: 今まさに研究が進む領域。期待と注意の両方を、フラットに見渡す。 ／ pages: [object Object]・[object Object]・[object Object]
 - n: 11 ／ en: THOUGHTS ／ ja: 思索 ／ anchor: #thoughts ／ desc: 「運命とは」「自由とは」「老いるとは」。健康を、問いから考えるエッセイ。 ／ pages: [object Object]・[object Object]・[object Object]・[object Object]
+- n: 12 ／ en: FOR KIDS ／ ja: こどもと ／ anchor: #kids ／ desc: 図鑑とゲームで、体のしくみに最初に触れる入口。事実の層は嘘をつかず、遊びの層で柔らかく。親子で。 ／ pages: [object Object]・[object Object]・[object Object]
 - n:  ／ en: APPROACH ／ ja: 考え方と立ち位置 ／ anchor: #approach ／ desc: このライブラリがどこに立っているか。使命、中庸、医療との距離感、栄養学の歴史。 ／ pages: [object Object]・[object Object]・[object Object]・[object Object]・[object Object]・[object Object]
 
 ## このページからのリンク

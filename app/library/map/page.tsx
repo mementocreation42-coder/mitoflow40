@@ -11,7 +11,7 @@ export const metadata = {
         siteName: 'Mitoflow40',
         locale: 'ja_JP',
         title: 'ライブラリマップ｜全体の構造をひと目で | Mitoflow40',
-        description: 'ライブラリの全11セクションの構造を、インフォグラフィックでひと目に。代表ページへの入口つきライブラリマップ。',
+        description: 'ライブラリの全12セクションの構造を、インフォグラフィックでひと目に。代表ページへの入口つきライブラリマップ。',
         url: 'https://mitoflow40.com/library/map',
         type: 'website',
     },
@@ -97,6 +97,12 @@ const sections: Sec[] = [
             { href: '/blood-sugar', label: '血糖' },
             { href: '/insulin-resistance', label: 'インスリン抵抗性' },
             { href: '/gut-health', label: '腸内環境' },
+            { href: '/atp', label: 'ATP' },
+            { href: '/ketones', label: 'ケトン体' },
+            { href: '/methylation', label: 'メチレーション' },
+            { href: '/autonomic-nervous-system', label: '自律神経' },
+            { href: '/circadian-rhythm', label: '体内時計' },
+            { href: '/gut-brain', label: '脳腸相関' },
         ],
     },
     {
@@ -163,6 +169,15 @@ const sections: Sec[] = [
             { href: '/thoughts/aging', label: '老いるとは？' },
             { href: '/thoughts/tuning', label: '整えるとは？' },
             { href: '/thoughts/balance', label: 'バランスとは？' },
+        ],
+    },
+    {
+        n: '12', en: 'FOR KIDS', ja: 'こどもと', anchor: '#kids', color: '#DCF1EA',
+        desc: '図鑑とゲームで、体のしくみに最初に触れる入口。事実の層は嘘をつかず、遊びの層で柔らかく。親子で。',
+        pages: [
+            { href: '/for-kids', label: '図鑑：いのちの仲間たち' },
+            { href: '/play', label: '走れミトス' },
+            { href: '/play/slow', label: '歩けミトス（子どもと）' },
         ],
     },
     {
@@ -244,7 +259,7 @@ function Arrow({ label }: { label: string }) {
 export default function LibraryMapPage() {
     const intro = byAnchor['#intro'], map = byAnchor['#map'], food = byAnchor['#food'], life = byAnchor['#lifestyle'];
     const organs = byAnchor['#organs'], mech = byAnchor['#mechanism'], aging = byAnchor['#aging'], horm = byAnchor['#hormones'];
-    const mind = byAnchor['#mind'], frontier = byAnchor['#frontier'], symptoms = byAnchor['#symptoms'], thoughts = byAnchor['#thoughts'], approach = byAnchor['#approach'];
+    const mind = byAnchor['#mind'], frontier = byAnchor['#frontier'], symptoms = byAnchor['#symptoms'], thoughts = byAnchor['#thoughts'], kids = byAnchor['#kids'], approach = byAnchor['#approach'];
     const lens = [
         { href: '/genes', en: 'GENES', ja: '遺伝子', role: '設計図', note: '生まれ持った体質', color: '#D7F0E8' },
         { href: '/biomarkers', en: 'BIOMARKERS', ja: '血液検査', role: '現在地', note: '今の体の状態', color: '#DCE8F0' },
@@ -257,7 +272,7 @@ export default function LibraryMapPage() {
             <img loading="lazy" decoding="async" src="/images/misc/24.png" alt="" className="absolute pointer-events-none"
                 style={{ bottom: '8px', left: '8px', width: '260px' }} />
 
-            <JsonLd data={medicalWebPage({ name: 'ライブラリマップ｜全体の構造をひと目で', description: 'ライブラリの全11セクションの構造を、インフォグラフィックでひと目に。代表ページへの入口つきライブラリマップ。', path: '/library/map' })} />
+            <JsonLd data={medicalWebPage({ name: 'ライブラリマップ｜全体の構造をひと目で', description: 'ライブラリの全12セクションの構造を、インフォグラフィックでひと目に。代表ページへの入口つきライブラリマップ。', path: '/library/map' })} />
             <JsonLd data={breadcrumb([{ name: 'Library', path: '/library' }, { name: 'ライブラリマップ', path: '/library/map' }])} />
 
             <article className="max-w-[920px] mx-auto relative" style={{ zIndex: 1 }}>
@@ -366,9 +381,10 @@ export default function LibraryMapPage() {
                     <span className="text-xs font-bold tracking-widest text-[#1A1A1A]/60" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>視野を広げる</span>
                     <span className="flex-1 h-px bg-[#1A1A1A]/20" />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <Node s={frontier} />
                     <Node s={thoughts} />
+                    <Node s={kids} />
                     <Node s={approach} />
                 </div>
 

@@ -80,6 +80,62 @@ export const readingPaths: ReadingPath[] = [
             { href: '/supplements', title: 'サプリメント', why: '最後に、足りない分だけ。マルチではなく単体で、体に聞きながら減らす。' },
         ],
     },
+    {
+        slug: 'gut-first', n: 5, title: '腸を整える 8 枚', en: 'GUT FIRST', color: '#F0E2D8', accent: '#C98A5E',
+        lead: '「食べた」と「吸収できた」は別の話。消化から吸収、腸内細菌、腸と脳のつながりまでを順に読むと、肌・気分・免疫の不調が腸から見えてくる。',
+        steps: [
+            { href: '/digestion', title: '消化・吸収', why: '入口。胃酸と酵素がそろって初めて、食べ物は材料になる。' },
+            { href: '/gut-health', title: '腸内環境', why: '腸は消化だけの臓器ではない。免疫の最前線と、気分の材料がここにある。' },
+            { href: '/microbiome', title: '腸内フローラ', why: '善玉菌を「足す」より「育てる」。食物繊維と発酵食品の役割。' },
+            { href: '/gut-troubles', title: '気になる腸のキーワード', why: 'グルテン・カゼイン・リーキーガット・SIBO。言葉が先行しがちな話題を中立に。' },
+            { href: '/gut-brain', title: '脳腸相関', why: '腸の不調が気分に、気分が腸に。双方向の道を知ると、打ち手が増える。' },
+            { href: '/organs/gut', title: '腸', why: '臓器としての腸。関わる血液項目と、40 代での変化。' },
+            { href: '/symptoms/gut-issues', title: 'お腹の不調・便秘', why: '症状から逆引きする。何を疑い、どの血液項目を見るか。' },
+            { href: '/foods/natto', title: '納豆', why: '腸活の理想形をひとつ。食べ物で章を締める。' },
+        ],
+    },
+    {
+        slug: 'hormones-at-40', n: 6, title: '40 代のホルモン 8 枚', en: 'HORMONES AT 40', color: '#F3E0EC', accent: '#C96BA3',
+        lead: '疲れ・冷え・気分の揺れ・眠りの浅さ。40 代の変化の多くは、ホルモンの量と効きが変わることで説明がつく。司令塔から順に、揺らぎを読む。',
+        steps: [
+            { href: '/hormones', title: 'ホルモンの種類', why: '全体の地図。どのホルモンが何を動かしているかを眺める。' },
+            { href: '/hormones/cortisol', title: 'コルチゾール', why: 'ストレスに応じて血糖を上げる緊急ホルモン。出っぱなしが 40 代の疲れを作る。' },
+            { href: '/organs/adrenal', title: '副腎', why: 'コルチゾールと DHEA を作る小さな司令塔。ストレスの受け皿。' },
+            { href: '/hormones/thyroid-hormone', title: '甲状腺ホルモン', why: '全身の代謝速度を決めるアクセル。冷え・むくみ・体重を同時に動かす。' },
+            { href: '/organs/thyroid', title: '甲状腺', why: '臓器としての甲状腺。TSH・FT3・FT4 のペアで読む。' },
+            { href: '/menopause', title: '更年期・更年期移行期', why: '女性の 40 代。エストロゲンの揺らぎが心身に及ぶ範囲。' },
+            { href: '/male-menopause', title: '男性更年期', why: '男性にもある。テストステロンの低下と、活力・気分・筋肉。' },
+            { href: '/hormones/melatonin', title: 'メラトニン', why: '眠りへ導くホルモン。光と時間で整える、最後の 1 枚。' },
+        ],
+    },
+    {
+        slug: 'mind-from-body', n: 7, title: '心とからだ 8 枚', en: 'MIND FROM THE BODY', color: '#E6E0F2', accent: '#8B78C9',
+        lead: '気分の落ち込みや不安を「性格」で片づけない。神経伝達物質の材料、炎症、呼吸と自律神経。心を体の土台から読み直す章。',
+        steps: [
+            { href: '/mind-body', title: '心とからだ', why: '入口。気分・不安・ストレスを「体の土台」から読み解く見取り図。' },
+            { href: '/mood-nutrition', title: '気分と栄養', why: 'セロトニンもドーパミンも、材料は食べ物。心の材料をそろえる。' },
+            { href: '/anxiety', title: '不安と体', why: '理由のない不安や動悸の裏に、血糖・鉄・甲状腺があることも。' },
+            { href: '/hormones/serotonin', title: 'セロトニン', why: '心の安定を支え、夜の眠りの材料になる。多くは腸で作られる。' },
+            { href: '/neuroinflammation', title: '神経炎症', why: 'サイトカインが脳に及ぶとき。気分の不調を炎症から読む。' },
+            { href: '/mindfulness', title: 'マインドフルネス・呼吸', why: '自律神経を整えるスイッチ。今日からできる打ち手。' },
+            { href: '/spirituality', title: 'スピリチュアリティと体', why: '祈り・瞑想・つながり。心身相関を科学の側から。' },
+            { href: '/thoughts/happiness', title: '幸せとは？', why: '幸せを体の側から問い直して、章を閉じる。' },
+        ],
+    },
+    {
+        slug: 'foundation-of-aging', n: 8, title: '老化の土台 8 枚', en: 'THE FOUNDATION OF AGING', color: '#F7E2DC', accent: '#E07A6A',
+        lead: '老いは劣化ではなく変化。ただし「さびる・こげる・くすぶる」が重なると、変化は不調に傾く。土台を知り、筋肉とタンパク質で下支えする。',
+        steps: [
+            { href: '/thoughts/aging', title: '老いるとは？', why: '出発点。暦年齢と生物学的年齢は別、という立場を先に決める。' },
+            { href: '/modern-diseases', title: '現代病とは', why: 'なぜ便利な暮らしが人を病気にするのか。老化を早める環境の話。' },
+            { href: '/oxidative-stress', title: '活性酸素・酸化ストレス', why: '「さびる」。ミトコンドリアが出す副産物と、抗酸化のしくみ。' },
+            { href: '/glycation', title: '糖化・AGEs', why: '「こげる」。血糖の波が、肌と血管を硬くする。' },
+            { href: '/autophagy', title: 'オートファジー', why: '細胞の掃除と再利用。空腹の時間が回すしくみ。' },
+            { href: '/sarcopenia', title: 'サルコペニア・フレイル', why: '40 代から始まる筋肉の減少。老化の進み方を大きく左右する。' },
+            { href: '/nutrients/protein', title: 'タンパク質', why: '筋肉・酵素・ホルモンの材料。量と分け方。' },
+            { href: '/hormones/growth-hormone', title: '成長ホルモン / IGF-1', why: '修復と再生。睡眠と運動で保つ、締めの 1 枚。' },
+        ],
+    },
 ];
 
 export function findStep(pathname: string): { path: ReadingPath; index: number } | null {

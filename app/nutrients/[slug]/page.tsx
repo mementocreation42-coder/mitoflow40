@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { nutrients, getNutrientBySlug } from '@/lib/nutrients';
 import { getGeneBySlug } from '@/lib/genes';
-import { getFoodsByNutrient } from '@/lib/foods';
+import { getFoodsByNutrient, resolveFoodLabel } from '@/lib/foods';
 import JsonLd, { medicalWebPage, breadcrumb } from '@/components/JsonLd';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import RelatedBlock from '@/components/RelatedBlock';
@@ -103,11 +103,18 @@ export default async function NutrientPage({ params }: { params: Promise<{ slug:
                         {n.name} を多く含む食品
                     </h2>
                     <div className="flex flex-wrap gap-2">
-                        {n.foods.map((f) => (
-                            <span key={f} className="px-3 py-1.5 bg-white border border-[#1A1A1A]/15 rounded-full text-sm text-[#1A1A1A]">
-                                {f}
-                            </span>
-                        ))}
+                        {n.foods.map((f) => {
+                            const food = resolveFoodLabel(f);
+                            return food ? (
+                                <Link key={f} href={`/foods/${food.slug}`} className="px-3 py-1.5 bg-white border border-[#1A1A1A] rounded-full text-sm font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white transition-colors">
+                                    {f} →
+                                </Link>
+                            ) : (
+                                <span key={f} className="px-3 py-1.5 bg-white border border-[#1A1A1A]/15 rounded-full text-sm text-[#1A1A1A]">
+                                    {f}
+                                </span>
+                            );
+                        })}
                     </div>
                 </section>
 

@@ -12,11 +12,16 @@ export interface Symptom {
     relatedNutrients: string[];  // 関わりやすい栄養素（slug）
     relatedLinks: { href: string; label: string }[]; // 臓器・しくみ・ホルモン・生活習慣など
     selfCare: string[];       // まず試したい生活の打ち手
+    journal?: { id: number; title: string; note: string }[]; // 本人の記録（n=1）。/journal/<id>。事実の根拠には使わない
 }
 
 export const symptoms: Symptom[] = [
     {
         slug: 'fatigue',
+        journal: [
+            { id: 20055, title: '主観と客観の答え合わせ——Apple WatchのHRV値が証明した「朝ピーク」の正体', note: '20 年の自己観察「朝がいちばん調子がいい」を、Apple Watch の HRV が裏づけた記録。' },
+            { id: 17491, title: '続・コウノエベルトの効果', note: '慢性腰痛が 2 ヶ月でほぼ消え、疲れにくくなったという記録。' },
+        ],
         name: '疲れやすい・だるい',
         en: 'Fatigue',
         color: '#FBE6D6',
@@ -46,6 +51,9 @@ export const symptoms: Symptom[] = [
     },
     {
         slug: 'post-meal-sleepiness',
+        journal: [
+            { id: 11988, title: 'フリースタイルリブレを二週間モニタリングしてみて', note: 'CGM を 2 週間つけたら、ほぼ毎食で血糖スパイクが出ていた記録。' },
+        ],
         name: '食後の眠気',
         en: 'Post-Meal Sleepiness',
         color: '#FCEBCE',
@@ -104,6 +112,9 @@ export const symptoms: Symptom[] = [
     },
     {
         slug: 'poor-sleep',
+        journal: [
+            { id: 20062, title: '【SleepCycle】「睡眠スコア85」の嘘と、朝4時の猫の唸り声', note: '睡眠スコアは高いのに体感が悪い。原因は数値の外にあった、という記録。' },
+        ],
         name: '寝つきが悪い・眠りが浅い',
         en: 'Poor Sleep',
         color: '#DCE3F0',
@@ -133,6 +144,9 @@ export const symptoms: Symptom[] = [
     },
     {
         slug: 'cold',
+        journal: [
+            { id: 20039, title: '【玄米】15年続けた”玄米食”をやめて…', note: '15 年続けた玄米をやめてから、冷えと体の重さが消えたという記録。' },
+        ],
         name: '冷え・寒がり',
         en: 'Cold Sensitivity',
         color: '#DEEAF2',
@@ -249,6 +263,9 @@ export const symptoms: Symptom[] = [
     },
     {
         slug: 'gut-issues',
+        journal: [
+            { id: 20065, title: '45歳、人生で今が一番「快便」です！', note: '20 歳から続いた腹の弱さが、45 歳でいちばん整ったという記録。' },
+        ],
         name: 'お腹の不調・便秘',
         en: 'Gut Issues',
         color: '#DCF1EA',
@@ -394,6 +411,9 @@ export const symptoms: Symptom[] = [
     },
     {
         slug: 'allergy',
+        journal: [
+            { id: 20068, title: '花粉症は、薬を使わず改善できる', note: '20 年続いた鼻炎・花粉症が、食事と暮らしの見直しのあと 1 年半出ていないという記録。' },
+        ],
         name: 'アレルギー・むずむず（鼻炎・かゆみ）',
         en: 'Allergy & Histamine',
         color: '#ECEFCF',

@@ -36,6 +36,10 @@ YOUR RESULT
 
 ※ この結果は12問の自覚症状から読み取れる「可能性レベルの仮説」です。確定ではなく、断定でもありません。
 
+12問の組み合わせから、ライブラリの知見に照らして浮かぶ「可能性」です。診断ではなく、次に確かめる場所の目印としてお読みください。
+
+今回の回答では、複数のサインが重なる強いパターンは見えませんでした。気になる軸から、下の「ライブラリで深掘り」へ進んでみてください。
+
 「」を底上げするために、まず読むページ
 
 次に気になる「」は：
@@ -50,20 +54,6 @@ DEEPER ANALYSIS
 このセルフチェックは「自覚症状」の可視化です。Mitoflow40の解析サービスでは、血液検査の客観データとApple Watchなどの生活ログを統合して、より深い仮説を導きます。
 
 ## ページ内のデータ（一覧・表・カード）
-
-### QUESTIONS
-- axis: energy ／ text: 朝、目覚めて10分以内に体が動き出せる ／ labelLow: なかなか動けない ／ labelHigh: すぐ動ける
-- axis: energy ／ text: 午前中、コーヒーやエナジードリンクがないと頭が回らない ／ labelLow: 頼らない ／ labelHigh: 毎日頼る
-- axis: energy ／ text: 何もしていない午後、体に「重さ」を感じない ／ labelLow: いつも重い ／ labelHigh: 感じない
-- axis: mental ／ text: 集中したい仕事を90分続けられる ／ labelLow: 続かない ／ labelHigh: 続く
-- axis: mental ／ text: 名前や言葉が「のど元まで出かかる」もどかしさが、週に何度かある ／ labelLow: ほぼない ／ labelHigh: 頻繁にある
-- axis: mental ／ text: 夜遅い時間でも頭が冴えて寝つけないことがある ／ labelLow: ない ／ labelHigh: よくある
-- axis: recovery ／ text: 軽い運動の翌日、筋肉痛や疲労がほとんど残らない ／ labelLow: いつも残る ／ labelHigh: 残らない
-- axis: recovery ／ text: 風邪をひくと長引く、または最近よく体調を崩す ／ labelLow: ない ／ labelHigh: よくある
-- axis: recovery ／ text: 寝ても疲れが取れた感覚がない朝が多い ／ labelLow: ほぼない ／ labelHigh: 頻繁
-- axis: flex ／ text: 食事を1食抜いても、頭と体が動き続ける ／ labelLow: すぐフラつく ／ labelHigh: 平気
-- axis: flex ／ text: 甘いもの・パン・米への強い渇望が、週に何度かある ／ labelLow: ない ／ labelHigh: よくある
-- axis: flex ／ text: 冷たい環境でも体の芯から冷えにくい ／ labelLow: すぐ冷える ／ labelHigh: 冷えにくい
 
 ### AXIS_META
 - energy: {"label":"エネルギー","en":"ENERGY","color":"#FF9855","description":"ミトコンドリアが日々のATP（エネルギー通貨）を十分に作れているか。"} ／ mental: {"label":"脳のクリアさ","en":"MENTAL CLARITY","color":"#6CCFF6","description":"脳はATPを最も大量に消費する臓器。ミトコンドリアの状態が思考の冴えに直結。"} ／ recovery: {"label":"回復力","en":"RECOVERY","color":"#4AF6C3","description":"細胞修復・抗酸化・免疫の働きはミトコンドリアの予備能力に依存。"} ／ flex: {"label":"代謝の柔軟性","en":"METABOLIC FLEXIBILITY","color":"#E8C547","description":"糖と脂質を切り替えて使える能力。鍛えられたミトコンドリアの証。"}

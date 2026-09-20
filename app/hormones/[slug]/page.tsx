@@ -5,6 +5,8 @@ import { getBiomarkerBySlug } from '@/lib/biomarkers';
 import { getNutrientBySlug } from '@/lib/nutrients';
 import JsonLd, { medicalWebPage, breadcrumb } from '@/components/JsonLd';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import RelatedBlock from '@/components/RelatedBlock';
+import { relatedForHormone } from '@/lib/related';
 
 export function generateStaticParams() {
     return hormones.map((h) => ({ slug: h.slug }));
@@ -131,6 +133,8 @@ export default async function HormonePage({ params }: { params: Promise<{ slug: 
                         </div>
                     </section>
                 )}
+
+                <RelatedBlock groups={relatedForHormone(h.slug)} />
 
                 <p className="text-xs text-[#4A4A4A]/60 leading-relaxed mb-12 p-4 bg-white/60 rounded-lg">
                     ※ 本記事は一般的な情報提供を目的としており、診断・治療・医療行為を構成するものではありません。ホルモンの検査・治療は医療機関にご相談ください。

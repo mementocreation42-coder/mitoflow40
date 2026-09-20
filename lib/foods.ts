@@ -677,3 +677,33 @@ export function getFoodsByCategory(): { category: string; items: Food[] }[] {
 export function getFoodsByNutrient(nutrientSlug: string): Food[] {
     return foods.filter((f) => f.nutrients.includes(nutrientSlug));
 }
+
+// ── 文字列ラベル → 食べ物ページ ──────────────────────────
+// nutrients.ts の foods は「卵」「青魚(さば・いわし)」のような表記。表記そのもの、または
+// ・／括弧で区切った各語が、名前か別名に一致すれば、その食べ物ページへ解決する。無ければ undefined（文字のまま出す）。
+const FOOD_ALIASES: Record<string, string> = {
+    'たまご': 'egg', '卵黄': 'egg',
+    '鶏肉': 'chicken-breast', 'ささみ': 'chicken-breast',
+    '牛肉': 'beef', '赤身肉': 'beef',
+    '青魚': 'mackerel', 'さば': 'mackerel', 'いわし': 'mackerel',
+    'かつお': 'tuna', 'まぐろ': 'tuna', 'カツオ': 'tuna', 'マグロ': 'tuna',
+    'あさり': 'clams', 'しじみ': 'clams',
+    '大豆': 'beans', '豆腐': 'beans', '大豆製品': 'beans', '枝豆': 'beans',
+    '緑の葉物野菜': 'spinach', '濃い緑の葉物': 'spinach',
+    '海藻': 'seaweed', 'わかめ': 'seaweed', 'ひじき': 'seaweed', '昆布': 'seaweed',
+    'ナッツ': 'almond',
+    'カカオ': 'dark-chocolate', 'ココア': 'dark-chocolate',
+    'ウコン': 'turmeric',
+};
+
+export function resolveFoodLabel(label: string): Food | undefined {
+    const clean = label.replace(/^※/, '').trim();
+    const parts = [clean, ...clean.split(/[・、／/（）()\s]+/).map((p) => p.trim()).filter(Boolean)];
+    for (const p of parts) {
+        const byName = foods.find((f) => f.name === p);
+        if (byName) return byName;
+        const alias = FOOD_ALIASES[p];
+        if (alias) return getFoodBySlug(alias);
+    }
+    return undefined;
+}

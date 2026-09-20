@@ -509,3 +509,28 @@ export function getNutrientsByCategory(): { category: string; items: Nutrient[] 
         }))
         .filter((g) => g.items.length > 0);
 }
+
+// ── 文字列ラベル → 栄養素ページ ──────────────────────────
+// genes.ts の nutrients は「葉酸 (5-MTHF)」「NAC (Nアセチルシステイン)」のような表記。
+// 表記そのもの、または括弧・空白で区切った各語が名前か別名に一致すれば、栄養素ページへ解決する。無ければ undefined。
+const NUTRIENT_ALIASES: Record<string, string> = {
+    'B12': 'b12', 'ビタミンB12': 'b12', 'メチルコバラミン': 'b12',
+    'CoQ10': 'coq10', 'コエンザイムQ10': 'coq10',
+    'NAC': 'nac', 'Nアセチルシステイン': 'nac',
+    'リボフラビン': 'b2', 'B2': 'b2',
+    '葉酸': 'folate', '5-MTHF': 'folate',
+    'ホスファチジルコリン': 'choline',
+    'ビタミンD3': 'vitamin-d', 'オメガ3': 'omega3',
+};
+
+export function resolveNutrientLabel(label: string): Nutrient | undefined {
+    const clean = label.replace(/^※/, '').trim();
+    const parts = [clean, ...clean.split(/[・、／/（）()\s]+/).map((p) => p.trim()).filter(Boolean)];
+    for (const p of parts) {
+        const byName = nutrients.find((n) => n.name === p);
+        if (byName) return byName;
+        const alias = NUTRIENT_ALIASES[p];
+        if (alias) return getNutrientBySlug(alias);
+    }
+    return undefined;
+}

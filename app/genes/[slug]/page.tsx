@@ -4,6 +4,9 @@ import { genes, getGeneBySlug } from '@/lib/genes';
 import { getSymptomBySlug } from '@/lib/symptoms';
 import JsonLd, { medicalWebPage, breadcrumb } from '@/components/JsonLd';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import RelatedBlock from '@/components/RelatedBlock';
+import { relatedForGene } from '@/lib/related';
+import { resolveNutrientLabel } from '@/lib/nutrients';
 
 export function generateStaticParams() {
     return genes.map((g) => ({ slug: g.slug }));
@@ -108,11 +111,18 @@ export default async function GenePage({ params }: { params: Promise<{ slug: str
                     {gene.symbol} に関連する栄養素
                 </h2>
                 <div className="flex flex-wrap gap-2">
-                    {gene.nutrients.map((n) => (
-                        <span key={n} className="px-3 py-1.5 bg-white border border-[#1A1A1A]/15 rounded-full text-sm text-[#1A1A1A]">
-                            {n}
-                        </span>
-                    ))}
+                    {gene.nutrients.map((n) => {
+                        const target = resolveNutrientLabel(n);
+                        return target ? (
+                            <Link key={n} href={`/nutrients/${target.slug}`} className="px-3 py-1.5 bg-white border border-[#1A1A1A] rounded-full text-sm font-bold text-[#1A1A1A] hover:bg-[#41C9B4] hover:text-white transition-colors">
+                                {n} →
+                            </Link>
+                        ) : (
+                            <span key={n} className="px-3 py-1.5 bg-white border border-[#1A1A1A]/15 rounded-full text-sm text-[#1A1A1A]">
+                                {n}
+                            </span>
+                        );
+                    })}
                 </div>
             </section>
 
@@ -142,6 +152,8 @@ export default async function GenePage({ params }: { params: Promise<{ slug: str
                     </div>
                 )}
             </section>
+
+            <RelatedBlock groups={relatedForGene(gene.slug)} />
 
             {/* もっと学ぶ（しくみ・生活習慣への導線） */}
             <section className="mb-12">

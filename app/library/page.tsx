@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { CSSProperties } from 'react';
 import LibrarySearch from '@/components/LibrarySearch';
 import TextbookResume from '@/components/TextbookResume';
+import GameLauncher from '@/components/game/GameLauncher';
 import { genes } from '@/lib/genes';
 import { nutrients } from '@/lib/nutrients';
 import { biomarkers } from '@/lib/biomarkers';
@@ -143,6 +144,7 @@ const TOC = [
     { href: '#symptoms', n: '09', label: '症状から引く', bg: '#FDEAD0', accent: '#EE9A3C' },
     { href: '#frontier', n: '10', label: 'フロンティア', bg: '#E2EAF2', accent: '#5B86B8' },
     { href: '#thoughts', n: '11', label: '思索', bg: '#ECE6DA', accent: '#A08F6A' },
+    { href: '#kids', n: '12', label: 'こどもと', bg: '#DCF1EA', accent: '#41C9B4' },
     { href: '#approach', n: '', label: '考え方と立ち位置', bg: '#F1EDE4', accent: '#7A7A7A' },
 ];
 
@@ -189,7 +191,7 @@ export default function LibraryIndex() {
                     <div className="grid grid-cols-3 md:grid-cols-6 gap-1.5 md:gap-2">
                         {TOC.map((t) => (
                             <a key={t.href} href={t.href}
-                                className="group inline-flex items-center justify-center gap-1 md:gap-1.5 px-2 md:px-2.5 py-1 md:py-1.5 rounded-full border text-[11px] md:text-[13px] font-bold text-[#1A1A1A] whitespace-nowrap shadow-sm bg-[var(--chip-bg)] hover:bg-[var(--chip)] hover:text-white transition-colors"
+                                className={`${t.href === '#approach' ? 'col-span-3 md:col-span-6 ' : ''}group inline-flex items-center justify-center gap-1 md:gap-1.5 px-2 md:px-2.5 py-1 md:py-1.5 rounded-full border text-[11px] md:text-[13px] font-bold text-[#1A1A1A] whitespace-nowrap shadow-sm bg-[var(--chip-bg)] hover:bg-[var(--chip)] hover:text-white transition-colors`}
                                 style={{ borderColor: t.accent, ['--chip-bg' as string]: t.bg, ['--chip' as string]: t.accent } as CSSProperties}>
                                 {t.n && <span className="text-[var(--chip)] group-hover:text-white transition-colors" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{t.n}</span>}
                                 {t.label}
@@ -644,6 +646,41 @@ export default function LibraryIndex() {
                             読む <span className="group-hover:translate-x-1 transition-transform">→</span>
                         </span>
                     </Link>
+                </div>
+
+                {/* こどもと（図鑑とゲーム） */}
+                <div id="kids" className="mt-10 md:mt-24 scroll-mt-24 md:scroll-mt-60">
+                    <div className="mb-3 md:mb-5 flex items-stretch gap-3">
+                        <span className="w-1.5 rounded-full" style={{ background: '#41C9B4' }} />
+                        <div className="py-0.5">
+                            <h2 className="text-2xl md:text-4xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}><span className="text-base md:text-lg font-bold mr-3 align-middle" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#41C9B4' }}>12</span>こどもと</h2>
+                            <p className="text-[10px] tracking-[0.2em] font-bold mt-1" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#41C9B4', opacity: 0.7 }}>FOR KIDS</p>
+                        </div>
+                    </div>
+                    <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#4A4A4A] mb-4 md:mb-5"><span className="md:hidden">体のしくみに、図鑑とゲームで最初に触れる。親子で。</span><span className="hidden md:inline">体の中ではたらく細胞や栄養をキャラクターにした図鑑と、ミトコンドリアの「ミトス」が体を旅する 2 つのゲーム。事実の層は嘘をつかず、遊びの層で柔らかくする。大人が読んでも、しくみの入口になります。</span></p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
+                        <Link href="/for-kids"
+                            className="group block rounded-2xl border border-black p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#DCF1EA' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>PICTURE BOOK · 21</div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">ミトちゃんといのちの仲間たち</div>
+                            <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/80 mb-2 line-clamp-3 sm:line-clamp-none">赤血球・腸内細菌・インスリン・活性酸素。体の中の仲間と手ごわい相手を、No. 順に集める図鑑。</p>
+                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>見る <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                        </Link>
+                        <GameLauncher game="run"
+                            className="group block rounded-2xl border border-black p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#FBE6D6' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>GAME · 1 TAP</div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">走れミトス</div>
+                            <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/80 mb-2 line-clamp-3 sm:line-clamp-none">すみかの細胞をめざして走る、1 タップのランゲーム。血管から細胞の中まで 5 つの面。良い食べ物で ATP を保つ。</p>
+                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>PLAY <span className="group-hover:translate-x-1 transition-transform">▶</span></span>
+                        </GameLauncher>
+                        <GameLauncher game="climb"
+                            className="group block rounded-2xl border border-black p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style={{ background: '#FFF1C9' }}>
+                            <div className="text-[10px] font-bold tracking-widest text-[#1A1A1A]/50 mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>GAME · SLOW</div>
+                            <div className="text-lg font-bold text-[#1A1A1A] mb-1">歩けミトス（子どもと）</div>
+                            <p className="text-[13px] leading-[1.6] md:text-sm md:leading-relaxed text-[#1A1A1A]/80 mb-2 line-clamp-3 sm:line-clamp-none">ゆっくり進む縦スクロール版。ひらがなのヒントで、体の中をいっしょに歩く。5 つのコース。</p>
+                            <span className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-bold text-[#1A1A1A] bg-[#FF9855]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>PLAY <span className="group-hover:translate-x-1 transition-transform">▶</span></span>
+                        </GameLauncher>
+                    </div>
                 </div>
 
                 {/* 考え方と立ち位置 */}

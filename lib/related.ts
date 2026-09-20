@@ -9,8 +9,10 @@
 
 import { biomarkers, getBiomarkerBySlug } from './biomarkers';
 import { symptoms, getSymptomBySlug } from './symptoms';
-import { getNutrientBySlug } from './nutrients';
+import { nutrients, getNutrientBySlug } from './nutrients';
 import { foods } from './foods';
+import { hormones } from './hormones';
+import { organs } from './organs';
 import { conditions, getConditionBySlug, type Condition } from './conditions';
 
 export interface RelatedCard {
@@ -83,6 +85,59 @@ export function resolveCondition(c: Condition) {
         others: conditions.filter((x) => x.slug !== c.slug && x.category === c.category),
     };
 }
+
+// ── ホルモン・臓器・遺伝子（逆引き）─────────────────────
+// 症状・病態は relatedLinks の href でホルモン／臓器を指している。ここで逆に辿る。
+const linksTo = (links: { href: string }[] | undefined, href: string) => (links ?? []).some((l) => l.href === href);
+const symptomCard = (s: (typeof symptoms)[number]): RelatedCard => ({ href: `/symptoms/${s.slug}`, label: s.name, sub: s.tagline, color: s.color });
+const biomarkerCard = (b: (typeof biomarkers)[number]): RelatedCard => ({ href: `/biomarkers/${b.slug}`, label: b.name, sub: b.tagline, color: b.color });
+const nutrientCard = (n: (typeof nutrients)[number]): RelatedCard => ({ href: `/nutrients/${n.slug}`, label: n.name, sub: n.tagline, color: n.color });
+const hormoneCard = (h: (typeof hormones)[number]): RelatedCard => ({ href: `/hormones/${h.slug}`, label: h.name, sub: h.tagline, color: h.color });
+const organCard = (o: (typeof organs)[number]): RelatedCard => ({ href: `/organs/${o.slug}`, label: o.name, sub: o.tagline, color: o.color });
+
+// 臓器 → そこでつくられる・主に働くホルモン（ページがあるものだけ）
+const ORGAN_HORMONES: Record<string, string[]> = {
+    adrenal: ['cortisol', 'dhea'],
+    thyroid: ['thyroid-hormone'],
+    pancreas: ['insulin'],
+    brain: ['melatonin', 'serotonin', 'growth-hormone'],
+    gut: ['serotonin'],
+    liver: ['growth-hormone'],
+};
+
+export function relatedForHormone(slug: string): RelatedGroup[] {
+    const href = `/hormones/${slug}`;
+    const groups: RelatedGroup[] = [];
+    const orgs = organs.filter((o) => linksTo(o.relatedMechanisms, href) || (ORGAN_HORMONES[o.slug] ?? []).includes(slug));
+    if (orgs.length) groups.push({ key: 'organs', title: 'このホルモンをつくる・受ける臓器', cards: orgs.map(organCard) });
+    const syms = symptoms.filter((s) => linksTo(s.relatedLinks, href));
+    if (syms.length) groups.push({ key: 'symptoms', title: 'このホルモンが手がかりになる症状', cards: cap(syms).map(symptomCard) });
+    const conds = conditions.filter((c) => linksTo(c.relatedLinks, href));
+    if (conds.length) groups.push({ key: 'conditions', title: '関わる不調・病態', cards: conds.map(conditionCard) });
+    return groups;
+}
+
+export function relatedForOrgan(slug: string): RelatedGroup[] {
+    const href = `/organs/${slug}`;
+    const groups: RelatedGroup[] = [];
+    const hs = hormones.filter((h) => linksTo(h.relatedMechanisms, href) || (ORGAN_HORMONES[slug] ?? []).includes(h.slug));
+    if (hs.length) groups.push({ key: 'hormones', title: 'この臓器がつくる・受けるホルモン', cards: hs.map(hormoneCard) });
+    const syms = symptoms.filter((s) => linksTo(s.relatedLinks, href));
+    if (syms.length) groups.push({ key: 'symptoms', title: 'この臓器が関わる症状', cards: cap(syms).map(symptomCard) });
+    const conds = conditions.filter((c) => linksTo(c.relatedLinks, href));
+    if (conds.length) groups.push({ key: 'conditions', title: '関わる不調・病態', cards: conds.map(conditionCard) });
+    return groups;
+}
+
+export function relatedForGene(slug: string): RelatedGroup[] {
+    const groups: RelatedGroup[] = [];
+    const bms = biomarkers.filter((b) => b.relatedGenes.includes(slug));
+    if (bms.length) groups.push({ key: 'biomarkers', title: 'この遺伝子が関わる血液検査の項目', cards: cap(bms).map(biomarkerCard) });
+    const ns = nutrients.filter((n) => n.relatedGenes.includes(slug));
+    if (ns.length) groups.push({ key: 'nutrients', title: 'この遺伝子の働きを支える栄養素', cards: cap(ns).map(nutrientCard) });
+    return groups;
+}
+
 
 // ── リンク切れ検証（ビルド時）：conditions が指す slug が実在するか ──
 function checkConditionLinks(): void {

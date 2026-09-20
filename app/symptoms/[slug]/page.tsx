@@ -141,6 +141,24 @@ export default async function SymptomPage({ params }: { params: Promise<{ slug: 
                     </ul>
                 </section>
 
+                {(s.journal?.length ?? 0) > 0 && (
+                    <section className="mb-12 rounded-2xl border border-[#1A1A1A]/20 bg-white/70 p-5 md:p-6">
+                        <div className="text-[10px] tracking-widest text-[#1A1A1A]/50 font-bold mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>JOURNAL · n=1</div>
+                        <h2 className="text-xl font-bold text-[#1A1A1A] mb-2 leading-tight">本人の記録</h2>
+                        <p className="text-xs text-[#4A4A4A] leading-relaxed mb-4">著者・小林大介の体験の記録です。ひとりの記録（n=1）であり、上の本文の根拠ではありません。同じことが誰にでも起きるとは限りません。</p>
+                        <ul className="space-y-3">
+                            {s.journal!.map((j) => (
+                                <li key={j.id}>
+                                    <Link href={`/journal/${j.id}`} className="group block">
+                                        <span className="text-sm font-bold text-[#1A1A1A] group-hover:underline underline-offset-2">{j.title} →</span>
+                                        <span className="block text-xs text-[#4A4A4A] leading-relaxed mt-0.5">{j.note}</span>
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                )}
+
                 <RelatedBlock groups={relatedForSymptom(s.slug)} />
 
                 <AnalysisCta variant="symptom" />

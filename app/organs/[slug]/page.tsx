@@ -5,6 +5,8 @@ import { getBiomarkerBySlug } from '@/lib/biomarkers';
 import { getNutrientBySlug } from '@/lib/nutrients';
 import JsonLd, { medicalWebPage, breadcrumb } from '@/components/JsonLd';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import RelatedBlock from '@/components/RelatedBlock';
+import { relatedForOrgan } from '@/lib/related';
 
 export function generateStaticParams() {
     return organs.map((o) => ({ slug: o.slug }));
@@ -171,6 +173,8 @@ export default async function OrganPage({ params }: { params: Promise<{ slug: st
                         </div>
                     </section>
                 )}
+
+                <RelatedBlock groups={relatedForOrgan(o.slug)} />
 
                 {/* Disclaimer */}
                 <p className="text-xs text-[#4A4A4A]/60 leading-relaxed mb-12 p-4 bg-white/60 rounded-lg">

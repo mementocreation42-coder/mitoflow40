@@ -10,6 +10,7 @@ import { symptoms } from '@/lib/symptoms';
 import { essays } from '@/lib/essays';
 import { conditions } from '@/lib/conditions';
 import { staticPages } from '@/lib/pages';
+import { characters } from '@/lib/characters';
 
 const BASE_URL = 'https://mitoflow40.com';
 
@@ -73,6 +74,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: 'monthly' as const,
         priority: 0.7,
     }));
+    const characterUrls = characters.map((c) => ({
+        url: `${BASE_URL}/for-kids/${c.id}`,
+        lastModified: now,
+        changeFrequency: 'monthly' as const,
+        priority: 0.5,
+    }));
     const essayUrls = essays.map((e) => ({
         url: `${BASE_URL}/thoughts/${e.slug}`,
         lastModified: now,
@@ -91,6 +98,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     return [
         ...staticUrls,
+        ...characterUrls,
         ...geneUrls,
         ...nutrientUrls,
         ...biomarkerUrls,
