@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import RssIcon from "./RssIcon";
 
 // ヘッダーと同じ並び（ANALYSIS / LIBRARY / LEARN / JOURNAL / CONTACT）
 const footerLinks = [
@@ -45,6 +46,12 @@ export default function Footer() {
                         <li><Link href="/play/slow" className="footer-link">ゲーム「歩けミトス」（子どもと）</Link></li>
                         <li><Link href="/author" className="footer-link">著者・監修</Link></li>
                         <li><Link href="/references" className="footer-link">参照文献・出典</Link></li>
+                        <li>
+                            <a href="/feed.xml" className="footer-link" title="Journal の RSS フィード" style={{ display: "inline-flex", alignItems: "center", gap: "0.4em" }}>
+                                <RssIcon size={14} />
+                                RSS（ジャーナル）
+                            </a>
+                        </li>
                         <li><Link href="/terms" className="footer-link">利用規約</Link></li>
                         <li><Link href="/privacy" className="footer-link">プライバシーポリシー</Link></li>
                         <li><Link href="/legal" className="footer-link">特定商取引法に基づく表記</Link></li>
