@@ -1,10 +1,10 @@
 import { featuredImageUrl, getLatestPosts } from "@/lib/wp";
 
-// Journal の RSS。RSS リーダー（SAL Reader など）でフォローできるようにする
+// サイトの RSS（中身は Journal の新着）。RSS リーダー（SAL Reader など）でフォローできるようにする
 export const revalidate = 3600;
 
 const SITE_URL = "https://mitoflow40.com";
-const TITLE = "Mitoflow40 Journal";
+const TITLE = "Mitoflow40";
 const DESCRIPTION = "40代からの健康実践・ミトコンドリア最適化・精密栄養学など、最先端の健康情報と実践の記録。";
 
 // WordPress の date はタイムゾーンなしの日本時間。Vercel（UTC）でそのまま読むと 9 時間ずれる
@@ -47,7 +47,7 @@ export async function GET() {
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
   <channel>
     <title>${esc(TITLE)}</title>
-    <link>${SITE_URL}/journal</link>
+    <link>${SITE_URL}/</link>
     <description>${esc(DESCRIPTION)}</description>
     <language>ja</language>
     <atom:link href="${SITE_URL}/feed.xml" rel="self" type="application/rss+xml"/>

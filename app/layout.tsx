@@ -82,8 +82,8 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <head>
-        {/* RSS リーダーがサイトの URL から Journal のフィードを見つけられるように */}
-        <link rel="alternate" type="application/rss+xml" title="Mitoflow40 Journal" href="/feed.xml" />
+        {/* RSS リーダーがサイトの URL からフィードを見つけられるように */}
+        <link rel="alternate" type="application/rss+xml" title="Mitoflow40" href="/feed.xml" />
       </head>
       <body
         className={`${spaceGrotesk.variable} ${inter.variable} ${notoSansJP.variable} ${museoModerno.variable} ${specialElite.variable} ${bebasNeue.variable} antialiased`}
