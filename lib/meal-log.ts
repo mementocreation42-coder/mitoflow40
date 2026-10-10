@@ -100,6 +100,36 @@ function csv(rows: string[][]): string {
 
 const NUTRIENT_HEADERS = NUTRIENTS.map((n) => `${n.label}(${n.unit})`);
 
+// 提出用：1 食 1 行。必須項目（日付・食事のタイプ・食事内容）を先頭に、任意の食事量・特記事項を続ける。
+// 同じ日・同じ区分の記録は 1 行にまとめる。写真は提出の対象外なので入れない。
+export function toSubmissionCsv(meals: Meal[], db: FoodDb | null): string {
+    const rows = [['日付', '食事のタイプ', '食事内容', '時刻', '食事量', '特記事項']];
+    const groups = new Map<string, Meal[]>();
+    for (const m of ascending(meals)) {
+        const key = `${m.date}|${m.type}`;
+        groups.set(key, [...(groups.get(key) ?? []), m]);
+    }
+    const sorted = [...groups.values()].sort((a, b) =>
+        a[0].date.localeCompare(b[0].date) || MEAL_TYPES.indexOf(a[0].type) - MEAL_TYPES.indexOf(b[0].type));
+    for (const list of sorted) {
+        const items = list.flatMap((m) => m.items);
+        const content = [
+            ...items.map((it) => `${displayName(it.name)}（${it.grams}g）`),
+            ...list.map((m) => m.food).filter(Boolean),
+        ].join('、');
+        const grams = items.reduce((n, it) => n + it.grams, 0);
+        const kcal = totalsOf(db, items).values.kcal;
+        const amount = items.length ? `${Math.round(grams)}g${db ? `・${Math.round(kcal)}kcal` : ''}` : '';
+        rows.push([
+            list[0].date, list[0].type, content,
+            list.map((m) => m.time).filter(Boolean).join('・'),
+            amount,
+            list.map((m) => m.memo).filter(Boolean).join('／'),
+        ]);
+    }
+    return csv(rows);
+}
+
 // 食べた食品ごとに 1 行（Cronometer の servings に相当）。
 // 成分表の食品がない記録は 1 行にまとめ、自由記述・メモ・写真は各記録の最初の行に入れる。
 export function toServingsCsv(meals: Meal[], db: FoodDb | null): string {

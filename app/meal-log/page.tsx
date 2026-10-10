@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { MEAL_TYPES, downloadCsv, downloadZip, recentFoods, sortMeals, toDailyCsv, toServingsCsv, todayStr, useMealLog, useProfile, type Meal, type MealItem, type MealType } from '@/lib/meal-log';
+import { MEAL_TYPES, downloadCsv, downloadZip, recentFoods, sortMeals, toDailyCsv, toServingsCsv, toSubmissionCsv, todayStr, useMealLog, useProfile, type Meal, type MealItem, type MealType } from '@/lib/meal-log';
 import { displayName, fmt, loadFoodDb, targetsFor, totalsOf, type FoodDb } from '@/lib/nutrition';
 import FoodSearch from '@/components/meal-log/FoodSearch';
 import MealEditor, { type Draft } from '@/components/meal-log/MealEditor';
@@ -40,6 +40,7 @@ export default function MealLogPage() {
     const [panel, setPanel] = useState<Panel>(null);
     const [viewer, setViewer] = useState<string | null>(null);
     const [busy, setBusy] = useState<string | null>(null);
+    const [month, setMonth] = useState(() => todayStr().slice(0, 7));
     const [from, setFrom] = useState('');
     const [to, setTo] = useState('');
 
@@ -50,6 +51,13 @@ export default function MealLogPage() {
     const totals = useMemo(() => totalsOf(db, dayItems), [db, dayItems]);
     const targets = useMemo(() => targetsFor(profile), [profile]);
     const recent = useMemo(() => recentFoods(meals), [meals]);
+
+    // 提出用：記録のある月と今月を選べるように
+    const months = useMemo(() => [...new Set([todayStr().slice(0, 7), ...meals.map((m) => m.date.slice(0, 7))])].sort().reverse(), [meals]);
+    const monthMeals = useMemo(() => meals.filter((m) => m.date.startsWith(month)), [meals, month]);
+    const monthDays = new Set(monthMeals.map((m) => m.date)).size;
+    const [my, mm] = month.split('-').map(Number);
+    const daysInMonth = new Date(my, mm, 0).getDate();
 
     const ranged = useMemo(() => meals.filter((m) => (!from || m.date >= from) && (!to || m.date <= to)), [meals, from, to]);
     const photoCount = ranged.reduce((n, m) => n + m.photos.length, 0);
@@ -175,9 +183,33 @@ export default function MealLogPage() {
 
                 <div className="mt-4"><NutrientTargets totals={totals} targets={targets} hasItems={dayItems.length > 0} /></div>
 
-                {/* 書き出し */}
+                {/* 提出用（1ヶ月分） */}
+                <section className="mt-4 rounded-2xl border-2 border-[#1A1A1A] bg-white p-4 md:p-5 shadow-[4px_4px_0_#1A1A1A]">
+                    <h2 className="text-base font-bold text-[#1A1A1A]">提出用 CSV（1ヶ月分）</h2>
+                    <p className="text-xs text-[#4A4A4A] mt-1">必須項目「日付・食事のタイプ・食事内容」を含む形で、1 食 1 行にまとめて書き出します。写真は提出の対象外なので含めません。</p>
+                    <div className="mt-3 flex flex-wrap items-end gap-3">
+                        <div>
+                            <label className={labelCls} htmlFor="ml-month">月</label>
+                            <select id="ml-month" className={`${inputCls} w-auto`} value={month} onChange={(e) => setMonth(e.target.value)}>
+                                {months.map((m) => <option key={m} value={m}>{Number(m.slice(0, 4))}年{Number(m.slice(5))}月</option>)}
+                            </select>
+                        </div>
+                        <button type="button" disabled={!monthMeals.length} onClick={() => downloadCsv(toSubmissionCsv(monthMeals, db), `meal-log_${month}`)}
+                            className={`${pillCls} bg-[#FF9855] py-2.5`}>
+                            提出用 CSV を書き出す
+                        </button>
+                    </div>
+                    <p className="text-xs text-[#4A4A4A] mt-2">
+                        {monthMeals.length ? `${monthDays} / ${daysInMonth} 日分の記録があります。` : 'この月の記録はまだありません。'}
+                    </p>
+                    <p className="text-[11px] text-[#666] mt-2 leading-relaxed">
+                        列：日付・食事のタイプ・食事内容（食品と量）・時刻・食事量（合計 g・kcal）・特記事項（メモ）。グルテンフリーなどの特記事項は、各食事の「写真・メモ・時刻を編集」のメモ欄に書いてください。
+                    </p>
+                </section>
+
+                {/* 書き出し（自分用・詳しいデータ） */}
                 <section className="mt-4 rounded-2xl border-2 border-[#1A1A1A] bg-white p-4 md:p-5">
-                    <h2 className="text-base font-bold text-[#1A1A1A]">CSV で書き出す</h2>
+                    <h2 className="text-base font-bold text-[#1A1A1A]">詳しいデータを書き出す（自分用）</h2>
                     <div className="grid grid-cols-2 gap-3 mt-3">
                         <div>
                             <label className={labelCls} htmlFor="ml-from">開始日（空欄ならすべて）</label>
