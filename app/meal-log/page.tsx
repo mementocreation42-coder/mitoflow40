@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { MEAL_TYPES, downloadCsv, foodLines, previousMeal, toSubmissionCsv, todayStr, useMealLog, useMemory, useMounted, type Meal, type MealType, type Remembered } from '@/lib/meal-log';
+import { MEAL_TYPES, downloadCsv, foodLines, previousMeal, toSubmissionCsv, todayStr, useMealLog, useMemory, useMounted, useNow, useReminders, missingMeals, buildReminderIcs, downloadIcs, DEFAULT_REMINDERS, MAIN_MEAL_TYPES, type MainMealType, type ReminderTimes, type Meal, type MealType, type Remembered } from '@/lib/meal-log';
 import { displayName } from '@/lib/nutrition';
 import { pillCls } from '@/components/meal-log/styles';
 
@@ -39,6 +39,8 @@ export default function MealLogEasyPage() {
     const [date, setDate] = useState(todayStr);
     const month = date.slice(0, 7);
     const { memory, remember, forget, suggest } = useMemory(meals);
+    const { times, setTimes } = useReminders();
+    const now = useNow();
 
     const byKey = useMemo(() => {
         const map = new Map<string, Meal[]>();
@@ -56,6 +58,7 @@ export default function MealLogEasyPage() {
 
     const today = todayStr();
     const isToday = date === today;
+    const missing = missingMeals(meals, times, now);
     const dayCount = MAIN_TYPES.filter((t) => filled(date, t)).length;
 
     return (
@@ -87,6 +90,17 @@ export default function MealLogEasyPage() {
                     </p>
                 </div>
 
+                <ReminderBanner missing={missing} todayAllDone={MAIN_TYPES.every((t) => filled(today, t))}
+                    onWrite={(d, type) => {
+                        setDate(d);
+                        // 日付を切り替えて描き直したあとに、その食事の入力欄へ移動する
+                        setTimeout(() => {
+                            const sec = document.querySelector<HTMLElement>(`section[aria-label="${type}"]`);
+                            sec?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            sec?.querySelector<HTMLInputElement>('input')?.focus({ preventScroll: true });
+                        }, 60);
+                    }} />
+
                 {meals.length === 0 && <HowTo />}
 
                 <div className="mt-4 space-y-3">
@@ -107,6 +121,8 @@ export default function MealLogEasyPage() {
                 <h2 className="mt-10 text-lg font-bold text-[#1A1A1A]">月末の提出</h2>
                 <MonthCalendar date={date} onSelect={setDate} filled={filled} />
                 <ExportBox month={month} meals={monthMeals} filled={filled} onPick={setDate} />
+
+                <ReminderSettings times={times} onSave={setTimes} />
 
                 <MemoryList memory={memory} onForget={forget} />
 
@@ -423,6 +439,87 @@ function MemoryList({ memory, onForget }: { memory: Record<string, Remembered>; 
                         ))}
                     </ul>
                 </>
+            )}
+        </section>
+    );
+}
+
+// 時間が過ぎたのに書いていない食事と、昨日の書き忘れ
+function ReminderBanner({ missing, todayAllDone, onWrite }: {
+    missing: { today: MainMealType[]; yesterday: MainMealType[]; yesterdayDate: string };
+    todayAllDone: boolean;
+    onWrite: (date: string, type: MainMealType) => void;
+}) {
+    const today = todayStr();
+    if (!missing.today.length && !missing.yesterday.length) {
+        return todayAllDone ? (
+            <p className="mt-4 rounded-xl bg-[#DFFBEF] border border-[#1A1A1A] px-3 py-2 text-[13px] font-bold text-[#1A1A1A]" role="status">✓ 今日の朝・昼・夕がそろいました</p>
+        ) : null;
+    }
+    return (
+        <section aria-label="記録のリマインド" className="mt-4 rounded-2xl border-2 border-[#1A1A1A] bg-[#FFF3D6] p-3">
+            {missing.today.length > 0 && (
+                <div>
+                    <p className="text-[13px] font-bold text-[#1A1A1A]">🔔 今日の{missing.today.join('・')}が、まだ書かれていません</p>
+                    <div className="flex flex-wrap gap-1.5 mt-2">
+                        {missing.today.map((t) => (
+                            <button key={t} type="button" onClick={() => onWrite(today, t)}
+                                className="min-h-[40px] rounded-full border-2 border-[#1A1A1A] bg-[#FF9855] px-4 text-[14px] font-bold">{t}を書く</button>
+                        ))}
+                    </div>
+                </div>
+            )}
+            {missing.yesterday.length > 0 && (
+                <div className={missing.today.length ? 'mt-3 pt-3 border-t border-[#1A1A1A]/30' : ''}>
+                    <p className="text-[13px] font-bold text-[#1A1A1A]">昨日（{md(missing.yesterdayDate)}）の{missing.yesterday.join('・')}が未記入です</p>
+                    <div className="flex flex-wrap gap-1.5 mt-2">
+                        {missing.yesterday.map((t) => (
+                            <button key={t} type="button" onClick={() => onWrite(missing.yesterdayDate, t)}
+                                className="min-h-[40px] rounded-full border-2 border-[#1A1A1A] bg-white px-4 text-[14px] font-bold">昨日の{t}を書く</button>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </section>
+    );
+}
+
+// リマインドの時刻と、カレンダーへの登録
+function ReminderSettings({ times, onSave }: { times: ReminderTimes; onSave: (t: ReminderTimes) => void }) {
+    const [open, setOpen] = useState(false);
+    const [added, setAdded] = useState(false);
+    const changed = (t: MainMealType, v: string) => { if (/^\d{2}:\d{2}$/.test(v)) { onSave({ ...times, [t]: v }); setAdded(false); } };
+    return (
+        <section className="mt-4 rounded-2xl border-2 border-[#1A1A1A] bg-white p-4">
+            <button type="button" onClick={() => setOpen(!open)} aria-expanded={open} className="w-full min-h-[36px] flex items-center justify-between text-left">
+                <span className="text-sm font-bold text-[#1A1A1A]">🔔 リマインドの設定</span>
+                <span className="text-xs font-bold underline text-[#4A4A4A]">{open ? '閉じる' : '時刻・通知を設定する'}</span>
+            </button>
+            {open && (
+                <div className="mt-2">
+                    <p className="text-[12px] text-[#4A4A4A]">この時刻を過ぎても書いていない食事を、このページを開いたときに画面の上でお知らせします。</p>
+                    <div className="mt-3 space-y-2">
+                        {MAIN_MEAL_TYPES.map((t) => (
+                            <label key={t} className="flex items-center justify-between gap-3">
+                                <span className="text-[15px] font-bold text-[#1A1A1A]">{t}</span>
+                                <input type="time" value={times[t]} onChange={(e) => changed(t, e.target.value)}
+                                    className="w-[150px] rounded-xl border-2 border-[#1A1A1A] bg-white px-3 py-2 text-[16px]" />
+                            </label>
+                        ))}
+                    </div>
+                    <button type="button" onClick={() => { downloadIcs(buildReminderIcs(times, `${location.origin}/meal-log`), 'meal-log-reminder'); setAdded(true); }}
+                        className={`${pillCls} bg-[#6CCFF6] w-full mt-4 py-3`}>
+                        カレンダーに毎日のリマインドを追加
+                    </button>
+                    {added && <p className="text-[12px] font-bold text-[#1A1A1A] mt-2" role="status">ファイルをダウンロードしました。開いて「カレンダーに追加」を押すと登録されます。</p>}
+                    <p className="text-[11px] text-[#666] mt-2 leading-relaxed">
+                        登録すると、毎日この時刻にカレンダーの通知が鳴ります（アプリを開いていなくても届きます）。
+                        iPhone は「ファイル」や Safari のダウンロードから開いて「すべてを追加」を押してください。時刻を変えたときは、カレンダーの古いリマインドを消して、もう一度追加してください。
+                    </p>
+                    {(times.朝食 !== DEFAULT_REMINDERS.朝食 || times.昼食 !== DEFAULT_REMINDERS.昼食 || times.夕食 !== DEFAULT_REMINDERS.夕食) && (
+                        <button type="button" onClick={() => { onSave(DEFAULT_REMINDERS); setAdded(false); }} className="mt-2 text-xs font-bold underline text-[#4A4A4A]">初期の時刻に戻す</button>
+                    )}
+                </div>
             )}
         </section>
     );

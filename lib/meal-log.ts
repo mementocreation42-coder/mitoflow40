@@ -417,3 +417,111 @@ export function previousMeal(meals: Meal[], date: string, type: MealType): { dat
     }
     return best;
 }
+
+// ===== リマインド =====
+// ページを閉じているとき、ブラウザだけでは通知を確実に出せない（iPhone はホーム画面に追加したアプリでないと通知不可）。
+// そのため、①開いたときに「書いていない食事」を画面の上に出す ②カレンダーに毎日のリマインドを登録する ── の 2 つで支える。
+
+export type MainMealType = '朝食' | '昼食' | '夕食';
+export const MAIN_MEAL_TYPES: MainMealType[] = ['朝食', '昼食', '夕食'];
+export type ReminderTimes = Record<MainMealType, string>; // HH:MM
+export const DEFAULT_REMINDERS: ReminderTimes = { 朝食: '09:00', 昼食: '13:30', 夕食: '20:30' };
+
+const REMINDER_KEY = 'mf:meal-log:reminder:v1';
+const reminderListeners = new Set<() => void>();
+function subscribeReminder(l: () => void) {
+    reminderListeners.add(l);
+    const onStorage = (e: StorageEvent) => { if (e.key === REMINDER_KEY) l(); };
+    window.addEventListener('storage', onStorage);
+    return () => { reminderListeners.delete(l); window.removeEventListener('storage', onStorage); };
+}
+function getReminderSnapshot(): string { try { return localStorage.getItem(REMINDER_KEY) ?? ''; } catch { return ''; } }
+
+export function useReminders() {
+    const raw = useSyncExternalStore(subscribeReminder, getReminderSnapshot, () => '');
+    let times: ReminderTimes = DEFAULT_REMINDERS;
+    try {
+        if (raw) {
+            const p = JSON.parse(raw);
+            times = { ...DEFAULT_REMINDERS };
+            for (const t of MAIN_MEAL_TYPES) if (typeof p[t] === 'string' && /^\d{2}:\d{2}$/.test(p[t])) times[t] = p[t];
+        }
+    } catch { /* 初期値のまま */ }
+    const setTimes = useCallback((t: ReminderTimes) => {
+        try { localStorage.setItem(REMINDER_KEY, JSON.stringify(t)); } catch { /* ignore */ }
+        reminderListeners.forEach((l) => l());
+    }, []);
+    return { times, setTimes };
+}
+
+// 今の時刻を 1 分ごと・画面に戻ったときに更新する（開きっぱなしでも時間が来たら出るように）
+export function useNow(): Date {
+    const snap = useSyncExternalStore(
+        (cb) => {
+            const id = setInterval(cb, 30_000);
+            const onVis = () => { if (document.visibilityState === 'visible') cb(); };
+            document.addEventListener('visibilitychange', onVis);
+            window.addEventListener('focus', cb);
+            return () => { clearInterval(id); document.removeEventListener('visibilitychange', onVis); window.removeEventListener('focus', cb); };
+        },
+        () => Math.floor(Date.now() / 30_000),
+        () => 0,
+    );
+    return new Date(snap * 30_000);
+}
+
+// 書いていない食事。today：リマインドの時刻を過ぎたのに未記入のもの。yesterday：昨日の未記入。
+export function missingMeals(meals: Meal[], times: ReminderTimes, now: Date): { today: MainMealType[]; yesterday: MainMealType[]; yesterdayDate: string } {
+    const todayDate = todayStr();
+    const hm = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    const has = (date: string, type: MealType) => meals.some((m) => m.date === date && m.type === type && (m.food.trim() || m.items.length));
+    const y = new Date(now); y.setDate(y.getDate() - 1);
+    const yesterdayDate = `${y.getFullYear()}-${String(y.getMonth() + 1).padStart(2, '0')}-${String(y.getDate()).padStart(2, '0')}`;
+    // 昨日のリマインドは、使い始めて以降だけ（はじめて開いた日に「昨日が未記入」と出さない）
+    const started = meals.some((m) => m.date <= yesterdayDate);
+    return {
+        today: MAIN_MEAL_TYPES.filter((t) => times[t] <= hm && !has(todayDate, t)),
+        yesterday: started ? MAIN_MEAL_TYPES.filter((t) => !has(yesterdayDate, t)) : [],
+        yesterdayDate,
+    };
+}
+
+// カレンダー（iPhone の標準カレンダーなど）に取り込む、毎日くり返しのリマインド。
+// 時刻は「フローティング」（端末の今いる時間帯のまま）にして、時間帯の設定に左右されないようにする。
+export function buildReminderIcs(times: ReminderTimes, url: string): string {
+    const d = new Date();
+    const day = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
+    const stamp = d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z'); // DTSTAMP は UTC
+    const esc = (s: string) => s.replace(/\\/g, '\\\\').replace(/;/g, '\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
+    const fold = (line: string) => { // 75 バイトを超える行は折り返す（RFC 5545）
+        const enc = new TextEncoder(); const out: string[] = []; let cur = '';
+        for (const ch of line) {
+            if (enc.encode(cur + ch).length > (out.length ? 74 : 75)) { out.push(cur); cur = ch; } else cur += ch;
+        }
+        out.push(cur);
+        return out.join('\r\n ');
+    };
+    const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Mitoflow40//Meal Log//JA', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'X-WR-CALNAME:食事記録のリマインド'];
+    for (const t of MAIN_MEAL_TYPES) {
+        const [h, m] = times[t].split(':');
+        lines.push(
+            'BEGIN:VEVENT',
+            `UID:meal-log-reminder-${t === '朝食' ? 'breakfast' : t === '昼食' ? 'lunch' : 'dinner'}@mitoflow40.com`,
+            `DTSTAMP:${stamp}`,
+            `DTSTART:${day}T${h}${m}00`,
+            'DURATION:PT10M',
+            'RRULE:FREQ=DAILY',
+            `SUMMARY:${esc(`${t}を記録する`)}`,
+            `DESCRIPTION:${esc(`${t}に食べたものを食事記録に書きましょう。\n${url}`)}`,
+            `URL:${url}`,
+            'BEGIN:VALARM', 'ACTION:DISPLAY', `DESCRIPTION:${esc(`${t}を記録する`)}`, 'TRIGGER:PT0M', 'END:VALARM',
+            'END:VEVENT',
+        );
+    }
+    lines.push('END:VCALENDAR');
+    return lines.map(fold).join('\r\n') + '\r\n';
+}
+
+export function downloadIcs(content: string, filename: string) {
+    download(new Blob([content], { type: 'text/calendar;charset=utf-8' }), `${filename}.ics`);
+}
