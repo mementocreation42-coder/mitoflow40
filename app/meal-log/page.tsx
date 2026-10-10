@@ -1,13 +1,11 @@
 'use client';
 
-import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { MEAL_TYPES, downloadCsv, foodLines, previousMeal, toSubmissionCsv, todayStr, useMealLog, useMemory, useMounted, useNow, useReminders, missingMeals, buildReminderIcs, downloadIcs, DEFAULT_REMINDERS, MAIN_MEAL_TYPES, type MainMealType, type ReminderTimes, type Meal, type MealType, type Remembered } from '@/lib/meal-log';
-import { displayName } from '@/lib/nutrition';
 import { pillCls } from '@/components/meal-log/styles';
 
 // かんたん記入：提出フォーマット（日付・食事タイプ・食事内容）を毎日書きやすくする画面。
-// 栄養の計算は /meal-log/nutrition。記録は共通。
+// この端末の中だけに保存し、どこにも送信しない。
 
 const TYPE_COLOR: Record<MealType, string> = { 朝食: '#FFB37B', 昼食: '#4AF6C3', 夕食: '#6CCFF6', 間食: '#E5D0E3' };
 const MAIN_TYPES: MealType[] = ['朝食', '昼食', '夕食']; // 提出の必須区分
@@ -48,7 +46,7 @@ export default function MealLogEasyPage() {
         return map;
     }, [meals]);
     const recordsOf = (d: string, t: MealType) => byKey.get(`${d}|${t}`) ?? [];
-    const filled = (d: string, t: MealType) => recordsOf(d, t).some((m) => m.food.trim() || m.items.length);
+    const filled = (d: string, t: MealType) => recordsOf(d, t).some((m) => m.food.trim());
 
     const monthMeals = useMemo(() => meals.filter((m) => m.date.startsWith(month)), [meals, month]);
 
@@ -109,7 +107,6 @@ export default function MealLogEasyPage() {
                         return (
                             <MealCard key={`${date}|${type}`} type={type}
                                 lines={recs.flatMap((m) => foodLines(m.food))}
-                                fixed={recs.flatMap((m) => m.items.map((it) => `${displayName(it.name)} ${it.grams}g`))}
                                 previous={previousMeal(meals, date, type)}
                                 suggest={(q, exclude) => suggest(type, q, exclude)}
                                 onChange={(lines, added) => { setLines(date, type, lines); if (added.length) remember(added, type, date); }} />
@@ -126,10 +123,6 @@ export default function MealLogEasyPage() {
 
                 <MemoryList memory={memory} onForget={forget} />
 
-                <p className="text-xs text-[#4A4A4A] mt-6">
-                    栄養（カロリー・PFC・ビタミン・ミネラル）も計算したいときは
-                    <Link href="/meal-log/nutrition" className="font-bold underline ml-1">栄養計算モード</Link>へ。記録は共通です。
-                </p>
             </div>
         </div>
     );
@@ -148,10 +141,9 @@ function HowTo() {
 }
 
 // 1 食分の入力（1 品ずつ足していく）
-function MealCard({ type, lines, fixed, previous, suggest, onChange }: {
+function MealCard({ type, lines, previous, suggest, onChange }: {
     type: MealType;
     lines: string[];      // 書き換えられる行
-    fixed: string[];      // 栄養計算モードで入れた食品（ここでは表示だけ）
     previous: { date: string; lines: string[] } | null; // 前回この食事タイプに書いた内容
     suggest: (query: string, exclude: string[]) => string[];
     onChange: (lines: string[], added: string[]) => void; // added は覚える行
@@ -161,7 +153,7 @@ function MealCard({ type, lines, fixed, previous, suggest, onChange }: {
     const [editing, setEditing] = useState<number | null>(null); // 直している行（その場で置き換える）
     const [undo, setUndo] = useState<{ lines: string[]; label: string } | null>(null); // 直前の削除を元に戻す
     const inputRef = useRef<HTMLInputElement>(null);
-    const count = lines.length + fixed.length;
+    const count = lines.length;
 
     // 「元に戻す」は 6 秒で消す
     useEffect(() => {
@@ -209,9 +201,6 @@ function MealCard({ type, lines, fixed, previous, suggest, onChange }: {
 
             {count > 0 && (
                 <ul className="px-4 pt-2">
-                    {fixed.map((l, i) => (
-                        <li key={`f${i}`} className="py-1.5 text-[16px] text-[#1A1A1A]">・{l}</li>
-                    ))}
                     {lines.map((l, i) => (
                         <li key={`${i}-${l}`} className={`flex items-center gap-2 py-0.5 ${editing === i ? 'bg-[#FBEBD5] -mx-2 px-2 rounded-lg' : ''}`}>
                             <button type="button" onClick={() => edit(i)} className="flex-1 min-h-[40px] text-left text-[16px] text-[#1A1A1A] break-words" title="タップで直す">・{l}</button>
@@ -338,7 +327,7 @@ function ExportBox({ month, meals, filled, onPick }: { month: string; meals: Mea
     const today = todayStr();
     const missing = Array.from({ length: days }, (_, i) => ymd(y, m, i + 1))
         .filter((d) => d <= today && MAIN_TYPES.some((t) => !filled(d, t)));
-    const csv = useMemo(() => toSubmissionCsv(meals, null), [meals]);
+    const csv = useMemo(() => toSubmissionCsv(meals), [meals]);
     const rows = useMemo(() => parseRows(csv), [csv]);
 
     return (

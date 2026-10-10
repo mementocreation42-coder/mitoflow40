@@ -1,11 +1,7 @@
 'use client';
 
-// 食事記録（端末内・localStorage）。アカウント不要、送信しない。
-// 写真だけは容量の都合で IndexedDB（lib/meal-photos.ts）に置き、ここには写真の ID だけを持つ。
+// 食事記録（この端末のブラウザの中だけに保存・どこにも送信しない）。
 import { useSyncExternalStore, useCallback, useEffect } from 'react';
-import { deletePhotos, getPhoto } from './meal-photos';
-import { makeZip } from './zip';
-import { DEFAULT_PROFILE, NUTRIENTS, displayName, fmt, totalsOf, type FoodDb, type Profile } from './nutrition';
 
 const KEY = 'mf:meal-log:v1';
 const EMPTY = '[]';
@@ -16,26 +12,14 @@ export type MealType = (typeof MEAL_TYPES)[number];
 export interface Meal {
     id: string;
     date: string;   // YYYY-MM-DD
-    time: string;   // HH:MM（空でもよい）
+    time: string;   // HH:MM（書いた時刻。同じ日の並び順に使う）
     type: MealType;
-    food: string;   // 食べたもの
-    memo: string;   // 体調・気づきなど
-    photos: string[]; // 写真の ID（IndexedDB のキー）
-    items: MealItem[]; // 成分表の食品と量
+    food: string;   // 食べたもの（1 行 1 品）
 }
 
-export interface MealItem {
-    id: string;
-    code: string;  // 食品番号（日本食品標準成分表）
-    name: string;  // 記録した時点の食品名
-    grams: number;
+function newId(): string {
+    return `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
 }
-
-function newId(prefix = ''): string {
-    return `${prefix}${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
-}
-
-const TYPE_EN: Record<MealType, string> = { 朝食: 'breakfast', 昼食: 'lunch', 夕食: 'dinner', 間食: 'snack' };
 
 const listeners = new Set<() => void>();
 function emit() { listeners.forEach((l) => l()); }
@@ -50,7 +34,10 @@ function getServerSnapshot(): string { return EMPTY; }
 function parse(raw: string): Meal[] {
     try {
         const v = JSON.parse(raw);
-        return Array.isArray(v) ? v.map((m) => ({ ...m, photos: Array.isArray(m.photos) ? m.photos : [], items: Array.isArray(m.items) ? m.items : [] })) : [];
+        if (!Array.isArray(v)) return [];
+        return v
+            .filter((m) => m && typeof m.date === 'string' && MEAL_TYPES.includes(m.type))
+            .map((m) => ({ id: String(m.id ?? newId()), date: m.date, time: typeof m.time === 'string' ? m.time : '', type: m.type, food: typeof m.food === 'string' ? m.food : '' }));
     } catch { return []; }
 }
 function write(meals: Meal[]) { try { localStorage.setItem(KEY, JSON.stringify(meals)); } catch { /* ignore */ } emit(); }
@@ -89,102 +76,26 @@ function csvCell(v: string): string {
     return /[",\r\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v;
 }
 
-// 古い日付から（同じ日は時刻順）
-function ascending(meals: Meal[]): Meal[] {
-    return sortMeals(meals).sort((a, b) => a.date.localeCompare(b.date)); // 日付だけ昇順に（同日内の順は保つ）
-}
-
-// 写真 ID → 書き出し時のファイル名（例：photos/2026-10-10_0743_breakfast_1.jpg）
-function photoNames(meals: Meal[]): Map<string, string> {
-    const names = new Map<string, string>();
-    const used = new Set<string>();
-    for (const m of ascending(meals)) {
-        const base = `${m.date}_${m.time.replace(':', '') || '0000'}_${TYPE_EN[m.type]}`;
-        let n = 1;
-        for (const id of m.photos) {
-            while (used.has(`${base}_${n}`)) n++;
-            used.add(`${base}_${n}`);
-            names.set(id, `photos/${base}_${n}.jpg`);
-        }
-    }
-    return names;
-}
-
-// Excel で文字化けしないよう BOM 付き UTF-8、改行は CRLF。
-function csv(rows: string[][]): string {
-    return '\uFEFF' + rows.map((r) => r.map(csvCell).join(',')).join('\r\n') + '\r\n';
-}
-
-const NUTRIENT_HEADERS = NUTRIENTS.map((n) => `${n.label}(${n.unit})`);
-
-// 提出用：8weeks.ai の参考テンプレート（日付・食事タイプ・食事内容）と同じ形。
+// 提出用：8weeks.ai の参考テンプレートと同じ「日付・食事タイプ・食事内容」の 3 列。
 // 日付は 2025/9/1、食事内容は「・」の箇条書きをセル内で改行。1 食 1 行で、同じ日の行は食べた時刻の順。
-// 任意の列（時刻・食事量・特記事項）はその後ろに足す。写真は提出の対象外なので入れない。
-export function toSubmissionCsv(meals: Meal[], db: FoodDb | null): string {
-    const rows = [['日付', '食事タイプ', '食事内容', '時刻', '食事量', '特記事項']];
+// Excel で文字化けしないよう BOM 付き UTF-8、改行は CRLF。
+export function toSubmissionCsv(meals: Meal[]): string {
+    const asc = sortMeals(meals).sort((a, b) => a.date.localeCompare(b.date)); // 日付だけ昇順に（同日内の順は保つ）
     const groups = new Map<string, Meal[]>();
-    for (const m of ascending(meals)) {
-        const key = `${m.date}|${m.type}`;
-        groups.set(key, [...(groups.get(key) ?? []), m]);
-    }
+    for (const m of asc) groups.set(`${m.date}|${m.type}`, [...(groups.get(`${m.date}|${m.type}`) ?? []), m]);
     const firstTime = (list: Meal[]) => list.map((m) => m.time).filter(Boolean).sort()[0] ?? '';
     const sorted = [...groups.values()].sort((a, b) =>
         a[0].date.localeCompare(b[0].date)
         || ((firstTime(a) && firstTime(b)) ? firstTime(a).localeCompare(firstTime(b)) : 0)
         || MEAL_TYPES.indexOf(a[0].type) - MEAL_TYPES.indexOf(b[0].type));
+    const rows = [['日付', '食事タイプ', '食事内容']];
     for (const list of sorted) {
-        const items = list.flatMap((m) => m.items);
-        const lines = [
-            ...items.map((it) => `${displayName(it.name)} ${it.grams}g`),
-            ...list.flatMap((m) => foodLines(m.food)),
-        ];
-        const content = lines.map((l) => `・${l}`).join('\n');
+        const content = list.flatMap((m) => foodLines(m.food)).map((l) => `・${l}`).join('\n');
+        if (!content) continue;
         const [y, mo, d] = list[0].date.split('-').map(Number);
-        const grams = items.reduce((n, it) => n + it.grams, 0);
-        const kcal = totalsOf(db, items).values.kcal;
-        const amount = items.length ? `${Math.round(grams)}g${db ? `・${Math.round(kcal)}kcal` : ''}` : '';
-        rows.push([
-            `${y}/${mo}/${d}`, list[0].type, content,
-            list.map((m) => m.time).filter(Boolean).join('・'),
-            amount,
-            list.map((m) => m.memo).filter(Boolean).join('／'),
-        ]);
+        rows.push([`${y}/${mo}/${d}`, list[0].type, content]);
     }
-    return csv(rows);
-}
-
-// 食べた食品ごとに 1 行（Cronometer の servings に相当）。
-// 成分表の食品がない記録は 1 行にまとめ、自由記述・メモ・写真は各記録の最初の行に入れる。
-export function toServingsCsv(meals: Meal[], db: FoodDb | null): string {
-    const names = photoNames(meals);
-    const rows = [['日付', '時刻', '区分', '食品番号', '食品名', '量(g)', ...NUTRIENT_HEADERS, '内容(自由記述)', 'メモ', '写真']];
-    for (const m of ascending(meals)) {
-        const extra = [m.food, m.memo, m.photos.map((id) => names.get(id)!).join(' ')];
-        if (!m.items.length) {
-            rows.push([m.date, m.time, m.type, '', '', '', ...NUTRIENTS.map(() => ''), ...extra]);
-            continue;
-        }
-        m.items.forEach((it, i) => {
-            const t = totalsOf(db, [it]);
-            const f = db?.byCode.get(it.code);
-            rows.push([m.date, m.time, m.type, it.code, displayName(it.name), String(it.grams),
-                ...NUTRIENTS.map((n) => (f && f.values[n.key] == null ? '' : fmt(t.values[n.key], n.digits).replace(/,/g, ''))),
-                ...(i === 0 ? extra : ['', '', ''])]);
-        });
-    }
-    return csv(rows);
-}
-
-// 1 日 1 行の栄養合計（Cronometer の daily summary に相当）
-export function toDailyCsv(meals: Meal[], db: FoodDb | null): string {
-    const rows = [['日付', '記録数', ...NUTRIENT_HEADERS]];
-    const byDate = new Map<string, Meal[]>();
-    for (const m of ascending(meals)) byDate.set(m.date, [...(byDate.get(m.date) ?? []), m]);
-    for (const [date, list] of byDate) {
-        const t = totalsOf(db, list.flatMap((m) => m.items));
-        rows.push([date, String(list.length), ...NUTRIENTS.map((n) => fmt(t.values[n.key], n.digits).replace(/,/g, ''))]);
-    }
-    return csv(rows);
+    return '\uFEFF' + rows.map((r) => r.map(csvCell).join(',')).join('\r\n') + '\r\n';
 }
 
 function download(blob: Blob, filename: string) {
@@ -199,120 +110,29 @@ export function downloadCsv(content: string, filename: string) {
     download(new Blob([content], { type: 'text/csv;charset=utf-8' }), `${filename}.csv`);
 }
 
-// 2 つの CSV と写真フォルダをひとつの ZIP に。CSV の「写真」列のファイル名が ZIP 内の写真と対応する。
-export async function downloadZip(meals: Meal[], db: FoodDb | null, filename: string) {
-    const files: { name: string; data: Blob | string }[] = [
-        { name: `${filename}_foods.csv`, data: toServingsCsv(meals, db) },
-        { name: `${filename}_daily.csv`, data: toDailyCsv(meals, db) },
-    ];
-    for (const [id, name] of photoNames(meals)) {
-        const blob = await getPhoto(id);
-        if (blob) files.push({ name, data: blob });
-    }
-    download(await makeZip(files), `${filename}.zip`);
-}
-
 export function useMealLog() {
     const raw = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
     const meals = parse(raw);
 
-    const save = useCallback((meal: Omit<Meal, 'id'> & { id?: string }) => {
-        const list = parse(getSnapshot());
-        if (meal.id) {
-            const prev = list.find((m) => m.id === meal.id);
-            if (prev) void deletePhotos(prev.photos.filter((p) => !meal.photos.includes(p))); // 外した写真を消す
-            write(list.map((m) => (m.id === meal.id ? { ...m, ...meal, id: m.id } : m)));
-        } else {
-            write([...list, { ...meal, id: newId() }]);
-        }
-    }, []);
-
-    // かんたん記入：その日のその区分の「食べたもの」を行ごとに書き換える（記録がなければ作る、空になれば消す）
+    // その日のその食事タイプの「食べたもの」を行ごとに書き換える（記録がなければ作る、空になれば消す）。
+    // 同じ日・同じ食事タイプの記録が複数あるときは、行をすべて最初の記録にまとめる。
     const setLines = useCallback((date: string, type: MealType, lines: string[]) => {
         const list = parse(getSnapshot());
         const food = lines.map((l) => l.trim()).filter(Boolean).join('\n');
         const target = list.find((m) => m.date === date && m.type === type);
         if (!target) {
             if (!food) return;
-            write([...list, { id: newId(), date, time: date === todayStr() ? nowTime() : '', type, food, memo: '', photos: [], items: [] }]);
+            write([...list, { id: newId(), date, time: date === todayStr() ? nowTime() : '', type, food }]);
             return;
         }
-        // 同じ日・同じ区分の記録が複数あるときは、行をすべて最初の記録にまとめる（画面では全部の行を 1 つに見せているため）
         write(list.flatMap((m) => {
             if (m.date !== date || m.type !== type) return [m];
-            const next = { ...m, food: m === target ? food : '' };
-            return !next.food && !m.items.length && !m.memo && !m.photos.length ? [] : [next];
+            const food2 = m === target ? food : '';
+            return food2 ? [{ ...m, food: food2 }] : [];
         }));
     }, []);
 
-    // その日のその区分の記録（なければ作る）に食品を足す
-    const addItem = useCallback((date: string, type: MealType, code: string, name: string, grams: number) => {
-        const list = parse(getSnapshot());
-        const item: MealItem = { id: newId('i'), code, name, grams };
-        const target = [...list].reverse().find((m) => m.date === date && m.type === type);
-        if (target) {
-            write(list.map((m) => (m === target ? { ...m, items: [...m.items, item] } : m)));
-        } else {
-            write([...list, { id: newId(), date, time: date === todayStr() ? nowTime() : '', type, food: '', memo: '', photos: [], items: [item] }]);
-        }
-    }, []);
-
-    // 量を変える（grams が null なら外す）。中身が空になった記録は消す
-    const updateItem = useCallback((mealId: string, itemId: string, grams: number | null) => {
-        const list = parse(getSnapshot());
-        write(list.flatMap((m) => {
-            if (m.id !== mealId) return [m];
-            const items = grams == null ? m.items.filter((i) => i.id !== itemId) : m.items.map((i) => (i.id === itemId ? { ...i, grams } : i));
-            const empty = !items.length && !m.food && !m.memo && !m.photos.length;
-            return empty ? [] : [{ ...m, items }];
-        }));
-    }, []);
-
-    const remove = useCallback((id: string) => {
-        const list = parse(getSnapshot());
-        const target = list.find((m) => m.id === id);
-        if (target) void deletePhotos(target.photos);
-        write(list.filter((m) => m.id !== id));
-    }, []);
-
-    return { meals, save, remove, addItem, updateItem, setLines };
-}
-
-// ===== プロフィール（目標値の計算に使う） =====
-
-const PROFILE_KEY = 'mf:meal-log:profile:v1';
-const profileListeners = new Set<() => void>();
-function subscribeProfile(l: () => void) {
-    profileListeners.add(l);
-    const onStorage = (e: StorageEvent) => { if (e.key === PROFILE_KEY) l(); };
-    window.addEventListener('storage', onStorage);
-    return () => { profileListeners.delete(l); window.removeEventListener('storage', onStorage); };
-}
-function getProfileSnapshot(): string { try { return localStorage.getItem(PROFILE_KEY) ?? ''; } catch { return ''; } }
-
-export function useProfile() {
-    const raw = useSyncExternalStore(subscribeProfile, getProfileSnapshot, () => '');
-    let profile: Profile = DEFAULT_PROFILE;
-    try { if (raw) profile = { ...DEFAULT_PROFILE, ...JSON.parse(raw) }; } catch { /* ignore */ }
-    const setProfile = useCallback((p: Profile) => {
-        try { localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); } catch { /* ignore */ }
-        profileListeners.forEach((l) => l());
-    }, []);
-    return { profile, configured: !!raw, setProfile };
-}
-
-// 最近使った食品（新しい順・重複なし）
-export function recentFoods(meals: Meal[], limit = 12): MealItem[] {
-    const seen = new Set<string>();
-    const out: MealItem[] = [];
-    for (const m of sortMeals(meals)) {
-        for (const it of [...m.items].reverse()) {
-            if (seen.has(it.code)) continue;
-            seen.add(it.code); out.push(it);
-            if (out.length >= limit) return out;
-        }
-    }
-    return out;
+    return { meals, setLines };
 }
 
 // ===== 覚えた品目（かんたん記入の候補） =====
@@ -474,7 +294,7 @@ export function useNow(): Date {
 export function missingMeals(meals: Meal[], times: ReminderTimes, now: Date): { today: MainMealType[]; yesterday: MainMealType[]; yesterdayDate: string } {
     const todayDate = todayStr();
     const hm = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-    const has = (date: string, type: MealType) => meals.some((m) => m.date === date && m.type === type && (m.food.trim() || m.items.length));
+    const has = (date: string, type: MealType) => meals.some((m) => m.date === date && m.type === type && m.food.trim());
     const y = new Date(now); y.setDate(y.getDate() - 1);
     const yesterdayDate = `${y.getFullYear()}-${String(y.getMonth() + 1).padStart(2, '0')}-${String(y.getDate()).padStart(2, '0')}`;
     // 昨日のリマインドは、使い始めて以降だけ（はじめて開いた日に「昨日が未記入」と出さない）
