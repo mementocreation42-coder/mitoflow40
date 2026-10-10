@@ -1,30 +1,22 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { MEAL_TYPES, downloadCsv, downloadZip, sortMeals, todayStr, useMealLog, type Meal, type MealType } from '@/lib/meal-log';
-import { deletePhotos, getPhoto, putPhoto, shrinkImage } from '@/lib/meal-photos';
+import { useEffect, useMemo, useState } from 'react';
+import { MEAL_TYPES, downloadCsv, downloadZip, recentFoods, sortMeals, toDailyCsv, toServingsCsv, todayStr, useMealLog, useProfile, type Meal, type MealItem, type MealType } from '@/lib/meal-log';
+import { displayName, fmt, loadFoodDb, targetsFor, totalsOf, type FoodDb } from '@/lib/nutrition';
+import FoodSearch from '@/components/meal-log/FoodSearch';
+import MealEditor, { type Draft } from '@/components/meal-log/MealEditor';
+import ProfileSheet from '@/components/meal-log/ProfileSheet';
+import Photo from '@/components/meal-log/Photo';
+import Sheet from '@/components/meal-log/Sheet';
+import { EnergySummary, NutrientTargets } from '@/components/meal-log/NutrientPanel';
+import { inputCls, labelCls, pillCls } from '@/components/meal-log/styles';
 
-const MAX_PHOTOS = 4;
+const TYPE_COLOR: Record<MealType, string> = { 朝食: '#FFB37B', 昼食: '#4AF6C3', 夕食: '#6CCFF6', 間食: '#E5D0E3' };
 
-const TYPE_COLOR: Record<MealType, string> = {
-    朝食: '#FFB37B',
-    昼食: '#4AF6C3',
-    夕食: '#6CCFF6',
-    間食: '#E5D0E3',
-};
-
-function nowTime(): string {
-    const d = new Date();
-    return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-}
-
-// 時刻から区分を推定（あとで変えられる）
-function guessType(time: string): MealType {
-    const h = Number(time.slice(0, 2));
-    if (h >= 4 && h < 11) return '朝食';
-    if (h >= 11 && h < 15) return '昼食';
-    if (h >= 17 && h < 23) return '夕食';
-    return '間食';
+function shiftDate(date: string, days: number): string {
+    const [y, m, d] = date.split('-').map(Number);
+    const x = new Date(y, m - 1, d + days);
+    return `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, '0')}-${String(x.getDate()).padStart(2, '0')}`;
 }
 
 function weekday(date: string): string {
@@ -32,199 +24,163 @@ function weekday(date: string): string {
     return '日月火水木金土'[new Date(y, m - 1, d).getDay()];
 }
 
-// IndexedDB の写真を表示する。クリックで大きく開く。
-function Photo({ id, className, onOpen }: { id: string; className: string; onOpen?: (url: string) => void }) {
-    const [url, setUrl] = useState<string | null>(null);
-    useEffect(() => {
-        let u: string | null = null;
-        let alive = true;
-        getPhoto(id).then((b) => { if (b && alive) { u = URL.createObjectURL(b); setUrl(u); } }).catch(() => {});
-        return () => { alive = false; if (u) URL.revokeObjectURL(u); };
-    }, [id]);
-    if (!url) return <div className={`${className} bg-[#F2F2F2]`} />;
-    return (
-        <button type="button" onClick={() => onOpen?.(url)} className="block p-0" aria-label="写真を大きく見る">
-            <img src={url} alt="" className={`${className} object-cover`} />
-        </button>
-    );
-}
-
-type Draft = Omit<Meal, 'id'> & { id?: string };
-
-function freshDraft(): Draft {
-    const time = nowTime();
-    return { date: todayStr(), time, type: guessType(time), food: '', memo: '', photos: [] };
-}
-
-const inputCls = 'w-full rounded-lg border-2 border-[#1A1A1A] bg-white px-3 py-2 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#FF9855]';
-const labelCls = 'block text-xs font-bold text-[#4A4A4A] mb-1';
+type Panel =
+    | { kind: 'search'; type: MealType }
+    | { kind: 'editor'; draft: Draft }
+    | { kind: 'profile' }
+    | { kind: 'item'; meal: Meal; item: MealItem }
+    | null;
 
 export default function MealLogPage() {
-    const { meals, save, remove } = useMealLog();
-    const [draft, setDraft] = useState<Draft>(freshDraft);
+    const { meals, save, remove, addItem, updateItem } = useMealLog();
+    const { profile, configured, setProfile } = useProfile();
+    const [date, setDate] = useState(todayStr);
+    const [db, setDb] = useState<FoodDb | null>(null);
+    const [dbError, setDbError] = useState(false);
+    const [panel, setPanel] = useState<Panel>(null);
+    const [viewer, setViewer] = useState<string | null>(null);
+    const [busy, setBusy] = useState<string | null>(null);
     const [from, setFrom] = useState('');
     const [to, setTo] = useState('');
-    const [busy, setBusy] = useState<string | null>(null);
-    const [viewer, setViewer] = useState<string | null>(null);
-    const fileRef = useRef<HTMLInputElement>(null);
 
-    const filtered = useMemo(
-        () => sortMeals(meals.filter((m) => (!from || m.date >= from) && (!to || m.date <= to))),
-        [meals, from, to],
-    );
-    const byDate = useMemo(() => {
-        const g = new Map<string, Meal[]>();
-        for (const m of filtered) g.set(m.date, [...(g.get(m.date) ?? []), m]);
-        return [...g.entries()];
-    }, [filtered]);
+    useEffect(() => { loadFoodDb().then(setDb).catch(() => setDbError(true)); }, []);
 
-    // 保存せずに入力を捨てるとき、この入力で追加した写真も消す
-    const discard = () => {
-        const saved = meals.find((m) => m.id === draft.id)?.photos ?? [];
-        void deletePhotos(draft.photos.filter((p) => !saved.includes(p)));
-        setDraft(freshDraft());
+    const dayMeals = useMemo(() => sortMeals(meals.filter((m) => m.date === date)), [meals, date]);
+    const dayItems = dayMeals.flatMap((m) => m.items);
+    const totals = useMemo(() => totalsOf(db, dayItems), [db, dayItems]);
+    const targets = useMemo(() => targetsFor(profile), [profile]);
+    const recent = useMemo(() => recentFoods(meals), [meals]);
+
+    const ranged = useMemo(() => meals.filter((m) => (!from || m.date >= from) && (!to || m.date <= to)), [meals, from, to]);
+    const photoCount = ranged.reduce((n, m) => n + m.photos.length, 0);
+    const fileBase = `meal-log${from || to ? `_${from || 'start'}_${to || todayStr()}` : `_${todayStr()}`}`;
+
+    const newDraft = (type: MealType): Draft => {
+        const d = new Date();
+        const time = date === todayStr() ? `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}` : '';
+        return { date, time, type, food: '', memo: '', photos: [], items: [] };
     };
 
-    const addPhotos = async (files: FileList | null) => {
-        if (!files?.length) return;
-        const room = MAX_PHOTOS - draft.photos.length;
-        setBusy('写真を取り込み中…');
-        try {
-            const ids: string[] = [];
-            for (const f of [...files].slice(0, room)) ids.push(await putPhoto(await shrinkImage(f)));
-            setDraft((d) => ({ ...d, photos: [...d.photos, ...ids] }));
-        } catch {
-            alert('写真を取り込めませんでした。別の写真でお試しください。');
-        } finally {
-            setBusy(null);
-            if (fileRef.current) fileRef.current.value = '';
-        }
-    };
-
-    const removeDraftPhoto = (id: string) => {
-        // 保存済みの記録の写真は「更新する」まで消さない（やめたら元に戻せるように）
-        const saved = meals.find((m) => m.id === draft.id)?.photos ?? [];
-        if (!saved.includes(id)) void deletePhotos([id]);
-        setDraft((d) => ({ ...d, photos: d.photos.filter((p) => p !== id) }));
-    };
-
-    const submit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!draft.food.trim() && !draft.photos.length) return;
-        save({ ...draft, food: draft.food.trim(), memo: draft.memo.trim() });
-        setDraft(freshDraft());
-    };
-
-    const edit = (m: Meal) => {
-        if (draft.id !== m.id) discard();
-        setDraft({ ...m });
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    const del = (m: Meal) => {
-        if (confirm(`${m.date} ${m.type}「${m.food || `写真 ${m.photos.length} 枚`}」を削除しますか？`)) {
+    const deleteMeal = (m: Meal) => {
+        if (confirm(`${m.date} ${m.type}の記録を削除しますか？（食品 ${m.items.length} 件・写真 ${m.photos.length} 枚も消えます）`)) {
             remove(m.id);
-            if (draft.id === m.id) setDraft(freshDraft());
+            setPanel(null);
         }
     };
-
-    const fileBase = () => `meal-log${from || to ? `_${from || 'start'}_${to || todayStr()}` : `_${todayStr()}`}`;
-    const photoCount = filtered.reduce((n, m) => n + m.photos.length, 0);
 
     const exportZip = async () => {
         setBusy('ZIP を作成中…');
-        try { await downloadZip(filtered, fileBase()); } finally { setBusy(null); }
+        try { await downloadZip(ranged, db, fileBase); } finally { setBusy(null); }
     };
+
+    const isToday = date === todayStr();
 
     return (
         <div className="pt-[calc(60px+2rem)] md:pt-[calc(60px+4rem)] pb-16 md:pb-24 px-4 md:px-6">
             <div className="max-w-[720px] mx-auto">
-                <p className="text-[11px] font-bold tracking-widest text-[#4A4A4A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>MEAL LOG</p>
-                <h1 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mt-1">食事記録</h1>
-                <p className="text-sm text-[#666] mt-2">毎日の食事を記録して、CSV で書き出せます。記録はこの端末のブラウザの中だけに保存され、どこにも送信されません。</p>
-
-                {/* 入力フォーム */}
-                <form onSubmit={submit} className="mt-6 rounded-2xl border-2 border-[#1A1A1A] bg-white p-4 md:p-6 shadow-[4px_4px_0_#1A1A1A]">
-                    <div className="grid grid-cols-2 gap-3">
-                        <div>
-                            <label className={labelCls} htmlFor="ml-date">日付</label>
-                            <input id="ml-date" type="date" required className={inputCls} value={draft.date}
-                                onChange={(e) => setDraft({ ...draft, date: e.target.value })} />
-                        </div>
-                        <div>
-                            <label className={labelCls} htmlFor="ml-time">時刻</label>
-                            <input id="ml-time" type="time" className={inputCls} value={draft.time}
-                                onChange={(e) => setDraft({ ...draft, time: e.target.value })} />
-                        </div>
+                <div className="flex items-start justify-between gap-3">
+                    <div>
+                        <p className="text-[11px] font-bold tracking-widest text-[#4A4A4A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>MEAL LOG</p>
+                        <h1 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mt-1">食事記録</h1>
                     </div>
+                    <button type="button" onClick={() => setPanel({ kind: 'profile' })} className={`${pillCls} bg-white mt-1 shrink-0`}>目標の設定</button>
+                </div>
+                <p className="text-sm text-[#666] mt-2">食べたものを選ぶと、エネルギー・PFC・ビタミン・ミネラルを自動で集計します。記録はこの端末のブラウザの中だけに保存され、どこにも送信されません。</p>
+                {!configured && (
+                    <p className="mt-3 rounded-xl border-2 border-dashed border-[#1A1A1A] bg-white px-3 py-2 text-xs text-[#4A4A4A]">
+                        いまの目標は「女性・30〜49歳・活動量ふつう」の値です。<button type="button" onClick={() => setPanel({ kind: 'profile' })} className="font-bold underline">目標の設定</button>で自分に合わせてください。
+                    </p>
+                )}
 
-                    <div className="mt-4">
-                        <span className={labelCls}>区分</span>
-                        <div className="grid grid-cols-4 gap-2">
-                            {MEAL_TYPES.map((t) => (
-                                <button key={t} type="button" onClick={() => setDraft({ ...draft, type: t })}
-                                    className="rounded-lg border-2 border-[#1A1A1A] py-2 text-sm font-bold transition-colors"
-                                    style={{ background: draft.type === t ? TYPE_COLOR[t] : '#fff' }}
-                                    aria-pressed={draft.type === t}>
-                                    {t}
-                                </button>
-                            ))}
-                        </div>
+                {/* 日付の切り替え */}
+                <div className="mt-6 flex items-center justify-between gap-2 rounded-2xl border-2 border-[#1A1A1A] bg-white px-2 py-2">
+                    <button type="button" onClick={() => setDate(shiftDate(date, -1))} aria-label="前の日" className="w-10 h-10 rounded-full font-bold text-lg hover:bg-[#FBEBD5]">‹</button>
+                    <label className="relative flex flex-col items-center cursor-pointer">
+                        <span className="text-base font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            {date.replace(/-/g, '.')}（{weekday(date)}）
+                        </span>
+                        <span className="text-[11px] text-[#4A4A4A]">{isToday ? '今日' : 'タップで日付を選ぶ'}</span>
+                        <input type="date" value={date} onChange={(e) => e.target.value && setDate(e.target.value)} aria-label="日付を選ぶ"
+                            className="absolute inset-0 opacity-0 cursor-pointer" />
+                    </label>
+                    <div className="flex items-center">
+                        {!isToday && <button type="button" onClick={() => setDate(todayStr())} className="text-xs font-bold underline px-1">今日</button>}
+                        <button type="button" onClick={() => setDate(shiftDate(date, 1))} aria-label="次の日" className="w-10 h-10 rounded-full font-bold text-lg hover:bg-[#FBEBD5]">›</button>
                     </div>
+                </div>
 
-                    <div className="mt-4">
-                        <span className={labelCls}>写真（任意・{MAX_PHOTOS} 枚まで）</span>
-                        <div className="flex flex-wrap gap-2">
-                            {draft.photos.map((id) => (
-                                <div key={id} className="relative">
-                                    <Photo id={id} className="w-20 h-20 rounded-lg border-2 border-[#1A1A1A]" onOpen={setViewer} />
-                                    <button type="button" onClick={() => removeDraftPhoto(id)} aria-label="この写真を外す"
-                                        className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-white border-2 border-[#1A1A1A] text-xs font-bold leading-none">×</button>
+                <div className="mt-4"><EnergySummary totals={totals} targets={targets} /></div>
+
+                {/* 日記（区分ごと） */}
+                <div className="mt-4 space-y-3">
+                    {MEAL_TYPES.map((type) => {
+                        const list = dayMeals.filter((m) => m.type === type);
+                        const kcal = totalsOf(db, list.flatMap((m) => m.items)).values.kcal;
+                        return (
+                            <section key={type} className="rounded-2xl border-2 border-[#1A1A1A] bg-white">
+                                <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#ECEBE6]">
+                                    <h2 className="flex items-center gap-2 text-sm font-bold text-[#1A1A1A]">
+                                        <span className="inline-block rounded-md px-2 py-0.5 text-xs border border-[#1A1A1A]" style={{ background: TYPE_COLOR[type] }}>{type}</span>
+                                        {list.some((m) => m.time) && <span className="text-xs font-normal text-[#4A4A4A]">{list.map((m) => m.time).filter(Boolean).join('・')}</span>}
+                                    </h2>
+                                    <span className="text-sm font-bold tabular-nums text-[#1A1A1A]">{fmt(kcal, 0)} <span className="text-[11px] font-normal">kcal</span></span>
                                 </div>
-                            ))}
-                            {draft.photos.length < MAX_PHOTOS && (
-                                <label className="w-20 h-20 rounded-lg border-2 border-dashed border-[#1A1A1A] bg-[#FAFAF7] flex flex-col items-center justify-center cursor-pointer text-[#4A4A4A] hover:bg-[#FBEBD5]">
-                                    <span className="text-2xl leading-none">＋</span>
-                                    <span className="text-[10px] font-bold mt-1">写真</span>
-                                    <input ref={fileRef} type="file" accept="image/*" multiple className="sr-only"
-                                        onChange={(e) => addPhotos(e.target.files)} />
-                                </label>
-                            )}
-                        </div>
-                    </div>
 
-                    <div className="mt-4">
-                        <label className={labelCls} htmlFor="ml-food">食べたもの{draft.photos.length ? '（写真があれば空でも可）' : ''}</label>
-                        <textarea id="ml-food" required={!draft.photos.length} rows={3} className={inputCls} value={draft.food}
-                            placeholder="例：玄米ごはん、納豆、味噌汁（わかめ・豆腐）、焼き鮭"
-                            onChange={(e) => setDraft({ ...draft, food: e.target.value })} />
-                    </div>
+                                {list.map((m) => (
+                                    <div key={m.id} className="px-4 py-2 border-b border-[#ECEBE6] last:border-b-0">
+                                        {m.items.length > 0 && (
+                                            <ul>
+                                                {m.items.map((it) => {
+                                                    const k = totalsOf(db, [it]).values.kcal;
+                                                    return (
+                                                        <li key={it.id}>
+                                                            <button type="button" onClick={() => setPanel({ kind: 'item', meal: m, item: it })}
+                                                                className="w-full text-left flex items-center gap-3 py-1.5 hover:bg-[#FAFAF7]">
+                                                                <span className="flex-1 min-w-0 text-[14px] text-[#1A1A1A] break-words">{displayName(it.name)}</span>
+                                                                <span className="shrink-0 text-xs text-[#4A4A4A] tabular-nums">{it.grams}g</span>
+                                                                <span className="shrink-0 w-16 text-right text-xs tabular-nums text-[#1A1A1A]">{db ? `${fmt(k, 0)} kcal` : '…'}</span>
+                                                            </button>
+                                                        </li>
+                                                    );
+                                                })}
+                                            </ul>
+                                        )}
+                                        {(m.food || m.memo || m.photos.length > 0) && (
+                                            <div className="py-1.5">
+                                                {m.food && <p className="text-[14px] text-[#1A1A1A] whitespace-pre-wrap break-words">{m.food}</p>}
+                                                {m.memo && <p className="text-xs text-[#666] mt-0.5 break-words">{m.memo}</p>}
+                                                {m.photos.length > 0 && (
+                                                    <div className="flex flex-wrap gap-2 mt-2">
+                                                        {m.photos.map((id) => <Photo key={id} id={id} className="w-20 h-20 rounded-lg border border-[#1A1A1A]" onOpen={setViewer} />)}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                        <button type="button" onClick={() => setPanel({ kind: 'editor', draft: { ...m } })} className="text-xs font-bold underline text-[#4A4A4A] mt-1">
+                                            写真・メモ・時刻を編集
+                                        </button>
+                                    </div>
+                                ))}
 
-                    <div className="mt-4">
-                        <label className={labelCls} htmlFor="ml-memo">メモ（任意）</label>
-                        <input id="ml-memo" type="text" className={inputCls} value={draft.memo}
-                            placeholder="例：腹八分目。食後に眠気なし"
-                            onChange={(e) => setDraft({ ...draft, memo: e.target.value })} />
-                    </div>
+                                <div className="flex gap-2 px-4 py-2.5">
+                                    <button type="button" onClick={() => setPanel({ kind: 'search', type })} className={`${pillCls} bg-[#FF9855] flex-1`}>＋ 食品</button>
+                                    {list.length === 0 && (
+                                        <button type="button" onClick={() => setPanel({ kind: 'editor', draft: newDraft(type) })} className={`${pillCls} bg-white`}>写真・メモ</button>
+                                    )}
+                                </div>
+                            </section>
+                        );
+                    })}
+                </div>
 
-                    <div className="mt-5 flex gap-2">
-                        <button type="submit" disabled={!!busy} className="flex-1 rounded-full border-2 border-[#1A1A1A] bg-[#FF9855] py-3 font-bold text-[#1A1A1A] hover:brightness-105">
-                            {draft.id ? '更新する' : '記録する'}
-                        </button>
-                        {draft.id && (
-                            <button type="button" onClick={discard}
-                                className="rounded-full border-2 border-[#1A1A1A] bg-white px-5 py-3 font-bold">
-                                やめる
-                            </button>
-                        )}
-                    </div>
-                </form>
+                <div className="mt-4"><NutrientTargets totals={totals} targets={targets} hasItems={dayItems.length > 0} /></div>
 
-                {/* 期間と書き出し */}
-                <div className="mt-8 rounded-2xl border-2 border-[#1A1A1A] bg-white p-4 md:p-5">
-                    <div className="grid grid-cols-2 gap-3">
+                {/* 書き出し */}
+                <section className="mt-4 rounded-2xl border-2 border-[#1A1A1A] bg-white p-4 md:p-5">
+                    <h2 className="text-base font-bold text-[#1A1A1A]">CSV で書き出す</h2>
+                    <div className="grid grid-cols-2 gap-3 mt-3">
                         <div>
-                            <label className={labelCls} htmlFor="ml-from">表示・書き出しの開始日</label>
+                            <label className={labelCls} htmlFor="ml-from">開始日（空欄ならすべて）</label>
                             <input id="ml-from" type="date" className={inputCls} value={from} onChange={(e) => setFrom(e.target.value)} />
                         </div>
                         <div>
@@ -232,70 +188,50 @@ export default function MealLogPage() {
                             <input id="ml-to" type="date" className={inputCls} value={to} onChange={(e) => setTo(e.target.value)} />
                         </div>
                     </div>
-                    <div className="mt-3 flex flex-wrap items-center gap-3">
-                        <button type="button" onClick={() => downloadCsv(filtered, fileBase())} disabled={!filtered.length}
-                            className="rounded-full border-2 border-[#1A1A1A] bg-[#4AF6C3] px-5 py-2 font-bold disabled:opacity-40">
-                            CSV で書き出す（{filtered.length} 件）
+                    <p className="text-xs text-[#4A4A4A] mt-2">対象：{ranged.length} 件の記録（{new Set(ranged.map((m) => m.date)).size} 日分）</p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                        <button type="button" disabled={!ranged.length || !db} onClick={() => downloadCsv(toServingsCsv(ranged, db), `${fileBase}_foods`)} className={`${pillCls} bg-[#4AF6C3]`}>
+                            食品ごとの記録
                         </button>
-                        {photoCount > 0 && (
-                            <button type="button" onClick={exportZip} disabled={!!busy}
-                                className="rounded-full border-2 border-[#1A1A1A] bg-[#6CCFF6] px-5 py-2 font-bold disabled:opacity-40">
-                                CSV＋写真（ZIP・{photoCount} 枚）
-                            </button>
-                        )}
-                        {(from || to) && (
-                            <button type="button" onClick={() => { setFrom(''); setTo(''); }} className="text-sm underline text-[#4A4A4A]">
-                                期間をクリア
-                            </button>
-                        )}
+                        <button type="button" disabled={!ranged.length || !db} onClick={() => downloadCsv(toDailyCsv(ranged, db), `${fileBase}_daily`)} className={`${pillCls} bg-[#4AF6C3]`}>
+                            1 日ごとの栄養合計
+                        </button>
+                        <button type="button" disabled={!ranged.length || !db || !!busy} onClick={exportZip} className={`${pillCls} bg-[#6CCFF6]`}>
+                            両方＋写真（ZIP{photoCount ? `・${photoCount} 枚` : ''}）
+                        </button>
                     </div>
-                    <p className="text-[11px] text-[#666] mt-2">列：日付・時刻・区分・食べたもの・メモ・写真（UTF-8 / Excel でそのまま開けます）。写真列のファイル名は ZIP の photos フォルダ内の写真に対応します。</p>
+                    <p className="text-[11px] text-[#666] mt-2 leading-relaxed">
+                        「食品ごと」は 1 食品 1 行（日付・区分・食品番号・量・34 栄養素・自由記述・メモ・写真）、「1 日ごと」は 1 日 1 行の合計です。UTF-8 で、Excel でもそのまま開けます。
+                        写真列のファイル名は ZIP の photos フォルダ内の写真に対応します。
+                    </p>
                     {busy && <p className="text-xs font-bold text-[#4A4A4A] mt-2" role="status">{busy}</p>}
-                </div>
+                </section>
 
-                {/* 一覧 */}
-                <div className="mt-8 space-y-6">
-                    {byDate.length === 0 && (
-                        <p className="text-center text-sm text-[#666] py-10">
-                            {meals.length ? 'この期間の記録はありません。' : 'まだ記録がありません。最初の一食を記録してみましょう。'}
-                        </p>
-                    )}
-                    {byDate.map(([date, list]) => (
-                        <section key={date}>
-                            <h2 className="text-sm font-bold text-[#1A1A1A] mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                                {date.replace(/-/g, '.')}（{weekday(date)}）
-                                <span className="ml-2 text-xs font-normal text-[#666]">{list.length} 件</span>
-                            </h2>
-                            <ul className="space-y-2">
-                                {list.map((m) => (
-                                    <li key={m.id} className="rounded-xl border-2 border-[#1A1A1A] bg-white p-3 flex gap-3">
-                                        <div className="shrink-0 w-14 text-center">
-                                            <span className="inline-block rounded-md px-2 py-0.5 text-xs font-bold border border-[#1A1A1A]" style={{ background: TYPE_COLOR[m.type] }}>{m.type}</span>
-                                            <div className="text-xs text-[#4A4A4A] mt-1">{m.time || '—'}</div>
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            {m.food && <p className="text-[15px] text-[#1A1A1A] whitespace-pre-wrap break-words">{m.food}</p>}
-                                            {m.memo && <p className="text-xs text-[#666] mt-1 break-words">{m.memo}</p>}
-                                            {m.photos.length > 0 && (
-                                                <div className="flex flex-wrap gap-2 mt-2">
-                                                    {m.photos.map((id) => <Photo key={id} id={id} className="w-24 h-24 rounded-lg border border-[#1A1A1A]" onOpen={setViewer} />)}
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className="shrink-0 flex flex-col gap-1">
-                                            <button type="button" onClick={() => edit(m)} className="text-xs font-bold underline">編集</button>
-                                            <button type="button" onClick={() => del(m)} className="text-xs font-bold underline text-[#C0392B]">削除</button>
-                                        </div>
-                                    </li>
-                                ))}
-                            </ul>
-                        </section>
-                    ))}
-                </div>
+                <p className="text-[11px] text-[#666] mt-6 leading-relaxed">
+                    食品の成分値：文部科学省「日本食品標準成分表（八訂）増補2023年」{db ? `（${db.updated} 更新版）` : ''}。目標値：厚生労働省「日本人の食事摂取基準（2025年版）」。
+                    病気の治療中の方は、医師・管理栄養士の指示を優先してください。
+                </p>
             </div>
+
+            {panel?.kind === 'search' && (
+                <FoodSearch db={db} dbError={dbError} type={panel.type} recent={recent} onClose={() => setPanel(null)}
+                    onAdd={(food, grams) => { addItem(date, panel.type, food.code, food.name, grams); setPanel(null); }} />
+            )}
+            {panel?.kind === 'editor' && (
+                <MealEditor initial={panel.draft} savedPhotos={meals.find((m) => m.id === panel.draft.id)?.photos ?? []}
+                    onClose={() => setPanel(null)} onOpenPhoto={setViewer}
+                    onSave={(d) => { save(d); if (d.date !== date) setDate(d.date); setPanel(null); }}
+                    onDelete={panel.draft.id ? () => deleteMeal(meals.find((m) => m.id === panel.draft.id)!) : undefined} />
+            )}
+            {panel?.kind === 'profile' && <ProfileSheet profile={profile} onSave={setProfile} onClose={() => setPanel(null)} />}
+            {panel?.kind === 'item' && (
+                <ItemEditor db={db} item={panel.item} onClose={() => setPanel(null)}
+                    onSave={(g) => { updateItem(panel.meal.id, panel.item.id, g); setPanel(null); }} />
+            )}
 
             {viewer && (
                 <div className="fixed inset-0 z-[100] bg-[#1A1A1A]/80 flex items-center justify-center p-4" onClick={() => setViewer(null)}>
+                    {/* eslint-disable-next-line @next/next/no-img-element -- 端末内の写真（blob URL） */}
                     <img src={viewer} alt="" className="max-w-full max-h-full rounded-xl" />
                     <button type="button" aria-label="閉じる" className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white border-2 border-[#1A1A1A] font-bold">×</button>
                 </div>
@@ -303,3 +239,23 @@ export default function MealLogPage() {
         </div>
     );
 }
+
+// 追加済みの食品の量を変える・外す
+function ItemEditor({ db, item, onSave, onClose }: { db: FoodDb | null; item: MealItem; onSave: (grams: number | null) => void; onClose: () => void }) {
+    const [grams, setGrams] = useState(String(item.grams));
+    const g = Number(grams);
+    const valid = Number.isFinite(g) && g > 0 && g <= 5000;
+    const v = valid ? totalsOf(db, [{ code: item.code, grams: g }]).values : null;
+    return (
+        <Sheet title="量を変える" onClose={onClose}>
+            <p className="text-[15px] font-bold text-[#1A1A1A]">{displayName(item.name)}</p>
+            <label className={`${labelCls} mt-4`} htmlFor="ie-g">量（g）</label>
+            <input id="ie-g" type="number" inputMode="decimal" min={1} max={5000} step="any" autoFocus className={`${inputCls} max-w-[120px]`}
+                value={grams} onChange={(e) => setGrams(e.target.value)} />
+            {v && <p className="text-sm text-[#4A4A4A] mt-2 tabular-nums">{fmt(v.kcal, 0)} kcal・たんぱく質 {fmt(v.prot, 1)}g・脂質 {fmt(v.fat, 1)}g・炭水化物 {fmt(v.carb, 1)}g</p>}
+            <button type="button" disabled={!valid} onClick={() => onSave(Math.round(g * 10) / 10)} className={`${pillCls} w-full mt-5 py-3 bg-[#FF9855]`}>保存する</button>
+            <button type="button" onClick={() => onSave(null)} className="w-full mt-3 text-sm font-bold underline text-[#d03b3b]">この食品を外す</button>
+        </Sheet>
+    );
+}
+
