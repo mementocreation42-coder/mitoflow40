@@ -1,4 +1,4 @@
-export const inputCls = 'w-full rounded-lg border-2 border-[#1A1A1A] bg-white px-3 py-2 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#FF9855]';
+export const inputCls = 'w-full rounded-lg border-2 border-[#1A1A1A] bg-white px-3 py-2 text-[16px] focus:outline-none focus:ring-2 focus:ring-[#FF9855]';
 export const labelCls = 'block text-xs font-bold text-[#4A4A4A] mb-1';
 export const pillCls = 'rounded-full border-2 border-[#1A1A1A] px-4 py-2 text-sm font-bold disabled:opacity-40';
 

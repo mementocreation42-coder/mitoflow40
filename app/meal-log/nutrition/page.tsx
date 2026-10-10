@@ -90,7 +90,7 @@ export default function MealLogPage() {
     }
 
     return (
-        <div className="pt-[calc(60px+2rem)] md:pt-[calc(60px+4rem)] pb-16 md:pb-24 px-4 md:px-6">
+        <div className="pt-8 md:pt-12 pb-16 md:pb-24 px-4 md:px-6">
             <div className="max-w-[720px] mx-auto">
                 <div className="flex items-start justify-between gap-3">
                     <div>
