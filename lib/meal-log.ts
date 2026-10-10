@@ -100,28 +100,34 @@ function csv(rows: string[][]): string {
 
 const NUTRIENT_HEADERS = NUTRIENTS.map((n) => `${n.label}(${n.unit})`);
 
-// 提出用：1 食 1 行。必須項目（日付・食事のタイプ・食事内容）を先頭に、任意の食事量・特記事項を続ける。
-// 同じ日・同じ区分の記録は 1 行にまとめる。写真は提出の対象外なので入れない。
+// 提出用：8weeks.ai の参考テンプレート（日付・食事タイプ・食事内容）と同じ形。
+// 日付は 2025/9/1、食事内容は「・」の箇条書きをセル内で改行。1 食 1 行で、同じ日の行は食べた時刻の順。
+// 任意の列（時刻・食事量・特記事項）はその後ろに足す。写真は提出の対象外なので入れない。
 export function toSubmissionCsv(meals: Meal[], db: FoodDb | null): string {
-    const rows = [['日付', '食事のタイプ', '食事内容', '時刻', '食事量', '特記事項']];
+    const rows = [['日付', '食事タイプ', '食事内容', '時刻', '食事量', '特記事項']];
     const groups = new Map<string, Meal[]>();
     for (const m of ascending(meals)) {
         const key = `${m.date}|${m.type}`;
         groups.set(key, [...(groups.get(key) ?? []), m]);
     }
+    const firstTime = (list: Meal[]) => list.map((m) => m.time).filter(Boolean).sort()[0] ?? '';
     const sorted = [...groups.values()].sort((a, b) =>
-        a[0].date.localeCompare(b[0].date) || MEAL_TYPES.indexOf(a[0].type) - MEAL_TYPES.indexOf(b[0].type));
+        a[0].date.localeCompare(b[0].date)
+        || ((firstTime(a) && firstTime(b)) ? firstTime(a).localeCompare(firstTime(b)) : 0)
+        || MEAL_TYPES.indexOf(a[0].type) - MEAL_TYPES.indexOf(b[0].type));
     for (const list of sorted) {
         const items = list.flatMap((m) => m.items);
-        const content = [
-            ...items.map((it) => `${displayName(it.name)}（${it.grams}g）`),
-            ...list.map((m) => m.food).filter(Boolean),
-        ].join('、');
+        const lines = [
+            ...items.map((it) => `${displayName(it.name)} ${it.grams}g`),
+            ...list.flatMap((m) => m.food.split(/\r?\n/)).map((l) => l.replace(/^[・\s]+/, '').trim()).filter(Boolean),
+        ];
+        const content = lines.map((l) => `・${l}`).join('\n');
+        const [y, mo, d] = list[0].date.split('-').map(Number);
         const grams = items.reduce((n, it) => n + it.grams, 0);
         const kcal = totalsOf(db, items).values.kcal;
         const amount = items.length ? `${Math.round(grams)}g${db ? `・${Math.round(kcal)}kcal` : ''}` : '';
         rows.push([
-            list[0].date, list[0].type, content,
+            `${y}/${mo}/${d}`, list[0].type, content,
             list.map((m) => m.time).filter(Boolean).join('・'),
             amount,
             list.map((m) => m.memo).filter(Boolean).join('／'),

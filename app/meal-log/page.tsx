@@ -186,7 +186,7 @@ export default function MealLogPage() {
                 {/* 提出用（1ヶ月分） */}
                 <section className="mt-4 rounded-2xl border-2 border-[#1A1A1A] bg-white p-4 md:p-5 shadow-[4px_4px_0_#1A1A1A]">
                     <h2 className="text-base font-bold text-[#1A1A1A]">提出用 CSV（1ヶ月分）</h2>
-                    <p className="text-xs text-[#4A4A4A] mt-1">必須項目「日付・食事のタイプ・食事内容」を含む形で、1 食 1 行にまとめて書き出します。写真は提出の対象外なので含めません。</p>
+                    <p className="text-xs text-[#4A4A4A] mt-1">参考テンプレートと同じ「日付・食事タイプ・食事内容」の形で、1 食 1 行にまとめて書き出します。写真は提出の対象外なので含めません。</p>
                     <div className="mt-3 flex flex-wrap items-end gap-3">
                         <div>
                             <label className={labelCls} htmlFor="ml-month">月</label>
@@ -203,7 +203,7 @@ export default function MealLogPage() {
                         {monthMeals.length ? `${monthDays} / ${daysInMonth} 日分の記録があります。` : 'この月の記録はまだありません。'}
                     </p>
                     <p className="text-[11px] text-[#666] mt-2 leading-relaxed">
-                        列：日付・食事のタイプ・食事内容（食品と量）・時刻・食事量（合計 g・kcal）・特記事項（メモ）。グルテンフリーなどの特記事項は、各食事の「写真・メモ・時刻を編集」のメモ欄に書いてください。
+                        列：日付・食事タイプ・食事内容（「・」の箇条書き）・時刻・食事量（合計 g・kcal）・特記事項（メモ）。グルテンフリーなどの特記事項は、各食事の「写真・メモ・時刻を編集」のメモ欄に書いてください。
                     </p>
                 </section>
 
