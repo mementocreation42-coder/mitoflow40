@@ -39,13 +39,34 @@ export async function deletePhotos(ids: string[]): Promise<void> {
 
 // 長辺 1280px の JPEG に縮小（スマホの写真 3〜5MB → 200KB 前後）
 export async function shrinkImage(file: File, max = 1280, quality = 0.8): Promise<Blob> {
-    const bmp = await createImageBitmap(file, { imageOrientation: 'from-image' });
-    const scale = Math.min(1, max / Math.max(bmp.width, bmp.height));
+    const img = await decode(file);
+    const scale = Math.min(1, max / Math.max(img.width, img.height));
     const canvas = document.createElement('canvas');
-    canvas.width = Math.round(bmp.width * scale);
-    canvas.height = Math.round(bmp.height * scale);
-    canvas.getContext('2d')!.drawImage(bmp, 0, 0, canvas.width, canvas.height);
-    bmp.close();
+    canvas.width = Math.round(img.width * scale);
+    canvas.height = Math.round(img.height * scale);
+    canvas.getContext('2d')!.drawImage(img.source, 0, 0, canvas.width, canvas.height);
+    img.close();
     return new Promise((resolve, reject) =>
         canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('画像を変換できませんでした'))), 'image/jpeg', quality));
+}
+
+// 画像を読み込む。createImageBitmap が使えない・失敗するブラウザ（古い iPhone の Safari など）では <img> で読む。
+// どちらもスマホ写真の向き（EXIF）を反映した状態で描ける。
+async function decode(file: File): Promise<{ source: CanvasImageSource; width: number; height: number; close: () => void }> {
+    if (typeof createImageBitmap === 'function') {
+        try {
+            const bmp = await createImageBitmap(file, { imageOrientation: 'from-image' });
+            return { source: bmp, width: bmp.width, height: bmp.height, close: () => bmp.close() };
+        } catch { /* 下の方法で読む */ }
+    }
+    const url = URL.createObjectURL(file);
+    try {
+        const img = new Image();
+        img.src = url;
+        await img.decode();
+        return { source: img, width: img.naturalWidth, height: img.naturalHeight, close: () => URL.revokeObjectURL(url) };
+    } catch (e) {
+        URL.revokeObjectURL(url);
+        throw e;
+    }
 }

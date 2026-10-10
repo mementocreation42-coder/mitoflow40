@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
-import { MEAL_TYPES, downloadCsv, downloadZip, recentFoods, sortMeals, toDailyCsv, toServingsCsv, toSubmissionCsv, todayStr, useMealLog, useProfile, type Meal, type MealItem, type MealType } from '@/lib/meal-log';
+import { MEAL_TYPES, downloadCsv, downloadZip, recentFoods, sortMeals, toDailyCsv, toServingsCsv, toSubmissionCsv, todayStr, useMealLog, useMounted, useProfile, type Meal, type MealItem, type MealType } from '@/lib/meal-log';
 import { displayName, fmt, loadFoodDb, targetsFor, totalsOf, type FoodDb } from '@/lib/nutrition';
 import FoodSearch from '@/components/meal-log/FoodSearch';
 import MealEditor, { type Draft } from '@/components/meal-log/MealEditor';
@@ -35,6 +35,7 @@ type Panel =
 export default function MealLogPage() {
     const { meals, save, remove, addItem, updateItem } = useMealLog();
     const { profile, configured, setProfile } = useProfile();
+    const mounted = useMounted();
     const [date, setDate] = useState(todayStr);
     const [db, setDb] = useState<FoodDb | null>(null);
     const [dbError, setDbError] = useState(false);
@@ -83,6 +84,10 @@ export default function MealLogPage() {
     };
 
     const isToday = date === todayStr();
+
+    if (!mounted) {
+        return <div className="pt-[calc(60px+4rem)] pb-24 px-4 text-center text-sm text-[#666]" role="status">読み込み中…</div>;
+    }
 
     return (
         <div className="pt-[calc(60px+2rem)] md:pt-[calc(60px+4rem)] pb-16 md:pb-24 px-4 md:px-6">

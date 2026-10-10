@@ -63,6 +63,13 @@ export function sortMeals(meals: Meal[]): Meal[] {
         || MEAL_TYPES.indexOf(a.type) - MEAL_TYPES.indexOf(b.type));
 }
 
+// ブラウザで動き始めたら true。サーバーで先に作るページには「今日の日付」を入れられない（作った日と開いた日がずれる）ため、
+// 日付を使う部分はこれが true になってから描く。
+const noopSubscribe = () => () => {};
+export function useMounted(): boolean {
+    return useSyncExternalStore(noopSubscribe, () => true, () => false);
+}
+
 export function nowTime(): string {
     const d = new Date();
     return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;

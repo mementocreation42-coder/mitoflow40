@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useMemo, useRef, useState } from 'react';
-import { MEAL_TYPES, downloadCsv, foodLines, previousMeal, toSubmissionCsv, todayStr, useMealLog, useMemory, type Meal, type MealType, type Remembered } from '@/lib/meal-log';
+import { MEAL_TYPES, downloadCsv, foodLines, previousMeal, toSubmissionCsv, todayStr, useMealLog, useMemory, useMounted, type Meal, type MealType, type Remembered } from '@/lib/meal-log';
 import { displayName } from '@/lib/nutrition';
 import { pillCls } from '@/components/meal-log/styles';
 
@@ -28,6 +28,7 @@ function weekday(date: string): string {
 
 export default function MealLogEasyPage() {
     const { meals, setLines } = useMealLog();
+    const mounted = useMounted();
     const [date, setDate] = useState(todayStr);
     const month = date.slice(0, 7);
     const { memory, remember, forget, suggest } = useMemory(meals);
@@ -42,6 +43,10 @@ export default function MealLogEasyPage() {
 
     const monthMeals = useMemo(() => meals.filter((m) => m.date.startsWith(month)), [meals, month]);
     const isToday = date === todayStr();
+
+    if (!mounted) {
+        return <div className="pt-[calc(60px+4rem)] pb-24 px-4 text-center text-sm text-[#666]" role="status">読み込み中…</div>;
+    }
 
     return (
         <div className="pt-[calc(60px+2rem)] md:pt-[calc(60px+4rem)] pb-16 md:pb-24 px-4 md:px-6">
@@ -157,7 +162,10 @@ function MealCard({ type, lines, fixed, previous, suggest, onChange }: {
             <form className="px-4 pt-2 pb-3" onSubmit={(e) => { e.preventDefault(); add(); }}>
                 <div className="flex gap-2">
                     <input ref={inputRef} type="text" value={text} onChange={(e) => setText(e.target.value)} onFocus={() => setOpen(true)}
-                        onKeyDown={(e) => { if (e.key === 'Enter' && e.nativeEvent.isComposing) e.preventDefault(); }}
+                        onKeyDown={(e) => {
+                            // 日本語の変換を確定する Enter では追加しない（Safari は確定の Enter を isComposing=false・keyCode 229 で送るため両方見る）
+                            if (e.key === 'Enter' && (e.nativeEvent.isComposing || e.keyCode === 229)) e.preventDefault();
+                        }}
                         placeholder={hasAny ? 'もう 1 品' : '例：おにぎり（鮭） 2個'} enterKeyHint="enter" aria-label={`${type}に食べたもの`}
                         className="flex-1 min-w-0 rounded-lg border-2 border-[#1A1A1A] bg-white px-3 py-2 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#FF9855]" />
                     <button type="submit" disabled={!q} className={`${pillCls} bg-[#FF9855] shrink-0`}>{editing == null ? '追加' : '直す'}</button>
