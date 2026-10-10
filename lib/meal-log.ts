@@ -63,6 +63,23 @@ export function sortMeals(meals: Meal[]): Meal[] {
         || MEAL_TYPES.indexOf(a.type) - MEAL_TYPES.indexOf(b.type));
 }
 
+export function nowTime(): string {
+    const d = new Date();
+    return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+}
+
+// 「・」や空白を外した 1 行ずつの「食べたもの」
+export function foodLines(food: string): string[] {
+    return food.split(/\r?\n/).map((l) => l.replace(/^[・\s]+/, '').trim()).filter(Boolean);
+}
+
+// これまでに書いた行を、よく書く順に（入力候補に使う）
+export function frequentLines(meals: Meal[]): string[] {
+    const count = new Map<string, number>();
+    for (const m of meals) for (const l of foodLines(m.food)) count.set(l, (count.get(l) ?? 0) + 1);
+    return [...count.entries()].sort((a, b) => b[1] - a[1]).map(([l]) => l);
+}
+
 export function todayStr(): string {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -119,7 +136,7 @@ export function toSubmissionCsv(meals: Meal[], db: FoodDb | null): string {
         const items = list.flatMap((m) => m.items);
         const lines = [
             ...items.map((it) => `${displayName(it.name)} ${it.grams}g`),
-            ...list.flatMap((m) => m.food.split(/\r?\n/)).map((l) => l.replace(/^[・\s]+/, '').trim()).filter(Boolean),
+            ...list.flatMap((m) => foodLines(m.food)),
         ];
         const content = lines.map((l) => `・${l}`).join('\n');
         const [y, mo, d] = list[0].date.split('-').map(Number);
@@ -210,6 +227,24 @@ export function useMealLog() {
         }
     }, []);
 
+    // かんたん記入：その日のその区分の「食べたもの」を行ごとに書き換える（記録がなければ作る、空になれば消す）
+    const setLines = useCallback((date: string, type: MealType, lines: string[]) => {
+        const list = parse(getSnapshot());
+        const food = lines.map((l) => l.trim()).filter(Boolean).join('\n');
+        const target = list.find((m) => m.date === date && m.type === type);
+        if (!target) {
+            if (!food) return;
+            write([...list, { id: newId(), date, time: date === todayStr() ? nowTime() : '', type, food, memo: '', photos: [], items: [] }]);
+            return;
+        }
+        // 同じ日・同じ区分の記録が複数あるときは、行をすべて最初の記録にまとめる（画面では全部の行を 1 つに見せているため）
+        write(list.flatMap((m) => {
+            if (m.date !== date || m.type !== type) return [m];
+            const next = { ...m, food: m === target ? food : '' };
+            return !next.food && !m.items.length && !m.memo && !m.photos.length ? [] : [next];
+        }));
+    }, []);
+
     // その日のその区分の記録（なければ作る）に食品を足す
     const addItem = useCallback((date: string, type: MealType, code: string, name: string, grams: number) => {
         const list = parse(getSnapshot());
@@ -218,9 +253,7 @@ export function useMealLog() {
         if (target) {
             write(list.map((m) => (m === target ? { ...m, items: [...m.items, item] } : m)));
         } else {
-            const d = new Date();
-            const time = date === todayStr() ? `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}` : '';
-            write([...list, { id: newId(), date, time, type, food: '', memo: '', photos: [], items: [item] }]);
+            write([...list, { id: newId(), date, time: date === todayStr() ? nowTime() : '', type, food: '', memo: '', photos: [], items: [item] }]);
         }
     }, []);
 
@@ -242,7 +275,7 @@ export function useMealLog() {
         write(list.filter((m) => m.id !== id));
     }, []);
 
-    return { meals, save, remove, addItem, updateItem };
+    return { meals, save, remove, addItem, updateItem, setLines };
 }
 
 // ===== プロフィール（目標値の計算に使う） =====

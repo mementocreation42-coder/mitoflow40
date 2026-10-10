@@ -1,293 +1,263 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { MEAL_TYPES, downloadCsv, downloadZip, recentFoods, sortMeals, toDailyCsv, toServingsCsv, toSubmissionCsv, todayStr, useMealLog, useProfile, type Meal, type MealItem, type MealType } from '@/lib/meal-log';
-import { displayName, fmt, loadFoodDb, targetsFor, totalsOf, type FoodDb } from '@/lib/nutrition';
-import FoodSearch from '@/components/meal-log/FoodSearch';
-import MealEditor, { type Draft } from '@/components/meal-log/MealEditor';
-import ProfileSheet from '@/components/meal-log/ProfileSheet';
-import Photo from '@/components/meal-log/Photo';
-import Sheet from '@/components/meal-log/Sheet';
-import { EnergySummary, NutrientTargets } from '@/components/meal-log/NutrientPanel';
-import { inputCls, labelCls, pillCls } from '@/components/meal-log/styles';
+import Link from 'next/link';
+import { useMemo, useRef, useState } from 'react';
+import { MEAL_TYPES, downloadCsv, foodLines, frequentLines, toSubmissionCsv, todayStr, useMealLog, type Meal, type MealType } from '@/lib/meal-log';
+import { displayName } from '@/lib/nutrition';
+import { pillCls } from '@/components/meal-log/styles';
+
+// かんたん記入：提出フォーマット（日付・食事タイプ・食事内容）を毎日書きやすくする画面。
+// 栄養の計算は /meal-log/nutrition。記録は共通。
 
 const TYPE_COLOR: Record<MealType, string> = { 朝食: '#FFB37B', 昼食: '#4AF6C3', 夕食: '#6CCFF6', 間食: '#E5D0E3' };
+const MAIN_TYPES: MealType[] = ['朝食', '昼食', '夕食']; // 提出の必須区分
+const AMOUNTS = ['1個', '2個', '1杯', '1皿', '1袋', '100g', '200g', '半分', '少々'];
 
+function ymd(y: number, m: number, d: number): string {
+    return `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+}
 function shiftDate(date: string, days: number): string {
     const [y, m, d] = date.split('-').map(Number);
     const x = new Date(y, m - 1, d + days);
-    return `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, '0')}-${String(x.getDate()).padStart(2, '0')}`;
+    return ymd(x.getFullYear(), x.getMonth() + 1, x.getDate());
 }
-
 function weekday(date: string): string {
     const [y, m, d] = date.split('-').map(Number);
     return '日月火水木金土'[new Date(y, m - 1, d).getDay()];
 }
 
-type Panel =
-    | { kind: 'search'; type: MealType }
-    | { kind: 'editor'; draft: Draft }
-    | { kind: 'profile' }
-    | { kind: 'item'; meal: Meal; item: MealItem }
-    | null;
-
-export default function MealLogPage() {
-    const { meals, save, remove, addItem, updateItem } = useMealLog();
-    const { profile, configured, setProfile } = useProfile();
+export default function MealLogEasyPage() {
+    const { meals, setLines } = useMealLog();
     const [date, setDate] = useState(todayStr);
-    const [db, setDb] = useState<FoodDb | null>(null);
-    const [dbError, setDbError] = useState(false);
-    const [panel, setPanel] = useState<Panel>(null);
-    const [viewer, setViewer] = useState<string | null>(null);
-    const [busy, setBusy] = useState<string | null>(null);
-    const [month, setMonth] = useState(() => todayStr().slice(0, 7));
-    const [from, setFrom] = useState('');
-    const [to, setTo] = useState('');
+    const month = date.slice(0, 7);
+    const frequent = useMemo(() => frequentLines(meals), [meals]);
 
-    useEffect(() => { loadFoodDb().then(setDb).catch(() => setDbError(true)); }, []);
+    const byKey = useMemo(() => {
+        const map = new Map<string, Meal[]>();
+        for (const m of meals) map.set(`${m.date}|${m.type}`, [...(map.get(`${m.date}|${m.type}`) ?? []), m]);
+        return map;
+    }, [meals]);
+    const recordsOf = (d: string, t: MealType) => byKey.get(`${d}|${t}`) ?? [];
+    const filled = (d: string, t: MealType) => recordsOf(d, t).some((m) => m.food.trim() || m.items.length);
 
-    const dayMeals = useMemo(() => sortMeals(meals.filter((m) => m.date === date)), [meals, date]);
-    const dayItems = dayMeals.flatMap((m) => m.items);
-    const totals = useMemo(() => totalsOf(db, dayItems), [db, dayItems]);
-    const targets = useMemo(() => targetsFor(profile), [profile]);
-    const recent = useMemo(() => recentFoods(meals), [meals]);
-
-    // 提出用：記録のある月と今月を選べるように
-    const months = useMemo(() => [...new Set([todayStr().slice(0, 7), ...meals.map((m) => m.date.slice(0, 7))])].sort().reverse(), [meals]);
     const monthMeals = useMemo(() => meals.filter((m) => m.date.startsWith(month)), [meals, month]);
-    const monthDays = new Set(monthMeals.map((m) => m.date)).size;
-    const [my, mm] = month.split('-').map(Number);
-    const daysInMonth = new Date(my, mm, 0).getDate();
-
-    const ranged = useMemo(() => meals.filter((m) => (!from || m.date >= from) && (!to || m.date <= to)), [meals, from, to]);
-    const photoCount = ranged.reduce((n, m) => n + m.photos.length, 0);
-    const fileBase = `meal-log${from || to ? `_${from || 'start'}_${to || todayStr()}` : `_${todayStr()}`}`;
-
-    const newDraft = (type: MealType): Draft => {
-        const d = new Date();
-        const time = date === todayStr() ? `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}` : '';
-        return { date, time, type, food: '', memo: '', photos: [], items: [] };
-    };
-
-    const deleteMeal = (m: Meal) => {
-        if (confirm(`${m.date} ${m.type}の記録を削除しますか？（食品 ${m.items.length} 件・写真 ${m.photos.length} 枚も消えます）`)) {
-            remove(m.id);
-            setPanel(null);
-        }
-    };
-
-    const exportZip = async () => {
-        setBusy('ZIP を作成中…');
-        try { await downloadZip(ranged, db, fileBase); } finally { setBusy(null); }
-    };
-
     const isToday = date === todayStr();
 
     return (
         <div className="pt-[calc(60px+2rem)] md:pt-[calc(60px+4rem)] pb-16 md:pb-24 px-4 md:px-6">
-            <div className="max-w-[720px] mx-auto">
-                <div className="flex items-start justify-between gap-3">
-                    <div>
-                        <p className="text-[11px] font-bold tracking-widest text-[#4A4A4A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>MEAL LOG</p>
-                        <h1 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mt-1">食事記録</h1>
-                    </div>
-                    <button type="button" onClick={() => setPanel({ kind: 'profile' })} className={`${pillCls} bg-white mt-1 shrink-0`}>目標の設定</button>
-                </div>
-                <p className="text-sm text-[#666] mt-2">食べたものを選ぶと、エネルギー・PFC・ビタミン・ミネラルを自動で集計します。記録はこの端末のブラウザの中だけに保存され、どこにも送信されません。</p>
-                {!configured && (
-                    <p className="mt-3 rounded-xl border-2 border-dashed border-[#1A1A1A] bg-white px-3 py-2 text-xs text-[#4A4A4A]">
-                        いまの目標は「女性・30〜49歳・活動量ふつう」の値です。<button type="button" onClick={() => setPanel({ kind: 'profile' })} className="font-bold underline">目標の設定</button>で自分に合わせてください。
-                    </p>
-                )}
+            <div className="max-w-[640px] mx-auto">
+                <p className="text-[11px] font-bold tracking-widest text-[#4A4A4A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>MEAL LOG</p>
+                <h1 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mt-1">食事記録</h1>
+                <p className="text-sm text-[#666] mt-2">
+                    食べたものを 1 品ずつ書くだけ。月末に「提出用 CSV」で、日付・食事タイプ・食事内容の形にまとめて書き出せます。記録はこの端末の中だけに保存されます。
+                </p>
 
-                {/* 日付の切り替え */}
-                <div className="mt-6 flex items-center justify-between gap-2 rounded-2xl border-2 border-[#1A1A1A] bg-white px-2 py-2">
-                    <button type="button" onClick={() => setDate(shiftDate(date, -1))} aria-label="前の日" className="w-10 h-10 rounded-full font-bold text-lg hover:bg-[#FBEBD5]">‹</button>
-                    <label className="relative flex flex-col items-center cursor-pointer">
-                        <span className="text-base font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                            {date.replace(/-/g, '.')}（{weekday(date)}）
-                        </span>
-                        <span className="text-[11px] text-[#4A4A4A]">{isToday ? '今日' : 'タップで日付を選ぶ'}</span>
-                        <input type="date" value={date} onChange={(e) => e.target.value && setDate(e.target.value)} aria-label="日付を選ぶ"
-                            className="absolute inset-0 opacity-0 cursor-pointer" />
-                    </label>
-                    <div className="flex items-center">
-                        {!isToday && <button type="button" onClick={() => setDate(todayStr())} className="text-xs font-bold underline px-1">今日</button>}
-                        <button type="button" onClick={() => setDate(shiftDate(date, 1))} aria-label="次の日" className="w-10 h-10 rounded-full font-bold text-lg hover:bg-[#FBEBD5]">›</button>
+                <MonthCalendar date={date} onSelect={setDate} filled={filled} />
+
+                {/* 日付 */}
+                <div className="mt-4 flex items-center justify-between gap-2">
+                    <button type="button" onClick={() => setDate(shiftDate(date, -1))} className={`${pillCls} bg-white px-3`} aria-label="前の日">‹ 前の日</button>
+                    <div className="text-center">
+                        <p className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            {Number(date.slice(5, 7))}月{Number(date.slice(8))}日（{weekday(date)}）
+                        </p>
+                        {isToday ? <p className="text-[11px] text-[#4A4A4A]">今日</p>
+                            : <button type="button" onClick={() => setDate(todayStr())} className="text-[11px] font-bold underline">今日に戻る</button>}
                     </div>
+                    <button type="button" onClick={() => setDate(shiftDate(date, 1))} className={`${pillCls} bg-white px-3`} aria-label="次の日">次の日 ›</button>
                 </div>
 
-                <div className="mt-4"><EnergySummary totals={totals} targets={targets} /></div>
-
-                {/* 日記（区分ごと） */}
-                <div className="mt-4 space-y-3">
+                <div className="mt-3 space-y-3">
                     {MEAL_TYPES.map((type) => {
-                        const list = dayMeals.filter((m) => m.type === type);
-                        const kcal = totalsOf(db, list.flatMap((m) => m.items)).values.kcal;
+                        const recs = recordsOf(date, type);
                         return (
-                            <section key={type} className="rounded-2xl border-2 border-[#1A1A1A] bg-white">
-                                <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#ECEBE6]">
-                                    <h2 className="flex items-center gap-2 text-sm font-bold text-[#1A1A1A]">
-                                        <span className="inline-block rounded-md px-2 py-0.5 text-xs border border-[#1A1A1A]" style={{ background: TYPE_COLOR[type] }}>{type}</span>
-                                        {list.some((m) => m.time) && <span className="text-xs font-normal text-[#4A4A4A]">{list.map((m) => m.time).filter(Boolean).join('・')}</span>}
-                                    </h2>
-                                    <span className="text-sm font-bold tabular-nums text-[#1A1A1A]">{fmt(kcal, 0)} <span className="text-[11px] font-normal">kcal</span></span>
-                                </div>
-
-                                {list.map((m) => (
-                                    <div key={m.id} className="px-4 py-2 border-b border-[#ECEBE6] last:border-b-0">
-                                        {m.items.length > 0 && (
-                                            <ul>
-                                                {m.items.map((it) => {
-                                                    const k = totalsOf(db, [it]).values.kcal;
-                                                    return (
-                                                        <li key={it.id}>
-                                                            <button type="button" onClick={() => setPanel({ kind: 'item', meal: m, item: it })}
-                                                                className="w-full text-left flex items-center gap-3 py-1.5 hover:bg-[#FAFAF7]">
-                                                                <span className="flex-1 min-w-0 text-[14px] text-[#1A1A1A] break-words">{displayName(it.name)}</span>
-                                                                <span className="shrink-0 text-xs text-[#4A4A4A] tabular-nums">{it.grams}g</span>
-                                                                <span className="shrink-0 w-16 text-right text-xs tabular-nums text-[#1A1A1A]">{db ? `${fmt(k, 0)} kcal` : '…'}</span>
-                                                            </button>
-                                                        </li>
-                                                    );
-                                                })}
-                                            </ul>
-                                        )}
-                                        {(m.food || m.memo || m.photos.length > 0) && (
-                                            <div className="py-1.5">
-                                                {m.food && <p className="text-[14px] text-[#1A1A1A] whitespace-pre-wrap break-words">{m.food}</p>}
-                                                {m.memo && <p className="text-xs text-[#666] mt-0.5 break-words">{m.memo}</p>}
-                                                {m.photos.length > 0 && (
-                                                    <div className="flex flex-wrap gap-2 mt-2">
-                                                        {m.photos.map((id) => <Photo key={id} id={id} className="w-20 h-20 rounded-lg border border-[#1A1A1A]" onOpen={setViewer} />)}
-                                                    </div>
-                                                )}
-                                            </div>
-                                        )}
-                                        <button type="button" onClick={() => setPanel({ kind: 'editor', draft: { ...m } })} className="text-xs font-bold underline text-[#4A4A4A] mt-1">
-                                            写真・メモ・時刻を編集
-                                        </button>
-                                    </div>
-                                ))}
-
-                                <div className="flex gap-2 px-4 py-2.5">
-                                    <button type="button" onClick={() => setPanel({ kind: 'search', type })} className={`${pillCls} bg-[#FF9855] flex-1`}>＋ 食品</button>
-                                    {list.length === 0 && (
-                                        <button type="button" onClick={() => setPanel({ kind: 'editor', draft: newDraft(type) })} className={`${pillCls} bg-white`}>写真・メモ</button>
-                                    )}
-                                </div>
-                            </section>
+                            <MealCard key={`${date}|${type}`} type={type}
+                                lines={recs.flatMap((m) => foodLines(m.food))}
+                                fixed={recs.flatMap((m) => m.items.map((it) => `${displayName(it.name)} ${it.grams}g`))}
+                                yesterday={recordsOf(shiftDate(date, -1), type).flatMap((m) => foodLines(m.food))}
+                                frequent={frequent}
+                                onChange={(lines) => setLines(date, type, lines)} />
                         );
                     })}
                 </div>
 
-                <div className="mt-4"><NutrientTargets totals={totals} targets={targets} hasItems={dayItems.length > 0} /></div>
+                <ExportBox month={month} meals={monthMeals} filled={filled} />
 
-                {/* 提出用（1ヶ月分） */}
-                <section className="mt-4 rounded-2xl border-2 border-[#1A1A1A] bg-white p-4 md:p-5 shadow-[4px_4px_0_#1A1A1A]">
-                    <h2 className="text-base font-bold text-[#1A1A1A]">提出用 CSV（1ヶ月分）</h2>
-                    <p className="text-xs text-[#4A4A4A] mt-1">参考テンプレートと同じ「日付・食事タイプ・食事内容」の形で、1 食 1 行にまとめて書き出します。写真は提出の対象外なので含めません。</p>
-                    <div className="mt-3 flex flex-wrap items-end gap-3">
-                        <div>
-                            <label className={labelCls} htmlFor="ml-month">月</label>
-                            <select id="ml-month" className={`${inputCls} w-auto`} value={month} onChange={(e) => setMonth(e.target.value)}>
-                                {months.map((m) => <option key={m} value={m}>{Number(m.slice(0, 4))}年{Number(m.slice(5))}月</option>)}
-                            </select>
-                        </div>
-                        <button type="button" disabled={!monthMeals.length} onClick={() => downloadCsv(toSubmissionCsv(monthMeals, db), `meal-log_${month}`)}
-                            className={`${pillCls} bg-[#FF9855] py-2.5`}>
-                            提出用 CSV を書き出す
-                        </button>
-                    </div>
-                    <p className="text-xs text-[#4A4A4A] mt-2">
-                        {monthMeals.length ? `${monthDays} / ${daysInMonth} 日分の記録があります。` : 'この月の記録はまだありません。'}
-                    </p>
-                    <p className="text-[11px] text-[#666] mt-2 leading-relaxed">
-                        列：日付・食事タイプ・食事内容（「・」の箇条書き）・時刻・食事量（合計 g・kcal）・特記事項（メモ）。グルテンフリーなどの特記事項は、各食事の「写真・メモ・時刻を編集」のメモ欄に書いてください。
-                    </p>
-                </section>
-
-                {/* 書き出し（自分用・詳しいデータ） */}
-                <section className="mt-4 rounded-2xl border-2 border-[#1A1A1A] bg-white p-4 md:p-5">
-                    <h2 className="text-base font-bold text-[#1A1A1A]">詳しいデータを書き出す（自分用）</h2>
-                    <div className="grid grid-cols-2 gap-3 mt-3">
-                        <div>
-                            <label className={labelCls} htmlFor="ml-from">開始日（空欄ならすべて）</label>
-                            <input id="ml-from" type="date" className={inputCls} value={from} onChange={(e) => setFrom(e.target.value)} />
-                        </div>
-                        <div>
-                            <label className={labelCls} htmlFor="ml-to">終了日</label>
-                            <input id="ml-to" type="date" className={inputCls} value={to} onChange={(e) => setTo(e.target.value)} />
-                        </div>
-                    </div>
-                    <p className="text-xs text-[#4A4A4A] mt-2">対象：{ranged.length} 件の記録（{new Set(ranged.map((m) => m.date)).size} 日分）</p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                        <button type="button" disabled={!ranged.length || !db} onClick={() => downloadCsv(toServingsCsv(ranged, db), `${fileBase}_foods`)} className={`${pillCls} bg-[#4AF6C3]`}>
-                            食品ごとの記録
-                        </button>
-                        <button type="button" disabled={!ranged.length || !db} onClick={() => downloadCsv(toDailyCsv(ranged, db), `${fileBase}_daily`)} className={`${pillCls} bg-[#4AF6C3]`}>
-                            1 日ごとの栄養合計
-                        </button>
-                        <button type="button" disabled={!ranged.length || !db || !!busy} onClick={exportZip} className={`${pillCls} bg-[#6CCFF6]`}>
-                            両方＋写真（ZIP{photoCount ? `・${photoCount} 枚` : ''}）
-                        </button>
-                    </div>
-                    <p className="text-[11px] text-[#666] mt-2 leading-relaxed">
-                        「食品ごと」は 1 食品 1 行（日付・区分・食品番号・量・34 栄養素・自由記述・メモ・写真）、「1 日ごと」は 1 日 1 行の合計です。UTF-8 で、Excel でもそのまま開けます。
-                        写真列のファイル名は ZIP の photos フォルダ内の写真に対応します。
-                    </p>
-                    {busy && <p className="text-xs font-bold text-[#4A4A4A] mt-2" role="status">{busy}</p>}
-                </section>
-
-                <p className="text-[11px] text-[#666] mt-6 leading-relaxed">
-                    食品の成分値：文部科学省「日本食品標準成分表（八訂）増補2023年」{db ? `（${db.updated} 更新版）` : ''}。目標値：厚生労働省「日本人の食事摂取基準（2025年版）」。
-                    病気の治療中の方は、医師・管理栄養士の指示を優先してください。
+                <p className="text-xs text-[#4A4A4A] mt-6">
+                    栄養（カロリー・PFC・ビタミン・ミネラル）も計算したいときは
+                    <Link href="/meal-log/nutrition" className="font-bold underline ml-1">栄養計算モード</Link>へ。記録は共通です。
                 </p>
             </div>
-
-            {panel?.kind === 'search' && (
-                <FoodSearch db={db} dbError={dbError} type={panel.type} recent={recent} onClose={() => setPanel(null)}
-                    onAdd={(food, grams) => { addItem(date, panel.type, food.code, food.name, grams); setPanel(null); }} />
-            )}
-            {panel?.kind === 'editor' && (
-                <MealEditor initial={panel.draft} savedPhotos={meals.find((m) => m.id === panel.draft.id)?.photos ?? []}
-                    onClose={() => setPanel(null)} onOpenPhoto={setViewer}
-                    onSave={(d) => { save(d); if (d.date !== date) setDate(d.date); setPanel(null); }}
-                    onDelete={panel.draft.id ? () => deleteMeal(meals.find((m) => m.id === panel.draft.id)!) : undefined} />
-            )}
-            {panel?.kind === 'profile' && <ProfileSheet profile={profile} onSave={setProfile} onClose={() => setPanel(null)} />}
-            {panel?.kind === 'item' && (
-                <ItemEditor db={db} item={panel.item} onClose={() => setPanel(null)}
-                    onSave={(g) => { updateItem(panel.meal.id, panel.item.id, g); setPanel(null); }} />
-            )}
-
-            {viewer && (
-                <div className="fixed inset-0 z-[100] bg-[#1A1A1A]/80 flex items-center justify-center p-4" onClick={() => setViewer(null)}>
-                    {/* eslint-disable-next-line @next/next/no-img-element -- 端末内の写真（blob URL） */}
-                    <img src={viewer} alt="" className="max-w-full max-h-full rounded-xl" />
-                    <button type="button" aria-label="閉じる" className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white border-2 border-[#1A1A1A] font-bold">×</button>
-                </div>
-            )}
         </div>
     );
 }
 
-// 追加済みの食品の量を変える・外す
-function ItemEditor({ db, item, onSave, onClose }: { db: FoodDb | null; item: MealItem; onSave: (grams: number | null) => void; onClose: () => void }) {
-    const [grams, setGrams] = useState(String(item.grams));
-    const g = Number(grams);
-    const valid = Number.isFinite(g) && g > 0 && g <= 5000;
-    const v = valid ? totalsOf(db, [{ code: item.code, grams: g }]).values : null;
+// 1 食分の入力（1 品ずつ足していく）
+function MealCard({ type, lines, fixed, yesterday, frequent, onChange }: {
+    type: MealType;
+    lines: string[];      // 書き換えられる行
+    fixed: string[];      // 栄養計算モードで入れた食品（ここでは表示だけ）
+    yesterday: string[];
+    frequent: string[];
+    onChange: (lines: string[]) => void;
+}) {
+    const [text, setText] = useState('');
+    const [open, setOpen] = useState(false);
+    const [editing, setEditing] = useState<number | null>(null); // 直している行（その場で置き換える）
+    const inputRef = useRef<HTMLInputElement>(null);
+    const hasAny = lines.length + fixed.length > 0;
+
+    const add = (value = text) => {
+        const v = value.replace(/^[・\s]+/, '').trim();
+        if (!v) return;
+        onChange(editing == null ? [...lines, v] : lines.map((l, j) => (j === editing ? v : l)));
+        setEditing(null);
+        setText('');
+        inputRef.current?.focus();
+    };
+    const remove = (i: number) => { onChange(lines.filter((_, j) => j !== i)); setEditing(null); };
+    const edit = (i: number) => { setText(lines[i]); setEditing(i); setOpen(true); setTimeout(() => inputRef.current?.focus(), 0); };
+    const cancelEdit = () => { setEditing(null); setText(''); };
+    const appendAmount = (a: string) => { setText((t) => (t.trim() ? `${t.trim()} ${a}` : t)); inputRef.current?.focus(); };
+
+    const q = text.trim();
+    const suggestions = editing != null ? [] : frequent.filter((l) => !lines.includes(l) && (!q || (l.includes(q) && l !== q))).slice(0, 8);
+
     return (
-        <Sheet title="量を変える" onClose={onClose}>
-            <p className="text-[15px] font-bold text-[#1A1A1A]">{displayName(item.name)}</p>
-            <label className={`${labelCls} mt-4`} htmlFor="ie-g">量（g）</label>
-            <input id="ie-g" type="number" inputMode="decimal" min={1} max={5000} step="any" autoFocus className={`${inputCls} max-w-[120px]`}
-                value={grams} onChange={(e) => setGrams(e.target.value)} />
-            {v && <p className="text-sm text-[#4A4A4A] mt-2 tabular-nums">{fmt(v.kcal, 0)} kcal・たんぱく質 {fmt(v.prot, 1)}g・脂質 {fmt(v.fat, 1)}g・炭水化物 {fmt(v.carb, 1)}g</p>}
-            <button type="button" disabled={!valid} onClick={() => onSave(Math.round(g * 10) / 10)} className={`${pillCls} w-full mt-5 py-3 bg-[#FF9855]`}>保存する</button>
-            <button type="button" onClick={() => onSave(null)} className="w-full mt-3 text-sm font-bold underline text-[#d03b3b]">この食品を外す</button>
-        </Sheet>
+        <section className="rounded-2xl border-2 border-[#1A1A1A] bg-white">
+            <div className="flex items-center justify-between px-4 pt-3">
+                <h2 className="flex items-center gap-2">
+                    <span className="inline-block rounded-md px-2 py-0.5 text-sm font-bold border border-[#1A1A1A]" style={{ background: TYPE_COLOR[type] }}>{type}</span>
+                    {MAIN_TYPES.includes(type) && !hasAny && <span className="text-[11px] text-[#666]">未記入</span>}
+                </h2>
+                {!hasAny && yesterday.length > 0 && (
+                    <button type="button" onClick={() => onChange(yesterday)} className="text-xs font-bold underline text-[#4A4A4A]">前日と同じにする</button>
+                )}
+            </div>
+
+            {hasAny && (
+                <ul className="px-4 pt-2">
+                    {fixed.map((l, i) => (
+                        <li key={`f${i}`} className="py-1 text-[15px] text-[#1A1A1A]">・{l}</li>
+                    ))}
+                    {lines.map((l, i) => (
+                        <li key={`${i}-${l}`} className={`flex items-center gap-2 py-1 ${editing === i ? 'bg-[#FBEBD5] -mx-2 px-2 rounded-lg' : ''}`}>
+                            <button type="button" onClick={() => edit(i)} className="flex-1 text-left text-[15px] text-[#1A1A1A] break-words" title="タップで直す">・{l}</button>
+                            <button type="button" onClick={() => remove(i)} aria-label={`「${l}」を消す`}
+                                className="shrink-0 w-7 h-7 rounded-full border border-[#1A1A1A] text-xs font-bold hover:bg-[#FBEBD5]">×</button>
+                        </li>
+                    ))}
+                </ul>
+            )}
+
+            <form className="px-4 pt-2 pb-3" onSubmit={(e) => { e.preventDefault(); add(); }}>
+                <div className="flex gap-2">
+                    <input ref={inputRef} type="text" value={text} onChange={(e) => setText(e.target.value)} onFocus={() => setOpen(true)}
+                        onKeyDown={(e) => { if (e.key === 'Enter' && e.nativeEvent.isComposing) e.preventDefault(); }}
+                        placeholder={hasAny ? 'もう 1 品' : '例：おにぎり（鮭） 2個'} enterKeyHint="enter" aria-label={`${type}に食べたもの`}
+                        className="flex-1 min-w-0 rounded-lg border-2 border-[#1A1A1A] bg-white px-3 py-2 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#FF9855]" />
+                    <button type="submit" disabled={!q} className={`${pillCls} bg-[#FF9855] shrink-0`}>{editing == null ? '追加' : '直す'}</button>
+                </div>
+                {editing != null && (
+                    <button type="button" onClick={cancelEdit} className="mt-1 text-xs font-bold underline text-[#4A4A4A]">直すのをやめる</button>
+                )}
+
+                {open && (
+                    <div className="mt-2 space-y-2">
+                        {q && (
+                            <div className="flex flex-wrap gap-1.5" aria-label="量を付ける">
+                                {AMOUNTS.map((a) => (
+                                    <button key={a} type="button" onClick={() => appendAmount(a)}
+                                        className="rounded-full border border-[#1A1A1A] bg-[#FAFAF7] px-2.5 py-1 text-xs font-bold">+{a}</button>
+                                ))}
+                            </div>
+                        )}
+                        {suggestions.length > 0 && (
+                            <div className="flex flex-wrap gap-1.5" aria-label="前に書いたもの">
+                                {suggestions.map((s) => (
+                                    <button key={s} type="button" onClick={() => add(s)}
+                                        className="rounded-full border border-[#1A1A1A] bg-white px-2.5 py-1 text-xs hover:bg-[#FBEBD5]">{s}</button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                )}
+            </form>
+        </section>
     );
 }
 
+// 月のカレンダー。朝・昼・夕のどれを書いたかが日ごとに見える
+function MonthCalendar({ date, onSelect, filled }: { date: string; onSelect: (d: string) => void; filled: (d: string, t: MealType) => boolean }) {
+    const [y, m] = date.split('-').map(Number);
+    const first = new Date(y, m - 1, 1).getDay();
+    const days = new Date(y, m, 0).getDate();
+    const today = todayStr();
+    const cells = [...Array(first).fill(null), ...Array.from({ length: days }, (_, i) => i + 1)];
+    const done = Array.from({ length: days }, (_, i) => ymd(y, m, i + 1)).filter((d) => MAIN_TYPES.every((t) => filled(d, t))).length;
+
+    const go = (delta: number) => {
+        const x = new Date(y, m - 1 + delta, 1);
+        const last = new Date(x.getFullYear(), x.getMonth() + 1, 0).getDate();
+        onSelect(ymd(x.getFullYear(), x.getMonth() + 1, Math.min(Number(date.slice(8)), last)));
+    };
+
+    return (
+        <section aria-label="カレンダー" className="mt-5 rounded-2xl border-2 border-[#1A1A1A] bg-white p-3">
+            <div className="flex items-center justify-between">
+                <button type="button" onClick={() => go(-1)} aria-label="前の月" className="w-9 h-9 rounded-full font-bold hover:bg-[#FBEBD5]">‹</button>
+                <p className="text-sm font-bold text-[#1A1A1A]">
+                    {y}年{m}月 <span className="font-normal text-[#4A4A4A]">朝昼夕そろった日 {done} / {days}</span>
+                </p>
+                <button type="button" onClick={() => go(1)} aria-label="次の月" className="w-9 h-9 rounded-full font-bold hover:bg-[#FBEBD5]">›</button>
+            </div>
+            <div className="grid grid-cols-7 gap-1 mt-1 text-center">
+                {'日月火水木金土'.split('').map((w) => <span key={w} className="text-[10px] text-[#666]">{w}</span>)}
+                {cells.map((d, i) => {
+                    if (d == null) return <span key={`e${i}`} />;
+                    const ds = ymd(y, m, d);
+                    const marks = MAIN_TYPES.map((t) => filled(ds, t));
+                    const all = marks.every(Boolean);
+                    const selected = ds === date;
+                    return (
+                        <button key={ds} type="button" onClick={() => onSelect(ds)} aria-pressed={selected}
+                            aria-label={`${m}月${d}日 ${MAIN_TYPES.map((t, j) => `${t}${marks[j] ? 'あり' : 'なし'}`).join('・')}`}
+                            className={`rounded-lg py-1 border-2 ${selected ? 'border-[#1A1A1A]' : 'border-transparent'} ${ds > today ? 'opacity-40' : ''}`}
+                            style={{ background: all ? '#DFFBEF' : undefined }}>
+                            <span className={`block text-xs ${ds === today ? 'font-bold underline' : ''}`}>{d}</span>
+                            <span className="block text-[10px] leading-none tracking-tighter mt-0.5">
+                                {MAIN_TYPES.map((t, j) => (
+                                    <span key={t} className={marks[j] ? 'text-[#1A1A1A] font-bold' : 'text-[#C8C7C2]'}>{t[0]}</span>
+                                ))}
+                            </span>
+                        </button>
+                    );
+                })}
+            </div>
+            <p className="text-[10px] text-[#666] mt-1.5">濃い字＝書いた食事（朝・昼・夕）。緑の日は 3 食そろっています。</p>
+        </section>
+    );
+}
+
+function ExportBox({ month, meals, filled }: { month: string; meals: Meal[]; filled: (d: string, t: MealType) => boolean }) {
+    const [y, m] = month.split('-').map(Number);
+    const days = new Date(y, m, 0).getDate();
+    const today = todayStr();
+    const missing = Array.from({ length: days }, (_, i) => ymd(y, m, i + 1))
+        .filter((d) => d <= today && MAIN_TYPES.some((t) => !filled(d, t)));
+    return (
+        <section className="mt-6 rounded-2xl border-2 border-[#1A1A1A] bg-white p-4 shadow-[4px_4px_0_#1A1A1A]">
+            <h2 className="text-base font-bold text-[#1A1A1A]">{m}月分を提出用 CSV で書き出す</h2>
+            <p className="text-xs text-[#4A4A4A] mt-1">列は「日付・食事タイプ・食事内容」（参考テンプレートと同じ形）。食事内容は「・」の箇条書きになります。</p>
+            {missing.length > 0 && (
+                <p className="text-xs text-[#1A1A1A] mt-2">
+                    <b>まだ書いていない食事がある日：</b>{missing.slice(0, 10).map((d) => Number(d.slice(8))).join('・')}日{missing.length > 10 ? ` ほか ${missing.length - 10} 日` : ''}
+                </p>
+            )}
+            <button type="button" disabled={!meals.length} onClick={() => downloadCsv(toSubmissionCsv(meals, null), `meal-log_${month}`)}
+                className={`${pillCls} bg-[#FF9855] w-full mt-3 py-3`}>
+                {meals.length ? `${m}月分の CSV を書き出す` : 'この月の記録はまだありません'}
+            </button>
+        </section>
+    );
+}
