@@ -1,7 +1,10 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { MEAL_TYPES, downloadCsv, sortMeals, todayStr, useMealLog, type Meal, type MealType } from '@/lib/meal-log';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { MEAL_TYPES, downloadCsv, downloadZip, sortMeals, todayStr, useMealLog, type Meal, type MealType } from '@/lib/meal-log';
+import { deletePhotos, getPhoto, putPhoto, shrinkImage } from '@/lib/meal-photos';
+
+const MAX_PHOTOS = 4;
 
 const TYPE_COLOR: Record<MealType, string> = {
     朝食: '#FFB37B',
@@ -29,11 +32,28 @@ function weekday(date: string): string {
     return '日月火水木金土'[new Date(y, m - 1, d).getDay()];
 }
 
+// IndexedDB の写真を表示する。クリックで大きく開く。
+function Photo({ id, className, onOpen }: { id: string; className: string; onOpen?: (url: string) => void }) {
+    const [url, setUrl] = useState<string | null>(null);
+    useEffect(() => {
+        let u: string | null = null;
+        let alive = true;
+        getPhoto(id).then((b) => { if (b && alive) { u = URL.createObjectURL(b); setUrl(u); } }).catch(() => {});
+        return () => { alive = false; if (u) URL.revokeObjectURL(u); };
+    }, [id]);
+    if (!url) return <div className={`${className} bg-[#F2F2F2]`} />;
+    return (
+        <button type="button" onClick={() => onOpen?.(url)} className="block p-0" aria-label="写真を大きく見る">
+            <img src={url} alt="" className={`${className} object-cover`} />
+        </button>
+    );
+}
+
 type Draft = Omit<Meal, 'id'> & { id?: string };
 
 function freshDraft(): Draft {
     const time = nowTime();
-    return { date: todayStr(), time, type: guessType(time), food: '', memo: '' };
+    return { date: todayStr(), time, type: guessType(time), food: '', memo: '', photos: [] };
 }
 
 const inputCls = 'w-full rounded-lg border-2 border-[#1A1A1A] bg-white px-3 py-2 text-[15px] focus:outline-none focus:ring-2 focus:ring-[#FF9855]';
@@ -44,6 +64,9 @@ export default function MealLogPage() {
     const [draft, setDraft] = useState<Draft>(freshDraft);
     const [from, setFrom] = useState('');
     const [to, setTo] = useState('');
+    const [busy, setBusy] = useState<string | null>(null);
+    const [viewer, setViewer] = useState<string | null>(null);
+    const fileRef = useRef<HTMLInputElement>(null);
 
     const filtered = useMemo(
         () => sortMeals(meals.filter((m) => (!from || m.date >= from) && (!to || m.date <= to))),
@@ -55,28 +78,62 @@ export default function MealLogPage() {
         return [...g.entries()];
     }, [filtered]);
 
+    // 保存せずに入力を捨てるとき、この入力で追加した写真も消す
+    const discard = () => {
+        const saved = meals.find((m) => m.id === draft.id)?.photos ?? [];
+        void deletePhotos(draft.photos.filter((p) => !saved.includes(p)));
+        setDraft(freshDraft());
+    };
+
+    const addPhotos = async (files: FileList | null) => {
+        if (!files?.length) return;
+        const room = MAX_PHOTOS - draft.photos.length;
+        setBusy('写真を取り込み中…');
+        try {
+            const ids: string[] = [];
+            for (const f of [...files].slice(0, room)) ids.push(await putPhoto(await shrinkImage(f)));
+            setDraft((d) => ({ ...d, photos: [...d.photos, ...ids] }));
+        } catch {
+            alert('写真を取り込めませんでした。別の写真でお試しください。');
+        } finally {
+            setBusy(null);
+            if (fileRef.current) fileRef.current.value = '';
+        }
+    };
+
+    const removeDraftPhoto = (id: string) => {
+        // 保存済みの記録の写真は「更新する」まで消さない（やめたら元に戻せるように）
+        const saved = meals.find((m) => m.id === draft.id)?.photos ?? [];
+        if (!saved.includes(id)) void deletePhotos([id]);
+        setDraft((d) => ({ ...d, photos: d.photos.filter((p) => p !== id) }));
+    };
+
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!draft.food.trim()) return;
+        if (!draft.food.trim() && !draft.photos.length) return;
         save({ ...draft, food: draft.food.trim(), memo: draft.memo.trim() });
         setDraft(freshDraft());
     };
 
     const edit = (m: Meal) => {
+        if (draft.id !== m.id) discard();
         setDraft({ ...m });
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const del = (m: Meal) => {
-        if (confirm(`${m.date} ${m.type}「${m.food}」を削除しますか？`)) {
+        if (confirm(`${m.date} ${m.type}「${m.food || `写真 ${m.photos.length} 枚`}」を削除しますか？`)) {
             remove(m.id);
             if (draft.id === m.id) setDraft(freshDraft());
         }
     };
 
-    const exportCsv = () => {
-        const range = from || to ? `_${from || 'start'}_${to || todayStr()}` : `_${todayStr()}`;
-        downloadCsv(filtered, `meal-log${range}.csv`);
+    const fileBase = () => `meal-log${from || to ? `_${from || 'start'}_${to || todayStr()}` : `_${todayStr()}`}`;
+    const photoCount = filtered.reduce((n, m) => n + m.photos.length, 0);
+
+    const exportZip = async () => {
+        setBusy('ZIP を作成中…');
+        try { await downloadZip(filtered, fileBase()); } finally { setBusy(null); }
     };
 
     return (
@@ -116,8 +173,29 @@ export default function MealLogPage() {
                     </div>
 
                     <div className="mt-4">
-                        <label className={labelCls} htmlFor="ml-food">食べたもの</label>
-                        <textarea id="ml-food" required rows={3} className={inputCls} value={draft.food}
+                        <span className={labelCls}>写真（任意・{MAX_PHOTOS} 枚まで）</span>
+                        <div className="flex flex-wrap gap-2">
+                            {draft.photos.map((id) => (
+                                <div key={id} className="relative">
+                                    <Photo id={id} className="w-20 h-20 rounded-lg border-2 border-[#1A1A1A]" onOpen={setViewer} />
+                                    <button type="button" onClick={() => removeDraftPhoto(id)} aria-label="この写真を外す"
+                                        className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-white border-2 border-[#1A1A1A] text-xs font-bold leading-none">×</button>
+                                </div>
+                            ))}
+                            {draft.photos.length < MAX_PHOTOS && (
+                                <label className="w-20 h-20 rounded-lg border-2 border-dashed border-[#1A1A1A] bg-[#FAFAF7] flex flex-col items-center justify-center cursor-pointer text-[#4A4A4A] hover:bg-[#FBEBD5]">
+                                    <span className="text-2xl leading-none">＋</span>
+                                    <span className="text-[10px] font-bold mt-1">写真</span>
+                                    <input ref={fileRef} type="file" accept="image/*" multiple className="sr-only"
+                                        onChange={(e) => addPhotos(e.target.files)} />
+                                </label>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="mt-4">
+                        <label className={labelCls} htmlFor="ml-food">食べたもの{draft.photos.length ? '（写真があれば空でも可）' : ''}</label>
+                        <textarea id="ml-food" required={!draft.photos.length} rows={3} className={inputCls} value={draft.food}
                             placeholder="例：玄米ごはん、納豆、味噌汁（わかめ・豆腐）、焼き鮭"
                             onChange={(e) => setDraft({ ...draft, food: e.target.value })} />
                     </div>
@@ -130,11 +208,11 @@ export default function MealLogPage() {
                     </div>
 
                     <div className="mt-5 flex gap-2">
-                        <button type="submit" className="flex-1 rounded-full border-2 border-[#1A1A1A] bg-[#FF9855] py-3 font-bold text-[#1A1A1A] hover:brightness-105">
+                        <button type="submit" disabled={!!busy} className="flex-1 rounded-full border-2 border-[#1A1A1A] bg-[#FF9855] py-3 font-bold text-[#1A1A1A] hover:brightness-105">
                             {draft.id ? '更新する' : '記録する'}
                         </button>
                         {draft.id && (
-                            <button type="button" onClick={() => setDraft(freshDraft())}
+                            <button type="button" onClick={discard}
                                 className="rounded-full border-2 border-[#1A1A1A] bg-white px-5 py-3 font-bold">
                                 やめる
                             </button>
@@ -155,17 +233,24 @@ export default function MealLogPage() {
                         </div>
                     </div>
                     <div className="mt-3 flex flex-wrap items-center gap-3">
-                        <button type="button" onClick={exportCsv} disabled={!filtered.length}
+                        <button type="button" onClick={() => downloadCsv(filtered, fileBase())} disabled={!filtered.length}
                             className="rounded-full border-2 border-[#1A1A1A] bg-[#4AF6C3] px-5 py-2 font-bold disabled:opacity-40">
                             CSV で書き出す（{filtered.length} 件）
                         </button>
+                        {photoCount > 0 && (
+                            <button type="button" onClick={exportZip} disabled={!!busy}
+                                className="rounded-full border-2 border-[#1A1A1A] bg-[#6CCFF6] px-5 py-2 font-bold disabled:opacity-40">
+                                CSV＋写真（ZIP・{photoCount} 枚）
+                            </button>
+                        )}
                         {(from || to) && (
                             <button type="button" onClick={() => { setFrom(''); setTo(''); }} className="text-sm underline text-[#4A4A4A]">
                                 期間をクリア
                             </button>
                         )}
                     </div>
-                    <p className="text-[11px] text-[#666] mt-2">列：日付・時刻・区分・食べたもの・メモ（UTF-8 / Excel でそのまま開けます）</p>
+                    <p className="text-[11px] text-[#666] mt-2">列：日付・時刻・区分・食べたもの・メモ・写真（UTF-8 / Excel でそのまま開けます）。写真列のファイル名は ZIP の photos フォルダ内の写真に対応します。</p>
+                    {busy && <p className="text-xs font-bold text-[#4A4A4A] mt-2" role="status">{busy}</p>}
                 </div>
 
                 {/* 一覧 */}
@@ -189,8 +274,13 @@ export default function MealLogPage() {
                                             <div className="text-xs text-[#4A4A4A] mt-1">{m.time || '—'}</div>
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <p className="text-[15px] text-[#1A1A1A] whitespace-pre-wrap break-words">{m.food}</p>
+                                            {m.food && <p className="text-[15px] text-[#1A1A1A] whitespace-pre-wrap break-words">{m.food}</p>}
                                             {m.memo && <p className="text-xs text-[#666] mt-1 break-words">{m.memo}</p>}
+                                            {m.photos.length > 0 && (
+                                                <div className="flex flex-wrap gap-2 mt-2">
+                                                    {m.photos.map((id) => <Photo key={id} id={id} className="w-24 h-24 rounded-lg border border-[#1A1A1A]" onOpen={setViewer} />)}
+                                                </div>
+                                            )}
                                         </div>
                                         <div className="shrink-0 flex flex-col gap-1">
                                             <button type="button" onClick={() => edit(m)} className="text-xs font-bold underline">編集</button>
@@ -203,6 +293,13 @@ export default function MealLogPage() {
                     ))}
                 </div>
             </div>
+
+            {viewer && (
+                <div className="fixed inset-0 z-[100] bg-[#1A1A1A]/80 flex items-center justify-center p-4" onClick={() => setViewer(null)}>
+                    <img src={viewer} alt="" className="max-w-full max-h-full rounded-xl" />
+                    <button type="button" aria-label="閉じる" className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white border-2 border-[#1A1A1A] font-bold">×</button>
+                </div>
+            )}
         </div>
     );
 }
