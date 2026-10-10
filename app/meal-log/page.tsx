@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useMemo, useRef, useState } from 'react';
-import { MEAL_TYPES, downloadCsv, foodLines, frequentLines, toSubmissionCsv, todayStr, useMealLog, type Meal, type MealType } from '@/lib/meal-log';
+import { MEAL_TYPES, downloadCsv, foodLines, previousMeal, toSubmissionCsv, todayStr, useMealLog, useMemory, type Meal, type MealType, type Remembered } from '@/lib/meal-log';
 import { displayName } from '@/lib/nutrition';
 import { pillCls } from '@/components/meal-log/styles';
 
@@ -30,7 +30,7 @@ export default function MealLogEasyPage() {
     const { meals, setLines } = useMealLog();
     const [date, setDate] = useState(todayStr);
     const month = date.slice(0, 7);
-    const frequent = useMemo(() => frequentLines(meals), [meals]);
+    const { memory, remember, forget, suggest } = useMemory(meals);
 
     const byKey = useMemo(() => {
         const map = new Map<string, Meal[]>();
@@ -74,14 +74,16 @@ export default function MealLogEasyPage() {
                             <MealCard key={`${date}|${type}`} type={type}
                                 lines={recs.flatMap((m) => foodLines(m.food))}
                                 fixed={recs.flatMap((m) => m.items.map((it) => `${displayName(it.name)} ${it.grams}g`))}
-                                yesterday={recordsOf(shiftDate(date, -1), type).flatMap((m) => foodLines(m.food))}
-                                frequent={frequent}
-                                onChange={(lines) => setLines(date, type, lines)} />
+                                previous={previousMeal(meals, date, type)}
+                                suggest={(q, exclude) => suggest(type, q, exclude)}
+                                onChange={(lines, added) => { setLines(date, type, lines); if (added.length) remember(added, type, date); }} />
                         );
                     })}
                 </div>
 
                 <ExportBox month={month} meals={monthMeals} filled={filled} />
+
+                <MemoryList memory={memory} onForget={forget} />
 
                 <p className="text-xs text-[#4A4A4A] mt-6">
                     栄養（カロリー・PFC・ビタミン・ミネラル）も計算したいときは
@@ -93,13 +95,13 @@ export default function MealLogEasyPage() {
 }
 
 // 1 食分の入力（1 品ずつ足していく）
-function MealCard({ type, lines, fixed, yesterday, frequent, onChange }: {
+function MealCard({ type, lines, fixed, previous, suggest, onChange }: {
     type: MealType;
     lines: string[];      // 書き換えられる行
     fixed: string[];      // 栄養計算モードで入れた食品（ここでは表示だけ）
-    yesterday: string[];
-    frequent: string[];
-    onChange: (lines: string[]) => void;
+    previous: { date: string; lines: string[] } | null; // 前回この食事タイプに書いた内容
+    suggest: (query: string, exclude: string[]) => string[];
+    onChange: (lines: string[], added: string[]) => void; // added は覚える行
 }) {
     const [text, setText] = useState('');
     const [open, setOpen] = useState(false);
@@ -110,18 +112,18 @@ function MealCard({ type, lines, fixed, yesterday, frequent, onChange }: {
     const add = (value = text) => {
         const v = value.replace(/^[・\s]+/, '').trim();
         if (!v) return;
-        onChange(editing == null ? [...lines, v] : lines.map((l, j) => (j === editing ? v : l)));
+        onChange(editing == null ? [...lines, v] : lines.map((l, j) => (j === editing ? v : l)), [v]);
         setEditing(null);
         setText('');
         inputRef.current?.focus();
     };
-    const remove = (i: number) => { onChange(lines.filter((_, j) => j !== i)); setEditing(null); };
+    const remove = (i: number) => { onChange(lines.filter((_, j) => j !== i), []); setEditing(null); };
     const edit = (i: number) => { setText(lines[i]); setEditing(i); setOpen(true); setTimeout(() => inputRef.current?.focus(), 0); };
     const cancelEdit = () => { setEditing(null); setText(''); };
     const appendAmount = (a: string) => { setText((t) => (t.trim() ? `${t.trim()} ${a}` : t)); inputRef.current?.focus(); };
 
     const q = text.trim();
-    const suggestions = editing != null ? [] : frequent.filter((l) => !lines.includes(l) && (!q || (l.includes(q) && l !== q))).slice(0, 8);
+    const suggestions = editing != null ? [] : suggest(q, lines);
 
     return (
         <section className="rounded-2xl border-2 border-[#1A1A1A] bg-white">
@@ -130,8 +132,10 @@ function MealCard({ type, lines, fixed, yesterday, frequent, onChange }: {
                     <span className="inline-block rounded-md px-2 py-0.5 text-sm font-bold border border-[#1A1A1A]" style={{ background: TYPE_COLOR[type] }}>{type}</span>
                     {MAIN_TYPES.includes(type) && !hasAny && <span className="text-[11px] text-[#666]">未記入</span>}
                 </h2>
-                {!hasAny && yesterday.length > 0 && (
-                    <button type="button" onClick={() => onChange(yesterday)} className="text-xs font-bold underline text-[#4A4A4A]">前日と同じにする</button>
+                {!hasAny && previous && (
+                    <button type="button" onClick={() => onChange(previous.lines, previous.lines)} className="text-xs font-bold underline text-[#4A4A4A]">
+                        前回（{Number(previous.date.slice(5, 7))}/{Number(previous.date.slice(8))}）と同じにする
+                    </button>
                 )}
             </div>
 
@@ -173,7 +177,8 @@ function MealCard({ type, lines, fixed, yesterday, frequent, onChange }: {
                             </div>
                         )}
                         {suggestions.length > 0 && (
-                            <div className="flex flex-wrap gap-1.5" aria-label="前に書いたもの">
+                            <div className="flex flex-wrap gap-1.5" aria-label="覚えている品目">
+                                {!q && <span className="w-full text-[10px] font-bold text-[#4A4A4A]">よく書く{type === '間食' ? '間食' : `${type}の品目`}（タップで追加）</span>}
                                 {suggestions.map((s) => (
                                     <button key={s} type="button" onClick={() => add(s)}
                                         className="rounded-full border border-[#1A1A1A] bg-white px-2.5 py-1 text-xs hover:bg-[#FBEBD5]">{s}</button>
@@ -258,6 +263,36 @@ function ExportBox({ month, meals, filled }: { month: string; meals: Meal[]; fil
                 className={`${pillCls} bg-[#FF9855] w-full mt-3 py-3`}>
                 {meals.length ? `${m}月分の CSV を書き出す` : 'この月の記録はまだありません'}
             </button>
+        </section>
+    );
+}
+
+// 覚えている品目の一覧。候補に出したくないものはここで忘れさせる
+function MemoryList({ memory, onForget }: { memory: Record<string, Remembered>; onForget: (line: string) => void }) {
+    const [open, setOpen] = useState(false);
+    const entries = Object.entries(memory).sort((a, b) => b[1].count - a[1].count);
+    if (!entries.length) return null;
+    return (
+        <section className="mt-4 rounded-2xl border-2 border-[#1A1A1A] bg-white p-4">
+            <button type="button" onClick={() => setOpen(!open)} aria-expanded={open} className="w-full flex items-center justify-between text-left">
+                <span className="text-sm font-bold text-[#1A1A1A]">覚えている品目（{entries.length}）</span>
+                <span className="text-xs font-bold underline text-[#4A4A4A]">{open ? '閉じる' : '見る・整理する'}</span>
+            </button>
+            {open && (
+                <>
+                    <p className="text-[11px] text-[#666] mt-1">一度書いた品目は、記録を消しても覚えていて、入力の候補に出ます。候補に出したくないものは × で忘れさせられます（記録は消えません）。</p>
+                    <ul className="mt-2 divide-y divide-[#ECEBE6]">
+                        {entries.map(([line, r]) => (
+                            <li key={line} className="flex items-center gap-2 py-1.5">
+                                <span className="flex-1 min-w-0 text-[14px] text-[#1A1A1A] break-words">{line}</span>
+                                <span className="shrink-0 text-[11px] text-[#666] tabular-nums">{r.count} 回</span>
+                                <button type="button" onClick={() => onForget(line)} aria-label={`「${line}」を忘れる`}
+                                    className="shrink-0 w-7 h-7 rounded-full border border-[#1A1A1A] text-xs font-bold hover:bg-[#FBEBD5]">×</button>
+                            </li>
+                        ))}
+                    </ul>
+                </>
+            )}
         </section>
     );
 }

@@ -2,7 +2,7 @@
 
 // 食事記録（端末内・localStorage）。アカウント不要、送信しない。
 // 写真だけは容量の都合で IndexedDB（lib/meal-photos.ts）に置き、ここには写真の ID だけを持つ。
-import { useSyncExternalStore, useCallback } from 'react';
+import { useSyncExternalStore, useCallback, useEffect } from 'react';
 import { deletePhotos, getPhoto } from './meal-photos';
 import { makeZip } from './zip';
 import { DEFAULT_PROFILE, NUTRIENTS, displayName, fmt, totalsOf, type FoodDb, type Profile } from './nutrition';
@@ -71,13 +71,6 @@ export function nowTime(): string {
 // 「・」や空白を外した 1 行ずつの「食べたもの」
 export function foodLines(food: string): string[] {
     return food.split(/\r?\n/).map((l) => l.replace(/^[・\s]+/, '').trim()).filter(Boolean);
-}
-
-// これまでに書いた行を、よく書く順に（入力候補に使う）
-export function frequentLines(meals: Meal[]): string[] {
-    const count = new Map<string, number>();
-    for (const m of meals) for (const l of foodLines(m.food)) count.set(l, (count.get(l) ?? 0) + 1);
-    return [...count.entries()].sort((a, b) => b[1] - a[1]).map(([l]) => l);
 }
 
 export function todayStr(): string {
@@ -313,4 +306,107 @@ export function recentFoods(meals: Meal[], limit = 12): MealItem[] {
         }
     }
     return out;
+}
+
+// ===== 覚えた品目（かんたん記入の候補） =====
+// 一度書いた品目は、記録を消しても覚えておく。食事タイプごとの回数と最後に使った日も持ち、候補の順番に使う。
+
+export interface Remembered {
+    count: number;
+    last: string; // 最後に使った日（YYYY-MM-DD）
+    types: Partial<Record<MealType, number>>;
+}
+type Memory = Record<string, Remembered>;
+
+const MEMORY_KEY = 'mf:meal-log:memory:v1';
+const memoryListeners = new Set<() => void>();
+function subscribeMemory(l: () => void) {
+    memoryListeners.add(l);
+    const onStorage = (e: StorageEvent) => { if (e.key === MEMORY_KEY) l(); };
+    window.addEventListener('storage', onStorage);
+    return () => { memoryListeners.delete(l); window.removeEventListener('storage', onStorage); };
+}
+function getMemorySnapshot(): string { try { return localStorage.getItem(MEMORY_KEY) ?? ''; } catch { return ''; } }
+function parseMemory(raw: string): Memory { try { return raw ? JSON.parse(raw) : {}; } catch { return {}; } }
+function writeMemory(m: Memory) {
+    try { localStorage.setItem(MEMORY_KEY, JSON.stringify(m)); } catch { /* ignore */ }
+    memoryListeners.forEach((l) => l());
+}
+
+function addTo(mem: Memory, line: string, type: MealType, date: string) {
+    const r = mem[line] ?? { count: 0, last: date, types: {} };
+    r.count += 1;
+    if (date > r.last) r.last = date;
+    r.types[type] = (r.types[type] ?? 0) + 1;
+    mem[line] = r;
+}
+
+// ひらがな・カタカナ・全角半角・空白の違いを無視して比べる
+function fold(s: string): string {
+    return s.normalize('NFKC').toLowerCase()
+        .replace(/[ァ-ヶ]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0x60))
+        .replace(/\s+/g, '');
+}
+
+export function useMemory(meals: Meal[]) {
+    const raw = useSyncExternalStore(subscribeMemory, getMemorySnapshot, () => '');
+    const memory = parseMemory(raw);
+
+    // はじめて使うとき、これまでの記録から覚える
+    useEffect(() => {
+        if (getMemorySnapshot() || !meals.length) return;
+        const mem: Memory = {};
+        for (const m of meals) for (const l of foodLines(m.food)) addTo(mem, l, m.type, m.date);
+        writeMemory(mem);
+    }, [meals]);
+
+    const remember = useCallback((lines: string[], type: MealType, date: string) => {
+        const mem = parseMemory(getMemorySnapshot());
+        for (const l of lines) addTo(mem, l, type, date);
+        writeMemory(mem);
+    }, []);
+
+    const forget = useCallback((line: string) => {
+        const mem = parseMemory(getMemorySnapshot());
+        delete mem[line];
+        writeMemory(mem);
+    }, []);
+
+    // 候補：入力が空なら、その食事タイプでよく書くもの順。入力があれば、頭が一致するもの→途中に含むもの
+    const suggest = useCallback((type: MealType, query: string, exclude: string[], limit = 12): string[] => {
+        const q = fold(query);
+        const score = (r: Remembered) => (r.types[type] ?? 0) * 3 + r.count + (r.last >= recentDate() ? 2 : 0);
+        return Object.entries(memory)
+            .filter(([l]) => !exclude.includes(l) && (!q || (fold(l).includes(q) && fold(l) !== q)))
+            .sort((a, b) => {
+                if (q) {
+                    const pa = fold(a[0]).startsWith(q) ? 0 : 1;
+                    const pb = fold(b[0]).startsWith(q) ? 0 : 1;
+                    if (pa !== pb) return pa - pb;
+                }
+                return score(b[1]) - score(a[1]);
+            })
+            .slice(0, limit)
+            .map(([l]) => l);
+    }, [memory]);
+
+    return { memory, remember, forget, suggest };
+}
+
+function recentDate(): string {
+    const d = new Date(); d.setDate(d.getDate() - 14);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+// 指定の日より前で、同じ食事タイプを最後に書いた日の内容（「前回と同じ」に使う）
+export function previousMeal(meals: Meal[], date: string, type: MealType): { date: string; lines: string[] } | null {
+    let best: { date: string; lines: string[] } | null = null;
+    for (const m of meals) {
+        if (m.type !== type || m.date >= date) continue;
+        const lines = foodLines(m.food);
+        if (!lines.length) continue;
+        if (!best || m.date > best.date) best = { date: m.date, lines };
+        else if (m.date === best.date) best.lines.push(...lines);
+    }
+    return best;
 }
