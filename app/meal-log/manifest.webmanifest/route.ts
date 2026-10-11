@@ -7,7 +7,7 @@ export function GET() {
         {
             name: '食事記録 by Mitoflow40',
             short_name: '食事記録',
-            description: '毎日の食事をかんたんに記録して、月末に CSV で書き出す。記録はこの端末の中だけに保存されます。',
+            description: '毎日の食事をかんたんに記録して、月末に CSV で書き出す。記録はこの端末に保存され、サイトにも控えを取ります。',
             id: '/meal-log',
             start_url: '/meal-log',
             scope: '/meal-log',

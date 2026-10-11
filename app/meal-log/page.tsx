@@ -3,9 +3,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { MEAL_TYPES, downloadCsv, foodLines, previousMeal, toSubmissionCsv, todayStr, useMealLog, useMemory, useMounted, useNow, useReminders, missingMeals, buildReminderIcs, downloadIcs, DEFAULT_REMINDERS, MAIN_MEAL_TYPES, type MainMealType, type ReminderTimes, type Meal, type MealType, type Remembered } from '@/lib/meal-log';
 import { pillCls } from '@/components/meal-log/styles';
+import { useBackup, formatCode } from '@/lib/meal-log-backup';
 
 // かんたん記入：提出フォーマット（日付・食事タイプ・食事内容）を毎日書きやすくする画面。
-// この端末の中だけに保存し、どこにも送信しない。
+// この端末に保存し、サイトにも控えを預ける（復元コードごと。lib/meal-log-backup.ts）。
 
 const TYPE_COLOR: Record<MealType, string> = { 朝食: '#FFB37B', 昼食: '#4AF6C3', 夕食: '#6CCFF6', 間食: '#E5D0E3' };
 const MAIN_TYPES: MealType[] = ['朝食', '昼食', '夕食']; // 提出の必須区分
@@ -39,6 +40,7 @@ export default function MealLogEasyPage() {
     const { memory, remember, forget, suggest } = useMemory(meals);
     const { times, setTimes } = useReminders();
     const now = useNow();
+    const backup = useBackup(meals);
 
     const byKey = useMemo(() => {
         const map = new Map<string, Meal[]>();
@@ -84,7 +86,7 @@ export default function MealLogEasyPage() {
                 <div className="pt-5">
                     <h1 className="text-xl md:text-2xl font-bold text-[#1A1A1A]">食事記録</h1>
                     <p className="text-[13px] text-[#666] mt-1">
-                        食べたものを 1 品ずつ書くだけ。書いた内容はその場で保存されます（この端末の中だけ）。月末に下の「提出用 CSV」で書き出してください。
+                        食べたものを 1 品ずつ書くだけ。書いた内容はその場で保存され、サイトにも控えを取ります。月末に下の「提出用 CSV」で書き出してください。
                     </p>
                 </div>
 
@@ -120,6 +122,8 @@ export default function MealLogEasyPage() {
                 <ExportBox month={month} meals={monthMeals} filled={filled} onPick={setDate} />
 
                 <ReminderSettings times={times} onSave={setTimes} />
+
+                <BackupBox backup={backup} />
 
                 <MemoryList memory={memory} onForget={forget} />
 
@@ -510,6 +514,52 @@ function ReminderSettings({ times, onSave }: { times: ReminderTimes; onSave: (t:
                     )}
                 </div>
             )}
+        </section>
+    );
+}
+
+// サイトの控え：復元コードと、別の端末から戻す
+function BackupBox({ backup }: { backup: ReturnType<typeof useBackup> }) {
+    const { state, busy, backupNow, restore } = backup;
+    const [input, setInput] = useState('');
+    const [msg, setMsg] = useState<string | null>(null);
+    const [copied, setCopied] = useState(false);
+    if (!state) return null;
+    const last = state.lastAt ? new Date(state.lastAt) : null;
+    return (
+        <section aria-label="サイトの控え" className="mt-10 rounded-2xl border-2 border-[#1A1A1A] bg-white p-4">
+            <h2 className="text-lg font-bold text-[#1A1A1A]">サイトの控え</h2>
+            <p className="text-[13px] text-[#4A4A4A] mt-1 leading-relaxed">
+                記録はこの端末に保存したうえで、Mitoflow40 のサイトにも自動で控えを取っています。アプリを消したときや機種変更のときは、下の復元コードで戻せます。
+            </p>
+            <p className="mt-3 text-[12px] font-bold text-[#4A4A4A]">復元コード</p>
+            <div className="mt-1 flex items-center gap-2">
+                <code className="flex-1 min-w-0 rounded-xl border-2 border-dashed border-[#1A1A1A] bg-[#FAFAF7] px-3 py-2 text-[15px] font-bold tracking-wider text-[#1A1A1A] break-all">{formatCode(state.code)}</code>
+                <button type="button" className={chipCls + ' bg-white font-bold'}
+                    onClick={async () => { try { await navigator.clipboard.writeText(formatCode(state.code)); setCopied(true); setTimeout(() => setCopied(false), 1500); } catch { /* ignore */ } }}>
+                    {copied ? 'コピーしました' : 'コピー'}
+                </button>
+            </div>
+            <p className="mt-1 text-[12px] text-[#666]">スクリーンショットかメモに残しておいてください。このコードを知っている人なら、誰でも記録を戻せます。</p>
+            <p className="mt-3 text-[12px] text-[#4A4A4A]" role="status">
+                {state.error ? <span className="text-[#C0392B] font-bold">控えを保存できませんでした：{state.error}</span>
+                    : last ? <>最後の控え：{last.getMonth() + 1}/{last.getDate()} {String(last.getHours()).padStart(2, '0')}:{String(last.getMinutes()).padStart(2, '0')}（{state.lastCount} 件）</>
+                        : 'まだ控えはありません。記録を書くと自動で保存します。'}
+                <button type="button" onClick={backupNow} className="ml-2 font-bold underline">今すぐ保存</button>
+            </p>
+            <details className="mt-4">
+                <summary className="text-[13px] font-bold text-[#1A1A1A] cursor-pointer">別の端末の記録を戻す</summary>
+                <p className="mt-2 text-[12px] text-[#666]">前の端末の復元コードを入れてください。いまの記録は消さずに、控えの記録を合わせます。</p>
+                <div className="mt-2 flex items-center gap-2">
+                    <input value={input} onChange={(e) => setInput(e.target.value)} placeholder="XXXX-XXXX-XXXX-XXXX" autoCapitalize="characters" autoCorrect="off" spellCheck={false} className={fieldCls} />
+                    <button type="button" disabled={busy || input.replace(/[-\s]/g, '').length !== 16}
+                        className={chipCls + ' bg-[#FF9855] font-bold disabled:opacity-40'}
+                        onClick={async () => { setMsg(null); try { setMsg(await restore(input)); setInput(''); } catch (e) { setMsg(e instanceof Error ? e.message : '戻せませんでした'); } }}>
+                        戻す
+                    </button>
+                </div>
+                {msg && <p className="mt-2 text-[12px] font-bold text-[#1A1A1A]" role="status">{msg}</p>}
+            </details>
         </section>
     );
 }

@@ -345,3 +345,33 @@ export function buildReminderIcs(times: ReminderTimes, url: string): string {
 export function downloadIcs(content: string, filename: string) {
     download(new Blob([content], { type: 'text/calendar;charset=utf-8' }), `${filename}.ics`);
 }
+
+// ===== サイトの控え（バックアップ）用 =====
+// 控えから戻すときは、いまの記録を消さずに合わせる（同じ id は控えの側を残さず、いまの端末を優先）。
+export function mergeMeals(incoming: Meal[]): number {
+    const list = parse(getSnapshot());
+    const ids = new Set(list.map((m) => m.id));
+    const add = incoming.filter((m) => m && typeof m.id === 'string' && !ids.has(m.id));
+    if (add.length) write([...list, ...add]);
+    return add.length;
+}
+
+export function getMemoryForBackup(): Record<string, Remembered> {
+    return parseMemory(getMemorySnapshot());
+}
+
+export function mergeMemory(incoming: Record<string, Remembered>) {
+    const mem = parseMemory(getMemorySnapshot());
+    for (const [line, r] of Object.entries(incoming ?? {})) {
+        if (!r || typeof r !== 'object') continue;
+        const cur = mem[line];
+        if (!cur) { mem[line] = r; continue; }
+        cur.count = Math.max(cur.count, r.count ?? 0);
+        if ((r.last ?? '') > cur.last) cur.last = r.last;
+        for (const [t, n] of Object.entries(r.types ?? {})) {
+            const k = t as MealType;
+            cur.types[k] = Math.max(cur.types[k] ?? 0, n ?? 0);
+        }
+    }
+    writeMemory(mem);
+}

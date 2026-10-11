@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from 'next';
 // 単独アプリ（iPhone のホーム画面に追加して使う）。サイトのヘッダー・フッターは付けない。
 export const metadata: Metadata = {
     title: '食事記録 | Mitoflow40',
-    description: '毎日の食事をかんたんに記録して、CSV で書き出せるツール。記録はこの端末の中だけに保存され、送信されません。',
+    description: '毎日の食事をかんたんに記録して、CSV で書き出せるツール。記録はこの端末に保存され、サイトにも控えを取ります。',
     alternates: { canonical: 'https://mitoflow40.com/meal-log' },
     // 単独アプリとして配るツール。検索結果には出さない
     robots: { index: false, follow: false },
