@@ -5,6 +5,8 @@ export const metadata: Metadata = {
     title: '食事記録 | Mitoflow40',
     description: '毎日の食事をかんたんに記録して、CSV で書き出せるツール。記録はこの端末の中だけに保存され、送信されません。',
     alternates: { canonical: 'https://mitoflow40.com/meal-log' },
+    // 単独アプリとして配るツール。検索結果には出さない
+    robots: { index: false, follow: false },
     manifest: '/meal-log/manifest.webmanifest',
     appleWebApp: { capable: true, title: '食事記録', statusBarStyle: 'default' },
     icons: { apple: '/meal-log/apple-touch-icon.png' },
