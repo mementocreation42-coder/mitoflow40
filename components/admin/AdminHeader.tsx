@@ -8,9 +8,9 @@ import styles from '@/app/admin/admin.module.css';
 // 管理画面の共通ヘッダー（2段）。
 //   上段：M（ダッシュボード）＋ グループ切替 [クライアント管理 | 記事管理] ＋ サイトを見る／ログアウト
 //   下段：いまのグループの項目
-//     クライアント管理 … クライアント／注文・契約／ニュースレター／DaVinci24 ↗（解析者の Mac のローカル受付）
+//     クライアント管理 … クライアント／注文・契約／ニュースレター／食事記録の控え／DaVinci24 ↗（解析者の Mac のローカル受付）
 //     記事管理         … 記事一覧／新規記事
-export type AdminNavKey = 'dashboard' | 'clients' | 'orders' | 'newsletter' | 'posts' | 'newpost';
+export type AdminNavKey = 'dashboard' | 'clients' | 'orders' | 'newsletter' | 'meallog' | 'posts' | 'newpost';
 type GroupKey = 'client' | 'article';
 
 const GROUPS: { key: GroupKey; label: string; href: string; items: { key: AdminNavKey; href: string; label: string }[] }[] = [
@@ -20,6 +20,7 @@ const GROUPS: { key: GroupKey; label: string; href: string; items: { key: AdminN
             { key: 'clients', href: '/admin/clients', label: 'クライアント' },
             { key: 'orders', href: '/admin/orders', label: '注文・契約' },
             { key: 'newsletter', href: '/admin/newsletter', label: 'ニュースレター' },
+            { key: 'meallog', href: '/admin/meal-log', label: '食事記録の控え' },
         ],
     },
     {

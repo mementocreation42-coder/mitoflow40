@@ -1,5 +1,5 @@
-import { createHash } from 'crypto';
 import { list, put } from '@vercel/blob';
+import { backupDir } from '@/lib/meal-log-store';
 
 // 食事記録（/meal-log）の控え。端末で作った復元コードごとに、記録をサイト側に預かる。
 // 保存先: meal-log/<sha256(コード)>/latest.json と、日ごとの控え <YYYY-MM-DD>.json
@@ -14,9 +14,6 @@ const TYPES = new Set(['朝食', '昼食', '夕食', '間食']);
 
 type Meal = { id: string; date: string; time: string; type: string; food: string };
 
-function dir(code: string): string {
-    return `meal-log/${createHash('sha256').update(`mf-meal-log:${code}`).digest('hex')}/`;
-}
 
 function cleanMeals(v: unknown): Meal[] | null {
     if (!Array.isArray(v) || v.length > MAX_MEALS) return null;
@@ -50,7 +47,7 @@ export async function POST(req: Request) {
 
     const code = typeof body.code === 'string' ? body.code.replace(/[-\s]/g, '').toUpperCase() : '';
     if (!CODE_RE.test(code)) return Response.json({ ok: false, error: '復元コードが正しくありません' }, { status: 400 });
-    const prefix = dir(code);
+    const prefix = backupDir(code);
 
     if (body.action === 'save') {
         const meals = cleanMeals(body.meals);
