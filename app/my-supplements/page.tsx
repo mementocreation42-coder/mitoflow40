@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getNutrientBySlug } from '@/lib/nutrients';
-import { MY_SUPPLEMENTS, UPDATED_AT, IHERB_HOME, KIND_META, iherbUrl, type MySupplement } from '@/lib/my-supplements';
+import { MY_SUPPLEMENTS, UPDATED_AT, IHERB_HOME, iherbUrl, type MySupplement } from '@/lib/my-supplements';
 import JsonLd, { medicalWebPage, breadcrumb } from '@/components/JsonLd';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
@@ -76,10 +76,8 @@ export default function MySupplementsPage() {
                                 const n = s.nutrientSlug ? getNutrientBySlug(s.nutrientSlug) : undefined;
                                 const st = STATUS[s.status];
                                 return (
-                                    <div key={s.name} className={`flex gap-3 rounded-2xl border border-[#1A1A1A]/20 bg-white/80 p-4 ${s.status === 'paused' ? 'opacity-70' : ''}`}>
-                                        <Thumb s={s} />
-                                        <div className="flex flex-col min-w-0 flex-1">
-                                        <div className="flex flex-wrap items-center gap-2 mb-1">
+                                    <div key={s.name} className="flex flex-col rounded-2xl border border-[#1A1A1A]/20 bg-white/80 p-4">
+                                        <div className="flex items-center gap-2 mb-1">
                                             <span className="text-base font-bold text-[#1A1A1A]">{s.name}</span>
                                             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full text-[#1A1A1A]/70" style={{ background: st.bg }}>{st.label}</span>
                                         </div>
@@ -91,7 +89,6 @@ export default function MySupplementsPage() {
                                                 iHerb で見る <span aria-hidden>↗</span> <span className="ml-1 text-[9px] font-normal opacity-70">PR</span>
                                             </a>
                                         )}
-                                        </div>
                                     </div>
                                 );
                             })}
@@ -118,19 +115,6 @@ export default function MySupplementsPage() {
                     <a href={IHERB_HOME} target="_blank" rel="sponsored noopener noreferrer" className="ml-1 underline">iHerb のトップ ↗</a>
                 </p>
             </article>
-        </div>
-    );
-}
-
-// サムネイル：周期表ふうのタイル（記号＋種類の色）。商品写真を使わず、見分けやすさだけを担う
-function Thumb({ s }: { s: MySupplement }) {
-    const k = KIND_META[s.kind];
-    const long = s.symbol.length > 3;
-    return (
-        <div aria-hidden className="relative flex-shrink-0 w-16 h-16 md:w-[72px] md:h-[72px] rounded-xl border-2 border-[#1A1A1A] flex items-center justify-center shadow-[2px_2px_0_#1A1A1A]"
-            style={{ background: k.bg, color: k.fg }}>
-            <span className={`font-bold leading-none ${long ? 'text-[13px]' : 'text-2xl'}`} style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{s.symbol}</span>
-            <span className="absolute bottom-1 left-0 right-0 text-center text-[8px] font-bold opacity-80">{k.label}</span>
         </div>
     );
 }
