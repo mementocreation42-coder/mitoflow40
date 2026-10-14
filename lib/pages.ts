@@ -92,6 +92,7 @@ export const staticPages: StaticPage[] = [
     { path: "/modern-diseases", priority: 0.6, changeFrequency: 'monthly', search: { title: "現代病とは", sub: "なぜ便利な暮らしが人を病気にするのか", group: "しくみ" } },
     { path: "/molecular-nutrition", priority: 0.8, changeFrequency: 'monthly', search: { title: "分子栄養学とは", sub: "Molecular Nutrition", group: "考え方" } },
     { path: "/mood-nutrition", priority: 0.6, changeFrequency: 'monthly', search: { title: "気分と栄養", sub: "Mood & Food", group: "心とからだ" } },
+    { path: "/my-supplements", priority: 0.5, changeFrequency: 'monthly', search: { title: "僕が飲んでいるサプリ", sub: "単体で、体に聞きながら（PR）", group: "生活習慣" } },
     { path: "/mycotoxins", priority: 0.6, changeFrequency: 'monthly', search: { title: "カビ毒と食の安全", sub: "マイコトキシン（アフラトキシン等）", group: "しくみ" } },
     { path: "/neuroinflammation", priority: 0.6, changeFrequency: 'monthly', search: { title: "神経炎症とは", sub: "IL-6・サイトカインが脳と心に及ぶとき", group: "しくみ" } },
     { path: "/newsletter", priority: 0.6, changeFrequency: 'monthly', search: { title: "Mitoflow40 レター", sub: "ニュースレター登録（無料・いつでも解除）", group: "サービス" } },

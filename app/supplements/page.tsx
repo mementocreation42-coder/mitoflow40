@@ -158,6 +158,7 @@ export default function SupplementsPage() {
                 <section className="mb-10 bg-white/70 rounded-2xl p-6 md:p-8 border border-black">
                     <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 border-l-4 border-[#41C9B4] pl-3 leading-tight">あわせて読みたい</h2>
                     <p className="text-sm text-[#4A4A4A] leading-relaxed mb-4">「何を・どれだけ」を知るために、栄養素・食べ物・血液検査もあわせてどうぞ。</p>
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed mb-4">著者が実際に飲んでいるものは <Link href="/my-supplements" className="font-bold underline underline-offset-2">僕が飲んでいるサプリ</Link> にまとめています（広告リンクを含みます）。</p>
                     <div className="flex flex-wrap gap-2">
                         {[
                             { href: '/nutrients', label: '栄養素' },
