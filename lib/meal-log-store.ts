@@ -11,7 +11,8 @@ export function backupDir(code: string): string {
 }
 
 export interface StoredMeal { id: string; date: string; time: string; type: string; food: string }
-export interface StoredBackup { v: number; savedAt: string; count: number; meals: StoredMeal[]; memory: Record<string, unknown> }
+export interface StoredStool { id: string; date: string; time: string; type: number }
+export interface StoredBackup { v: number; savedAt: string; count: number; meals: StoredMeal[]; stools?: StoredStool[]; memory: Record<string, unknown> }
 
 export interface BackupSummary {
     id: string;            // ハッシュ（フォルダ名）
@@ -44,7 +45,7 @@ async function readJson(url: string): Promise<StoredBackup | null> {
 }
 
 function summarize(id: string, data: StoredBackup, snapshots: string[]): BackupSummary {
-    const dates = [...new Set(data.meals.map((m) => m.date))].sort();
+    const dates = [...new Set([...data.meals.map((m) => m.date), ...(data.stools ?? []).map((s) => s.date)])].sort();
     return { id, savedAt: data.savedAt, count: data.count, firstDate: dates[0] ?? null, lastDate: dates.at(-1) ?? null, days: dates.length, snapshots };
 }
 

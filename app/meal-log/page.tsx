@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { MEAL_TYPES, downloadCsv, foodLines, previousMeal, toSubmissionCsv, todayStr, useMealLog, useMemory, useMounted, useNow, useReminders, missingMeals, buildReminderIcs, downloadIcs, DEFAULT_REMINDERS, MAIN_MEAL_TYPES, type MainMealType, type ReminderTimes, type Meal, type MealType, type Remembered } from '@/lib/meal-log';
 import { pillCls } from '@/components/meal-log/styles';
 import { useBackup, formatCode } from '@/lib/meal-log-backup';
+import { useStools, STOOL_TYPES, type Stool } from '@/lib/meal-log';
 
 // かんたん記入：提出フォーマット（日付・食事タイプ・食事内容）を毎日書きやすくする画面。
 // この端末に保存し、サイトにも控えを預ける（復元コードごと。lib/meal-log-backup.ts）。
@@ -40,7 +41,8 @@ export default function MealLogEasyPage() {
     const { memory, remember, forget, suggest } = useMemory(meals);
     const { times, setTimes } = useReminders();
     const now = useNow();
-    const backup = useBackup(meals);
+    const { stools, addStool, removeStool } = useStools();
+    const backup = useBackup(meals, stools);
 
     const byKey = useMemo(() => {
         const map = new Map<string, Meal[]>();
@@ -114,6 +116,8 @@ export default function MealLogEasyPage() {
                                 onChange={(lines, added) => { setLines(date, type, lines); if (added.length) remember(added, type, date); }} />
                         );
                     })}
+                    <StoolCard key={`${date}|便`} items={stools.filter((s) => s.date === date)}
+                        onAdd={(type) => addStool(date, type)} onRemove={removeStool} />
                 </div>
 
                 {/* 月末の提出 */}
@@ -560,6 +564,55 @@ function BackupBox({ backup }: { backup: ReturnType<typeof useBackup> }) {
                 </div>
                 {msg && <p className="mt-2 text-[12px] font-bold text-[#1A1A1A]" role="status">{msg}</p>}
             </details>
+        </section>
+    );
+}
+
+// 便：形を 7 段階から選ぶだけ（タップ 1 回で 1 回分）
+function StoolCard({ items, onAdd, onRemove }: { items: Stool[]; onAdd: (type: number) => void; onRemove: (id: string) => void }) {
+    const [open, setOpen] = useState(false);
+    const sorted = [...items].sort((a, b) => (a.time || '99').localeCompare(b.time || '99'));
+    return (
+        <section className="rounded-2xl border-2 border-[#1A1A1A] bg-white" aria-label="便">
+            <div className="flex items-center justify-between gap-2 px-4 pt-3">
+                <h2 className="flex items-center gap-2">
+                    <span className="inline-block rounded-md px-2.5 py-0.5 text-[15px] font-bold border border-[#1A1A1A]" style={{ background: '#D9C2A0' }}>便</span>
+                    <span className="text-[12px] text-[#666]">{items.length ? `${items.length} 回` : '未記入'}</span>
+                </h2>
+                <button type="button" onClick={() => setOpen((v) => !v)} aria-expanded={open}
+                    className={`${pillCls} ${open ? 'bg-[#FAFAF7]' : 'bg-[#FF9855]'} shrink-0`}>{open ? '閉じる' : '記録する'}</button>
+            </div>
+
+            {sorted.length > 0 && (
+                <ul className="px-4 pt-2">
+                    {sorted.map((s) => {
+                        const t = STOOL_TYPES[s.type - 1];
+                        return (
+                            <li key={s.id} className="flex items-center gap-2 py-1">
+                                <span className="w-12 shrink-0 text-[13px] text-[#666] tabular-nums">{s.time || '—'}</span>
+                                <span className="flex-1 text-[16px] text-[#1A1A1A]">{t.n}. {t.label}</span>
+                                <button type="button" onClick={() => onRemove(s.id)} aria-label={`${t.label}の記録を消す`}
+                                    className="shrink-0 w-9 h-9 rounded-full border border-[#1A1A1A] text-sm font-bold text-[#4A4A4A] hover:bg-[#FBEBD5]">×</button>
+                            </li>
+                        );
+                    })}
+                </ul>
+            )}
+
+            {open ? (
+                <div className="px-4 pt-2 pb-3">
+                    <p className="text-[11px] font-bold text-[#4A4A4A] mb-1.5">形を選ぶ（3〜4 がなめらかな理想の形）</p>
+                    <div className="grid grid-cols-1 gap-1.5">
+                        {STOOL_TYPES.map((t) => (
+                            <button key={t.n} type="button" onClick={() => { onAdd(t.n); setOpen(false); }}
+                                className={`flex items-center gap-3 rounded-xl border border-[#1A1A1A] px-3 py-2 text-left ${t.n === 3 || t.n === 4 ? 'bg-[#E3F2EE]' : 'bg-[#FAFAF7]'} hover:bg-[#FBEBD5]`}>
+                                <span className="w-6 text-center text-[15px] font-bold">{t.n}</span>
+                                <span className="flex-1"><span className="block text-[15px] font-bold text-[#1A1A1A]">{t.label}</span><span className="block text-[12px] text-[#666]">{t.hint}</span></span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            ) : <div className="pb-3" />}
         </section>
     );
 }

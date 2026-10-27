@@ -31,6 +31,23 @@ function cleanMeals(v: unknown): Meal[] | null {
     return out;
 }
 
+type Stool = { id: string; date: string; time: string; type: number };
+function cleanStools(v: unknown): Stool[] | null {
+    if (v == null) return [];
+    if (!Array.isArray(v) || v.length > MAX_MEALS) return null;
+    const out: Stool[] = [];
+    for (const s of v) {
+        if (!s || typeof s !== 'object') return null;
+        const { id, date, time, type } = s as Record<string, unknown>;
+        if (typeof id !== 'string' || id.length > 40) return null;
+        if (typeof date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
+        if (typeof time !== 'string' || time.length > 5) return null;
+        if (typeof type !== 'number' || !Number.isInteger(type) || type < 1 || type > 7) return null;
+        out.push({ id, date, time, type });
+    }
+    return out;
+}
+
 function today(): string {
     // 日本時間の日付
     return new Date(Date.now() + 9 * 3600_000).toISOString().slice(0, 10);
@@ -51,11 +68,12 @@ export async function POST(req: Request) {
 
     if (body.action === 'save') {
         const meals = cleanMeals(body.meals);
-        if (!meals) return Response.json({ ok: false, error: '記録の形式が正しくありません' }, { status: 400 });
-        if (meals.length === 0) return Response.json({ ok: false, error: '記録がないので保存しません' }, { status: 400 });
+        const stools = cleanStools(body.stools);
+        if (!meals || !stools) return Response.json({ ok: false, error: '記録の形式が正しくありません' }, { status: 400 });
+        if (meals.length === 0 && stools.length === 0) return Response.json({ ok: false, error: '記録がないので保存しません' }, { status: 400 });
         const memory = body.memory && typeof body.memory === 'object' && !Array.isArray(body.memory) ? body.memory : {};
         const savedAt = new Date().toISOString();
-        const payload = JSON.stringify({ v: 1, savedAt, count: meals.length, meals, memory });
+        const payload = JSON.stringify({ v: 1, savedAt, count: meals.length, meals, stools, memory });
         const opts = { access: 'public' as const, token, addRandomSuffix: false, allowOverwrite: true, contentType: 'application/json', cacheControlMaxAge: 60 };
         await Promise.all([
             put(`${prefix}latest.json`, payload, opts),
@@ -71,7 +89,7 @@ export async function POST(req: Request) {
         const res = await fetch(`${latest.url}?t=${Date.now()}`, { cache: 'no-store' });
         if (!res.ok) return Response.json({ ok: false, error: '控えを読み込めませんでした' }, { status: 502 });
         const data = await res.json();
-        return Response.json({ ok: true, savedAt: data.savedAt, count: data.count, meals: data.meals ?? [], memory: data.memory ?? {} });
+        return Response.json({ ok: true, savedAt: data.savedAt, count: data.count, meals: data.meals ?? [], stools: data.stools ?? [], memory: data.memory ?? {} });
     }
 
     return Response.json({ ok: false, error: '不明な操作です' }, { status: 400 });

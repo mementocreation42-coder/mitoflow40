@@ -4,7 +4,7 @@
 // 端末ごとに復元コードを 1 つ作り、記録が変わるたびに少し待ってから自動で送る。
 // 記録が 0 件のときは送らない（新しい端末の空の記録で、控えを上書きしないため）。
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { getMemoryForBackup, mergeMeals, mergeMemory, type Meal } from './meal-log';
+import { getMemoryForBackup, getStoolsForBackup, mergeMeals, mergeMemory, mergeStools, type Meal, type Stool } from './meal-log';
 
 const KEY = 'mf:meal-log:backup:v1';
 const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // I・O・0・1 を除く
@@ -41,11 +41,13 @@ async function call(body: object, keepalive = false) {
     return data;
 }
 
-export function useBackup(meals: Meal[]) {
+export function useBackup(meals: Meal[], stools: Stool[] = []) {
     const [state, setState] = useState<BackupState | null>(null);
     const [busy, setBusy] = useState(false);
     const mealsRef = useRef(meals);
     mealsRef.current = meals;
+    const stoolsRef = useRef(stools);
+    stoolsRef.current = stools;
     const sentRef = useRef<string>('');
 
     useEffect(() => { setState(load()); }, []);
@@ -53,11 +55,12 @@ export function useBackup(meals: Meal[]) {
     const backupNow = useCallback(async (keepalive = false) => {
         const s = load();
         const list = mealsRef.current;
-        if (!list.length) return;
-        const sig = JSON.stringify(list);
+        const st = stoolsRef.current;
+        if (!list.length && !st.length) return;
+        const sig = JSON.stringify([list, st]);
         if (keepalive && sig === sentRef.current) return;
         try {
-            const r = await call({ action: 'save', code: s.code, meals: list, memory: getMemoryForBackup() }, keepalive);
+            const r = await call({ action: 'save', code: s.code, meals: list, stools: getStoolsForBackup(), memory: getMemoryForBackup() }, keepalive);
             sentRef.current = sig;
             const next = { ...s, lastAt: r.savedAt, lastCount: r.count, error: null };
             save(next); setState(next);
@@ -68,12 +71,12 @@ export function useBackup(meals: Meal[]) {
 
     // 記録が変わったら 4 秒待って送る
     useEffect(() => {
-        if (!meals.length) return;
-        const sig = JSON.stringify(meals);
+        if (!meals.length && !stools.length) return;
+        const sig = JSON.stringify([meals, stools]);
         if (sig === sentRef.current) return;
         const t = setTimeout(() => { backupNow(); }, 4000);
         return () => clearTimeout(t);
-    }, [meals, backupNow]);
+    }, [meals, stools, backupNow]);
 
     // アプリを閉じる・切り替えるときにも送る
     useEffect(() => {
@@ -89,10 +92,11 @@ export function useBackup(meals: Meal[]) {
         try {
             const r = await call({ action: 'restore', code });
             const added = mergeMeals(r.meals ?? []);
+            const addedStools = mergeStools(r.stools ?? []);
             mergeMemory(r.memory ?? {});
             const next: BackupState = { code, lastAt: r.savedAt ?? null, lastCount: r.count ?? 0, error: null };
             save(next); setState(next); sentRef.current = '';
-            return `${added} 件の記録を戻しました。`;
+            return `食事 ${added} 件、便 ${addedStools} 件の記録を戻しました。`;
         } finally { setBusy(false); }
     }, []);
 

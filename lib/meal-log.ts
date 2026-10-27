@@ -375,3 +375,58 @@ export function mergeMemory(incoming: Record<string, Remembered>) {
     }
     writeMemory(mem);
 }
+
+// ===== 便の記録 =====
+// 形は医療でも使う 7 段階（ブリストルスケール）。3〜4 がなめらかで理想とされる（/detox と同じ物差し）。
+// 食事とは別の保存先。提出用 CSV には入れない。
+
+export { STOOL_TYPES } from './stool-types';
+
+export interface Stool {
+    id: string;
+    date: string;  // YYYY-MM-DD
+    time: string;  // HH:MM（今日の記録だけ。過去の日は空）
+    type: number;  // 1〜7
+}
+
+const STOOL_KEY = 'mf:meal-log:stool:v1';
+const stoolListeners = new Set<() => void>();
+function subscribeStool(l: () => void) {
+    stoolListeners.add(l);
+    const onStorage = (e: StorageEvent) => { if (e.key === STOOL_KEY) l(); };
+    window.addEventListener('storage', onStorage);
+    return () => { stoolListeners.delete(l); window.removeEventListener('storage', onStorage); };
+}
+function getStoolSnapshot(): string { try { return localStorage.getItem(STOOL_KEY) ?? EMPTY; } catch { return EMPTY; } }
+function parseStools(raw: string): Stool[] {
+    try {
+        const v = JSON.parse(raw);
+        return Array.isArray(v) ? v.filter((s) => s && typeof s.id === 'string' && typeof s.date === 'string' && Number.isInteger(s.type) && s.type >= 1 && s.type <= 7) : [];
+    } catch { return []; }
+}
+function writeStools(list: Stool[]) {
+    try { localStorage.setItem(STOOL_KEY, JSON.stringify(list)); } catch { /* ignore */ }
+    stoolListeners.forEach((l) => l());
+}
+
+export function useStools() {
+    const raw = useSyncExternalStore(subscribeStool, getStoolSnapshot, getServerSnapshot);
+    const stools = parseStools(raw);
+    const addStool = useCallback((date: string, type: number) => {
+        writeStools([...parseStools(getStoolSnapshot()), { id: newId(), date, time: date === todayStr() ? nowTime() : '', type }]);
+    }, []);
+    const removeStool = useCallback((id: string) => {
+        writeStools(parseStools(getStoolSnapshot()).filter((s) => s.id !== id));
+    }, []);
+    return { stools, addStool, removeStool };
+}
+
+export function getStoolsForBackup(): Stool[] { return parseStools(getStoolSnapshot()); }
+
+export function mergeStools(incoming: Stool[]): number {
+    const list = parseStools(getStoolSnapshot());
+    const ids = new Set(list.map((s) => s.id));
+    const add = parseStools(JSON.stringify(incoming ?? [])).filter((s) => !ids.has(s.id));
+    if (add.length) writeStools([...list, ...add]);
+    return add.length;
+}

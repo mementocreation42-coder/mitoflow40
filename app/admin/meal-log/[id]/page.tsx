@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import AdminHeader from '@/components/admin/AdminHeader';
-import { getBackup, type StoredMeal } from '@/lib/meal-log-store';
+import { getBackup, type StoredMeal, type StoredStool } from '@/lib/meal-log-store';
+import { STOOL_TYPES } from '@/lib/stool-types';
 import styles from '../../admin.module.css';
 
 export const metadata = { title: { absolute: '食事記録の控え | Mitoflow40 Admin' }, robots: { index: false, follow: false } };
@@ -28,7 +29,9 @@ export default async function AdminMealLogDetail({ params, searchParams }: { par
 
     const byDate = new Map<string, StoredMeal[]>();
     for (const m of data.meals) byDate.set(m.date, [...(byDate.get(m.date) ?? []), m]);
-    const dates = [...byDate.keys()].sort().reverse();
+    const stoolsByDate = new Map<string, StoredStool[]>();
+    for (const s of data.stools ?? []) stoolsByDate.set(s.date, [...(stoolsByDate.get(s.date) ?? []), s]);
+    const dates = [...new Set([...byDate.keys(), ...stoolsByDate.keys()])].sort().reverse();
 
     return (
         <div className={styles.shell}>
@@ -57,6 +60,7 @@ export default async function AdminMealLogDetail({ params, searchParams }: { par
                             <tr>
                                 <th style={th}>日付</th>
                                 {TYPES.map((t) => <th key={t} style={th}>{t}</th>)}
+                                <th style={th}>便</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,6 +71,12 @@ export default async function AdminMealLogDetail({ params, searchParams }: { par
                                         const items = (byDate.get(d) ?? []).filter((m) => m.type === t).flatMap((m) => m.food.split('\n')).filter(Boolean);
                                         return <td key={t} style={td}>{items.length ? items.map((x, i) => <div key={i}>{x}</div>) : <span style={{ color: '#bbb' }}>—</span>}</td>;
                                     })}
+                                    <td style={{ ...td, whiteSpace: 'nowrap' }}>
+                                        {(stoolsByDate.get(d) ?? []).sort((a, b) => a.time.localeCompare(b.time)).map((x) => (
+                                            <div key={x.id}>{x.time ? `${x.time} ` : ''}{x.type}. {STOOL_TYPES[x.type - 1]?.label}</div>
+                                        ))}
+                                        {!(stoolsByDate.get(d) ?? []).length && <span style={{ color: '#bbb' }}>—</span>}
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
